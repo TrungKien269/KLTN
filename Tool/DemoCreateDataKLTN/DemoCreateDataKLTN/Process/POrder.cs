@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using DemoCreateDataKLTN.BUS;
+using DemoCreateDataKLTN.Helper;
 using DemoCreateDataKLTN.Models;
 
 namespace DemoCreateDataKLTN.Process
@@ -52,7 +53,12 @@ namespace DemoCreateDataKLTN.Process
                     CreatedDate = DateTime.Now
                 };
 
+                orderBal.InsertOrder(order);
+                orderDetailBal.InsertOrderDetail(orderDetail);
+
                 pRating.Execute(orderDetail.BookId, order.UserId);
+
+                QRHelper.GenerateAndSaveQRCode("Order" + i);
 
                 Console.WriteLine(dsUser.Tables[0].Rows[i][0].ToString());
             }

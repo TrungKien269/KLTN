@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 
-namespace DemoCreateDataKLTN
+namespace DemoCreateDataKLTN.Helper
 {
     public class ConfigHelper
     {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Data.SqlClient;
+using DemoCreateDataKLTN.Helper;
 using DemoCreateDataKLTN.Models;
 
 namespace DemoCreateDataKLTN.DAL

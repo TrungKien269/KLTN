@@ -17,7 +17,7 @@ namespace DemoCreateDataKLTN.BUS
 
         public DataSet GetListUser()
         {
-            string strSQL = "Select * From dbo.[User];";
+            string strSQL = "Select * From dbo.[User] Where ID > 0;";
 
             return sql.ExecuteReader(strSQL, CommandType.Text, null);
         }
