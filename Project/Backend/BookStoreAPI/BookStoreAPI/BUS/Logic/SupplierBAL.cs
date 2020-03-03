@@ -29,5 +29,18 @@ namespace BookStoreAPI.BUS.Logic
                 return Response.CatchError(e.Message);
             }
         }
+
+        public async Task<Response> GetSupplier(int id)
+        {
+            try
+            {
+                var supplier = await context.Supplier.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
+                return new Response("Success", true, 0, supplier);
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
     }
 }

@@ -12,11 +12,19 @@ namespace BookStoreAPI.BUS.Logic
     {
         private BookBAL bookBal;
         private AuthorBAL authorBal;
+        private FormBookBAL formBookBal;
+        private SupplierBAL supplierBal;
+        private PublisherBAL publisherBal;
+        private RawBookBAL rawBookBal;
 
         public CRUDBookBAL()
         {
             bookBal = new BookBAL();
             authorBal = new AuthorBAL();
+            formBookBal = new FormBookBAL();
+            supplierBal = new SupplierBAL();
+            publisherBal = new PublisherBAL();
+            rawBookBal = new RawBookBAL();
         }
 
         public async Task<Response> CreateBookProcess(Book book, List<Author> authors, List<string> images, int cateID,
@@ -45,6 +53,8 @@ namespace BookStoreAPI.BUS.Logic
                         await bookBal.InsertFormBook(book.Id, formID);
                         await bookBal.InsertSupplierrBook(book.Id, supplierID);
                         await bookBal.InsertPublisherBook(book.Id, publisherID);
+
+                        await CreateRawBookProcess(book, authors, cateID, formID, supplierID, publisherID);
 
                         return new Response("Success", true, 1, book);
                     }
@@ -95,6 +105,8 @@ namespace BookStoreAPI.BUS.Logic
                     await bookBal.InsertSupplierrBook(book.Id, supplierID);
                     await bookBal.InsertPublisherBook(book.Id, publisherID);
 
+                    await UpdateRawBookProcess(book, authors, cateID, formID, supplierID, publisherID);
+
                     return new Response("Success", true, 1, book);
                 }
                 else
@@ -106,6 +118,76 @@ namespace BookStoreAPI.BUS.Logic
             {
                 return Response.CatchError(e.Message);
             }
+        }
+
+        public async Task<Response> CreateRawBookProcess(Book book, List<Author> authors, 
+            int cateID, int formID, int supplierID, int publisherID)
+        {
+            try
+            {
+                var rawbook = new RawBook
+                {
+                    Id = book.Id,
+                    Image = book.Image,
+                    Name = book.Name,
+                    ReleaseYear = book.ReleaseYear,
+                    Author = ProcessAuthors(authors),
+                    NumOfPage = book.NumOfPage,
+                    Summary = book.Summary,
+                    Form = ((await formBookBal.GetFormBook(formID)).Obj as Form).Name,
+                    Price = book.OriginalPrice,
+                    Weight = book.Weight,
+                    Supplier = ((await supplierBal.GetSupplier(supplierID)).Obj as Supplier).Name,
+                    Publisher = ((await publisherBal.GetPublisher(publisherID)).Obj as Publisher).Name,
+                };
+
+                await rawBookBal.Insert(rawbook);
+                return new Response("Success", true, 1, rawbook);
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
+        public async Task<Response> UpdateRawBookProcess(Book book, List<Author> authors,
+            int cateID, int formID, int supplierID, int publisherID)
+        {
+            try
+            {
+                var rawbook = new RawBook
+                {
+                    Id = book.Id,
+                    Image = book.Image,
+                    Name = book.Name,
+                    ReleaseYear = book.ReleaseYear,
+                    Author = ProcessAuthors(authors),
+                    NumOfPage = book.NumOfPage,
+                    Summary = book.Summary,
+                    Form = ((await formBookBal.GetFormBook(formID)).Obj as Form).Name,
+                    Price = book.OriginalPrice,
+                    Weight = book.Weight,
+                    Supplier = ((await supplierBal.GetSupplier(supplierID)).Obj as Supplier).Name,
+                    Publisher = ((await publisherBal.GetPublisher(publisherID)).Obj as Publisher).Name,
+                };
+
+                await rawBookBal.Update(rawbook);
+                return new Response("Success", true, 1, rawbook);
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
+        public string ProcessAuthors(List<Author> authors)
+        {
+            string author = "";
+            foreach (var auth in authors)
+            {
+                author += auth.Name + ", ";
+            }
+            return author.Substring(0, author.Length - 2);
         }
     }
 }

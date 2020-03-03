@@ -42,5 +42,18 @@ namespace BookStoreAPI.BUS.Logic
                 return Response.CatchError(e.Message);
             }
         }
+
+        public async Task<Response> GetPublisher(int id)
+        {
+            try
+            {
+                var publisher = await context.Publisher.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
+                return new Response("Success", true, 1, publisher);
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
     }
 }

@@ -29,5 +29,18 @@ namespace BookStoreAPI.BUS.Logic
                 return Response.CatchError(e.Message);
             }
         }
+
+        public async Task<Response> GetFormBook(int id)
+        {
+            try
+            {
+                var form = await context.Form.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
+                return new Response("Success", true, 0, form);
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
     }
 }
