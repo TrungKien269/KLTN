@@ -6,13 +6,13 @@ using DemoCreateDataKLTN.Models;
 
 namespace DemoCreateDataKLTN.Process
 {
-    public class PRating
+    public class PWishList
     {
-        private RatingBAL ratingBal;
+        private WishListBAL wishListBal;
 
-        public PRating()
+        public PWishList()
         {
-            ratingBal = new RatingBAL();
+            wishListBal = new WishListBAL();
         }
 
         public void Execute()
@@ -22,27 +22,27 @@ namespace DemoCreateDataKLTN.Process
 
             for (int i = 0; i < dsUser.Tables[0].Rows.Count; i++)
             {
-                var rating = new Rating
+                var wishlist = new WishList
                 {
-                    //UserId = userID,
                     UserId = Int32.Parse(dsUser.Tables[0].Rows[i][0].ToString()),
-                    //BookId = bookID,
                     BookId = dsBook.Tables[0].Rows[PGetListMainObject.GetRandomNumberIndexBookList()][0].ToString(),
-                    DateTime = DateTime.Now,
-                    Point = GetRandomPoint()
+                    DateTime = GetRandomDateTime()
                 };
 
-                ratingBal.InsertRating(rating);
-
+                wishListBal.InsertWishList(wishlist);
                 Console.WriteLine(dsUser.Tables[0].Rows[i][0].ToString());
             }
         }
 
-        public int GetRandomPoint()
+        public DateTime GetRandomDateTime()
         {
             Random r = new Random();
-            int result = r.Next(7, 11);
-            return result;
+            var from = new DateTime(2020, 1, 1);
+            var range = DateTime.Now - from;
+            var randomUpperBound = (Int32)range.TotalSeconds;
+            var randTimeSpan = TimeSpan.FromSeconds((Int64)(range.TotalSeconds - r.Next(0, randomUpperBound)));
+
+            return from + randTimeSpan;
         }
     }
 }

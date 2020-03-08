@@ -15,7 +15,7 @@ namespace DemoCreateDataKLTN.BUS
             sql = new SQLManager();
         }
 
-        public DataSet GetListBookID()
+        public DataSet GetListBook()
         {
             string strSQL = "Select * From dbo.[Book];";
 

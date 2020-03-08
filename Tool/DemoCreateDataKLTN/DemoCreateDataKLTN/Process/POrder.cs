@@ -9,18 +9,18 @@ namespace DemoCreateDataKLTN.Process
 {
     public class POrder
     {
-        private UserBAL userBal;
+        //private UserBAL userBal;
         private OrderBAL orderBal;
         private OrderDetailBAL orderDetailBal;
-        private BookBAL bookBal;
+        //private BookBAL bookBal;
         private PRating pRating;
         private string[] OrderStatus;
 
         public POrder()
         {
-            userBal = new UserBAL();
+            //userBal = new UserBAL();
             orderBal = new OrderBAL();
-            bookBal = new BookBAL();
+            //bookBal = new BookBAL();
             orderDetailBal = new OrderDetailBAL();
             pRating = new PRating();
             OrderStatus = new[] {"Processing", "Delivering", "Delivered"};
@@ -28,15 +28,15 @@ namespace DemoCreateDataKLTN.Process
 
         public void Execute()
         {
-            var dsUser = userBal.GetListUser();
-            var dsBook = bookBal.GetListBookID();
+            var dsUser = PGetListMainObject.GetListUser();
+            var dsBook = PGetListMainObject.GetListBook();
 
             for (int i = 0; i < dsUser.Tables[0].Rows.Count; i++)
             {
                 var orderDetail = new OrderDetail
                 {
                     OrderId = "Order" + (Int32.Parse(orderBal.GetAllOrderQuantity().Obj.ToString()) + 1),
-                    BookId = dsBook.Tables[0].Rows[GetRandomNumberIndexBookList()][0].ToString(),
+                    BookId = dsBook.Tables[0].Rows[PGetListMainObject.GetRandomNumberIndexBookList()][0].ToString(),
                     Quantity = GetRandomNumberQuantity()
                 };
 
@@ -44,7 +44,7 @@ namespace DemoCreateDataKLTN.Process
                 {
                     Id = "Order" + (Int32.Parse(orderBal.GetAllOrderQuantity().Obj.ToString()) + 1),
                     UserId = Int32.Parse(dsUser.Tables[0].Rows[i][0].ToString()),
-                    Total = Int32.Parse(dsBook.Tables[0].Rows[GetRandomNumberIndexBookList()][3].ToString()) *
+                    Total = Int32.Parse(dsBook.Tables[0].Rows[PGetListMainObject.GetRandomNumberIndexBookList()][3].ToString()) *
                             orderDetail.Quantity,
                     Status = OrderStatus[GetRandomOrderStatus()],
                     FullName = dsUser.Tables[0].Rows[i][1].ToString(),
@@ -55,21 +55,18 @@ namespace DemoCreateDataKLTN.Process
 
                 orderBal.InsertOrder(order);
                 orderDetailBal.InsertOrderDetail(orderDetail);
-
-                pRating.Execute(orderDetail.BookId, order.UserId);
-
                 QRHelper.GenerateAndSaveQRCode("Order" + i);
 
                 Console.WriteLine(dsUser.Tables[0].Rows[i][0].ToString());
             }
         }
 
-        public int GetRandomNumberIndexBookList()
-        {
-            Random r = new Random();
-            int result = r.Next(0, 4739);
-            return result;
-        }
+        //public int GetRandomNumberIndexBookList()
+        //{
+        //    Random r = new Random();
+        //    int result = r.Next(0, 4739);
+        //    return result;
+        //}
 
         public int GetRandomNumberQuantity()
         {
