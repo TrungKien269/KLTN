@@ -88,10 +88,9 @@ namespace BookStoreAPI.BUS.Control
             return await commentBal.Update(id, text);
         }
 
-        //public async Task<Response> GetListRelatedBooks(string id)
-        //{
-        //    var relatedList = PythonHelper.GetRelatedBooks(id);
-        //    return await bookBal.GetListRelatedBooks(relatedList);
-        //}
+        public async Task<Response> GetListRelatedBooks(List<string> ListBookID)
+        {
+            return await bookBal.GetListRelatedBooks(ListBookID);
+        }
     }
 }
