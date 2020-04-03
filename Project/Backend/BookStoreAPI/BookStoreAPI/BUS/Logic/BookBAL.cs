@@ -407,7 +407,7 @@ namespace BookStoreAPI.BUS.Logic
             try
             {
                 var findBook = await context.Book.Where(x => x.Id.Equals(obj.Id)).FirstOrDefaultAsync();
-                findBook.Id = SecureHelper.GetOriginalInput(findBook.Id);
+                //findBook.Id = SecureHelper.GetOriginalInput(findBook.Id);
                 findBook.Name = obj.Name;
                 findBook.Image = obj.Image;
                 findBook.CurrentPrice = obj.CurrentPrice;

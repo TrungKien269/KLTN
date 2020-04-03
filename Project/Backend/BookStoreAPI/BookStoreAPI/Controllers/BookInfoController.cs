@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BookStoreAPI.BUS.Control;
 using BookStoreAPI.Helper;
@@ -9,6 +10,7 @@ using BookStoreAPI.Models.Objects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace BookStoreAPI.Controllers
 {
@@ -146,6 +148,17 @@ namespace BookStoreAPI.Controllers
         public async Task<Response> UpdateComment(string id, string text)
         {
             return await bookInfoBal.UpdateComment(id, text);
+        }
+
+        [HttpGet("RelatedBook/{id}")]
+        public async Task<Response> RelatedBook(string id)
+        {
+            var httpClient = new HttpClient();
+            var listBook = new List<string>();
+            var response = httpClient.GetAsync("http://localhost:5000/booksimilarity/" + id);
+            string apiResponse = await response.Result.Content.ReadAsStringAsync();
+            listBook = JsonConvert.DeserializeObject<List<string>>(apiResponse);
+            return await bookInfoBal.GetListRelatedBooks(listBook);
         }
     }
 }

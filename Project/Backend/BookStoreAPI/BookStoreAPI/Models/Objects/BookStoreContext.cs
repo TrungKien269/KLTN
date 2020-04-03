@@ -42,6 +42,7 @@ namespace BookStoreAPI.Models.Objects
         public virtual DbSet<SupplierBook> SupplierBook { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<WishList> WishList { get; set; }
+        public virtual DbSet<RawBook> RawBook { get; set; }
 
         // Unable to generate entity type for table 'dbo.RawUser'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.RawBook'. Please see the warning messages.
@@ -346,6 +347,11 @@ namespace BookStoreAPI.Models.Objects
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_WishList_User");
+            });
+
+            modelBuilder.Entity<RawBook>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
             });
         }
     }
