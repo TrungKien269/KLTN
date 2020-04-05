@@ -85,11 +85,11 @@ bookObj = Book(books)
 
 # MongoDB Connection
 
-from pymongo import *
+# from pymongo import *
 
-client = MongoClient ('localhost:27017')
-db = client.get_database('BookStore')
-BookViewTracking = db.get_collection('book_view_tracking')
+# client = MongoClient ('localhost:27017')
+# db = client.get_database('BookStore')
+# BookViewTracking = db.get_collection('book_view_tracking')
 
-book_view_trackings = pd.DataFrame(list(BookViewTracking.find()))
-# print(book_view_trackings.tail())
+# book_view_trackings = pd.DataFrame(list(BookViewTracking.find()))
+# # print(book_view_trackings.tail())
