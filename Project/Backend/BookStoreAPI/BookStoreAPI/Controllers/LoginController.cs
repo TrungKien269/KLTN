@@ -6,13 +6,14 @@ using BookStoreAPI.BUS.Control;
 using BookStoreAPI.Helper;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStoreAPI.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [EnableCors("BookStoreAPIPolicy")]
     public class LoginController : Controller
     {
         private LoginBAL loginBal;

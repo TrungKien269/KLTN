@@ -8,6 +8,7 @@ using BookStoreAPI.Helper;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -15,7 +16,7 @@ using Newtonsoft.Json;
 namespace BookStoreAPI.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [EnableCors("BookStoreAPIPolicy")]
     public class BookInfoController : Controller
     {
         private BookInfoBAL bookInfoBal;

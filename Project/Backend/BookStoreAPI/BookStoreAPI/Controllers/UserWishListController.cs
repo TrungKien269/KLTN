@@ -6,6 +6,7 @@ using BookStoreAPI.BUS.Control;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookStoreAPI.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("BookStoreAPIPolicy")]
     public class UserWishListController : Controller
     {
         private UserWishListBAL userWishListBal;

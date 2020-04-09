@@ -7,6 +7,7 @@ using BookStoreAPI.Helper;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookStoreAPI.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [EnableCors("BookStoreAPIPolicy")]
     public class UserCartController : Controller
     {
         private UserCartBAL userCartBal;

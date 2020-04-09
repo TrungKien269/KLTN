@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BookStoreAPI.BUS.Control;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookStoreAPI.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [EnableCors("BookStoreAPIPolicy")]
     public class ListBookController : Controller
     {
         private ListBookBAL listBookBal;

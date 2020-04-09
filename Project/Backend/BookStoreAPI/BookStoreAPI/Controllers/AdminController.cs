@@ -6,6 +6,7 @@ using BookStoreAPI.BUS.Control;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -13,6 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookStoreAPI.Controllers
 {
     [Route("api/[controller]")]
+    //[ApiController]
+    [EnableCors("BookStoreAPIPolicy")]
     public class AdminController : Controller
     {
         private AdminBAL adminBal;
@@ -68,7 +71,7 @@ namespace BookStoreAPI.Controllers
 
         [Authorize(Roles = "Administrator")]
         [HttpPost("InsertUpdateBook")]
-        public async Task<Response> InsertOrUpdate(Book book, [FromBody]List<Author> authors, List<string> images, int cateID, 
+        public async Task<Response> InsertOrUpdate(Book book, [FromBody]List<Author> authors, List<string> images, int cateID,
             int formID, int supplierID, int publisherID)
         {
             return await adminBal.InsertBook(book, authors, images, cateID, formID, supplierID, publisherID);
