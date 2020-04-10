@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BookStoreAPI.BUS.Control;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
+using BookStoreAPI.Models.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -71,9 +72,23 @@ namespace BookStoreAPI.Controllers
 
         [Authorize(Roles = "Administrator")]
         [HttpPost("InsertUpdateBook")]
-        public async Task<Response> InsertOrUpdate(Book book, [FromBody]List<Author> authors, List<string> images, int cateID,
+        public async Task<Response> InsertOrUpdate(BookRequest bookRequest, List<Author> authors, List<string> images, int cateID,
             int formID, int supplierID, int publisherID)
         {
+            var book = new Book
+            {
+                Id = bookRequest.Id,
+                Name = bookRequest.Name,
+                OriginalPrice = bookRequest.OriginalPrice,
+                CurrentPrice = bookRequest.CurrentPrice,
+                ReleaseYear = bookRequest.ReleaseYear,
+                Weight = bookRequest.Weight,
+                NumOfPage = bookRequest.NumOfPage,
+                Image = bookRequest.Image,
+                Summary = bookRequest.Summary,
+                Status = bookRequest.Status
+            };
+
             return await adminBal.InsertBook(book, authors, images, cateID, formID, supplierID, publisherID);
         }
 

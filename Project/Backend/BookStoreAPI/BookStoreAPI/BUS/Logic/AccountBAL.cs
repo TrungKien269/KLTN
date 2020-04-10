@@ -154,5 +154,25 @@ namespace BookStoreAPI.BUS.Logic
                 return Response.CatchError(e.Message);
             }
         }
+
+        public async Task<Response> GetAccountByEmail(string email)
+        {
+            try
+            {
+                var account = await context.Account.Where(x => x.Email.Equals(email)).FirstOrDefaultAsync();
+                if (account is null)
+                {
+                    return new Response("This email is not correctly!", false, 0, null);
+                }
+                else
+                {
+                    return new Response("Success", true, 1, account);
+                }
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
     }
 }

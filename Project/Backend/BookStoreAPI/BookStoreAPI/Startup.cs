@@ -102,8 +102,8 @@ namespace BookStoreAPI
                         ValidateLifetime = true,
                         ValidIssuer = "books.sell",
                         ValidAudience = "readers",
-                        IssuerSigningKey = symmetricSecurityKey
-                        //IssuerSigningKey = new SymmetricSecurityKey(signingKey)
+                        IssuerSigningKey = symmetricSecurityKey,
+                        ClockSkew = TimeSpan.Zero
                     };
                 });
 

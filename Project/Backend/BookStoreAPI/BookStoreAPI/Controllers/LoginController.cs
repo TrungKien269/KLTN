@@ -6,6 +6,7 @@ using BookStoreAPI.BUS.Control;
 using BookStoreAPI.Helper;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
+using BookStoreAPI.Models.Request;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -59,9 +60,25 @@ namespace BookStoreAPI.Controllers
         }
 
         [HttpPost("Signup")]
-        [ValidateAntiForgeryToken]
-        public async Task<Response> Signup([FromForm] User user)
+        public async Task<Response> Signup(UserRequest userRequest)
         {
+            var account = new Account
+            {
+                Username = userRequest.AccountRequest.Username,
+                Password = userRequest.AccountRequest.Password,
+                Email = userRequest.AccountRequest.Email
+            };
+
+            var user = new User
+            {
+                FullName = userRequest.FullName,
+                Gender = userRequest.Gender,
+                Birthday = userRequest.Birthday,
+                PhoneNumber = userRequest.PhoneNumber,
+                Address = userRequest.Address,
+                Account = account
+            };
+
             var response = await loginBal.Signup(user);
             if (response.Status is true)
             {
