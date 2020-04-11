@@ -2790,7 +2790,7 @@ jQuery(document).ready(function ($) {
           items: 4,
         },
         1200: {
-          items: 6,
+          items: 5,
         },
       },
       navElement: "div",
@@ -2823,21 +2823,23 @@ jQuery(document).ready(function ($) {
       },
     });
 });
-
-$(".owl-feature").owlCarousel({
-  loop: true,
-  margin: 0,
-  dots: false,
-  items: 1.25,
-  center: true,
-  responsive: {
-    320: {
-      items: 1,
-    },
-    1200: {
+jQuery(document).ready(function ($) {
+  jQuery(".owl-feature").length &&
+    $(".owl-feature").owlCarousel({
+      loop: true,
+      margin: 0,
+      dots: false,
       items: 1.25,
-    },
-  },
+      center: true,
+      responsive: {
+        320: {
+          items: 1,
+        },
+        1200: {
+          items: 1.25,
+        },
+      },
+    });
 });
 
 function myFunction() {
@@ -2930,26 +2932,12 @@ String.prototype.getDecimals ||
       a.trigger("change");
   });
 
-const container = $(".star__rating");
-container.each(function (index_container) {
-  const stars = $(this).find("label.full");
-  var value_star = $(this).data("value-star");
-  getcolorStar(value_star, stars);
-});
-
-function getcolorStar(value_star, element) {
-  for (i = 0; i <= value_star - 1; i++) {
-    $(element[i]).css({
-      color: "#fec600",
-    });
-  }
-}
 //star chay nguoc
 
-const Swal = require("sweetalert2");
-Swal.fire({
-  title: "Error!",
-  text: "Do you want to continue",
-  icon: "error",
-  confirmButtonText: "Cool",
-});
+// const Swal = require("sweetalert2");
+// Swal.fire({
+//   title: "Error!",
+//   text: "Do you want to continue",
+//   icon: "error",
+//   confirmButtonText: "Cool",
+// });

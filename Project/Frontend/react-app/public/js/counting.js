@@ -1,9 +1,8 @@
 // Set the date we're counting down to
-var countDownDate = new Date("Jan 5, 2020 15:37:25").getTime();
+var countDownDate = new Date("Jul 5, 2020 15:37:25").getTime();
 
 // Update the count down every 1 second
 var x = setInterval(function () {
-
   // Get today's date and time
   var now = new Date().getTime();
 
@@ -22,14 +21,12 @@ var x = setInterval(function () {
   document.getElementById("count-minutes").innerHTML = minutes + "m";
   document.getElementById("count-seconds").innerHTML = seconds + "s";
 
-
-  // If the count down is over, write some text 
+  // If the count down is over, write some text
   if (distance < 0) {
     clearInterval(x);
     document.getElementById("count-days").innerHTML = "EXPIRED";
     document.getElementById("count-hours").innerHTML = "EXPIRED";
     document.getElementById("count-minutes").innerHTML = "EXPIRED";
     document.getElementById("count-seconds").innerHTML = "EXPIRED";
-
   }
 }, 1000);

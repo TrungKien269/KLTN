@@ -12,7 +12,7 @@ function Footer() {
               className="input__subcribe"
               placeholder="Enter your e-mail address"
             />
-            <a href="#" className="btn btn--rounded btn-fit btn--blue">
+            <a href="/" className="btn btn--rounded btn-fit btn--blue">
               Subcribe
             </a>
           </div>
@@ -52,25 +52,25 @@ function Footer() {
             </h4>
             <ul className="footer__infor">
               <li>
-                <a href="#">
+                <a href="/">
                   <i className="fab fa-facebook-f" />
                   Facebook
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="/">
                   <i className="fab fa-twitter" />
                   Twitter
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="/">
                   <i className="fab fa-google-plus-g" />
                   Google Plus
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="/">
                   <i className="fab fa-instagram" />
                   Instagram
                 </a>
@@ -87,22 +87,22 @@ function Footer() {
             </h4>
             <ul className="footer__infor">
               <li>
-                <a href="#">About us</a>
+                <a href="/">About us</a>
               </li>
               <li>
-                <a href="#">Term &amp; Condition</a>
+                <a href="/">Term &amp; Condition</a>
               </li>
               <li>
-                <a href="#">Contact us</a>
+                <a href="/">Contact us</a>
               </li>
               <li>
-                <a href="#">My account</a>
+                <a href="/">My account</a>
               </li>
               <li>
-                <a href="#">FAQ</a>
+                <a href="/">FAQ</a>
               </li>
               <li>
-                <a href="#">Blog</a>
+                <a href="/">Blog</a>
               </li>
             </ul>
           </div>
