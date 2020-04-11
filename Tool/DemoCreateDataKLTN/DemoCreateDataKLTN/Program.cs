@@ -13,8 +13,8 @@ namespace DemoCreateDataKLTN
         {
             try
             {
-                PBookViewTracking pBookViewTracking = new PBookViewTracking();
-                pBookViewTracking.Execute();
+                PSearchHistory pSearchHistory = new PSearchHistory();
+                pSearchHistory.Execute();
             }
             catch (Exception e)
             {

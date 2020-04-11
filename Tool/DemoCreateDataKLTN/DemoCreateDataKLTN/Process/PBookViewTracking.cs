@@ -22,14 +22,22 @@ namespace DemoCreateDataKLTN.Process
 
             for (int i = 0; i < dsUser.Tables[0].Rows.Count; i++)
             {
+                //var track = new BookViewTracking
+                //{
+                //    user_id = Int32.Parse(dsUser.Tables[0].Rows[i][0].ToString()),
+                //    book_id = dsBook.Tables[0].Rows[PGetListMainObject.GetRandomNumberIndexBookList()][0].ToString(),
+                //    datetime = GetRandomDateTime()
+                //};
+
                 var track = new BookViewTracking
                 {
-                    user_id = Int32.Parse(dsUser.Tables[0].Rows[i][0].ToString()),
-                    book_id = dsBook.Tables[0].Rows[PGetListMainObject.GetRandomNumberIndexBookList()][0].ToString(),
-                    datetime = GetRandomDateTime()
+                    UserId = Int32.Parse(dsUser.Tables[0].Rows[i][0].ToString()),
+                    BookId = dsBook.Tables[0].Rows[PGetListMainObject.GetRandomNumberIndexBookList()][0].ToString(),
+                    DateTime = GetRandomDateTime()
                 };
 
-                bookViewTrackingBal.Create(track);
+                //bookViewTrackingBal.Create(track);
+                bookViewTrackingBal.InsertBookViewTracking(track);
                 Console.WriteLine(dsUser.Tables[0].Rows[i][0].ToString());
             }
         }

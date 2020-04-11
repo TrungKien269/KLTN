@@ -22,14 +22,22 @@ namespace DemoCreateDataKLTN.Process
 
             for (int i = 0; i < dsUser.Tables[0].Rows.Count; i++)
             {
+                //var search = new SearchHistory
+                //{
+                //    user_id = Int32.Parse(dsUser.Tables[0].Rows[i][0].ToString()),
+                //    words = dsBook.Tables[0].Rows[PGetListMainObject.GetRandomNumberIndexBookList()][0].ToString(),
+                //    datetime = GetRandomDateTime()
+                //};
+
                 var search = new SearchHistory
                 {
-                    user_id = Int32.Parse(dsUser.Tables[0].Rows[i][0].ToString()),
-                    words = dsBook.Tables[0].Rows[PGetListMainObject.GetRandomNumberIndexBookList()][0].ToString(),
-                    datetime = GetRandomDateTime()
+                    UserId = Int32.Parse(dsUser.Tables[0].Rows[i][0].ToString()),
+                    Words = dsBook.Tables[0].Rows[PGetListMainObject.GetRandomNumberIndexBookList()][0].ToString(),
+                    DateTime = GetRandomDateTime()
                 };
 
-                searchHistoryBal.Create(search);
+                //searchHistoryBal.Create(search);
+                searchHistoryBal.InsertSearchHistory(search);
                 Console.WriteLine(dsUser.Tables[0].Rows[i][0].ToString());
             }
         }
