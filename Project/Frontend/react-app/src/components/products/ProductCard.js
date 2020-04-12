@@ -1,6 +1,7 @@
 import React, { useEffect, useState, Component } from "react";
 import Badge from "../utilities/Badge";
-import axios from "axios";
+// import axios from "axios";
+// import LazyLoad from "react-lazyload";
 // import ProductRating from "./ProductRating";
 
 class ProductCard extends Component {

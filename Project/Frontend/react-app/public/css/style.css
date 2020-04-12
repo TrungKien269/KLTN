@@ -1946,18 +1946,13 @@ h1 {
 .pagination {
   justify-content: center;
 }
-.pagination-block {
-  margin: 2rem 0;
-}
-.pagination .page-item {
-  margin: 0 1.5rem;
+.pagination li {
+  margin: 2rem 0.5rem;
+  font-size: 2.4rem;
   height: 6rem;
   width: 6rem;
 }
-.pagination .page-item {
-  transition: all 0.3s;
-}
-.pagination .page-item .page-link {
+.pagination li a {
   border-radius: 50%;
   font-size: 2rem;
   display: flex;
@@ -1966,15 +1961,34 @@ h1 {
   height: 100%;
   width: 100%;
 }
-.pagination .page-item.active:hover .page-link,
-.pagination .page-item.active .page-link {
+
+.pagination .page-item {
+  margin: 0 1.5rem;
+  height: 6rem;
+  width: 6rem;
+}
+.pagination li,
+.pagination li a {
+  transition: all 0.5s;
+}
+.pagination li a {
+  border-radius: 50%;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+.pagination li.active:hover a,
+.pagination li.active a {
   border: 1.5px solid #1b8bcc;
   border-radius: 50%;
   background: #fff;
   color: #1b8bcc;
   filter: drop-shadow(0.2rem 0.2rem 0.5rem rgba(27, 139, 204, 0.4));
 }
-.pagination .page-item:hover .page-link {
+.pagination li:hover a {
   border: 1.5px solid #1b8bcc;
   border-radius: 50%;
   background: #fff;

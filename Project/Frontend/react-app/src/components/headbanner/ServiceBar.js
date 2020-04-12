@@ -12,7 +12,8 @@ function ServiceBar() {
             <div className="service-text">
               <div className="service-title">Quick delivery</div>
               <div className="service-caption">
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                Provides clients with solutions to their same-day delivery
+                needs.
               </div>
             </div>
           </div>
@@ -23,7 +24,8 @@ function ServiceBar() {
             <div className="service-text">
               <div className="service-title">Pay with Easy</div>
               <div className="service-caption">
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                It is a payment method that allows your customers to make
+                payments through ATM machines of various banks.
               </div>
             </div>
           </div>
@@ -34,7 +36,8 @@ function ServiceBar() {
             <div className="service-text">
               <div className="service-title">best deal</div>
               <div className="service-caption">
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                We're confident if you buy any of these now, you're getting a
+                good deal.
               </div>
             </div>
           </div>
@@ -45,7 +48,8 @@ function ServiceBar() {
             <div className="service-text">
               <div className="service-title">secured payment</div>
               <div className="service-caption">
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                Secure Payment Services is a safer, faster, more secure way to
+                pay online with, your payments.
               </div>
             </div>
           </div>

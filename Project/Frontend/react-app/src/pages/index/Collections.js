@@ -16,7 +16,7 @@ function Collections() {
               <SideBarBrand />
             </div>
             <div className="col-md">
-              <div class="title-wrapper">
+              <div className="title-wrapper">
                 <h1>Products</h1>
               </div>
               <div className="row">
