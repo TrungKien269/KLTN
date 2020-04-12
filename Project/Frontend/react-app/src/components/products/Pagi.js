@@ -5,13 +5,13 @@ import NumberFormat from "react-number-format";
 
 const Index = (props) => {
   const { data, itemsCountPerPage, pageRangeDisplayed } = props;
-  console.log(props);
+  // console.log(props);
   const [activePage, setActivePage] = useState(1);
   const [loadingRange, setLoadingRange] = useState([0, itemsCountPerPage - 1]);
 
   const handlePageChange = (pageNumber) => {
-    console.log(`active page is ${pageNumber}`);
-    console.log(itemsCountPerPage);
+    // console.log(`active page is ${pageNumber}`);
+    // console.log(itemsCountPerPage);
     setActivePage(pageNumber);
     setLoadingRange([
       (pageNumber - 1) * itemsCountPerPage,
@@ -23,7 +23,9 @@ const Index = (props) => {
     let result = [];
     if (data.length > 0) {
       let start = loadingRange[0];
-      let end = loadingRange[1];
+      let end =
+        loadingRange[1] > data.length ? data.length - 1 : loadingRange[1];
+      console.log(end);
       for (let i = start; i <= end; i++) {
         const book = data[i];
         result.push(

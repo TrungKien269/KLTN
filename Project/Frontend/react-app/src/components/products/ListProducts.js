@@ -11,14 +11,14 @@ const Index = () => {
       method: "get",
       url: "http://localhost:53788/api/ListBook/GetAll",
     }).then(function (res) {
-      console.log(res);
+      // console.log(res);
       setData(res.data.obj);
     });
   }, []);
 
   return (
     <React.Fragment>
-      <Pagi data={data} itemsCountPerPage={20} pageRangeDisplayed={5} />
+      <Pagi data={data} itemsCountPerPage={16} pageRangeDisplayed={5} />
     </React.Fragment>
   );
 };
