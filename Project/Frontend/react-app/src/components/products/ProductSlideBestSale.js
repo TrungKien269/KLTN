@@ -16,7 +16,7 @@ class ProductSlideBestSale extends Component {
     const x = this;
     axios({
       method: "get",
-      url: "http://localhost:53788/api/Main/List6BestSaleBook",
+      url: "http://localhost:5000/api/Main/List6BestSaleBook",
     }).then(function (response) {
       x.setState({ data: response.data.obj });
     });

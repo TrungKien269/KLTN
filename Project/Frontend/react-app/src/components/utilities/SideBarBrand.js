@@ -1,42 +1,46 @@
 import React, { Component } from "react";
-
+import axios from "axios";
 class SideBarBrand extends Component {
+  state = {
+    publishers: [],
+  };
+
+  componentDidMount = () => {
+    const x = this;
+    axios({
+      method: "get",
+      url: "http://localhost:5000/api/Main/FamousPublisher",
+    }).then(function (res) {
+      x.setState({
+        publishers: res.data.obj,
+      });
+    });
+  };
+  showListPublisher = (publishers) => {
+    let result = "";
+    if (Object.keys(publishers).length > 0) {
+      result = publishers.map((publisher) => {
+        return (
+          <li>
+            {" "}
+            <label>
+              <input type="checkbox" id={publisher.id} className="check__box" />
+              <label htmlFor={publisher.id} className="checkmark" />
+              <label htmlFor={publisher.id}>{publisher.name}</label>
+            </label>
+          </li>
+        );
+      });
+    }
+    return result;
+  };
   render() {
     return (
       <React.Fragment>
         <div className="sidebar-block">
-          <h2>Brand</h2>
+          <h2>Publishers</h2>
           <ul className="list-unstyled sidebar-list">
-            <li>
-              <input type="checkbox" id="check1" className="check__box" />
-              <label htmlFor="check1" className="checkmark" />
-              <label htmlFor="check1">accesi</label>
-            </li>
-            <li>
-              <input type="checkbox" id="check2" className="check__box" />
-              <label htmlFor="check2" className="checkmark" />
-              <label htmlFor="check2">bikis</label>
-            </li>
-            <li>
-              <input type="checkbox" id="check3" className="check__box" />
-              <label htmlFor="check3" className="checkmark" />
-              <label htmlFor="check3">elle</label>
-            </li>
-            <li>
-              <input type="checkbox" id="check4" className="check__box" />
-              <label htmlFor="check4" className="checkmark" />
-              <label htmlFor="check4">gondo</label>
-            </li>
-            <li>
-              <input type="checkbox" id="check5" className="check__box" />
-              <label htmlFor="check5" className="checkmark" />
-              <label htmlFor="check5">jeana</label>
-            </li>
-            <li>
-              <input type="checkbox" id="check6" className="check__box" />
-              <label htmlFor="check6" className="checkmark" />
-              <label htmlFor="check6">ladora</label>
-            </li>
+            {this.showListPublisher(this.state.publishers)}
           </ul>
         </div>
       </React.Fragment>

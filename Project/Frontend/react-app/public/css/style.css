@@ -2233,8 +2233,8 @@ h1 {
 }
 .sidebar-block .checkmark::after {
   position: absolute;
-  content: "\f00c";
   font-family: FontAwesome;
+  content: "✓";
   font-size: 1.4rem;
   color: #1b8bcc;
   opacity: 0;

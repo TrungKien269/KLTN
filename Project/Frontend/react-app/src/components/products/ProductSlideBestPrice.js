@@ -13,7 +13,7 @@ class ProductSlideBestPrice extends Component {
     const books = this;
     axios({
       method: "get",
-      url: "http://localhost:53788/api/Main/ListLowestPriceBook",
+      url: "http://localhost:5000/api/Main/ListLowestPriceBook",
     }).then(function (res) {
       books.setState({
         data: res.data.obj,

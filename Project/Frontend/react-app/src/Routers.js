@@ -14,7 +14,7 @@ const Routers = [
     main: () => <NotFoundPage></NotFoundPage>,
   },
   {
-    path: "/collections",
+    path: "/collections", // /collection/Romance
     exact: false,
     main: () => <Collections></Collections>,
   },

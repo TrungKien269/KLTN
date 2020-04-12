@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import GetCategories from "../utilities/GetCategories";
 
 class Header extends Component {
   render() {
@@ -77,20 +78,7 @@ class Header extends Component {
                   aria-labelledby="navbarDropdownMenuLink3"
                 >
                   <div className="row">
-                    <div className="col-md-3">
-                      <h3>All Genre</h3>
-                      <ul className="list-unstyled">
-                        <li>
-                          <Link to="#" className="pad-0-0">
-                            Art &amp; Photography
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="col-md-3">
-                      <h3>Banner image</h3>
-                      <img src="data/book7.webp" className="img-cover" alt="" />
-                    </div>
+                    <GetCategories />
                   </div>
                 </div>
               </li>

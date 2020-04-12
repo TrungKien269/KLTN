@@ -10,7 +10,7 @@ const Index = (props) => {
   const [loadingRange, setLoadingRange] = useState([0, itemsCountPerPage - 1]);
 
   const handlePageChange = (pageNumber) => {
-    console.log(`active page is ${pageNumber}`);
+    // console.log(`active page is ${pageNumber}`);
     // console.log(itemsCountPerPage);
     setActivePage(pageNumber);
     setLoadingRange([

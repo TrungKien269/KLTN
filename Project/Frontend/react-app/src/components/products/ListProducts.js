@@ -9,7 +9,7 @@ const Index = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: "http://localhost:53788/api/ListBook/GetAll",
+      url: "http://localhost:5000/api/ListBook/GetAll",
     }).then(function (res) {
       // console.log(res);
       setData(res.data.obj);

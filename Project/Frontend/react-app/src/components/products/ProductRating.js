@@ -11,7 +11,7 @@
 //   render() {
 //     // rating = 2;
 //     return (
-//       <StarRatings  
+//       <StarRatings
 //         rating={this.state.rating}
 //         starRatedColor="blue"
 //         changeRating={this.changeRating}
