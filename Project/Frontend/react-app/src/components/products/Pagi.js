@@ -10,7 +10,7 @@ const Index = (props) => {
   const [loadingRange, setLoadingRange] = useState([0, itemsCountPerPage - 1]);
 
   const handlePageChange = (pageNumber) => {
-    // console.log(`active page is ${pageNumber}`);
+    console.log(`active page is ${pageNumber}`);
     // console.log(itemsCountPerPage);
     setActivePage(pageNumber);
     setLoadingRange([
@@ -22,6 +22,7 @@ const Index = (props) => {
   const showListData = useMemo(() => {
     let result = [];
     if (data.length > 0) {
+      console.log(data.length);
       let start = loadingRange[0];
       let end =
         loadingRange[1] > data.length ? data.length - 1 : loadingRange[1];
@@ -55,6 +56,7 @@ const Index = (props) => {
       <div className="d-flex justify-content-center w-100">
         <Pagination
           activePage={activePage}
+          itemsCountPerPage={itemsCountPerPage}
           totalItemsCount={data.length}
           pageRangeDisplayed={pageRangeDisplayed}
           onChange={handlePageChange}

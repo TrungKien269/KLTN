@@ -18,7 +18,7 @@ const Index = () => {
 
   return (
     <React.Fragment>
-      <Pagi data={data} itemsCountPerPage={16} pageRangeDisplayed={5} />
+      <Pagi data={data} itemsCountPerPage={20} pageRangeDisplayed={5} />
     </React.Fragment>
   );
 };

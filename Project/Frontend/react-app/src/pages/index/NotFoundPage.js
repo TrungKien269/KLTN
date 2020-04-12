@@ -1,6 +1,7 @@
 import React from "react";
+import Index from "../../components/utilities/GetCategories";
 
 function NotFoundPage() {
-  return <h1>Page not found</h1>;
+  return <Index />;
 }
 export default NotFoundPage;
