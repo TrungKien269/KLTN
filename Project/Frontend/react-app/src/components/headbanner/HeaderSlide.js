@@ -1,5 +1,6 @@
 import React from "react";
 import ServiceBar from "./ServiceBar";
+import { Link } from "react-router-dom";
 
 function HeaderSlide() {
   return (
@@ -57,13 +58,13 @@ function HeaderSlide() {
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                   Aperia
                 </p>
-                <a
-                  href="/"
+                <Link
+                  to={"/collections"}
                   className="btn btn--rounded btn--blue wow fadeIn"
                   data-wow-delay="1.5s"
                 >
                   view collections
-                </a>
+                </Link>
               </div>
               <video src="data/video.mp4" autoPlay loop muted preload="auto" />
             </div>
