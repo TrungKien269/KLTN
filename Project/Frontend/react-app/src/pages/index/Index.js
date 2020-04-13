@@ -1,8 +1,6 @@
 import React from "react";
 import HeaderBanner from "../../components/headbanner/HeaderBanner";
-import ProductSlide from "../../components/products/ProductSlideBestSale";
 import SpecialItemSlide from "../../components/products/SpecialItemSlide";
-import TimeCounting from "../../components/utilities/TimeCounter";
 import ProductSlideBestSale from "../../components/products/ProductSlideBestSale";
 import ProductSlideBestPrice from "../../components/products/ProductSlideBestPrice";
 function Index() {

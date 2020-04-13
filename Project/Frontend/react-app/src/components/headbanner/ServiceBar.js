@@ -24,8 +24,7 @@ function ServiceBar() {
             <div className="service-text">
               <div className="service-title">Pay with Easy</div>
               <div className="service-caption">
-                It is a payment method that allows your customers to make
-                payments through ATM machines of various banks.
+                You can make your payments in various ways, fast and easy
               </div>
             </div>
           </div>
@@ -48,8 +47,8 @@ function ServiceBar() {
             <div className="service-text">
               <div className="service-title">secured payment</div>
               <div className="service-caption">
-                Secure Payment Services is a safer, faster, more secure way to
-                pay online with, your payments.
+                A safer, faster, more secure way to pay online with, your
+                payments.
               </div>
             </div>
           </div>

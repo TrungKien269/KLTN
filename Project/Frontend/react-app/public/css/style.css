@@ -2034,9 +2034,12 @@ h1 {
 }
 .section__feature .special-item {
   width: 100%;
+  height: 100%;
 }
 .section__feature .special-wrapper {
+  position: relative;
   background-size: cover !important;
+  background-position: center;
   padding: 3rem 7rem;
 }
 @media (max-width: 47em) {
