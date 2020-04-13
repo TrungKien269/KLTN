@@ -1,0 +1,62 @@
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - ask_func_list
+  - ask_name
+  - ask_book_category
+  - ask_book_publisher
+
+actions:
+- utter_greet
+- utter_cheer_up
+- utter_did_that_help
+- utter_happy
+- utter_goodbye
+- utter_iamabot
+- utter_utter_ask_for_function
+- utter_ask_name
+- utter_ask_func_list
+- utter_thank
+- action_find_book_category
+- action_find_book_publisher
+
+templates:
+  utter_greet:
+  - text: "Hey! How are you?"
+  - text: "Chào, bạn khỏe không?"
+
+  utter_cheer_up:
+  - text: "Here is something to cheer you up:"
+    image: "https://i.imgur.com/nGF1K8f.jpg"
+
+  utter_did_that_help:
+  - text: "Did that help you?"
+  - text: "Tôi có thể giúp gì cho bạn?"
+
+  utter_happy:
+  - text: "Great, carry on!"
+
+  utter_goodbye:
+  - text: "Bye"
+  - text: "Xin chào và hẹn gặp lại"
+
+  utter_iamabot:
+  - text: "I am a bot, powered by Rasa."
+  - text: "Tôi là bot, được hỗ trợ bởi Rasa!."
+
+  utter_ask_name:
+  - text: "My name is Belpois, nice to meet you!"
+  - text: "Tôi là Belpois, rất vui phục vụ bạn!!"
+
+  utter_ask_func_list:
+  - text: "I can talk with you, give you some information that you need!"
+  - text: "Tôi có thể trò chuyện, trả lời câu hỏi và cung cấ thông tin bạn cần!"
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
