@@ -1,0 +1,4 @@
+Train models: rasa train
+Chạy local: rasa shell
+Khởi động api và cors: rasa run -m models --enable-api --cors "*" --debug
+Khởi động server: rasa run actions

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BookStoreAPI.BUS.Control;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
+using BookStoreAPI.Models.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -36,8 +37,16 @@ namespace BookStoreAPI.Controllers
 
         [Authorize]
         [HttpPut("UpdateProfile")]
-        public async Task<Response> UpdateUser(User user)
+        public async Task<Response> UpdateUser(UserRequest userRequest)
         {
+            var user = new User
+            {
+                FullName =  userRequest.FullName,
+                Gender = userRequest.Gender,
+                Birthday = userRequest.Birthday,
+                PhoneNumber = userRequest.PhoneNumber,
+                Address = userRequest.Address
+            };
             user.Id = HttpContext.Session.GetInt32("UserID").Value;
             return await profileBal.UpdateUser(user);
         }

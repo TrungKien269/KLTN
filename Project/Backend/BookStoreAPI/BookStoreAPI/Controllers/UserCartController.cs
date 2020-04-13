@@ -26,6 +26,7 @@ namespace BookStoreAPI.Controllers
             this.userCartBal = new UserCartBAL();
         }
 
+        [Authorize]
         [HttpGet("Cart")]
         public async Task<Response> GetUserCart()
         {
@@ -43,6 +44,7 @@ namespace BookStoreAPI.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("RemoveBookCart")]
         public async Task<Response> RemoveBookInCart(string id)
         {
@@ -72,6 +74,7 @@ namespace BookStoreAPI.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("EditQuantityCart")]
         public async Task<Response> EditQuantityBookInCart(string id, string quantity)
         {
