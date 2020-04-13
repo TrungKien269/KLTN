@@ -1,24 +1,13 @@
 import React, { Component, lazy, useState, useEffect } from "react";
-import axios from "axios";
+
 import Pagi from "./Pagi";
-import ProductCard from "./ProductCard";
 
-const Index = () => {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    axios({
-      method: "get",
-      url: "http://localhost:5000/api/ListBook/GetAll",
-    }).then(function (res) {
-      // console.log(res);
-      setData(res.data.obj);
-    });
-  }, []);
-
+const Index = (props) => {
+  const {category} = props
+  
   return (
     <React.Fragment>
-      <Pagi data={data} itemsCountPerPage={20} pageRangeDisplayed={5} />
+      <Pagi category={encodeURI(category)} itemsCountPerPage={20} pageRangeDisplayed={5} />
     </React.Fragment>
   );
 };

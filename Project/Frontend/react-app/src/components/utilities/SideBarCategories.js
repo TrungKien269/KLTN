@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 class SideBarCategories extends Component {
   state = {
     categories: [],
@@ -21,12 +22,11 @@ class SideBarCategories extends Component {
     if (Object.keys(categories).length > 0) {
       result = categories.map((category) => {
         // console.log(categories[1].subCategory);
-
         return (
           <li key={category.id}>
-            <a href="/" className="pad-0-0">
+            <Link to={category.name} className="pad-0-0" >
               {category.name}
-            </a>
+            </Link>
           </li>
         );
       });

@@ -4,7 +4,10 @@ import SideBarPriceRange from "../../components/utilities/SideBarPriceRange";
 import SideBarBrand from "../../components/utilities/SideBarBrand";
 import ProductCard from "../../components/products/ProductCard";
 import ListProducts from "../../components/products/ListProducts";
-function Collections() {
+import { withRouter } from "react-router-dom";
+
+function Collections(props) {
+  const {category=''} = props.match.params
   return (
     <React.Fragment>
       <section className="section__product-list">
@@ -20,7 +23,7 @@ function Collections() {
                 <h1>Products</h1>
               </div>
               <div className="row">
-                <ListProducts />
+                <ListProducts category={category}/>
               </div>
             </div>
           </div>
@@ -29,4 +32,4 @@ function Collections() {
     </React.Fragment>
   );
 }
-export default Collections;
+export default withRouter(Collections);

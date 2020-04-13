@@ -15,7 +15,12 @@ const Routers = [
   },
   {
     path: "/collections", // /collection/Romance
-    exact: false,
+    exact: true,
+    main: () => <Collections></Collections>,
+  },
+  {
+    path: "/collections/:category", // /collection/Romance
+    exact: true,
     main: () => <Collections></Collections>,
   },
 ];

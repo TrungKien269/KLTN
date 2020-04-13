@@ -1,39 +1,32 @@
-import React, { Component, useState, useEffect, Link } from "react";
+import React, { Component, useState, useEffect } from "react";
 import axios from "axios";
+import { withRouter, Link } from "react-router-dom";
 
-class GetCategories extends Component {
-  state = {
-    categories: [],
-  };
-  componentDidMount() {
-    const x = this;
+const GetCategories = () => {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
     axios({
       method: "GET",
       url: "http://localhost:5000/api/Main/ListCategory",
-    }).then(function (res) {
-      //   console.log(res);
-      x.setState({ categories: res.data.obj });
+    }).then((res) => {
+      setCategories(res.data.obj);
     });
-  }
+  }, []);
 
-  showListCategories = (categories) => {
+  const showListCategories = (categories) => {
     // console.log(categories.length);
-    let result = "";
-    if (Object.keys(categories).length > 0) {
-      result = categories.map((category) => {
-        // console.log(categories[1].subCategory);
-
+    if (categories.length > 0) {
+      return categories.map((v) => {
         return (
-          <div className="col-md-3">
-            <h3 key={category.id}>{category.name}</h3>
-            <ul>
-              <li>asdasd</li>
-            </ul>
+          <div className="col-md-3" key={v.id}>
+            <Link to={`/collections/${v.name}`}>
+              <h3>{v.name}</h3>
+            </Link>
           </div>
         );
       });
-    }
-    return result;
+    } return null
   };
 
   //   showListSubCategory = (categories) => {
@@ -51,13 +44,7 @@ class GetCategories extends Component {
   //     return result;
   //   };
 
-  render() {
-    return (
-      <React.Fragment>
-        {this.showListCategories(this.state.categories)}
-      </React.Fragment>
-    );
-  }
-}
+  return <React.Fragment>{showListCategories(categories)}</React.Fragment>;
+};
 
-export default GetCategories;
+export default withRouter(GetCategories);

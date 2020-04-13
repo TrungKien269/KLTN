@@ -1,17 +1,29 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Pagination from "react-js-pagination";
 import ProductCard from "./ProductCard";
 import NumberFormat from "react-number-format";
+import axios from "axios";
 
 const Index = (props) => {
-  const { data, itemsCountPerPage, pageRangeDisplayed } = props;
-  // console.log(props);
+  const { itemsCountPerPage, pageRangeDisplayed, category = "" } = props;
   const [activePage, setActivePage] = useState(1);
   const [loadingRange, setLoadingRange] = useState([0, itemsCountPerPage - 1]);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `http://localhost:5000/api/ListBook/${
+        category.length > 0 ? `Category/${category}` : "GetAll"
+      }`,
+    }).then(function (res) {
+      setData(res.data.obj);
+    });
+    setLoadingRange([0, itemsCountPerPage - 1]);
+    setActivePage(1);
+  }, [category]);
 
   const handlePageChange = (pageNumber) => {
-    // console.log(`active page is ${pageNumber}`);
-    // console.log(itemsCountPerPage);
     setActivePage(pageNumber);
     setLoadingRange([
       (pageNumber - 1) * itemsCountPerPage,
@@ -22,11 +34,9 @@ const Index = (props) => {
   const showListData = useMemo(() => {
     let result = [];
     if (data.length > 0) {
-      console.log(data.length);
       let start = loadingRange[0];
       let end =
         loadingRange[1] > data.length ? data.length - 1 : loadingRange[1];
-      console.log(end);
       for (let i = start; i <= end; i++) {
         const book = data[i];
         result.push(
