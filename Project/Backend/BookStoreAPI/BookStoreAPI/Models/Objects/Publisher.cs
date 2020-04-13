@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace BookStoreAPI.Models.Objects
 {
@@ -18,6 +19,7 @@ namespace BookStoreAPI.Models.Objects
         public string Name { get; set; }
 
         [InverseProperty("Publisher")]
+        [JsonIgnore]
         public virtual ICollection<PublisherBook> PublisherBook { get; set; }
     }
 }
