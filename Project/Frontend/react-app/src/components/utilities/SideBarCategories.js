@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 class SideBarCategories extends Component {
   state = {
     categories: [],
@@ -24,7 +24,7 @@ class SideBarCategories extends Component {
         // console.log(categories[1].subCategory);
         return (
           <li key={category.id}>
-            <Link to={category.name} className="pad-0-0" >
+            <Link to={category.name} className="pad-0-0">
               {category.name}
             </Link>
           </li>
@@ -40,6 +40,9 @@ class SideBarCategories extends Component {
           <h2>Categories</h2>
           <ul className="list-unstyled sidebar-list sidebar-category">
             {this.showListCategories(this.state.categories)}
+            <li>
+              <Link to={"/collections/"}>All Products</Link>
+            </li>
           </ul>
         </div>
       </React.Fragment>

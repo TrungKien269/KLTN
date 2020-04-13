@@ -34,13 +34,14 @@ const Index = (props) => {
   const showListData = useMemo(() => {
     let result = [];
     if (data.length > 0) {
+      console.log(data);
       let start = loadingRange[0];
       let end =
         loadingRange[1] > data.length ? data.length - 1 : loadingRange[1];
       for (let i = start; i <= end; i++) {
         const book = data[i];
         result.push(
-          <div className="col-lg-3 col-md-4 col-sm-6" key={book.id}>
+          <div className="col-lg-3 col-md-4 col-6" key={book.id}>
             <ProductCard
               name={book.name}
               image={book.image}
@@ -62,6 +63,16 @@ const Index = (props) => {
 
   return (
     <>
+      <div className="d-flex justify-content-center w-100">
+        <Pagination
+          hideDisabled={true}
+          activePage={activePage}
+          itemsCountPerPage={itemsCountPerPage}
+          totalItemsCount={data.length}
+          pageRangeDisplayed={pageRangeDisplayed}
+          onChange={handlePageChange}
+        />
+      </div>
       <div className="row">{showListData}</div>
       <div className="d-flex justify-content-center w-100">
         <Pagination
