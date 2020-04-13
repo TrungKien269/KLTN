@@ -59,7 +59,7 @@ function HeaderSlide() {
                   Aperia
                 </p>
                 <Link
-                  to={"/collections"}
+                  to={"/collections/"}
                   className="btn btn--rounded btn--blue wow fadeIn"
                   data-wow-delay="1.5s"
                 >
