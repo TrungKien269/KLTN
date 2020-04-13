@@ -21,7 +21,7 @@ class SideBarBrand extends Component {
     if (Object.keys(publishers).length > 0) {
       result = publishers.map((publisher) => {
         return (
-          <li>
+          <li key={publisher.id}>
             {" "}
             <label>
               <input type="checkbox" id={publisher.id} className="check__box" />

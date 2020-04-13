@@ -18,7 +18,7 @@ function Collections(props) {
             </div>
             <div className="col-md">
               <div className="title-wrapper">
-                <h1>Products</h1>
+                <h1>{category}</h1>
               </div>
               <div className="row">
                 <ListProducts category={category} />
