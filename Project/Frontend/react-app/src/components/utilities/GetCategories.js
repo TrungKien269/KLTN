@@ -26,7 +26,8 @@ const GetCategories = () => {
           </div>
         );
       });
-    } return null
+    }
+    return null;
   };
 
   //   showListSubCategory = (categories) => {

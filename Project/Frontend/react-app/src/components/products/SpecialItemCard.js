@@ -23,7 +23,9 @@ class SpecialItemCard extends Component {
                   {this.props.name}
                 </div>
                 <div className="special-price">{this.props.price}</div>
-                <div className="special-author">Author: Jessica therrien</div>
+                <div className="special-author">
+                  Author: {this.props.author}
+                </div>
                 <a href="#" className="btn btn--rounded btn-fit btn--white">
                   view detail
                 </a>

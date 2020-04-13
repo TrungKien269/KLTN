@@ -4,28 +4,20 @@ class SideBarPriceRange extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="sidebar-block">
-          <h2>Price Range</h2>
-          <div className="d-flex align-items-center">
-            <h4>Range:</h4>
-            <input
-              type="text"
-              className="js-input-from input-min-price"
-              defaultValue={0}
-            />
-            <h3>-</h3>
-            <input
-              type="text"
-              className="js-input-to input-max-price"
-              defaultValue={0}
-            />
-          </div>
-          <div className="wrapper">
-            <div className="range-slider">
-              <input type="text" className="js-range-slider" defaultValue />
-            </div>
-          </div>
-        </div>
+        <select className="price-range">
+          <option>All</option>
+          <option>&lt;= 100.000</option>
+          <option>100.000 - 500.000</option>
+          <option>500.000 - 1.000.000</option>
+          <option>1.000.000 - 1.500.000</option>
+          <option>1.500.000 - 2.000.000</option>
+          <option>2.000.000 - 2.500.000</option>
+          <option>2.500.000 - 3.000.000</option>
+          <option>3.000.000 - 3.500.000</option>
+          <option>3.500.000 - 4.000.000</option>
+          <option>4.000.000 - 4.500.000</option>
+          <option>4.500.000 - 5.000.000</option>
+        </select>
       </React.Fragment>
     );
   }

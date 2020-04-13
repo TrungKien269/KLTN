@@ -3,10 +3,11 @@ import SideBarCategories from "../../components/utilities/SideBarCategories";
 import SideBarBrand from "../../components/utilities/SideBarBrand";
 import ListProducts from "../../components/products/ListProducts";
 import { withRouter } from "react-router-dom";
+import SideBarPriceRange from "../../components/utilities/SideBarPriceRange";
 
 function Collections(props) {
   const { category = "" } = props.match.params;
-  
+
   return (
     <React.Fragment>
       <section className="section__product-list">
@@ -14,8 +15,8 @@ function Collections(props) {
           <div className="row">
             <div className="col-md-3">
               <SideBarCategories />
-
               <SideBarBrand />
+              <SideBarPriceRange />
             </div>
             <div className="col-md">
               <div className="title-wrapper">

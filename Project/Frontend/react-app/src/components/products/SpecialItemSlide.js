@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, Component } from "react";
 import SpecialItemCard from "./SpecialItemCard";
 import axios from "axios";
 import OwlCarousel from "react-owl-carousel2";
-import NumberFormat from "react-number-format"; 
+import NumberFormat from "react-number-format";
 class SpecialItemSlide extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +21,7 @@ class SpecialItemSlide extends Component {
 
   showFeatureBook = (data) => {
     let result = "";
+    let authors = "";
     if (Object.keys(data).length > 0) {
       result = data.map((book) => {
         return (
@@ -36,6 +37,7 @@ class SpecialItemSlide extends Component {
                 prefix={"VND "}
               />
             }
+            author={book.authorBook[0].author.name}
           />
         );
       });
@@ -44,7 +46,8 @@ class SpecialItemSlide extends Component {
   };
   options = {
     nav: false,
-    items: 1,
+    items: 1.25,
+    center: true,
     margin: 0,
     loop: true,
     autoWidth: false,
