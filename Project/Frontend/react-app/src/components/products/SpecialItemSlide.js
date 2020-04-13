@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, Component } from "react";
 import SpecialItemCard from "./SpecialItemCard";
 import axios from "axios";
 import OwlCarousel from "react-owl-carousel2";
+import NumberFormat from "react-number-format"; 
 class SpecialItemSlide extends Component {
   constructor(props) {
     super(props);
@@ -27,7 +28,14 @@ class SpecialItemSlide extends Component {
             key={book.id}
             image={book.image}
             name={book.name}
-            price={book.currentPrice}
+            price={
+              <NumberFormat
+                value={book.currentPrice}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"VND "}
+              />
+            }
           />
         );
       });
