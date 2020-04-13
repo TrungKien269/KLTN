@@ -65,6 +65,7 @@ const Index = (props) => {
       <div className="row">{showListData}</div>
       <div className="d-flex justify-content-center w-100">
         <Pagination
+          hideDisabled={true}
           activePage={activePage}
           itemsCountPerPage={itemsCountPerPage}
           totalItemsCount={data.length}
