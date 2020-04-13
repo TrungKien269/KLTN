@@ -45,6 +45,12 @@ namespace BookStoreAPI.BUS.Control
             return await bookBal.GetBookBySubCategory(subcategory);
         }
 
+        public async Task<Response> GetListBookGetBookByCategoryAndPrice(int abovePrice, int belowPrice,
+            string category)
+        {
+            return await bookBal.GetBookByCategoryAndPrice(abovePrice, belowPrice, category);
+        }
+
         public async Task<Response> SearchBook(string value)
         {
             return await bookBal.SearchBook(value);

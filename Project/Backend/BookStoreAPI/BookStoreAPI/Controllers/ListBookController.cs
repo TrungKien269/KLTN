@@ -42,6 +42,13 @@ namespace BookStoreAPI.Controllers
             return await listBookBal.GetListBookBySubCategory(subcategory);
         }
 
+        [HttpGet("Filter/{abovePrice}/{belowPrice}/{category}")]
+        public async Task<Response> GetBookByCategoryAndPrice(string abovePrice, string belowPrice, string category)
+        {
+            return await listBookBal.GetListBookGetBookByCategoryAndPrice(int.Parse(abovePrice), int.Parse(belowPrice),
+                category);
+        }
+
         [HttpGet("Search/value={value}")]
         public async Task<Response> SearchBook(string value)
         {

@@ -533,6 +533,22 @@ namespace BookStoreAPI.BUS.Logic
             }
         }
 
+        public async Task<Response> GetBookByCategoryAndPrice(int abovePrice, int belowPrice, string category)
+        {
+            try
+            {
+                var books = await context.Book.Include(x => x.PublisherBook).ThenInclude(x => x.Publisher)
+                    .Where(x => x.BookCategory.All(y => y.Cate.Cate.Name.Equals(category)) &&
+                                x.Status.Equals("Available") && x.CurrentPrice >= abovePrice && x.CurrentPrice <= belowPrice)
+                    .OrderByDescending(x => x.CurrentPrice).ToListAsync();
+                return new Response("Success", true, 1, books);
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
         public async Task<Response> SearchBook(string value)
         {
             try
