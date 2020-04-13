@@ -3,11 +3,15 @@ import React, { Component, lazy, useState, useEffect } from "react";
 import Pagi from "./Pagi";
 
 const Index = (props) => {
-  const {category} = props
-  
+  const { category } = props;
+
   return (
     <React.Fragment>
-      <Pagi category={encodeURI(category)} itemsCountPerPage={20} pageRangeDisplayed={5} />
+      <Pagi
+        category={encodeURI(category)}
+        itemsCountPerPage={16}
+        pageRangeDisplayed={3}
+      />
     </React.Fragment>
   );
 };
