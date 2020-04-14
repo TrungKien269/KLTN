@@ -14,7 +14,7 @@ class ProductCard extends Component {
         <div className="card display-on-hover">
           <a href="#">
             <img
-              className="card-img-top img-cover img-cover-30"
+              className="card-img-top img-contain img-contain-25"
               src={this.props.image}
               alt="Card image cap"
             />

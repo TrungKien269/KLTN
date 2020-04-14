@@ -15,8 +15,8 @@ function Collections(props) {
           <div className="row">
             <div className="col-md-3">
               <SideBarCategories />
-              <SideBarBrand />
               <SideBarPriceRange />
+              <SideBarBrand />
             </div>
             <div className="col-md">
               <div className="title-wrapper">

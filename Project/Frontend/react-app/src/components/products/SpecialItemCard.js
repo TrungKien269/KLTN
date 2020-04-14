@@ -14,8 +14,12 @@ class SpecialItemCard extends Component {
           }}
         >
           <div className="row">
-            <div className="col-sm-3 special-img">
-              <img src={this.props.image} className="img-contain" alt="" />
+            <div className="col-md-4 ">
+              <img
+                src={this.props.image}
+                className="img-contain img-contain-25"
+                alt=""
+              />
             </div>
             <div className="col">
               <div className="special-text">

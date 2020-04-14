@@ -331,6 +331,9 @@ body::-webkit-scrollbar-thumb {
 .img-contain-20 {
   height: 20rem;
 }
+.img-contain-25 {
+  height: 25rem;
+}
 
 .w-30 {
   width: 30%;
@@ -1101,9 +1104,9 @@ body::-webkit-scrollbar-thumb {
 .card-product {
   width: 100%;
 }
-.card-img-top {
+/* .card-img-top {
   filter: drop-shadow(0 0.3rem 0.4rem rgba(0, 0, 0, 0.4));
-}
+} */
 .card__book-title {
   height: 4.32rem;
   text-transform: capitalize;
@@ -1948,9 +1951,9 @@ h1 {
 }
 .pagination li {
   margin: 2rem 0.5rem;
-  font-size: 2.4rem;
-  height: 6rem;
-  width: 6rem;
+  font-size: 2rem;
+  height: 4rem;
+  width: 4rem;
 }
 .pagination li a {
   border-radius: 50%;
@@ -2040,7 +2043,7 @@ h1 {
   position: relative;
   background-size: cover !important;
   background-position: center;
-  padding: 3rem 7rem;
+  padding: 7rem 7rem;
 }
 @media (max-width: 47em) {
   .section__feature .special-wrapper {

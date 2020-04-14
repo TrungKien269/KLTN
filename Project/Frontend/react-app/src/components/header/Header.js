@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import GetCategories from "../utilities/GetCategories";
+import SearchBar from "../utilities/SearchBar";
 
 class Header extends Component {
   render() {
@@ -11,10 +12,7 @@ class Header extends Component {
             <Link to="/" className="navbar-sm-brand">
               <img src={process.env.PUBLIC_URL + "/img/logo.png"} alt="" />
             </Link>
-            <div className="input__search-bar">
-              <input type="text" placeholder="Search" />
-              <i className="fas fa-search" />
-            </div>
+            <SearchBar />
             <div className="hidden-md-elements nav__social-icon">
               <Link
                 to="#"

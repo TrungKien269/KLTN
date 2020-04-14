@@ -47,7 +47,7 @@ class ProductSlideBestPrice extends Component {
   };
   options = {
     nav: true,
-    items: 5,
+    items: 4,
     margin: 30,
     loop: false,
     autoWidth: false,

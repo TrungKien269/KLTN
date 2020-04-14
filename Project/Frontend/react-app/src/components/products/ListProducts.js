@@ -1,13 +1,25 @@
 import React, { Component, lazy, useState, useEffect } from "react";
 
+import {useLocation} from 'react-router-dom'
+
 import Pagi from "./Pagi";
 
 const Index = (props) => {
   const { category } = props;
 
+  const useQuery = () => {
+    return new URLSearchParams(useLocation().search);
+  };
+
+  const query = useQuery();
+  const from = query.get("from");
+  const to = query.get("to");
+
+
   return (
     <React.Fragment>
       <Pagi
+        query={{from, to}}
         category={encodeURI(category)}
         itemsCountPerPage={16}
         pageRangeDisplayed={3}
