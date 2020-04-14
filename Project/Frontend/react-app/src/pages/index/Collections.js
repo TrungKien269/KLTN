@@ -8,7 +8,6 @@ import SideBarPriceSort from "../../components/utilities/SideBarPriceSort";
 
 function Collections(props) {
   const { category = "" } = props.match.params;
-
   return (
     <React.Fragment>
       <section className="section__product-list">

@@ -1,5 +1,7 @@
 import React, { useEffect, useState, Component } from "react";
 import Badge from "../utilities/Badge";
+import { Link, withRouter } from "react-router-dom";
+
 // import axios from "axios";
 // import LazyLoad from "react-lazyload";
 // import ProductRating from "./ProductRating";
@@ -11,44 +13,43 @@ class ProductCard extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="card display-on-hover">
-          <a href="#">
+        <Link to={`/${this.props.id}`}>
+          <div className="card display-on-hover">
             <img
               className="card-img-top img-contain img-contain-25"
               src={this.props.image}
               alt="Card image cap"
             />
-          </a>
-          <div className="card-body">
-            <a href="#">
+
+            <div className="card-body">
               <h5 className="card__book-title">{this.props.name}</h5>
               <p className="card__book-price">{this.props.price}</p>
               {/* <ProductRating /> */}
-            </a>
-            <button
-              className="btn btn--rounded btn-fw btn--blue item-display"
-              onClick={this.addToCart}
-            >
-              Add to cart
-            </button>
+              <button
+                className="btn btn--rounded btn-fw btn--blue item-display"
+                onClick={this.addToCart}
+              >
+                Add to cart
+              </button>
+            </div>
+            <div className="badge badge__utilities item-display">
+              <a href="#" className="badge__utilities-blue">
+                <i className="fas fa-heart" />
+              </a>
+              <a
+                href="#"
+                className="badge__utilities-blue"
+                data-toggle="modal"
+                data-target="#modalQuickview"
+              >
+                <i className="fas fa-search" />
+              </a>
+            </div>
           </div>
-          <div className="badge badge__utilities item-display">
-            <a href="#" className="badge__utilities-blue">
-              <i className="fas fa-heart" />
-            </a>
-            <a
-              href="#"
-              className="badge__utilities-blue"
-              data-toggle="modal"
-              data-target="#modalQuickview"
-            >
-              <i className="fas fa-search" />
-            </a>
-          </div>
-        </div>
+        </Link>
       </React.Fragment>
     );
   }
 }
 
-export default ProductCard;
+export default withRouter(ProductCard);

@@ -5,14 +5,21 @@ import NumberFormat from "react-number-format";
 import axios from "axios";
 
 const Index = (props) => {
-  const { itemsCountPerPage, pageRangeDisplayed, category = "", query, sortQuery, searchQuery } = props;
+  const {
+    itemsCountPerPage,
+    pageRangeDisplayed,
+    category = "",
+    query,
+    sortQuery,
+    searchQuery,
+  } = props;
   const [activePage, setActivePage] = useState(1);
   const [loadingRange, setLoadingRange] = useState([0, itemsCountPerPage - 1]);
   const [data, setData] = useState(null);
   const [flexData, setFlexData] = useState(null);
 
   useEffect(() => {
-    setLoadingRange([0, itemsCountPerPage - 1])
+    setLoadingRange([0, itemsCountPerPage - 1]);
     const { from, to } = query || {};
     if (data) {
       if (from && to && from !== "-1" && to !== "-1") {
@@ -20,43 +27,46 @@ const Index = (props) => {
           (v) => v.currentPrice >= from && v.currentPrice <= to
         );
         setFlexData(newData);
-
       } else setFlexData(null);
     }
   }, [query, data]);
 
   useEffect(() => {
     const { sortfield, sorttype } = sortQuery || {};
-    if (data && (sortfield && sorttype)) {
+    if (data && sortfield && sorttype) {
       const fields = {
-        'Price': 'currentPrice',
-        'Name': 'name'
-      }
-        if(sorttype == "ASC"){
-            let sortData = flexData || data;
-            if(sortfield === 'Price')
-            sortData.sort((a ,b) => a[fields[sortfield]] - b[fields[sortfield]])
-            else {
-              sortData.sort((a,b) => a[fields[sortfield]].localeCompare(b[fields[sortfield]]))
-            }
-            setFlexData([...sortData]);
-        }
+        Price: "currentPrice",
+        Name: "name",
+      };
+      if (sorttype == "ASC") {
+        let sortData = flexData || data;
+        if (sortfield === "Price")
+          sortData.sort((a, b) => a[fields[sortfield]] - b[fields[sortfield]]);
         else {
-          let sortData = flexData || data;
-          if(sortfield === 'Price')
-          sortData.sort((a ,b) => b[fields[sortfield]] - a[fields[sortfield]])
-          else sortData.sort((a,b) => b[fields[sortfield]].localeCompare(a[fields[sortfield]]))
-          setFlexData([...sortData]);
+          sortData.sort((a, b) =>
+            a[fields[sortfield]].localeCompare(b[fields[sortfield]])
+          );
         }
+        setFlexData([...sortData]);
+      } else {
+        let sortData = flexData || data;
+        if (sortfield === "Price")
+          sortData.sort((a, b) => b[fields[sortfield]] - a[fields[sortfield]]);
+        else
+          sortData.sort((a, b) =>
+            b[fields[sortfield]].localeCompare(a[fields[sortfield]])
+          );
+        setFlexData([...sortData]);
+      }
     }
   }, [sortQuery, data]);
 
   useEffect(() => {
     const searchvalue = searchQuery;
-    if(searchvalue != null){
+    if (searchvalue != null) {
       axios({
         method: "get",
-        url: `http://localhost:5000/api/ListBook/Search/value=${searchvalue}`
+        url: `http://localhost:5000/api/ListBook/Search/value=${searchvalue}`,
       }).then((res) => {
         setData(res.data.obj);
       });
@@ -100,6 +110,7 @@ const Index = (props) => {
         result.push(
           <div className="col-lg-3 col-md-4 col-6" key={book.id}>
             <ProductCard
+              id={book.id}
               name={book.name}
               image={book.image}
               price={

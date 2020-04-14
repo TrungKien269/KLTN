@@ -1,6 +1,6 @@
 import React, { Component, lazy, useState, useEffect } from "react";
 
-import {useLocation} from 'react-router-dom'
+import { useLocation } from "react-router-dom";
 
 import Pagi from "./Pagi";
 
@@ -19,15 +19,14 @@ const Index = (props) => {
   const sortfield = sortQuery.get("sortfield");
   const sorttype = sortQuery.get("sorttype");
 
-  const searchQuery = useQuery()
+  const searchQuery = useQuery();
   const searchvalue = searchQuery.get("search");
-
 
   return (
     <React.Fragment>
       <Pagi
-        query={{from, to}}
-        sortQuery={{sortfield, sorttype}}
+        query={{ from, to }}
+        sortQuery={{ sortfield, sorttype }}
         searchQuery={searchvalue}
         category={encodeURI(category)}
         itemsCountPerPage={16}

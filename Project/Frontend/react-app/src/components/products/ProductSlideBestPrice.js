@@ -28,6 +28,7 @@ class ProductSlideBestPrice extends Component {
         return (
           <ProductCard
             key={book.id}
+            id={book.id}
             name={book.name}
             image={book.image}
             price={
