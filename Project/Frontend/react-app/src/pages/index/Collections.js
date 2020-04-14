@@ -4,6 +4,7 @@ import SideBarBrand from "../../components/utilities/SideBarBrand";
 import ListProducts from "../../components/products/ListProducts";
 import { withRouter } from "react-router-dom";
 import SideBarPriceRange from "../../components/utilities/SideBarPriceRange";
+import SideBarPriceSort from "../../components/utilities/SideBarPriceSort";
 
 function Collections(props) {
   const { category = "" } = props.match.params;
@@ -21,6 +22,9 @@ function Collections(props) {
             <div className="col-md">
               <div className="title-wrapper">
                 <h1>{category !== "" ? category : "All Products"}</h1>
+              </div>
+              <div className="col-xd-6">
+                <SideBarPriceSort />
               </div>
               <div className="row">
                 <ListProducts category={category} />
