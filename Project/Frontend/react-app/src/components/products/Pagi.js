@@ -5,7 +5,7 @@ import NumberFormat from "react-number-format";
 import axios from "axios";
 
 const Index = (props) => {
-  const { itemsCountPerPage, pageRangeDisplayed, category = "", query, sortQuery } = props;
+  const { itemsCountPerPage, pageRangeDisplayed, category = "", query, sortQuery, searchQuery } = props;
   const [activePage, setActivePage] = useState(1);
   const [loadingRange, setLoadingRange] = useState([0, itemsCountPerPage - 1]);
   const [data, setData] = useState(null);
@@ -50,6 +50,20 @@ const Index = (props) => {
         }
     }
   }, [sortQuery, data]);
+
+  useEffect(() => {
+    const searchvalue = searchQuery;
+    if(searchvalue != null){
+      axios({
+        method: "get",
+        url: `http://localhost:5000/api/ListBook/Search/value=${searchvalue}`
+      }).then((res) => {
+        setData(res.data.obj);
+      });
+      setLoadingRange([0, itemsCountPerPage - 1]);
+      setActivePage(1);
+    }
+  }, [searchQuery]);
 
   useEffect(() => {
     axios({

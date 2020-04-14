@@ -19,12 +19,16 @@ const Index = (props) => {
   const sortfield = sortQuery.get("sortfield");
   const sorttype = sortQuery.get("sorttype");
 
+  const searchQuery = useQuery()
+  const searchvalue = searchQuery.get("search");
+
 
   return (
     <React.Fragment>
       <Pagi
         query={{from, to}}
         sortQuery={{sortfield, sorttype}}
+        searchQuery={searchvalue}
         category={encodeURI(category)}
         itemsCountPerPage={16}
         pageRangeDisplayed={3}
