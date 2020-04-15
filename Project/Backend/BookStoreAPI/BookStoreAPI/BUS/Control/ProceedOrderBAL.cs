@@ -11,29 +11,21 @@ namespace BookStoreAPI.BUS.Control
     public class ProceedOrderBAL
     {
         private CartBAL cartBal;
-        private AccountBAL accountBal;
+        private UserBAL userBal;
         private OrderBAL orderBal;
         private BookBAL bookBal;
 
         public ProceedOrderBAL()
         {
             this.cartBal = new CartBAL();
-            this.accountBal = new AccountBAL();
+            this.userBal = new UserBAL();
             this.orderBal = new OrderBAL();
             this.bookBal = new BookBAL();
         }
 
-        public async Task<Response> GetCart(string cookie)
+        public async Task<Response> GetCart(int userID)
         {
-            var response_Account = await accountBal.GetAccountByCookie(cookie);
-            if (response_Account.Status is true)
-            {
-                return await cartBal.GetCart((response_Account.Obj as Account).Id);
-            }
-            else
-            {
-                return new Response("Cannot recognize an account!", false, 0, null);
-            }
+            return await cartBal.GetCart(userID);
         }
 
         public async Task<Response> ResetCart(int cartID)
@@ -54,6 +46,11 @@ namespace BookStoreAPI.BUS.Control
         public async Task<Response> GetBook(string bookID)
         {
             return await bookBal.GetBookOnly(bookID);
+        }
+
+        public async Task<Response> GetUser(int userID)
+        {
+            return await userBal.GetUser(userID);
         }
     }
 }

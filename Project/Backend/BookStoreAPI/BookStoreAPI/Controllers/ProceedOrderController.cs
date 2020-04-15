@@ -28,38 +28,33 @@ namespace BookStoreAPI.Controllers
         [HttpGet("ListCartBook")]
         public async Task<Response> GetListCartBook()
         {
-            var session = HttpContext.Session.GetString("BookStore");
-            var response = await userOrderBal.GetCart(session);
-            if (response.Status is false)
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
             {
-                response.Obj = SessionHelper.GetCartSession(HttpContext.Session);
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
             }
             else
             {
-                response.Obj = (response.Obj as Cart).CartBook;
+                int userID = Int32.Parse(checkToken);
+                return await userOrderBal.GetCart(userID);
             }
-            return response;
         }
 
         [HttpGet("OrderUserInfo")]
         public async Task<Response> GetOrderUserInfo()
         {
-            var session = HttpContext.Session.GetString("BookStore");
-            var response = await userOrderBal.GetCart(session);
-            if (response.Status is false)
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
             {
-                response.Obj = new Order();
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
             }
             else
             {
-                response.Obj = new Order
-                {
-                    FullName = (response.Obj as Cart).IdNavigation.FullName,
-                    PhoneNumber = (response.Obj as Cart).IdNavigation.PhoneNumber,
-                    Address = (response.Obj as Cart).IdNavigation.Address
-                };
+                int userID = Int32.Parse(checkToken);
+                return await userOrderBal.GetUser(userID);
             }
-            return response;
         }
     }
 }

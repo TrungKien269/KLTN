@@ -39,32 +39,68 @@ namespace BookStoreAPI.Controllers
         [HttpGet("ListProcessing")]
         public async Task<Response> GetListProcessing()
         {
-            int userID = HttpContext.Session.GetInt32("UserID").Value;
-            return await userOrderBal.GetListProcessing(userID);
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                return await userOrderBal.GetListProcessing(userID);
+            }
         }
 
         [Authorize]
         [HttpGet("ListDelivery")]
         public async Task<Response> GetListDelivery()
         {
-            int userID = HttpContext.Session.GetInt32("UserID").Value;
-            return await userOrderBal.GetListDelivery(userID);
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                return await userOrderBal.GetListDelivery(userID);
+            }
         }
 
         [Authorize]
         [HttpGet("ListDelivered")]
         public async Task<Response> GetListDelivered()
         {
-            int userID = HttpContext.Session.GetInt32("UserID").Value;
-            return await userOrderBal.GetListDelivered(userID);
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                return await userOrderBal.GetListDelivered(userID);
+            }
         }
 
         [Authorize]
         [HttpGet("ListCanceled")]
         public async Task<Response> GetListCanceled()
         {
-            int userID = HttpContext.Session.GetInt32("UserID").Value;
-            return await userOrderBal.GetListCanceled(userID);
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                return await userOrderBal.GetListCanceled(userID);
+            }
         }
 
         [Authorize]
