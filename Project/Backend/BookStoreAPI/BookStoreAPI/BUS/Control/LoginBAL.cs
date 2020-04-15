@@ -60,33 +60,5 @@ namespace BookStoreAPI.BUS.Control
             user.Account.Cookie = null;
             return await Task.FromResult<User>(user);
         }
-
-        public async Task<Response> SetCartAfterLogin(ISession session, int userID)
-        {
-            var ListCartBook = SessionHelper.GetCartSession(session);
-            var cart = await cartBal.GetCart(userID);
-            if (cart.Status is true)
-            {
-                foreach (var cartbook in ListCartBook)
-                {
-                    await cartBal.InsertToCartFromSession(cart.Obj as Cart, cartbook.Book, cartbook.Quantity,
-                        cartbook.SubTotal);
-                }
-                SessionHelper.ResetCartSession(session, ListCartBook);
-                return cart;
-            }
-            else
-            {
-                var newCart_Response = await cartBal.CreateCart(int.Parse(userID.ToString()));
-                Cart newCart = newCart_Response.Obj as Cart;
-                foreach (var cartbook in ListCartBook)
-                {
-                    await cartBal.InsertToCartFromSession(newCart, cartbook.Book, cartbook.Quantity,
-                        cartbook.SubTotal);
-                }
-                SessionHelper.ResetCartSession(session, ListCartBook);
-                return newCart_Response;
-            }
-        }
     }
 }

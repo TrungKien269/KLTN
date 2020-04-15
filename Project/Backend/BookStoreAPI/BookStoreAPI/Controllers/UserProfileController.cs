@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookStoreAPI.BUS.Control;
+using BookStoreAPI.Helper;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
 using BookStoreAPI.Models.Request;
@@ -30,42 +31,79 @@ namespace BookStoreAPI.Controllers
         [HttpGet("Profile")]
         public async Task<Response> GetProfile()
         {
-            //ViewBag.FullName = HttpContext.Session.GetString("UserFullName");
-            var userID = HttpContext.Session.GetInt32("UserID").Value;
-            return await profileBal.GetUserInfo(userID);
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                return await profileBal.GetUserInfo(userID);
+            }
         }
 
         [Authorize]
         [HttpPut("UpdateProfile")]
         public async Task<Response> UpdateUser(UserRequest userRequest)
         {
-            var user = new User
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
             {
-                FullName =  userRequest.FullName,
-                Gender = userRequest.Gender,
-                Birthday = userRequest.Birthday,
-                PhoneNumber = userRequest.PhoneNumber,
-                Address = userRequest.Address
-            };
-            user.Id = HttpContext.Session.GetInt32("UserID").Value;
-            return await profileBal.UpdateUser(user);
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                var user = new User
+                {
+                    FullName = userRequest.FullName,
+                    Gender = userRequest.Gender,
+                    Birthday = userRequest.Birthday,
+                    PhoneNumber = userRequest.PhoneNumber,
+                    Address = userRequest.Address
+                };
+                user.Id = userID;
+                return await profileBal.UpdateUser(user);
+            }
         }
-        
+
+        [Authorize]
         [HttpPost("CheckPassword")]
         public async Task<Response> CheckPassword(string current_password)
         {
-            var session = HttpContext.Session.GetString("BookStore");
-            var account = await profileBal.GetAccountInfo(session);
-            return await profileBal.CheckCurrentPassword(account.Obj as Account, current_password);
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                var account = await profileBal.GetAccountInfo(userID);
+                return await profileBal.CheckCurrentPassword(account.Obj as Account, current_password);
+            }
         }
 
         [Authorize]
         [HttpPost("ChangePassword")]
         public async Task<Response> ChangePassword(string new_password)
         {
-            var session = HttpContext.Session.GetString("BookStore");
-            var account = await profileBal.GetAccountInfo(session);
-            return await profileBal.ChangePassword(account.Obj as Account, new_password);
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                var account = await profileBal.GetAccountInfo(userID);
+                return await profileBal.ChangePassword(account.Obj as Account, new_password);
+            }
         }
     }
 }

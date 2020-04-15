@@ -85,6 +85,27 @@ namespace BookStoreAPI.BUS.Logic
             }
         }
 
+        public async Task<Response> GetAccount(int userID)
+        {
+            try
+            {
+                var account = await context.Account.Where(x => x.Id.Equals(userID))
+                    .FirstOrDefaultAsync();
+                if (account is null)
+                {
+                    return new Response("Not found", false, 0, null);
+                }
+                else
+                {
+                    return new Response("Success", true, 1, account);
+                }
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
         public async Task<Response> CheckAccount(Account account)
         {
             try

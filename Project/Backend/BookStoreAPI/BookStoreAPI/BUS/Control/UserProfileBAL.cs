@@ -29,9 +29,9 @@ namespace BookStoreAPI.BUS.Control
             return await userBal.Update(user);
         }
 
-        public async Task<Response> GetAccountInfo(string cookie)
+        public async Task<Response> GetAccountInfo(int userID)
         {
-            return await accountBal.GetAccountByCookie(cookie);
+            return await accountBal.GetAccount(userID);
         }
 
         public async Task<Response> CheckCurrentPassword(Account account, string password)
