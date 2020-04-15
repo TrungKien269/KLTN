@@ -25,13 +25,13 @@ const Login = (props) => {
       url: "http://localhost:5000/api/Login/Signin",
       params: {
         username,
-        password
+        password,
       },
     })
       .then((res) => {
         if (res.data.status) {
           setUserSession(res.data.token, res.data.obj);
-          refreshUser()
+          refreshUser();
           props.history.push("/");
         } else {
           alert("sikesss");
@@ -54,7 +54,11 @@ const Login = (props) => {
         <div className="row">
           <div className="col-md-6">
             <h1>Login</h1>
-            <form method="post" id="loginForm" onSubmit={(e) => handleFormSubmit(e)}>
+            <form
+              method="post"
+              id="loginForm"
+              onSubmit={(e) => handleFormSubmit(e)}
+            >
               <div className="field-control">
                 <label>Username or Email</label>
                 <input
@@ -74,7 +78,11 @@ const Login = (props) => {
                 />
               </div>
               <div className="col-md-8 pad-0-0 mar-top-md">
-                <input type="submit" className="btn btn-fit btn--blue" />
+                <input
+                  type="submit"
+                  className="btn btn-fit btn--blue"
+                  value="Login"
+                />
               </div>
               <Link to="/login">Lost your password ?</Link>
             </form>

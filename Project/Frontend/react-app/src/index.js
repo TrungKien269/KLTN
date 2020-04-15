@@ -3,12 +3,12 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import UserContextProvider from '../src/context/userContext'
+import UserContextProvider from "../src/context/userContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <UserContextProvider>
-          <App />
+      <App />
     </UserContextProvider>
   </React.StrictMode>,
   document.getElementById("root")

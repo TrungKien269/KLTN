@@ -17,21 +17,24 @@ function Header() {
     if (user) {
       return (
         <div className="hidden-md-elements nav__social-icon">
-          <Link
-            to="#"
-            data-toggle="tooltip"
-            data-placement="bottom"
-            title="Wish list"
-          >
-            <i class="fas fa-heart"></i>
-          </Link>
+          <div>
+            <Link
+              to="/"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Wish list"
+            >
+              <i className="fas fa-heart"></i>
+            </Link>
+          </div>
+
           <div className="dropdown">
             <Link to="/cart.html">
               <i className="fas fa-shopping-cart" />
             </Link>
           </div>
 
-          <div className="nav-item dropdown ">
+          <div className="dropdown ">
             <Link
               className="nav-link dropdown-toggle"
               id="navbarDropdownMenuLink4"
@@ -72,7 +75,7 @@ function Header() {
       return (
         <div className="hidden-md-elements nav__social-icon">
           <Link to="/login">
-            <i className="far fa-user" />
+            <i className="fas fa-sign-in-alt"></i>
           </Link>
         </div>
       );
