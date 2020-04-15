@@ -13,13 +13,14 @@ namespace BookStoreAPI.Helper
     {
         public static string securityKey = SettingHelper.GetConfig().GetSection("JwtSigningSecret").Value;
 
-        public static string CreateUserToken()
+        public static string CreateUserToken(int userID)
         {
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
 
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Role, "User"));
+            claims.Add(new Claim(JwtRegisteredClaimNames.NameId, userID.ToString()));
             var token = new JwtSecurityToken(
                 issuer: "books.sell",
                 audience: "readers",
@@ -71,6 +72,7 @@ namespace BookStoreAPI.Helper
         {
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
             var tokenHandler = new JwtSecurityTokenHandler();
+            token = token.Replace("Bearer ", "");
 
             try
             {
@@ -91,6 +93,22 @@ namespace BookStoreAPI.Helper
             catch (Exception e)
             {
                 return false;
+            }
+        }
+
+        public static string GetUserID(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            token = token.Replace("Bearer ", "");
+            var tokenS = tokenHandler.ReadToken(token) as JwtSecurityToken;
+            try
+            {
+                var id = tokenS.Claims.First(claim => claim.Type == "nameid").Value;
+                return id;
+            }
+            catch (Exception e)
+            {
+                return "Error";
             }
         }
     }

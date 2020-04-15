@@ -53,9 +53,9 @@ namespace BookStoreAPI.BUS.Control
             return await cartBal.CreateCart(userID);
         }
 
-        public async Task<Response> AddToCart(Cart cart, Book book, int quantity)
+        public async Task<Response> AddToCart(int cartID, string bookID, int currentPrice, int quantity)
         {
-            return await cartBal.InsertToCart(cart, book, quantity);
+            return await cartBal.InsertToCart(cartID, bookID, currentPrice, quantity);
         }
 
         public async Task<Response> RateBook(Rating rating)

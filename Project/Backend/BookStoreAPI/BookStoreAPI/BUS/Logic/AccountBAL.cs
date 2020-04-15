@@ -22,7 +22,7 @@ namespace BookStoreAPI.BUS.Logic
         {
             try
             {
-                var account = await context.Account.Include(x => x.IdNavigation)
+                var account = await context.Account
                     .Where(x => x.Username.Equals(username) || x.Email.Equals(username))
                     .FirstOrDefaultAsync();
                 if (account != null)

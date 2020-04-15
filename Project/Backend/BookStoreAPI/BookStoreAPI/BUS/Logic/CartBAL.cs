@@ -27,7 +27,8 @@ namespace BookStoreAPI.BUS.Logic
                     .Where(x => x.IdNavigation.Id.Equals(userID)).FirstOrDefaultAsync();
                 if (cart is null)
                 {
-                    return new Response("Can not find a cart for this account!", false, 0, null);
+                    //return new Response("Can not find a cart for this account!", false, 0, null);
+                    return await CreateCart(userID);
                 }
                 return new Response("Success", true, 1, cart);
             }
@@ -63,23 +64,22 @@ namespace BookStoreAPI.BUS.Logic
             }
         }
 
-        public async Task<Response> InsertToCart(Cart cart, Book book, int quantity)
+        public async Task<Response> InsertToCart(int cartID, string bookID, int currentPrice, int quantity)
         {
             try
             {
-                var originalID = book.Id.Length < 18 ? book.Id : SecureHelper.GetOriginalInput(book.Id);
                 var checkCartBook = await context.CartBook
-                    .Where(x => x.BookId.Equals(originalID) && x.CartId.Equals(cart.Id))
+                    .Where(x => x.BookId.Equals(bookID) && x.CartId.Equals(cartID))
                     .FirstOrDefaultAsync();
                 if (checkCartBook is null)
                 {
                     var cartBook = new CartBook
                     {
-                        BookId = book.Id.Length < 18 ? book.Id : SecureHelper.GetOriginalInput(book.Id),
-                        CartId = cart.Id,
+                        BookId = bookID,
+                        CartId = cartID,
                         PickedDate = DateTime.Now,
                         Quantity = quantity,
-                        SubTotal = book.CurrentPrice
+                        SubTotal = currentPrice * quantity
                     };
                     context.CartBook.Add(cartBook);
                     await context.SaveChangesAsync();
@@ -88,43 +88,7 @@ namespace BookStoreAPI.BUS.Logic
                 else
                 {
                     checkCartBook.Quantity += quantity;
-                    checkCartBook.SubTotal += book.CurrentPrice * quantity;
-                    context.CartBook.Update(checkCartBook);
-                    await context.SaveChangesAsync();
-                    return new Response("Success", true, 1, checkCartBook);
-                }
-            }
-            catch (Exception e)
-            {
-                return Response.CatchError(e.Message);
-            }
-        }
-
-        public async Task<Response> InsertToCartFromSession(Cart cart, Book book, int quantity, int subtotal)
-        {
-            try
-            {
-                var originalID = book.Id.Length < 18 ? book.Id : SecureHelper.GetOriginalInput(book.Id);
-                var checkCartBook = await context.CartBook.Where(x => x.BookId.Equals(originalID) && x.CartId.Equals(cart.Id))
-                    .FirstOrDefaultAsync();
-                if (checkCartBook is null)
-                {
-                    var cartBook = new CartBook
-                    {
-                        BookId = originalID,
-                        CartId = cart.Id,
-                        PickedDate = DateTime.Now,
-                        Quantity = quantity,
-                        SubTotal = subtotal
-                    };
-                    context.CartBook.Add(cartBook);
-                    await context.SaveChangesAsync();
-                    return new Response("Success", true, 1, cartBook);
-                }
-                else
-                {
-                    checkCartBook.Quantity += quantity;
-                    checkCartBook.SubTotal += subtotal;
+                    checkCartBook.SubTotal += currentPrice * quantity;
                     context.CartBook.Update(checkCartBook);
                     await context.SaveChangesAsync();
                     return new Response("Success", true, 1, checkCartBook);

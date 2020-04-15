@@ -32,26 +32,14 @@ namespace BookStoreAPI.Controllers
             {
                 if ((response.Obj as Account).Username.Equals("admin"))
                 {
-                    var hash = await Task.FromResult<string>(
-                        CryptographyHelper.GenerateHash(username + DateTime.Now.ToString(),
-                            (response.Obj as Account).Salt));
                     response.Token = JWTHelper.CreateAdminToken();
-                    SessionHelper.SetAdminSession(this.HttpContext.Session, hash);
                     return response;
                 }
                 else
                 {
-                    var hash = await Task.FromResult<string>(
-                        CryptographyHelper.GenerateHash(username + DateTime.Now.ToString(),
-                            (response.Obj as Account).Salt));
-                    SessionHelper.SetWebsiteSession(this.HttpContext.Session, hash);
-                    SessionHelper.SetUserSession(this.HttpContext.Session, (response.Obj as Account).Id,
-                        (response.Obj as Account).IdNavigation.FullName);
-                    CookieHelper.SetWebsiteCookie(this.Response, hash);
-                    await loginBal.SetCookieForAccount(hash, response.Obj as Account);
                     if (response.Status is true)
                     {
-                        response.Token = JWTHelper.CreateUserToken();
+                        response.Token = JWTHelper.CreateUserToken((response.Obj as Account).Id);
                     }
                     return response;
                 }
@@ -82,11 +70,6 @@ namespace BookStoreAPI.Controllers
             var response = await loginBal.Signup(user);
             if (response.Status is true)
             {
-                var hash = await Task.FromResult<string>(
-                    CryptographyHelper.GenerateHash(user.Account.Username + DateTime.Now.ToString(),
-                        (response.Obj as User).Account.Salt));
-                CookieHelper.SetWebsiteCookie(this.Response, hash);
-                await loginBal.SetCookieForAccount(hash, (response.Obj as User).Account);
                 return response;
             }
             else

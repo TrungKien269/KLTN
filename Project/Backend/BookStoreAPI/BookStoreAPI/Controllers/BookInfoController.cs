@@ -30,7 +30,6 @@ namespace BookStoreAPI.Controllers
         public async Task<Response> Index(string id)
         {
             var response = await bookInfoBal.GetBook(id);
-            //HttpContext.Session.SetString("PreviousState", "Book/" + id);
             response.previousState = "Book/" + id;
             return response;
         }
@@ -39,59 +38,18 @@ namespace BookStoreAPI.Controllers
         [HttpPost("AddToCart")]
         public async Task<Response> AddBookToCart(string id, string quantity)
         {
-            var userID = HttpContext.Session.GetInt32("UserID");
-            if (userID is null)
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
             {
-                try
-                {
-                    var originalID = SecureHelper.GetOriginalInput(id);
-                    var book = (await bookInfoBal.GetBookWithoutDetail(originalID)).Obj as Book;
-                    var listCartBook = SessionHelper.GetCartSession(this.HttpContext.Session);
-                    var index = listCartBook.FindIndex(x => x.BookId.Equals(originalID));
-                    if (index >= 0)
-                    {
-                        listCartBook[index].Quantity += int.Parse(quantity);
-                        listCartBook[index].SubTotal += book.CurrentPrice * int.Parse(quantity);
-                    }
-                    else
-                    {
-                        listCartBook.Add(new CartBook
-                        {
-                            BookId = originalID,
-                            Quantity = int.Parse(quantity),
-                            SubTotal = int.Parse(quantity) * book.CurrentPrice,
-                            PickedDate = DateTime.Now,
-                            Book = book
-                        });
-                    }
-                    SessionHelper.SetCartSession(this.HttpContext.Session, listCartBook);
-                    return await Task.FromResult<Response>(new Response("Success", true, 1, listCartBook));
-                }
-                catch (Exception e)
-                {
-                    return Models.Response.CatchError(e.Message);
-                }
-
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
             }
             else
             {
-                var cart = (await bookInfoBal.GetCart(int.Parse(userID.ToString()))).Obj as Cart;
-                if (cart is null)
-                {
-                    var newCart_Response = await bookInfoBal.CreateCart(int.Parse(userID.ToString()));
-                    Cart newCart = newCart_Response.Obj as Cart;
-                    var originalID = SecureHelper.GetOriginalInput(id);
-                    var book = (await bookInfoBal.GetBook(originalID)).Obj as Book;
-                    await bookInfoBal.AddToCart(newCart, book, int.Parse(quantity));
-                    return new Response("Success", true, 1, newCart.CartBook);
-                }
-                else
-                {
-                    var originalID = SecureHelper.GetOriginalInput(id);
-                    var book = (await bookInfoBal.GetBook(originalID)).Obj as Book;
-                    await bookInfoBal.AddToCart(cart, book, int.Parse(quantity));
-                    return new Response("Success", true, 1, cart.CartBook);
-                }
+                int userID = Int32.Parse(checkToken);
+                var cart = (await bookInfoBal.GetCart(userID)).Obj as Cart;
+                var currentPrice = ((await bookInfoBal.GetBook(id)).Obj as Book).CurrentPrice;
+                return await bookInfoBal.AddToCart(cart.Id, id, currentPrice, int.Parse(quantity));
             }
         }
 
@@ -99,15 +57,24 @@ namespace BookStoreAPI.Controllers
         [HttpPost("RateBook")]
         public async Task<Response> RateBook(string bookID, int point)
         {
-            var userID = HttpContext.Session.GetInt32("UserID");
-            var rating = new Rating
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
             {
-                BookId = bookID,
-                Point = point,
-                DateTime = DateTime.Now,
-                UserId = userID.Value
-            };
-            return await bookInfoBal.RateBook(rating);
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                var rating = new Rating
+                {
+                    BookId = bookID,
+                    Point = point,
+                    DateTime = DateTime.Now,
+                    UserId = userID
+                };
+                return await bookInfoBal.RateBook(rating);
+            }
         }
 
         [HttpGet("RatingInfo")]
@@ -126,15 +93,24 @@ namespace BookStoreAPI.Controllers
         [HttpPost("Comment")]
         public async Task<Response> Comment(string bookID, string text)
         {
-            var userID = HttpContext.Session.GetInt32("UserID");
-            var comment = new Comment
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
             {
-                BookId = bookID,
-                DateTime = DateTime.Now,
-                Text = text,
-                UserId = userID.Value
-            };
-            return await bookInfoBal.Comment(comment);
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                var comment = new Comment
+                {
+                    BookId = bookID,
+                    DateTime = DateTime.Now,
+                    Text = text,
+                    UserId = userID
+                };
+                return await bookInfoBal.Comment(comment);
+            }
         }
 
         [Authorize]

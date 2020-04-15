@@ -30,47 +30,34 @@ namespace BookStoreAPI.Controllers
         [HttpGet("Cart")]
         public async Task<Response> GetUserCart()
         {
-            HttpContext.Session.SetString("PreviousState", "Cart");
-            var session = HttpContext.Session.GetString("BookStore");
-            var response = await userCartBal.GetCart(session);
-            if (response.Status is false)
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
             {
-                response.Obj = SessionHelper.GetCartSession(HttpContext.Session);
-                return response;
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
             }
             else
             {
-                return response;
+                int userID = Int32.Parse(checkToken);
+                return await userCartBal.GetCart(userID);
             }
         }
 
         [Authorize]
-        [HttpPost("RemoveBookCart")]
+        [HttpDelete("RemoveBookCart")]
         public async Task<Response> RemoveBookInCart(string id)
         {
-            var session = HttpContext.Session.GetString("BookStore");
-            var response = await userCartBal.GetCart(session);
-            var originalID = SecureHelper.GetOriginalInput(id);
-            if (response.Status is false)
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
             {
-                try
-                {
-                    var listCartBook = SessionHelper.GetCartSession(this.HttpContext.Session);
-                    var book = listCartBook.Where(x => x.BookId.Equals(originalID)).FirstOrDefault();
-                    listCartBook.Remove(book);
-                    SessionHelper.SetCartSession(this.HttpContext.Session, listCartBook);
-                    return await Task.FromResult<Response>(new Response("Success", true, 1, listCartBook));
-                }
-                catch (Exception e)
-                {
-                    return Models.Response.CatchError(e.Message);
-                }
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
             }
             else
             {
-                var cart = response.Obj as Cart;
-                await userCartBal.RemoveFromCart(cart.Id, originalID);
-                return await Task.FromResult<Response>(new Response("Success", true, 1, cart.CartBook));
+                int userID = Int32.Parse(checkToken);
+                var cart = (await userCartBal.GetCart(userID)).Obj as Cart;
+                return await userCartBal.RemoveFromCart(cart.Id, id);
             }
         }
 
@@ -78,30 +65,17 @@ namespace BookStoreAPI.Controllers
         [HttpPost("EditQuantityCart")]
         public async Task<Response> EditQuantityBookInCart(string id, string quantity)
         {
-            var session = HttpContext.Session.GetString("BookStore");
-            var response = await userCartBal.GetCart(session);
-            var originalID = SecureHelper.GetOriginalInput(id);
-            if (response.Status is false)
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
             {
-                try
-                {
-                    var listCartBook = SessionHelper.GetCartSession(this.HttpContext.Session);
-                    var index = listCartBook.FindIndex(x => x.BookId.Equals(originalID));
-                    listCartBook[index].Quantity = int.Parse(quantity);
-                    listCartBook[index].SubTotal = listCartBook[index].Book.CurrentPrice * int.Parse(quantity);
-                    SessionHelper.SetCartSession(this.HttpContext.Session, listCartBook);
-                    return await Task.FromResult<Response>(new Response("Success", true, 1, listCartBook[index]));
-                }
-                catch (Exception e)
-                {
-                    return Models.Response.CatchError(e.Message);
-                }
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
             }
             else
             {
-                var cart = response.Obj as Cart;
-                var newCartBook = await userCartBal.EditQuantityInCart(cart.Id, originalID, int.Parse(quantity));
-                return await Task.FromResult<Response>(new Response("Success", true, 1, newCartBook.Obj as CartBook));
+                int userID = Int32.Parse(checkToken);
+                var cart = (await userCartBal.GetCart(userID)).Obj as Cart;
+                return await userCartBal.EditQuantityInCart(cart.Id, id, int.Parse(quantity));
             }
         }
     }

@@ -19,17 +19,9 @@ namespace BookStoreAPI.BUS.Control
             this.accountBal = new AccountBAL();
         }
 
-        public async Task<Response> GetCart(string cookie)
+        public async Task<Response> GetCart(int userID)
         {
-            var response_Account = await accountBal.GetAccountByCookie(cookie);
-            if (response_Account.Status is true)
-            {
-                return await cartBal.GetCart((response_Account.Obj as Account).Id);
-            }
-            else
-            {
-                return new Response("Cannot recognize an account!", false, 0, null);
-            }
+            return await cartBal.GetCart(userID);
         }
 
         public async Task<Response> RemoveFromCart(int cartID, string bookID)
