@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link, withRouter } from "react-router-dom";
 
 class SpecialItemCard extends Component {
   render() {
@@ -30,9 +31,11 @@ class SpecialItemCard extends Component {
                 <div className="special-author">
                   Author: {this.props.author}
                 </div>
-                <a href="#" className="btn btn--rounded btn-fit btn--white">
+                {/* <a href="#" className="btn btn--rounded btn-fit btn--white">
                   view detail
-                </a>
+                </a> */}
+                <Link to={`/book/${this.props.id}`} className="btn btn--rounded btn-fit btn--white">
+                View Detail</Link>
               </div>
             </div>
           </div>

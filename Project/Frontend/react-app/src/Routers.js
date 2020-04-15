@@ -25,7 +25,7 @@ const Routers = [
     main: () => <Collections></Collections>,
   },
   {
-    path: "/:id",
+    path: "/book/:id",
     exact: true,
     main: () => <BookDetail />,
   },

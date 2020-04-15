@@ -156,7 +156,7 @@ namespace BookStoreAPI.Controllers
         {
             var httpClient = new HttpClient();
             var listBook = new List<string>();
-            var response = httpClient.GetAsync("http://localhost:5000/booksimilarity/" + id);
+            var response = httpClient.GetAsync("http://localhost:6000/booksimilarity/" + id);
             string apiResponse = await response.Result.Content.ReadAsStringAsync();
             listBook = JsonConvert.DeserializeObject<List<string>>(apiResponse);
             return await bookInfoBal.GetListRelatedBooks(listBook);

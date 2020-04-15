@@ -19,6 +19,10 @@ const Index = (props) => {
   const [flexData, setFlexData] = useState(null);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [])
+
+  useEffect(() => {
     setLoadingRange([0, itemsCountPerPage - 1]);
     const { from, to } = query || {};
     if (data) {

@@ -28,4 +28,4 @@ def get_list_rating(id):
     return jsonify(book_rating.GetListBookRating(id))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=6000)

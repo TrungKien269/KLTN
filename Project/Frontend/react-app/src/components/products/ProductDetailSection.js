@@ -5,7 +5,12 @@ import NumberFormat from "react-number-format";
 class ProductDetailSection extends Component {
   constructor(props) {
     super(props);
-    this.state = { data: [] };
+    this.state = { 
+      data: {}, 
+      authors: "",
+      similarityData: {} 
+    };
+    window.scrollTo(0, 0);
   }
   componentDidMount() {
     const v = this;
@@ -13,12 +18,27 @@ class ProductDetailSection extends Component {
       method: "get",
       url: `http://localhost:5000/api/BookInfo/Book/${this.props.bookInfo}`,
     }).then(function (response) {
-      console.log(response);
       v.setState({ data: response.data.obj });
+      if(Object.keys(v.state.data).length > 0){
+        var author = "";
+        for(var i = 0; i < v.state.data.authorBook.length; i ++){
+          author += v.state.data.authorBook[i].author.name + ", "
+        }
+        v.setState({
+          authors: author.substring(0, author.length - 2)
+        })
+      }
+    });
+    axios({
+      method: "get",
+      url: `http://localhost:5000/api/BookInfo/RelatedBook/${this.props.bookInfo}`,
+    }).then((res) => {
+      console.log(res.data.obj);
+      v.setState({similarityData: res.data.obj});
     });
   }
 
-  showDetail = (data) => {
+  showDetail = (data, authors) => {
     return (
       <section className="section__detail">
         <div className="container">
@@ -29,7 +49,7 @@ class ProductDetailSection extends Component {
                   {/*Carousel-slide*/}
                   <div className="container-fluid">
                     {/*Carousel Wrapper*/}
-                    <div className="badge sale__badge">SALE</div>
+                    {/* <div className="badge sale__badge">SALE</div> */}
                     <div
                       id="carousel-example-1z"
                       className="carousel slide carousel-slide pointer-event "
@@ -234,9 +254,9 @@ class ProductDetailSection extends Component {
                   </div>
                   <div className="detail__link">
                     <a href="#">add to wishlish</a>
-                    <a href="#">add to compare</a>
+                    {/* <a href="#">add to compare</a> */}
                   </div>
-                  <div className="detail__social">
+                  {/* <div className="detail__social">
                     <a
                       href="#"
                       className="detail__social-icon detail__social-icon-twitter"
@@ -258,7 +278,7 @@ class ProductDetailSection extends Component {
                       <i className="fab fa-google-plus-g" />
                       google +
                     </a>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="product-table">
                   <table>
@@ -269,40 +289,40 @@ class ProductDetailSection extends Component {
                       </tr>
                       <tr className="author">
                         <td className="first">Author</td>
-                        <td>{}</td>
+                        <td>{authors}</td>
                       </tr>
                       <tr className="type">
                         <td className="first">Type</td>
-                        <td>Classic</td>
+                        <td>{Object.keys(data).length > 0 ? data.bookCategory[0].cate.name:''}</td>
                       </tr>
                       <tr className="title">
-                        <td className="first">Date published</td>
-                        <td> Mar 13, 2017</td>
+                        <td className="first">Released Year</td>
+                        <td>{data.releaseYear}</td>
                       </tr>
                       <tr className="provider">
-                        <td className="first">Provider</td>
-                        <td>Harper Collins</td>
+                        <td className="first">Supplier</td>
+                        <td>{Object.keys(data).length > 0 ? data.supplierBook[0].supplier.name: ''}</td>
                       </tr>
                       <tr className="publisher">
                         <td className="first">Publisher</td>
-                        <td>William Morrow</td>
+                        <td>{Object.keys(data).length > 0 ? data.publisherBook[0].publisher.name: ''}</td>
                       </tr>
                       <tr className="weight">
                         <td className="first">Weight</td>
-                        <td>William Morrow</td>
-                      </tr>
-                      <tr className="Size">
-                        <td className="first">Size</td>
-                        <td>19.1 x 4.5 x 10.6</td>
+                        <td>{data.weight}</td>
                       </tr>
                       <tr className="Pages">
                         <td className="first">Number of pages</td>
-                        <td>784</td>
+                        <td>{data.numOfPage}</td>
+                      </tr>
+                      <tr className="Description">
+                        <td className="first">Summary</td>
+                        <td>{data.summary}</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
-                <div className="container-fluid d-flex pad-0-0 mar-top-md">
+                {/* <div className="container-fluid d-flex pad-0-0 mar-top-md">
                   <ul className="nav nav-tabs nav-tabs-table" id="active-exp">
                     <li className="nav-tab-item active">
                       <a data-toggle="tab" href="#home">
@@ -364,7 +384,7 @@ class ProductDetailSection extends Component {
                       </p>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -372,27 +392,10 @@ class ProductDetailSection extends Component {
       </section>
     );
   };
+  
   render() {
-    return <div>{this.showDetail(this.state.data)}</div>;
+    return <div>{this.showDetail(this.state.data, this.state.authors, this.state.similarityData)}</div>;
   }
 }
 
 export default ProductDetailSection;
-
-// const Index = (props) => {
-//   const { bookInfo } = props;
-//   const [data, setData] = useState(null);
-//   //   console.log(bookInfo);
-
-//   useEffect(() => {
-//     axios({
-//       method: "get",
-//       url: `http://localhost:5000/api/BookInfo/Book/${bookInfo}`,
-//     }).then(function (response) {
-//       setData(response.data.obj);
-//     });
-//   }, [bookInfo]);
-//   return <div></div>;
-// };
-
-// export default Index;

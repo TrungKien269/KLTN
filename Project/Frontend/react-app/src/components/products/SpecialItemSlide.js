@@ -27,6 +27,7 @@ class SpecialItemSlide extends Component {
         return (
           <SpecialItemCard
             key={book.id}
+            id={book.id}
             image={book.image}
             name={book.name}
             price={

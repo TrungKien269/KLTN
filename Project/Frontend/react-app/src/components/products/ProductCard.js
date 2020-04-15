@@ -13,7 +13,7 @@ class ProductCard extends Component {
   render() {
     return (
       <React.Fragment>
-        <Link to={`/${this.props.id}`}>
+        <Link to={`/book/${this.props.id}`}>
           <div className="card display-on-hover">
             <img
               className="card-img-top img-contain img-contain-25"
