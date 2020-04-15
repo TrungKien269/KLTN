@@ -20,7 +20,7 @@ const Index = (props) => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [])
+  }, []);
 
   useEffect(() => {
     setLoadingRange([0, itemsCountPerPage - 1]);

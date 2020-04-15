@@ -3,6 +3,7 @@ import Index from "./pages/index/Index";
 import NotFoundPage from "./pages/index/NotFoundPage";
 import Collections from "./pages/index/Collections";
 import BookDetail from "./pages/index/BookDetail";
+import Login from "./pages/index/Login";
 const Routers = [
   {
     path: "/",
@@ -28,6 +29,11 @@ const Routers = [
     path: "/book/:id",
     exact: true,
     main: () => <BookDetail />,
+  },
+  {
+    path: "/login",
+    exact: false,
+    main: () => <Login />,
   },
 ];
 

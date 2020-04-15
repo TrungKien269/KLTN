@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Header from "./components/header/Header";
 import Routers from "./Routers";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Footer from "./components/Footer";
+import { getToken } from "./Utils/Commons";
 
 const showPage = (Routers) => {
   var result = null;

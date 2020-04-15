@@ -4,7 +4,7 @@ import { withRouter, useParams } from "react-router-dom";
 
 function BookDetail(props) {
   const { id = "" } = useParams();
-  console.log(id);
+
   return (
     <div>
       <ProductDetailSection bookInfo={id} />

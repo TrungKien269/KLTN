@@ -3,7 +3,11 @@ import HeaderBanner from "../../components/headbanner/HeaderBanner";
 import SpecialItemSlide from "../../components/products/SpecialItemSlide";
 import ProductSlideBestSale from "../../components/products/ProductSlideBestSale";
 import ProductSlideBestPrice from "../../components/products/ProductSlideBestPrice";
-function Index() {
+import { getUser } from "../../Utils/Commons";
+function Index(props) {
+  const user = getUser();
+  console.log(user);
+
   return (
     <React.Fragment>
       <HeaderBanner></HeaderBanner>
