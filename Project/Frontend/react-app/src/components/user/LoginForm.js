@@ -1,48 +1,46 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useContext } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
 import { setUserSession } from "../../Utils/Commons";
+import { UserContext } from "../../context/userContext";
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
+const Login = (props) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const { user, refreshUser } = useContext(UserContext);
 
-    this.state = {
-      username: "",
-      password: "",
-    };
-  }
-
-  handleUserNameChange = (event) => {
-    this.setState({
-      username: event.target.value,
-    });
+  const handleUserNameChange = (event) => {
+    setUsername(event.target.value);
   };
 
-  handlePasswordChange = (event) => {
-    this.setState({
-      password: event.target.value,
-    });
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
   };
 
-  handleFormSubmit = (event) => {
-    const { match, location, history } = this.props;
+  const handleFormSubmit = (event) => {
     event.preventDefault();
     axios({
       method: "post",
       url: "http://localhost:5000/api/Login/Signin",
       params: {
-        username: this.state.username,
-        password: this.state.password,
+        username,
+        password
       },
-    }).then((res) => {
-      setUserSession(res.data.token, res.data.obj);
-      this.props.history.push("/");
-    });
+    })
+      .then((res) => {
+        if (res.data.status) {
+          setUserSession(res.data.token, res.data.obj);
+          refreshUser()
+          props.history.push("/");
+        } else {
+          alert("sikesss");
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
-  GetSession = (event) => {
+  const GetSession = (event) => {
     axios({
       url: "http://localhost:5000/api/Main/SessionInfo",
     }).then((res) => {
@@ -50,47 +48,41 @@ class Login extends Component {
     });
   };
 
-  render() {
-    return (
-      <section className="section__login">
-        <div className="containter-fluid">
-          <div className="row">
-            <div className="col-md-6">
-              <h1>Login</h1>
-              <form
-                method="post"
-                id="loginForm"
-                onSubmit={this.handleFormSubmit}
-              >
-                <div className="field-control">
-                  <label>Username or Email</label>
-                  <input
-                    type="text"
-                    required
-                    className="col-md-8"
-                    onChange={this.handleUserNameChange}
-                  />
-                </div>
-                <div className="field-control">
-                  <label>Password</label>
-                  <input
-                    type="password"
-                    required
-                    className="col-md-8"
-                    onChange={this.handlePasswordChange}
-                  />
-                </div>
-                <div className="col-md-8 pad-0-0 mar-top-md">
-                  <input type="submit" className="btn btn-fit btn--blue" />
-                </div>
-                <Link to="/login">Lost your password ?</Link>
-              </form>
-            </div>
+  return (
+    <section className="section__login">
+      <div className="containter-fluid">
+        <div className="row">
+          <div className="col-md-6">
+            <h1>Login</h1>
+            <form method="post" id="loginForm" onSubmit={(e) => handleFormSubmit(e)}>
+              <div className="field-control">
+                <label>Username or Email</label>
+                <input
+                  type="text"
+                  required
+                  className="col-md-8"
+                  onChange={(e) => handleUserNameChange(e)}
+                />
+              </div>
+              <div className="field-control">
+                <label>Password</label>
+                <input
+                  type="password"
+                  required
+                  className="col-md-8"
+                  onChange={(e) => handlePasswordChange(e)}
+                />
+              </div>
+              <div className="col-md-8 pad-0-0 mar-top-md">
+                <input type="submit" className="btn btn-fit btn--blue" />
+              </div>
+              <Link to="/login">Lost your password ?</Link>
+            </form>
           </div>
         </div>
-      </section>
-    );
-  }
-}
+      </div>
+    </section>
+  );
+};
 
 export default withRouter(Login);

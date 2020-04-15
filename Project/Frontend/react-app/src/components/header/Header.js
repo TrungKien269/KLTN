@@ -1,14 +1,20 @@
-import React, { Component } from "react";
+import React, { Component, useMemo, useContext } from "react";
 import { Link } from "react-router-dom";
 import GetCategories from "../utilities/GetCategories";
 import SearchBar from "../utilities/SearchBar";
-import { getToken } from "../../Utils/Commons";
+import { getUser, removeUserSession } from "../../Utils/Commons";
+import { UserContext } from "../../context/userContext";
 
 function Header() {
-  const user = getToken();
+  const { user, refreshUser } = useContext(UserContext);
 
-  const loginNav = () => {
-    if (user !== null) {
+  const handleLogout = () => {
+    removeUserSession();
+    refreshUser();
+  };
+
+  const loginNav = useMemo(() => {
+    if (user) {
       return (
         <div className="hidden-md-elements nav__social-icon">
           <Link
@@ -17,22 +23,62 @@ function Header() {
             data-placement="bottom"
             title="Wish list"
           >
-            <i className="far fa-heart" />
+            <i class="fas fa-heart"></i>
           </Link>
           <div className="dropdown">
             <Link to="/cart.html">
               <i className="fas fa-shopping-cart" />
             </Link>
           </div>
+
+          <div className="nav-item dropdown ">
+            <Link
+              className="nav-link dropdown-toggle"
+              id="navbarDropdownMenuLink4"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <i className="far fa-user" />
+            </Link>
+            <div
+              className="dropdown-menu mega-menu mega-menu-sm "
+              aria-labelledby="navbarDropdownMenuLink4"
+            >
+              <div className="row">
+                <ul className="list-unstyled">
+                  <li>
+                    <Link onClick={handleLogout}>Log out</Link>
+                  </li>
+                  <li>
+                    <Link to="/about.html">About</Link>
+                  </li>
+                  <li>
+                    <Link to="/authors.html">Author</Link>
+                  </li>
+                  <li>
+                    <Link to="#">Limited Offer Time</Link>
+                  </li>
+                  <li>
+                    <Link to="#">FAQs</Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="hidden-md-elements nav__social-icon">
           <Link to="/login">
             <i className="far fa-user" />
           </Link>
         </div>
       );
-    } else {
-      return <div>Login</div>;
     }
-  };
+  }, [user]);
+
   return (
     <React.Fragment>
       <nav className="navbar navbar-shadow justify-content-between">

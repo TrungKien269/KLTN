@@ -11,16 +11,16 @@ class ProductCard extends Component {
     event.preventDefault();
     axios({
       headers: {
-        "Authorization": "Bearer " + window.sessionStorage.getItem("Token")
+        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
       },
       url: "http://localhost:5000/api/BookInfo/AddToCart",
       method: "post",
       params: {
         id: this.props.id,
-        quantity: 1
-      }
+        quantity: 1,
+      },
     }).then((res) => {
-      if(res.data.status == true){
+      if (res.data.status == true) {
         alert("add " + this.props.name + " to cart successfully");
       }
     });
