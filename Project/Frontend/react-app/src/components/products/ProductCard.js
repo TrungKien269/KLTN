@@ -1,14 +1,29 @@
 import React, { useEffect, useState, Component } from "react";
 import Badge from "../utilities/Badge";
 import { Link, withRouter } from "react-router-dom";
+import axios from "axios";
 
-// import axios from "axios";
 // import LazyLoad from "react-lazyload";
 // import ProductRating from "./ProductRating";
 
 class ProductCard extends Component {
-  addToCart = () => {
-    alert("add " + this.props.name + " to cart successfully");
+  addToCart = (event) => {
+    event.preventDefault();
+    axios({
+      headers: {
+        "Authorization": "Bearer " + window.sessionStorage.getItem("Token")
+      },
+      url: "http://localhost:5000/api/BookInfo/AddToCart",
+      method: "post",
+      params: {
+        id: this.props.id,
+        quantity: 1
+      }
+    }).then((res) => {
+      if(res.data.status == true){
+        alert("add " + this.props.name + " to cart successfully");
+      }
+    });
   };
   render() {
     return (

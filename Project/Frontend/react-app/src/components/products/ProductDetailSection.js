@@ -8,7 +8,8 @@ class ProductDetailSection extends Component {
     this.state = { 
       data: {}, 
       authors: "",
-      similarityData: {} 
+      similarityData: {}, 
+      quantity: 1
     };
     window.scrollTo(0, 0);
   }
@@ -35,6 +36,29 @@ class ProductDetailSection extends Component {
     }).then((res) => {
       console.log(res.data.obj);
       v.setState({similarityData: res.data.obj});
+    });
+  }
+
+  handleQuantityChanged = (event) => {
+    this.setState({quantity: parseInt(document.getElementById("txtQuantity").value)});
+  }
+
+  AddToCart = (event) => {
+    event.preventDefault();
+    axios({
+      headers: {
+        "Authorization": "Bearer " + window.sessionStorage.getItem("Token")
+      },
+      url: "http://localhost:5000/api/BookInfo/AddToCart",
+      method: "post",
+      params: {
+        id: this.state.data.id,
+        quantity: this.state.quantity
+      }
+    }).then((res) => {
+      if(res.data.status == true){
+        alert("add " + this.state.data.name + " to cart successfully");
+      }
     });
   }
 
@@ -224,10 +248,12 @@ class ProductDetailSection extends Component {
                         <input
                           type="button"
                           defaultValue="-"
-                          className="minus quantity__button"
+                          className="minus quantity__button" 
+                          onClick={this.handleQuantityChanged}
                         />
                         <input
-                          type="text"
+                          type="text" 
+                          id="txtQuantity"
                           step={1}
                           min={1}
                           max
@@ -242,12 +268,14 @@ class ProductDetailSection extends Component {
                         <input
                           type="button"
                           defaultValue="+"
-                          className="plus quantity__button"
+                          className="plus quantity__button" 
+                          onClick={this.handleQuantityChanged}
                         />
                       </div>
                     </div>
                     <div className="col-md-5">
-                      <a href="#" className="btn btn-fw btn--rounded btn--blue">
+                      <a href="#" className="btn btn-fw btn--rounded btn--blue" 
+                      onClick={this.AddToCart}>
                         Add to cart
                       </a>
                     </div>
