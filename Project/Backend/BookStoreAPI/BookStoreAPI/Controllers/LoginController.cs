@@ -70,6 +70,7 @@ namespace BookStoreAPI.Controllers
             var response = await loginBal.Signup(user);
             if (response.Status is true)
             {
+                response.Token = JWTHelper.CreateUserToken((response.Obj as User).Id);
                 return response;
             }
             else
