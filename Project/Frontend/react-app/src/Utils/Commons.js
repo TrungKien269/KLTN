@@ -1,19 +1,19 @@
-export const getUser = () => {
-  const userStr = sessionStorage.getItem("user");
-  if (userStr) return JSON.parse(userStr);
-  else return null;
-};
+// export const getUser = () => {
+//   const userStr = sessionStorage.getItem("user");
+//   if (userStr) return JSON.parse(userStr);
+//   else return null;
+// };
 
 export const getToken = () => {
-  return sessionStorage.getItem("token") || null;
+  return sessionStorage.getItem("Token") || null;
 };
 
 export const removeUserSession = () => {
-  sessionStorage.removeItem("token");
-  sessionStorage.removeItem("user");
+  sessionStorage.removeItem("Token");
+  // sessionStorage.removeItem("user");
 };
 
-export const setUserSession = (token, user) => {
-  sessionStorage.setItem("token", token);
-  sessionStorage.setItem("user", JSON.stringify(user));
+export const setUserSession = (token) => {
+  sessionStorage.setItem("Token", token);
+  // sessionStorage.setItem("user", JSON.stringify(user));
 };

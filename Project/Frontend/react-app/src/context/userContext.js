@@ -1,18 +1,24 @@
 import React, { useState, createContext } from "react";
-import { getUser, removeUserSession } from "../Utils/Commons";
+import { getUser, getToken } from "../Utils/Commons";
 
 export const UserContext = createContext();
 
 function Index(props) {
-  const [user, setUser] = useState(getUser());
+  // const [user, setUser] = useState(getUser());
+  const [token, setToken] = useState(getToken());
 
-  const refreshUser = () => {
-    setUser(getUser());
-  };
+  // const refreshUser = () => {
+  //   setUser(getUser());
+  // };
+
+  const refreshToken = () => {
+    setToken(getToken());
+  }
 
   const contextValue = {
-    user,
-    refreshUser,
+    // user,
+    // refreshUser,
+    token, refreshToken
   };
 
   return (

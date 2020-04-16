@@ -2,19 +2,22 @@ import React, { Component, useMemo, useContext } from "react";
 import { Link } from "react-router-dom";
 import GetCategories from "../utilities/GetCategories";
 import SearchBar from "../utilities/SearchBar";
-import { getUser, removeUserSession } from "../../Utils/Commons";
+import { removeUserSession } from "../../Utils/Commons";
 import { UserContext } from "../../context/userContext";
 
 function Header() {
-  const { user, refreshUser } = useContext(UserContext);
+  // const { user, refreshUser } = useContext(UserContext);
+  const { token, refreshToken } = useContext(UserContext);
 
   const handleLogout = () => {
     removeUserSession();
-    refreshUser();
+    // refreshUser();
+    refreshToken();
   };
 
   const loginNav = useMemo(() => {
-    if (user) {
+    if (token) {
+    // if (user) {
       return (
         <div className="hidden-md-elements nav__social-icon">
           <div>
@@ -80,7 +83,7 @@ function Header() {
         </div>
       );
     }
-  }, [user]);
+  }, [token]);
 
   return (
     <React.Fragment>

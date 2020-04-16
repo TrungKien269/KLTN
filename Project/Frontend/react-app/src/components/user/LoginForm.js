@@ -8,7 +8,8 @@ import { UserContext } from "../../context/userContext";
 const Login = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { user, refreshUser } = useContext(UserContext);
+  // const { user, refreshUser } = useContext(UserContext);
+  const { token, refreshToken } = useContext(UserContext);
 
   const handleUserNameChange = (event) => {
     setUsername(event.target.value);
@@ -30,22 +31,15 @@ const Login = (props) => {
     })
       .then((res) => {
         if (res.data.status) {
-          setUserSession(res.data.token, res.data.obj);
-          refreshUser();
+          setUserSession(res.data.token);
+          // refreshUser();
+          refreshToken();
           props.history.push("/");
         } else {
-          alert("sikesss");
+          alert("ERROR");
         }
       })
       .catch((err) => console.log(err));
-  };
-
-  const GetSession = (event) => {
-    axios({
-      url: "http://localhost:5000/api/Main/SessionInfo",
-    }).then((res) => {
-      console.log(res);
-    });
   };
 
   return (
