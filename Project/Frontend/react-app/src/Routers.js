@@ -4,6 +4,9 @@ import NotFoundPage from "./pages/index/NotFoundPage";
 import Collections from "./pages/index/Collections";
 import BookDetail from "./pages/index/BookDetail";
 import Login from "./pages/index/Login";
+import ConfirmEmail from "./pages/index/ConfirmEmail";
+import ResetPassword from "./pages/index/ResetPassword";
+
 const Routers = [
   {
     path: "/",
@@ -30,7 +33,16 @@ const Routers = [
     exact: true,
     main: () => <BookDetail />,
   },
-
+  {
+    path: "/confirmemail",
+    exact: true,
+    main: () => <ConfirmEmail />,
+  },
+  {
+    path: "/resetpassword",
+    exact: true,
+    main: () => <ResetPassword />,
+  },
 ];
 
 export default Routers;

@@ -8,7 +8,6 @@ import { UserContext } from "../../context/userContext";
 const Login = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  // const { user, refreshUser } = useContext(UserContext);
   const { token, refreshToken } = useContext(UserContext);
 
   const handleUserNameChange = (event) => {
@@ -32,7 +31,6 @@ const Login = (props) => {
       .then((res) => {
         if (res.data.status) {
           setUserSession(res.data.token);
-          // refreshUser();
           refreshToken();
           props.history.push("/");
         } else {
@@ -75,7 +73,7 @@ const Login = (props) => {
                   value="Login"
                 />
               </div>
-              <Link to="/login">Lost your password ?</Link>
+              <Link to="/confirmemail">Forgot your password ?</Link>
             </form>
           </div>
   );
