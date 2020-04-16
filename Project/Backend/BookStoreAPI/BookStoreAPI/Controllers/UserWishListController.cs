@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookStoreAPI.BUS.Control;
+using BookStoreAPI.Helper;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
 using Microsoft.AspNetCore.Authorization;
@@ -29,30 +30,57 @@ namespace BookStoreAPI.Controllers
         [HttpGet("UserWishList")]
         public async Task<Response> GetUserWishList()
         {
-            var userID = HttpContext.Session.GetInt32("UserID");
-            return await userWishListBal.GetListWisher(userID.Value);
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                return await userWishListBal.GetListWisher(userID);
+            }
         }
 
         [Authorize]
         [HttpPost("AddToWishList")]
         public async Task<Response> AddToWishList(string bookID)
         {
-            var userID = HttpContext.Session.GetInt32("UserID");
-            var wishlist = new WishList
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
             {
-                UserId = userID.Value,
-                DateTime = DateTime.Now,
-                BookId = bookID
-            };
-            return await userWishListBal.AddToWishList(wishlist);
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                var wishlist = new WishList
+                {
+                    UserId = userID,
+                    DateTime = DateTime.Now,
+                    BookId = bookID
+                };
+                return await userWishListBal.AddToWishList(wishlist);
+            }
         }
 
         [Authorize]
         [HttpDelete("RemoveFromWishList")]
         public async Task<Response> RemoveFromWishList(string bookID)
         {
-            var userID = HttpContext.Session.GetInt32("UserID");
-            return await userWishListBal.RemoveFromWishList(userID.Value, bookID);
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                return await userWishListBal.RemoveFromWishList(userID, bookID);
+            }
         }
     }
 }
