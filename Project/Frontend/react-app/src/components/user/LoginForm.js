@@ -43,9 +43,6 @@ const Login = (props) => {
   };
 
   return (
-    <section className="section__login">
-      <div className="containter-fluid">
-        <div className="row">
           <div className="col-md-6">
             <h1>Login</h1>
             <form
@@ -81,9 +78,6 @@ const Login = (props) => {
               <Link to="/login">Lost your password ?</Link>
             </form>
           </div>
-        </div>
-      </div>
-    </section>
   );
 };
 
