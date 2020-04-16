@@ -5,11 +5,11 @@ import NumberFormat from "react-number-format";
 class ProductDetailSection extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      data: {}, 
+    this.state = {
+      data: {},
       authors: "",
-      similarityData: {}, 
-      quantity: 1
+      similarityData: {},
+      quantity: 1,
     };
     window.scrollTo(0, 0);
   }
@@ -20,14 +20,14 @@ class ProductDetailSection extends Component {
       url: `http://localhost:5000/api/BookInfo/Book/${this.props.bookInfo}`,
     }).then(function (response) {
       v.setState({ data: response.data.obj });
-      if(Object.keys(v.state.data).length > 0){
+      if (Object.keys(v.state.data).length > 0) {
         var author = "";
-        for(var i = 0; i < v.state.data.authorBook.length; i ++){
-          author += v.state.data.authorBook[i].author.name + ", "
+        for (var i = 0; i < v.state.data.authorBook.length; i++) {
+          author += v.state.data.authorBook[i].author.name + ", ";
         }
         v.setState({
-          authors: author.substring(0, author.length - 2)
-        })
+          authors: author.substring(0, author.length - 2),
+        });
       }
     });
     axios({
@@ -35,60 +35,63 @@ class ProductDetailSection extends Component {
       url: `http://localhost:5000/api/BookInfo/RelatedBook/${this.props.bookInfo}`,
     }).then((res) => {
       console.log(res.data.obj);
-      v.setState({similarityData: res.data.obj});
+      v.setState({ similarityData: res.data.obj });
     });
   }
 
   handleQuantityChanged = (event) => {
-    this.setState({quantity: parseInt(document.getElementById("txtQuantity").value)});
-  }
+    this.setState({
+      quantity: parseInt(document.getElementById("txtQuantity").value),
+    });
+  };
 
   AddToCart = (event) => {
     event.preventDefault();
     axios({
       headers: {
-        "Authorization": "Bearer " + window.sessionStorage.getItem("Token")
+        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
       },
       url: "http://localhost:5000/api/BookInfo/AddToCart",
       method: "post",
       params: {
         id: this.state.data.id,
-        quantity: this.state.quantity
-      }
+        quantity: this.state.quantity,
+      },
     }).then((res) => {
-      if(res.data.status == true){
+      if (res.data.status == true) {
         alert("add " + this.state.data.name + " to cart successfully");
       }
     });
-  }
+  };
 
   AddToWishList = (event) => {
     event.preventDefault();
     axios({
       headers: {
-        "Authorization": "Bearer " + window.sessionStorage.getItem("Token")
+        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
       },
-      method: "post", 
-      url: "http://localhost:5000/api/UserWishList/AddToWishList", 
+      method: "post",
+      url: "http://localhost:5000/api/UserWishList/AddToWishList",
       params: {
-        bookID: this.state.data.id
-      }
-    }).then((res) => {
-      console.log(res.data);
-      if(res.data.status){
-        alert("add " + this.state.data.name + " to wish list successfully");
-      }
-    }).catch((err) => {
-      if(err.response){
-        if(err.response.status === 401) {
-          alert("You have to sign in for this action");
-        }
-      }
-      else{
-        console.log(err);
-      }
+        bookID: this.state.data.id,
+      },
     })
-  }
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.status) {
+          alert("add " + this.state.data.name + " to wish list successfully");
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          if (err.response.status === 401) {
+            alert("You have to sign in for this action");
+          }
+        } else {
+          console.log(err);
+        }
+      });
+  };
 
   showDetail = (data, authors) => {
     return (
@@ -276,11 +279,11 @@ class ProductDetailSection extends Component {
                         <input
                           type="button"
                           defaultValue="-"
-                          className="minus quantity__button" 
+                          className="minus quantity__button"
                           onClick={this.handleQuantityChanged}
                         />
                         <input
-                          type="text" 
+                          type="text"
                           id="txtQuantity"
                           step={1}
                           min={1}
@@ -296,20 +299,25 @@ class ProductDetailSection extends Component {
                         <input
                           type="button"
                           defaultValue="+"
-                          className="plus quantity__button" 
+                          className="plus quantity__button"
                           onClick={this.handleQuantityChanged}
                         />
                       </div>
                     </div>
                     <div className="col-md-5">
-                      <a href="#" className="btn btn-fw btn--rounded btn--blue" 
-                      onClick={this.AddToCart}>
+                      <a
+                        href="#"
+                        className="btn btn-fw btn--rounded btn--blue"
+                        onClick={this.AddToCart}
+                      >
                         Add to cart
                       </a>
                     </div>
                   </div>
                   <div className="detail__link">
-                    <a href="#" onClick={this.AddToWishList}>add to wishlish</a>
+                    <a href="#" onClick={this.AddToWishList}>
+                      add to wishlish
+                    </a>
                     {/* <a href="#">add to compare</a> */}
                   </div>
                   {/* <div className="detail__social">
@@ -349,7 +357,11 @@ class ProductDetailSection extends Component {
                       </tr>
                       <tr className="type">
                         <td className="first">Type</td>
-                        <td>{Object.keys(data).length > 0 ? data.bookCategory[0].cate.name:''}</td>
+                        <td>
+                          {Object.keys(data).length > 0
+                            ? data.bookCategory[0].cate.name
+                            : ""}
+                        </td>
                       </tr>
                       <tr className="title">
                         <td className="first">Released Year</td>
@@ -357,11 +369,19 @@ class ProductDetailSection extends Component {
                       </tr>
                       <tr className="provider">
                         <td className="first">Supplier</td>
-                        <td>{Object.keys(data).length > 0 ? data.supplierBook[0].supplier.name: ''}</td>
+                        <td>
+                          {Object.keys(data).length > 0
+                            ? data.supplierBook[0].supplier.name
+                            : ""}
+                        </td>
                       </tr>
                       <tr className="publisher">
                         <td className="first">Publisher</td>
-                        <td>{Object.keys(data).length > 0 ? data.publisherBook[0].publisher.name: ''}</td>
+                        <td>
+                          {Object.keys(data).length > 0
+                            ? data.publisherBook[0].publisher.name
+                            : ""}
+                        </td>
                       </tr>
                       <tr className="weight">
                         <td className="first">Weight</td>
@@ -448,9 +468,17 @@ class ProductDetailSection extends Component {
       </section>
     );
   };
-  
+
   render() {
-    return <div>{this.showDetail(this.state.data, this.state.authors, this.state.similarityData)}</div>;
+    return (
+      <div>
+        {this.showDetail(
+          this.state.data,
+          this.state.authors,
+          this.state.similarityData
+        )}
+      </div>
+    );
   }
 }
 

@@ -41,41 +41,37 @@ const Login = (props) => {
   };
 
   return (
-          <div className="col-md-6">
-            <h1>Login</h1>
-            <form
-              method="post"
-              id="loginForm"
-              onSubmit={(e) => handleFormSubmit(e)}
-            >
-              <div className="field-control">
-                <label>Username or Email</label>
-                <input
-                  type="text"
-                  required
-                  className="col-md-8"
-                  onChange={(e) => handleUserNameChange(e)}
-                />
-              </div>
-              <div className="field-control">
-                <label>Password</label>
-                <input
-                  type="password"
-                  required
-                  className="col-md-8"
-                  onChange={(e) => handlePasswordChange(e)}
-                />
-              </div>
-              <div className="col-md-8 pad-0-0 mar-top-md">
-                <input
-                  type="submit"
-                  className="btn btn-fit btn--blue"
-                  value="Login"
-                />
-              </div>
-              <Link to="/confirmemail">Forgot your password ?</Link>
-            </form>
-          </div>
+    <div className="col-md-6">
+      <h1>Login</h1>
+      <form method="post" id="loginForm" onSubmit={(e) => handleFormSubmit(e)}>
+        <div className="field-control">
+          <label>Username or Email</label>
+          <input
+            type="text"
+            required
+            className="col-md-8"
+            onChange={(e) => handleUserNameChange(e)}
+          />
+        </div>
+        <div className="field-control">
+          <label>Password</label>
+          <input
+            type="password"
+            required
+            className="col-md-8"
+            onChange={(e) => handlePasswordChange(e)}
+          />
+        </div>
+        <div className="col-md-8 pad-0-0 mar-top-md">
+          <input
+            type="submit"
+            className="btn btn-fit btn--blue"
+            value="Login"
+          />
+        </div>
+        <Link to="/confirmemail">Forgot your password ?</Link>
+      </form>
+    </div>
   );
 };
 
