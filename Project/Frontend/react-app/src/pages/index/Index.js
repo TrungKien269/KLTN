@@ -1,13 +1,10 @@
-import React from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import HeaderBanner from "../../components/headbanner/HeaderBanner";
 import SpecialItemSlide from "../../components/products/SpecialItemSlide";
 import ProductSlideBestSale from "../../components/products/ProductSlideBestSale";
 import ProductSlideBestPrice from "../../components/products/ProductSlideBestPrice";
-// import { getUser } from "../../Utils/Commons";
 
 function Index(props) {
-  // const user = getUser();
-
   return (
     <React.Fragment>
       <HeaderBanner></HeaderBanner>

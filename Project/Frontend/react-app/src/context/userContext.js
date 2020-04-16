@@ -13,12 +13,13 @@ function Index(props) {
 
   const refreshToken = () => {
     setToken(getToken());
-  }
+  };
 
   const contextValue = {
     // user,
     // refreshUser,
-    token, refreshToken
+    token,
+    refreshToken,
   };
 
   return (

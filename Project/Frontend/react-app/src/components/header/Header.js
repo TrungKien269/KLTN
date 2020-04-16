@@ -1,9 +1,16 @@
-import React, { Component, useMemo, useContext } from "react";
+import React, {
+  Component,
+  useMemo,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Link } from "react-router-dom";
 import GetCategories from "../utilities/GetCategories";
 import SearchBar from "../utilities/SearchBar";
-import { removeUserSession } from "../../Utils/Commons";
+import { removeUserSession, getToken } from "../../Utils/Commons";
 import { UserContext } from "../../context/userContext";
+
 
 function Header() {
   // const { user, refreshUser } = useContext(UserContext);
@@ -14,10 +21,12 @@ function Header() {
     // refreshUser();
     refreshToken();
   };
-
+ 
+  
+  
   const loginNav = useMemo(() => {
     if (token) {
-    // if (user) {
+      // if (user) {
       return (
         <div className="hidden-md-elements nav__social-icon">
           <div>
@@ -39,7 +48,7 @@ function Header() {
 
           <div className="dropdown ">
             <Link
-              className="nav-link dropdown-toggle"
+              className=""
               id="navbarDropdownMenuLink4"
               data-toggle="dropdown"
               aria-haspopup="true"
@@ -57,7 +66,7 @@ function Header() {
                     <Link onClick={handleLogout}>Log out</Link>
                   </li>
                   <li>
-                    <Link to="/about.html">About</Link>
+                    <Link to="/profile">Profile</Link>
                   </li>
                   <li>
                     <Link to="/authors.html">Author</Link>

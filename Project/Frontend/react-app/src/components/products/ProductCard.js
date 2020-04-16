@@ -2,6 +2,7 @@ import React, { useEffect, useState, Component } from "react";
 import Badge from "../utilities/Badge";
 import { Link, withRouter } from "react-router-dom";
 import axios from "axios";
+import { getToken } from "../../Utils/Commons";
 
 // import LazyLoad from "react-lazyload";
 // import ProductRating from "./ProductRating";
@@ -11,7 +12,7 @@ class ProductCard extends Component {
     event.preventDefault();
     axios({
       headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
+        Authorization: "Bearer " + getToken(),
       },
       url: "http://localhost:5000/api/BookInfo/AddToCart",
       method: "post",

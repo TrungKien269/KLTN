@@ -8,6 +8,7 @@ import { getToken } from "./Utils/Commons";
 import PrivateRoute from "./Utils/PrivateRoute";
 import PublicRoute from "./Utils/PublicRoute";
 import Login from "./pages/index/Login";
+import UserProfile from "./pages/index/UserProfile";
 
 const showPage = (Routers) => {
   var result = null;
@@ -35,6 +36,7 @@ function App() {
         <Switch>
           {showPage(Routers)}
           <PublicRoute path="/login" component={Login} />
+          <PrivateRoute path="/profile" component={UserProfile} />
         </Switch>
 
         <Footer />
