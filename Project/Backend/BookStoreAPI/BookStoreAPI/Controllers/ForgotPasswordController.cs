@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookStoreAPI.BUS.Control;
+using BookStoreAPI.Helper;
 using BookStoreAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -39,9 +40,18 @@ namespace BookStoreAPI.Controllers
 
         [HttpPost("ResetPassword")]
         [Authorize(Roles = "Temporary")]
-        public async Task<Response> ResetPassword(string email, string newPassword)
+        public async Task<Response> ResetPassword(string newPassword)
         {
-            return await forgotPasswordBal.ResetPassword(email, newPassword);
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetEmail(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                return await forgotPasswordBal.ResetPassword(checkToken, newPassword);
+            }
         }
     }
 }

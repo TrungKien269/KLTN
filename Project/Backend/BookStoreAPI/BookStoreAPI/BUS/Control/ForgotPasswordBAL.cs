@@ -30,7 +30,7 @@ namespace BookStoreAPI.BUS.Control
         {
             try
             {
-                var token = JWTHelper.CreateTemporaryToken();
+                var token = JWTHelper.CreateTemporaryToken(email);
                 MailMessage message = new MailMessage();
                 SmtpClient smtp = new SmtpClient();
                 message.From = new MailAddress("pokemon.ute19.06@gmail.com", "Book Store");
@@ -38,8 +38,8 @@ namespace BookStoreAPI.BUS.Control
                 message.Subject = "RESET PASSWORD";
                 message.IsBodyHtml = true;
                 message.Body = "<p>Click this link to reset your password: " +
-                               "<a href=" + "http://localhost:3000/ResetPassword?token=" + token + "?" + "email=" + email + ">" +
-                               "http://localhost:3000/ResetPassword?token=" + token + "?" + "email=" + email + "</a></p>" +
+                               "<a href=" + "http://localhost:3000/ResetPassword?token=" + token + ">" +
+                               "http://localhost:3000/ResetPassword?token=" + token + "</a></p>" +
                                "<br/><br/><br/>" +
                                "<p>This link will terminate in 5 minute later. Please to reset your password as early as possible</p>";
                 smtp.Port = 587;

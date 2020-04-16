@@ -50,13 +50,14 @@ namespace BookStoreAPI.Helper
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public static string CreateTemporaryToken()
+        public static string CreateTemporaryToken(string email)
         {
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
 
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Role, "Temporary"));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Email, email));
             var token = new JwtSecurityToken(
                 issuer: "books.sell",
                 audience: "readers",
@@ -105,6 +106,22 @@ namespace BookStoreAPI.Helper
             {
                 var id = tokenS.Claims.First(claim => claim.Type == "nameid").Value;
                 return id;
+            }
+            catch (Exception e)
+            {
+                return "Error";
+            }
+        }
+
+        public static string GetEmail(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            token = token.Replace("Bearer ", "");
+            var tokenS = tokenHandler.ReadToken(token) as JwtSecurityToken;
+            try
+            {
+                var email = tokenS.Claims.First(claim => claim.Type == "email").Value;
+                return email;
             }
             catch (Exception e)
             {
