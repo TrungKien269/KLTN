@@ -30,11 +30,7 @@ const Routers = [
     exact: true,
     main: () => <BookDetail />,
   },
-  {
-    path: "/login",
-    exact: false,
-    main: () => <Login />,
-  },
+
 ];
 
 export default Routers;

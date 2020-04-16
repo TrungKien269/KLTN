@@ -5,6 +5,9 @@ import Routers from "./Routers";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Footer from "./components/Footer";
 import { getToken } from "./Utils/Commons";
+import PrivateRoute from "./Utils/PrivateRoute";
+import PublicRoute from "./Utils/PublicRoute";
+import Login from "./pages/index/Login";
 
 const showPage = (Routers) => {
   var result = null;
@@ -21,7 +24,7 @@ const showPage = (Routers) => {
     });
   }
 
-  return <Switch>{result}</Switch>;
+  return result;
 };
 
 function App() {
@@ -29,7 +32,11 @@ function App() {
     <Router>
       <React.Fragment>
         <Header></Header>
-        {showPage(Routers)}
+        <Switch>
+          {showPage(Routers)}
+          <PublicRoute path="/login" component={Login} />
+        </Switch>
+
         <Footer />
       </React.Fragment>
     </Router>
