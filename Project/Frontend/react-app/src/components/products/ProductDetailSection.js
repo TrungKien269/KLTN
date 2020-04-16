@@ -62,6 +62,34 @@ class ProductDetailSection extends Component {
     });
   }
 
+  AddToWishList = (event) => {
+    event.preventDefault();
+    axios({
+      headers: {
+        "Authorization": "Bearer " + window.sessionStorage.getItem("Token")
+      },
+      method: "post", 
+      url: "http://localhost:5000/api/UserWishList/AddToWishList", 
+      params: {
+        bookID: this.state.data.id
+      }
+    }).then((res) => {
+      console.log(res.data);
+      if(res.data.status){
+        alert("add " + this.state.data.name + " to wish list successfully");
+      }
+    }).catch((err) => {
+      if(err.response){
+        if(err.response.status === 401) {
+          alert("You have to sign in for this action");
+        }
+      }
+      else{
+        console.log(err);
+      }
+    })
+  }
+
   showDetail = (data, authors) => {
     return (
       <section className="section__detail">
@@ -281,7 +309,7 @@ class ProductDetailSection extends Component {
                     </div>
                   </div>
                   <div className="detail__link">
-                    <a href="#">add to wishlish</a>
+                    <a href="#" onClick={this.AddToWishList}>add to wishlish</a>
                     {/* <a href="#">add to compare</a> */}
                   </div>
                   {/* <div className="detail__social">
