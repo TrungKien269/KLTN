@@ -28,6 +28,11 @@ namespace BookStoreAPI.BUS.Control
             return await accountBal.Login(username, password);
         }
 
+        public async Task<Response> LoginByGoogle(string email)
+        {
+            return await accountBal.LoginByGoogle(email);
+        }
+
         public async Task<Response> SetCookieForAccount(string cookie, Account account)
         {
             return await accountBal.SetCookie(cookie, account);

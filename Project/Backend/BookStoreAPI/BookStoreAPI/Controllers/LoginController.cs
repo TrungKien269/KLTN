@@ -47,6 +47,18 @@ namespace BookStoreAPI.Controllers
             return response;
         }
 
+        [HttpPost("GoogleSignin")]
+        public async Task<Response> GoogleSignin(string email)
+        {
+            var response = await loginBal.LoginByGoogle(email);
+            if (response.Status is true)
+            {
+                response.Token = JWTHelper.CreateUserToken((response.Obj as Account).Id);
+                return response;
+            }
+            return response;
+        }
+
         [HttpPost("Signup")]
         public async Task<Response> Signup(UserRequest userRequest)
         {

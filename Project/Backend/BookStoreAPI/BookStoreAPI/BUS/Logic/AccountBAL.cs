@@ -42,6 +42,27 @@ namespace BookStoreAPI.BUS.Logic
             }
         }
 
+        public async Task<Response> LoginByGoogle(string email)
+        {
+            try
+            {
+                var account = await context.Account
+                    .Where(x => x.Email.Equals(email)).FirstOrDefaultAsync();
+                if (account is null)
+                {
+                    return new Response("This email has not been used in this system", false, 0, null);
+                }
+                else
+                {
+                    return new Response("Success", true, 1, account);
+                }
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
         public async Task<Response> SetCookie(string cookie, Account account)
         {
             try
