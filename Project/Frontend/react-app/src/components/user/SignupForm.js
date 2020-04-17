@@ -73,7 +73,9 @@ const Signup = (props) => {
         } else {
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        alert(err.message);
+      });
   };
 
   return (
@@ -172,7 +174,7 @@ const Signup = (props) => {
         </div>
 
         <div class="col-md-8 pad-0-0 mar-top-md">
-          <input type="submit" value="Signup" class="btn btn-fit btn--blue" />
+          <input type="submit" value="Sign up" class="btn btn-fit btn--blue" />
         </div>
       </form>
     </div>

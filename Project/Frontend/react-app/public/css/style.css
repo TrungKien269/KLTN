@@ -3019,3 +3019,7 @@ h1 {
 .price-range:focus {
   outline: none;
 }
+
+.swal2-popup {
+  font-size: 1.6rem !important;
+}

@@ -44,11 +44,6 @@ const Routers = [
     exact: true,
     main: () => <ResetPassword />,
   },
-  {
-    path: "/cart",
-    exact: true,
-    main: () => <UserCart />,
-  },
 ];
 
 export default Routers;

@@ -1,6 +1,9 @@
 import React, { Component, useState, useEffect, useMemo, useRef } from "react";
 import { getToken, removeUserSession } from "../../Utils/Commons";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { swal } from "sweetalert2/dist/sweetalert2.all";
+
 function UserProfile() {
   const [userInfor, setUserInfor] = useState();
   const [fullName, setFullName] = useState("");
@@ -8,11 +11,17 @@ function UserProfile() {
   const [address, setAddress] = useState("");
   const [birthday, setBirthday] = useState("");
   const [gender, setGender] = useState("");
+  const [currentPass, setCurrentpass] = useState("");
+  const [newPass, setNewPass] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
+
   const fullNameRef = useRef(null);
   const birthDayRef = useRef(null);
   const phoneRef = useRef(null);
   const addressRef = useRef(null);
-  const genderRef = useRef(null);
+  const curPassRef = useRef(null);
+  const newPassref = useRef(null);
+  const confirmPassRef = useRef(null);
 
   const handleNameChange = (event) => {
     setFullName(event.target.value);
@@ -20,19 +29,24 @@ function UserProfile() {
   const handleGenderChanged = (event) => {
     setGender(event.target.value);
   };
-
   const handleBirthday = (event) => {
     setBirthday(event.target.value);
   };
-
   const handlePhoneNumberChanged = (event) => {
     setPhoneNumber(event.target.value);
   };
-
   const handleAddressChanged = (event) => {
     setAddress(event.target.value);
   };
-
+  const handlecurrentPass = (event) => {
+    setCurrentpass(event.target.value);
+  };
+  const handleNewPass = (event) => {
+    setNewPass(event.target.value);
+  };
+  const handleConfirmPass = (event) => {
+    setConfirmPass(event.target.value);
+  };
   console.log(fullName, phonenumber, address, birthday, gender);
 
   useEffect(() => {
@@ -74,11 +88,64 @@ function UserProfile() {
       .then((res) => {
         console.log(res);
         if (res.data.status) {
-          alert("Update successfully");
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Update Profile successfully",
+          });
         } else {
         }
       })
       .catch((err) => console.log(err));
+  };
+
+  const handleChangePass = (event) => {
+    event.preventDefault();
+    axios({
+      headers: {
+        Authorization: "Bearer " + getToken(),
+      },
+      method: "post",
+      url: "http://localhost:5000/api/UserProfile/CheckPassword",
+      params: {
+        current_password: currentPass,
+      },
+    }).then((res) => {
+      if (res.data.status) {
+        if (confirmPass === newPass) {
+          axios({
+            headers: {
+              Authorization: "Bearer " + getToken(),
+            },
+            method: "post",
+            url: "http://localhost:5000/api/UserProfile/ChangePassword",
+            params: {
+              new_password: newPass,
+            },
+          }).then((res) => {
+            if (res.data.status) {
+              Swal.fire({
+                icon: "success",
+                title: "Password change successfully",
+                text: "Your password is changed",
+              });
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Your confirm Password is wrong",
+          });
+        }
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Your Password is wrong",
+        });
+      }
+    });
   };
 
   const checkGender = useMemo(() => {
@@ -150,6 +217,7 @@ function UserProfile() {
       );
     }
   }, [gender]);
+
   return (
     <section class="section__profile">
       <div class="container">
@@ -206,16 +274,43 @@ function UserProfile() {
             <div class="title-wrapper">
               <h3>Change password</h3>
             </div>
-            <form action="" class="profile-wrapper">
+            <form
+              action=""
+              class="profile-wrapper"
+              onSubmit={(e) => handleChangePass(e)}
+            >
               <label for="current">Current password</label>
-              <input type="password" id="current" required />
+              <input
+                type="password"
+                id="current"
+                defaultValue=""
+                ref={curPassRef}
+                required
+                onChange={(e) => handlecurrentPass(e)}
+              />
               <label for="new">New password</label>
-              <input type="password" id="new" required />
+              <input
+                type="password"
+                id="new"
+                defaultValue=""
+                ref={newPassref}
+                onChange={(e) => handleNewPass(e)}
+                required
+              />
               <label for="comfirm">Confirm password</label>
-              <input type="password" id="confirm" required />
-              <button class="btn btn-fit btn--lg btn--rounded btn--blue">
-                Change
-              </button>
+              <input
+                type="password"
+                id="confirm"
+                defaultValue=""
+                ref={confirmPassRef}
+                onChange={(e) => handleConfirmPass(e)}
+                required
+              />
+              <input
+                class="btn btn-fit btn--lg btn--rounded btn--blue"
+                value="Submit"
+                type="submit"
+              />
             </form>
           </div>
         </div>

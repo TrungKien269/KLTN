@@ -9,6 +9,7 @@ import PrivateRoute from "./Utils/PrivateRoute";
 import PublicRoute from "./Utils/PublicRoute";
 import Login from "./pages/index/Login";
 import UserProfile from "./pages/index/UserProfile";
+import UserCart from "./pages/index/UserCart";
 
 const showPage = (Routers) => {
   var result = null;
@@ -37,6 +38,7 @@ function App() {
           {showPage(Routers)}
           <PublicRoute path="/login" component={Login} />
           <PrivateRoute path="/profile" component={UserProfile} />
+          <PrivateRoute path="/cart" component={UserCart} />
         </Switch>
 
         <Footer />
