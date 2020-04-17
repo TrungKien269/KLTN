@@ -73,9 +73,7 @@ const Signup = (props) => {
         } else {
         }
       })
-      .catch((err) => {
-        alert(err.message);
-      });
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -140,7 +138,7 @@ const Signup = (props) => {
                   value="Female"
                   onClick={(e) => handleGenderChanged(e)}
                 />
-                <label for="Female">Female</label>
+                <label for="female">Female</label>
                 <div class="check">
                   <div class="inside"></div>
                 </div>
