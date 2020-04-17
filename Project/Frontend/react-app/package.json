@@ -19,7 +19,9 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-star-ratings": "^2.3.0",
-    "sweetalert2-react": "^0.8.3"
+    "sweetalert2": "^9.10.12",
+    "sweetalert2-react": "^0.8.3",
+    "sweetalert2-react-content": "^3.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

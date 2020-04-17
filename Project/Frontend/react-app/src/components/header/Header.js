@@ -41,7 +41,7 @@ function Header() {
           </div>
 
           <div className="dropdown">
-            <Link to="/cart.html">
+            <Link to="/cart">
               <i className="fas fa-shopping-cart" />
             </Link>
           </div>

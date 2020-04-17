@@ -6,6 +6,7 @@ import BookDetail from "./pages/index/BookDetail";
 import Login from "./pages/index/Login";
 import ConfirmEmail from "./pages/index/ConfirmEmail";
 import ResetPassword from "./pages/index/ResetPassword";
+import UserCart from "./pages/index/UserCart";
 
 const Routers = [
   {
@@ -42,6 +43,11 @@ const Routers = [
     path: "/resetpassword",
     exact: true,
     main: () => <ResetPassword />,
+  },
+  {
+    path: "/cart",
+    exact: true,
+    main: () => <UserCart />,
   },
 ];
 
