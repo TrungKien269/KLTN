@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
 import { setUserSession } from "../../Utils/Commons";
 import { UserContext } from "../../context/userContext";
+import Swal from "sweetalert2";
 
 const Login = (props) => {
   const [username, setUsername] = useState("");
@@ -30,14 +31,30 @@ const Login = (props) => {
     })
       .then((res) => {
         if (res.data.status) {
-          setUserSession(res.data.token);
-          refreshToken();
-          props.history.push("/");
+          Swal.fire({
+            title: "Success",
+            text: "Sign up  completely",
+            icon: "success",
+          }).then(() => {
+            setUserSession(res.data.token);
+            refreshToken();
+            props.history.push("/");
+          })
         } else {
-          alert("ERROR");
+          Swal.fire({
+            title: "Error",
+            text: res.data.message,
+            icon: "error",
+          });
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        Swal.fire({
+          title: "Error",
+          text: err,
+          icon: "error",
+        });
+      });
   };
 
   return (

@@ -3,6 +3,7 @@ import Badge from "../utilities/Badge";
 import { Link, withRouter } from "react-router-dom";
 import axios from "axios";
 import { getToken } from "../../Utils/Commons";
+import Swal from "sweetalert2";
 
 // import LazyLoad from "react-lazyload";
 // import ProductRating from "./ProductRating";
@@ -22,8 +23,25 @@ class ProductCard extends Component {
       },
     }).then((res) => {
       if (res.data.status == true) {
-        alert("add " + this.props.name + " to cart successfully");
+        Swal.fire({
+          title: "Success",
+          text: "Add this book to cart successfully",
+          icon: "success",
+        });
       }
+      else{
+        Swal.fire({
+          title: "Error",
+          text: res.data.message,
+          icon: "error",
+        });
+      }
+    }).catch((err) => {
+      Swal.fire({
+        title: "Error",
+        text: "You have to sign in for this action!",
+        icon: "error",
+      });
     });
   };
   render() {

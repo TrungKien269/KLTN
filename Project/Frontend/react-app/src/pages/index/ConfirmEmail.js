@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import axios from "axios";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const ConfirmEmail = (props) => {
   const [email, setEmail] = useState("");
@@ -21,12 +22,26 @@ const ConfirmEmail = (props) => {
     })
       .then((res) => {
         if (res.data.status) {
-          alert("You can check your email to change your password");
+          Swal.fire({
+            title: "Confirmed",
+            text: "You can check your email to change your password",
+            icon: "info",
+          });
         } else {
-          alert("This email was not used in system!");
+          Swal.fire({
+            title: "Error",
+            text: "This email was not used in system!",
+            icon: "error",
+          });
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        Swal.fire({
+          title: "Error",
+          text: err,
+          icon: "error",
+        });
+      });
   };
 
   return (

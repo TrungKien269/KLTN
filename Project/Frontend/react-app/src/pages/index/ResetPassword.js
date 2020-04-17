@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import axios from "axios";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const ResetPassword = (props) => {
 
@@ -28,16 +29,28 @@ const ResetPassword = (props) => {
         }).then((res) => {
             console.log(res.data);
             if(res.data.status){
-                alert("Password has been changed successfully");
+              Swal.fire({
+                title: "Completely",
+                text: "Password has been changed successfully",
+                icon: "success",
+              });
             }
         }).catch((err) => {
             if (err.response) {
                 if(err.response.status === 401){
-                    alert("This session has expired!");
+                  Swal.fire({
+                    title: "Error",
+                    text: "This session has expired!",
+                    icon: "error",
+                  });
                 }
             }
             else{
-                console.log(err);
+              Swal.fire({
+                title: "Error",
+                text: err,
+                icon: "error",
+              });
             }
         });
     }

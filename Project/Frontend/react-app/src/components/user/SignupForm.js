@@ -4,11 +4,12 @@ import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
 import { setUserSession } from "../../Utils/Commons";
 import { UserContext } from "../../context/userContext";
+import Swal from "sweetalert2";
 
 const Signup = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState("Male");
   const [fullname, setFullName] = useState("");
   const [phonenumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
@@ -66,14 +67,31 @@ const Signup = (props) => {
     })
       .then((res) => {
         if (res.data.status) {
-          alert("Sign up successfully");
-          setUserSession(res.data.token);
-          refreshToken();
-          props.history.push("/");
-        } else {
+          Swal.fire({
+            title: "Success",
+            text: "Sign up  completely",
+            icon: "success",
+          }).then(() => {
+            setUserSession(res.data.token);
+            refreshToken();
+            props.history.push("/");
+          })
+        } 
+        else {
+          Swal.fire({
+            title: "Error",
+            text: res.data.message,
+            icon: "error",
+          });
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) =>{
+        Swal.fire({
+          title: "Error",
+          text: err,
+          icon: "error",
+        });
+      });
   };
 
   return (
@@ -92,7 +110,8 @@ const Signup = (props) => {
         <div class="field-control">
           <label>Password</label>
           <input
-            type="password"
+            type="password" 
+            required
             class="col-md-8"
             onChange={(e) => handlePasswordChanged(e)}
           />
@@ -101,7 +120,8 @@ const Signup = (props) => {
         <div class="field-control">
           <label>Email</label>
           <input
-            type="email"
+            type="email" 
+            required
             class="col-md-8"
             onChange={(e) => handleEmailChanged(e)}
           />
@@ -110,7 +130,8 @@ const Signup = (props) => {
         <div class="field-control">
           <label>Full Name</label>
           <input
-            type="text"
+            type="text" 
+            required
             class="col-md-8"
             onChange={(e) => handleFullNameChanged(e)}
           />
@@ -121,7 +142,8 @@ const Signup = (props) => {
             <ul>
               <li>
                 <input
-                  type="radio"
+                  type="radio" 
+                  checked
                   id="male"
                   name="gender"
                   value="Male"
@@ -132,7 +154,7 @@ const Signup = (props) => {
               </li>
               <li>
                 <input
-                  type="radio"
+                  type="radio" 
                   id="female"
                   name="gender"
                   value="Female"
@@ -149,7 +171,8 @@ const Signup = (props) => {
         <div class="field-control">
           <label>Birthday</label>
           <input
-            type="date"
+            type="date" 
+            required
             class="col-md-8"
             onChange={(e) => handleBirthdayChanged(e)}
           />
@@ -157,7 +180,8 @@ const Signup = (props) => {
         <div class="field-control">
           <label>Phone Number</label>
           <input
-            type="text"
+            type="number" 
+            required
             class="col-md-8"
             onChange={(e) => handlePhoneNumberChanged(e)}
           />
@@ -165,7 +189,8 @@ const Signup = (props) => {
         <div class="field-control">
           <label>Address</label>
           <input
-            type="text"
+            type="text" 
+            required
             class="col-md-8"
             onChange={(e) => handleAddressChanged(e)}
           />

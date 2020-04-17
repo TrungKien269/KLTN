@@ -1,6 +1,7 @@
 import React, { Component, useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import NumberFormat from "react-number-format";
+import Swal from "sweetalert2";
 
 class ProductDetailSection extends Component {
   constructor(props) {
@@ -59,8 +60,25 @@ class ProductDetailSection extends Component {
       },
     }).then((res) => {
       if (res.data.status == true) {
-        alert("add " + this.state.data.name + " to cart successfully");
+        Swal.fire({
+          title: "Success",
+          text: "Add this book to cart successfully",
+          icon: "success",
+        });
       }
+      else{
+        Swal.fire({
+          title: "Error",
+          text: res.data.message,
+          icon: "error",
+        });
+      }
+    }).catch((err) => {
+      Swal.fire({
+        title: "Error",
+        text: "You have to sign in for this action!",
+        icon: "error",
+      });
     });
   };
 
@@ -77,19 +95,27 @@ class ProductDetailSection extends Component {
       },
     })
       .then((res) => {
-        console.log(res.data);
         if (res.data.status) {
-          alert("add " + this.state.data.name + " to wish list successfully");
+          Swal.fire({
+            title: "Success",
+            text: "Add this book to wish list successfully",
+            icon: "success",
+          });
+        }
+        else{
+          Swal.fire({
+            title: "Error",
+            text: res.data.message,
+            icon: "error",
+          });
         }
       })
       .catch((err) => {
-        if (err.response) {
-          if (err.response.status === 401) {
-            alert("You have to sign in for this action");
-          }
-        } else {
-          console.log(err);
-        }
+        Swal.fire({
+          title: "Error",
+          text: "You have to sign in for this action!",
+          icon: "error",
+        });
       });
   };
 
