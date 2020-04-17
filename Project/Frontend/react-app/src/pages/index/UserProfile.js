@@ -58,7 +58,7 @@ function UserProfile() {
       headers: {
         Authorization: "Bearer " + getToken(),
       },
-      method: "post",
+      method: "put",
       url: "http://localhost:5000/api/UserProfile/UpdateProfile",
       params: {
         fullName: fullName,
