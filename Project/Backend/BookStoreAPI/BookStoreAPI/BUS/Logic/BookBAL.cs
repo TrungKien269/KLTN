@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BookStoreAPI.Helper;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
+using BookStoreAPI.Models.Rating;
 using BookStoreAPI.Models.Statistics;
 using Microsoft.EntityFrameworkCore;
 
@@ -599,23 +600,15 @@ namespace BookStoreAPI.BUS.Logic
                 var ListRecord = await context.Rating.Where(x => x.BookId.Equals(bookID)).ToListAsync();
                 if (ListRecord.Count is 0)
                 {
-                    List<double> RatingInfo = new List<double>
-                    {
-                        0,
-                        0
-                    };
-                    return new Response("Success", true, 1, RatingInfo);
+                    var ratingInfo = new RatingInfo(0, 0, 0);
+                    return new Response("Success", true, 1, ratingInfo);
                 }
                 else
                 {
                     var sumOfPoint = ListRecord.Sum(x => x.Point);
-                    var avgPoint = Math.Round((double)sumOfPoint / ListRecord.Count, 1);
-                    List<double> RatingInfo = new List<double>
-                    {
-                        avgPoint,
-                        ListRecord.Count
-                    };
-                    return new Response("Success", true, 1, RatingInfo);
+                    var avgPoint = Math.Round(ListRecord.Average(x => x.Point), 1);
+                    var ratingInfo = new RatingInfo(sumOfPoint, ListRecord.Count, avgPoint);
+                    return new Response("Success", true, 1, ratingInfo);
                 }
             }
             catch (Exception e)
