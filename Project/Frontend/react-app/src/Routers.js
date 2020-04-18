@@ -45,11 +45,6 @@ const Routers = [
     exact: true,
     main: () => <ResetPassword />,
   },
-  {
-    path: "/orderstatus",
-    exact: true,
-    main: () => <OrderStatus />,
-  },
 ];
 
 export default Routers;

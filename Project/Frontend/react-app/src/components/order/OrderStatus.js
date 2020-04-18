@@ -197,6 +197,8 @@ const OrderStatus = () => {
           </div>
         );
       });
+    } else {
+      orderBlock.push(<h2>Nothing here</h2>);
     }
     return orderBlock;
   }, [processingOrder]);
@@ -370,6 +372,8 @@ const OrderStatus = () => {
       //       );
       //     }
       //   }
+    } else {
+      orderBlock.push(<h2>Nothing here</h2>);
     }
     return orderBlock;
   }, [deliveringOrder]);
@@ -541,6 +545,8 @@ const OrderStatus = () => {
       //       );
       //     }
       //   }
+    } else {
+      orderBlock.push(<h2>Nothing here</h2>);
     }
     return orderBlock;
   }, [deliveredOrder]);
@@ -646,6 +652,8 @@ const OrderStatus = () => {
           </div>
         );
       });
+    } else {
+      orderBlock.push(<h2>Nothing here</h2>);
     }
     return orderBlock;
   }, [cancelledOrder]);
