@@ -2,9 +2,10 @@ import React, { Component, useState, useEffect, useMemo, useRef } from "react";
 import { getToken, removeUserSession } from "../../Utils/Commons";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { withRouter } from "react-router";
 import { swal } from "sweetalert2/dist/sweetalert2.all";
 
-function UserProfile() {
+function UserProfile(props) {
   const [userInfor, setUserInfor] = useState();
   const [fullName, setFullName] = useState("");
   const [phonenumber, setPhoneNumber] = useState("");
@@ -47,7 +48,7 @@ function UserProfile() {
   const handleConfirmPass = (event) => {
     setConfirmPass(event.target.value);
   };
-  console.log(fullName, phonenumber, address, birthday, gender);
+  // console.log(fullName, phonenumber, address, birthday, gender);
 
   useEffect(() => {
     axios({
@@ -128,7 +129,10 @@ function UserProfile() {
                 icon: "success",
                 title: "Password change successfully",
                 text: "Your password is changed",
+                confirmButtonText: "Back to the login page",
               });
+              removeUserSession();
+              props.history.push("/login");
             }
           });
         } else {
@@ -319,4 +323,4 @@ function UserProfile() {
   );
 }
 
-export default UserProfile;
+export default withRouter(UserProfile);
