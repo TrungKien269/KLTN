@@ -8,7 +8,7 @@ export default class UserCart extends Component {
     super(props);
 
     this.state = {
-      data: []
+      data: [],
     };
   }
 
@@ -16,11 +16,11 @@ export default class UserCart extends Component {
     const x = this;
     axios({
       headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("Token")
+        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
       },
       method: "get",
-      url: "http://localhost:5000/api/UserCart/Cart"
-    }).then(res => {
+      url: "http://localhost:5000/api/UserCart/Cart",
+    }).then((res) => {
       if (res.data.status) {
         x.setState({ data: res.data.obj.cartBook });
         // console.log(this.state.data);
@@ -36,27 +36,27 @@ export default class UserCart extends Component {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, remove it!"
-    }).then(result => {
+      confirmButtonText: "Yes, remove it!",
+    }).then((result) => {
       if (result.value) {
         this.setState({
-          data: this.state.data.filter(item => item.bookId != bookId)
+          data: this.state.data.filter((item) => item.bookId != bookId),
         });
         axios({
           headers: {
-            Authorization: "Bearer " + window.sessionStorage.getItem("Token")
+            Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
           },
           method: "delete",
           url: "http://localhost:5000/api/UserCart/RemoveBookCart",
           params: {
-            id: bookId
-          }
-        }).then(res => {
+            id: bookId,
+          },
+        }).then((res) => {
           if (res.data.status) {
             Swal.fire({
               title: "Done",
               text: "Remove this book from your cart",
-              icon: "success"
+              icon: "success",
             });
           }
         });
@@ -75,31 +75,31 @@ export default class UserCart extends Component {
     item.subTotal = parseInt(item.book.currentPrice) * parseInt(quantity);
     items[index] = item;
     this.setState({
-      data: items
+      data: items,
     });
 
     axios({
       headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("Token")
+        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
       },
       method: "post",
       url: "http://localhost:5000/api/UserCart/EditQuantityCart",
       params: {
         id: bookId,
-        quantity: quantity
-      }
-    }).then(res => {
+        quantity: quantity,
+      },
+    }).then((res) => {
       if (res.data.status) {
         Swal.fire({
           title: "Done",
           text: "Change number of this book in your cart",
-          icon: "success"
+          icon: "success",
         });
       }
     });
   };
 
-  showListBooks = data => {
+  showListBooks = (data) => {
     let bookArr = [];
     if (Object.keys(data).length > 0) {
       bookArr = data.map((item, index) => {
@@ -125,7 +125,7 @@ export default class UserCart extends Component {
                   type="button"
                   value="-"
                   className="minus quantity__button"
-                  onClick={event =>
+                  onClick={(event) =>
                     this.handleQuantityChanged(item.bookId, index)
                   }
                 />
@@ -145,7 +145,7 @@ export default class UserCart extends Component {
                   type="button"
                   value="+"
                   class="plus quantity__button"
-                  onClick={event =>
+                  onClick={(event) =>
                     this.handleQuantityChanged(item.bookId, index)
                   }
                 />

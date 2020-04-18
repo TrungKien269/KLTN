@@ -7,6 +7,7 @@ import Login from "./pages/index/Login";
 import ConfirmEmail from "./pages/index/ConfirmEmail";
 import ResetPassword from "./pages/index/ResetPassword";
 import UserCart from "./pages/index/UserCart";
+import OrderStatus from "./components/order/OrderStatus";
 
 const Routers = [
   {
@@ -43,6 +44,11 @@ const Routers = [
     path: "/resetpassword",
     exact: true,
     main: () => <ResetPassword />,
+  },
+  {
+    path: "/orderstatus",
+    exact: true,
+    main: () => <OrderStatus />,
   },
 ];
 
