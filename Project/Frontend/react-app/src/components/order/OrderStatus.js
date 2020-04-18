@@ -59,33 +59,11 @@ const OrderStatus = () => {
     let orderItem = [];
     let orderBlock = [];
     if (processingOrder && processingOrder.length > 0) {
-      for (let i = 0; i < processingOrder.length; i++) {
-        const order = processingOrder[i];
-        orderBlock.push(
-          <div className="order-block">
-            <div className="title-wrapper">
-              <h2>Date: {order.createdDate.slice(0, 10)}</h2>
-              <p>Amount: {order.orderDetail.length} items</p>
-            </div>
-            <div className="cart-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th className="item">Items</th>
-                    <th className="qty">Qty</th>
-                    <th className="price">Price</th>
-                    <th className="total-price">Total</th>
-                    <th className="remove">&nbsp;</th>
-                  </tr>
-                </thead>
-                <tbody>{orderItem}</tbody>
-              </table>
-            </div>
-          </div>
-        );
-        for (let j = 0; j < order.orderDetail.length; j++) {
-          const item = order.orderDetail[j];
-          orderItem.push(
+      orderBlock = processingOrder.map((order) => {
+        console.log(order.orderDetail);
+        let x = order.orderDetail;
+        orderItem = x.map((item) => {
+          return (
             <tr>
               <td className="item-name">
                 <div className="item-img">
@@ -144,8 +122,30 @@ const OrderStatus = () => {
               <td className="action"></td>
             </tr>
           );
-        }
-      }
+        });
+        return (
+          <div className="order-block">
+            <div className="title-wrapper">
+              <h2>Date: {order.createdDate.slice(0, 10)}</h2>
+              <p>Amount: {order.orderDetail.length} items</p>
+            </div>
+            <div className="cart-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th className="item">Items</th>
+                    <th className="qty">Qty</th>
+                    <th className="price">Price</th>
+                    <th className="total-price">Total</th>
+                    <th className="remove">&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>{orderItem}</tbody>
+              </table>
+            </div>
+          </div>
+        );
+      });
     }
     return orderBlock;
   }, [processingOrder]);
@@ -154,34 +154,12 @@ const OrderStatus = () => {
     let orderItem = [];
     let orderBlock = [];
     if (deliveringOrder && deliveringOrder.length > 0) {
-      for (let i = 0; i < deliveringOrder.length; i++) {
-        const order = deliveringOrder[i];
-        console.log(order);
-        orderBlock.push(
-          <div className="order-block">
-            <div className="title-wrapper">
-              <h2>Date: {order.createdDate.slice(0, 10)}</h2>
-              <p>Amount: {order.orderDetail.length} items</p>
-            </div>
-            <div className="cart-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th className="item">Items</th>
-                    <th className="qty">Qty</th>
-                    <th className="price">Price</th>
-                    <th className="total-price">Total</th>
-                    <th className="remove">&nbsp;</th>
-                  </tr>
-                </thead>
-                <tbody>{orderItem}</tbody>
-              </table>
-            </div>
-          </div>
-        );
-        for (let j = 0; j < order.orderDetail.length; j++) {
-          const item = order.orderDetail[j];
-          orderItem.push(
+      orderBlock = deliveringOrder.map((order) => {
+        console.log(order.orderDetail);
+        let x = order.orderDetail;
+        orderItem = x.map((item) => {
+          console.log(item);
+          return (
             <tr>
               <td className="item-name">
                 <div className="item-img">
@@ -240,8 +218,96 @@ const OrderStatus = () => {
               <td className="action"></td>
             </tr>
           );
-        }
-      }
+        });
+        return (
+          <div className="order-block">
+            <div className="title-wrapper">
+              <h2>Date: {order.createdDate.slice(0, 10)}</h2>
+              <p>Amount: {order.orderDetail.length} items</p>
+            </div>
+            <div className="cart-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th className="item">Items</th>
+                    <th className="qty">Qty</th>
+                    <th className="price">Price</th>
+                    <th className="total-price">Total</th>
+                    <th className="remove">&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>{orderItem}</tbody>
+              </table>
+            </div>
+          </div>
+        );
+      });
+      //   for (let i = 0; i < deliveredOrder.length; i++) {
+      //     const order = deliveredOrder[0];
+      //     console.log(order.orderDetail);
+      //     for (let j = 0; j < order.orderDetail.length; j++) {
+      //       const item = order.orderDetail[j];
+      //       orderItem.push(
+      //         <tr key={order.orderId}>
+      //           <td className="item-name">
+      //             <div className="item-img">
+      //               <a href="#">
+      //                 <img
+      //                   src={item.book.image}
+      //                   className="img-contain img-cover-10"
+      //                   alt=""
+      //                 />
+      //               </a>
+      //             </div>
+      //             <div className="item-title">
+      //               <a href="#">{item.book.name}</a>
+      //             </div>
+      //           </td>
+      //           <td className="item-qty">
+      //             <div className="quantity buttons_added d-flex justify-content-center">
+      //               <input
+      //                 type="text"
+      //                 step={1}
+      //                 min={1}
+      //                 max
+      //                 name="quantity"
+      //                 defaultValue={item.quantity}
+      //                 title="Qty"
+      //                 className="input-text qty text h-100"
+      //                 size={4}
+      //                 pattern
+      //                 inputMode
+      //                 disabled
+      //               />
+      //             </div>
+      //           </td>
+      //           <td className="item-price">
+      //             <p>
+      //               {
+      //                 <NumberFormat
+      //                   displayType="text"
+      //                   value={item.book.originalPrice}
+      //                   thousandSeparator={true}
+      //                   prefix="VND "
+      //                 ></NumberFormat>
+      //               }
+      //             </p>
+      //           </td>
+      //           <td className="item-total">
+      //             <p>
+      //               <NumberFormat
+      //                 displayType="text"
+      //                 value={item.book.originalPrice * item.quantity}
+      //                 thousandSeparator={true}
+      //                 prefix="VND "
+      //               ></NumberFormat>
+      //             </p>
+      //           </td>
+      //           <td className="action"></td>
+      //         </tr>
+      //       );
+      //     }
+      //   }
     }
     return orderBlock;
   }, [deliveringOrder]);
@@ -250,100 +316,161 @@ const OrderStatus = () => {
     let orderBlock = [];
     let orderItem = [];
     if (deliveredOrder && deliveredOrder.length > 0) {
-        orderBlock = deliveredOrder.map((order) => {
-          console.log(order.orderDetail);
+      orderBlock = deliveredOrder.map((order) => {
+        let x = order.orderDetail;
+        orderItem = x.map((item) => {
           return (
-            <div className="order-block">
-              <div className="title-wrapper">
-                <h2>Date: {order.createdDate.slice(0, 10)}</h2>
-                <p>Amount: {order.orderDetail.length} items</p>
-              </div>
-              <div className="cart-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th className="item">Items</th>
-                      <th className="qty">Qty</th>
-                      <th className="price">Price</th>
-                      <th className="total-price">Total</th>
-                      <th className="remove">&nbsp;</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
+            <tr>
+              <td className="item-name">
+                <div className="item-img">
+                  <a href="#">
+                    <img
+                      src={item.book.image}
+                      className="img-contain img-cover-10"
+                      alt=""
+                    />
+                  </a>
+                </div>
+                <div className="item-title">
+                  <a href="#">{item.book.name}</a>
+                </div>
+              </td>
+              <td className="item-qty">
+                <div className="quantity buttons_added d-flex justify-content-center">
+                  <input
+                    type="text"
+                    step={1}
+                    min={1}
+                    max
+                    name="quantity"
+                    defaultValue={item.quantity}
+                    title="Qty"
+                    className="input-text qty text h-100"
+                    size={4}
+                    pattern
+                    inputMode
+                    disabled
+                  />
+                </div>
+              </td>
+              <td className="item-price">
+                <p>
+                  {
+                    <NumberFormat
+                      displayType="text"
+                      value={item.book.originalPrice}
+                      thousandSeparator={true}
+                      prefix="VND "
+                    ></NumberFormat>
+                  }
+                </p>
+              </td>
+              <td className="item-total">
+                <p>
+                  <NumberFormat
+                    displayType="text"
+                    value={item.book.originalPrice * item.quantity}
+                    thousandSeparator={true}
+                    prefix="VND "
+                  ></NumberFormat>
+                </p>
+              </td>
+              <td className="action"></td>
+            </tr>
           );
         });
-    //   for (let i = 0; i < deliveredOrder.length; i++) {
-    //     const order = deliveredOrder[0];
-    //     console.log(order.orderDetail);
-    //     for (let j = 0; j < order.orderDetail.length; j++) {
-    //       const item = order.orderDetail[j];
-    //       orderItem.push(
-    //         <tr key={order.orderId}>
-    //           <td className="item-name">
-    //             <div className="item-img">
-    //               <a href="#">
-    //                 <img
-    //                   src={item.book.image}
-    //                   className="img-contain img-cover-10"
-    //                   alt=""
-    //                 />
-    //               </a>
-    //             </div>
-    //             <div className="item-title">
-    //               <a href="#">{item.book.name}</a>
-    //             </div>
-    //           </td>
-    //           <td className="item-qty">
-    //             <div className="quantity buttons_added d-flex justify-content-center">
-    //               <input
-    //                 type="text"
-    //                 step={1}
-    //                 min={1}
-    //                 max
-    //                 name="quantity"
-    //                 defaultValue={item.quantity}
-    //                 title="Qty"
-    //                 className="input-text qty text h-100"
-    //                 size={4}
-    //                 pattern
-    //                 inputMode
-    //                 disabled
-    //               />
-    //             </div>
-    //           </td>
-    //           <td className="item-price">
-    //             <p>
-    //               {
-    //                 <NumberFormat
-    //                   displayType="text"
-    //                   value={item.book.originalPrice}
-    //                   thousandSeparator={true}
-    //                   prefix="VND "
-    //                 ></NumberFormat>
-    //               }
-    //             </p>
-    //           </td>
-    //           <td className="item-total">
-    //             <p>
-    //               <NumberFormat
-    //                 displayType="text"
-    //                 value={item.book.originalPrice * item.quantity}
-    //                 thousandSeparator={true}
-    //                 prefix="VND "
-    //               ></NumberFormat>
-    //             </p>
-    //           </td>
-    //           <td className="action"></td>
-    //         </tr>
-    //       );
-    //     }
-    //   }
+        return (
+          <div className="order-block">
+            <div className="title-wrapper">
+              <h2>Date: {order.createdDate.slice(0, 10)}</h2>
+              <p>Amount: {order.orderDetail.length} items</p>
+            </div>
+            <div className="cart-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th className="item">Items</th>
+                    <th className="qty">Qty</th>
+                    <th className="price">Price</th>
+                    <th className="total-price">Total</th>
+                    <th className="remove">&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>{orderItem}</tbody>
+              </table>
+            </div>
+          </div>
+        );
+      });
+      //   for (let i = 0; i < deliveredOrder.length; i++) {
+      //     const order = deliveredOrder[0];
+      //     console.log(order.orderDetail);
+      //     for (let j = 0; j < order.orderDetail.length; j++) {
+      //       const item = order.orderDetail[j];
+      //       orderItem.push(
+      //         <tr key={order.orderId}>
+      //           <td className="item-name">
+      //             <div className="item-img">
+      //               <a href="#">
+      //                 <img
+      //                   src={item.book.image}
+      //                   className="img-contain img-cover-10"
+      //                   alt=""
+      //                 />
+      //               </a>
+      //             </div>
+      //             <div className="item-title">
+      //               <a href="#">{item.book.name}</a>
+      //             </div>
+      //           </td>
+      //           <td className="item-qty">
+      //             <div className="quantity buttons_added d-flex justify-content-center">
+      //               <input
+      //                 type="text"
+      //                 step={1}
+      //                 min={1}
+      //                 max
+      //                 name="quantity"
+      //                 defaultValue={item.quantity}
+      //                 title="Qty"
+      //                 className="input-text qty text h-100"
+      //                 size={4}
+      //                 pattern
+      //                 inputMode
+      //                 disabled
+      //               />
+      //             </div>
+      //           </td>
+      //           <td className="item-price">
+      //             <p>
+      //               {
+      //                 <NumberFormat
+      //                   displayType="text"
+      //                   value={item.book.originalPrice}
+      //                   thousandSeparator={true}
+      //                   prefix="VND "
+      //                 ></NumberFormat>
+      //               }
+      //             </p>
+      //           </td>
+      //           <td className="item-total">
+      //             <p>
+      //               <NumberFormat
+      //                 displayType="text"
+      //                 value={item.book.originalPrice * item.quantity}
+      //                 thousandSeparator={true}
+      //                 prefix="VND "
+      //               ></NumberFormat>
+      //             </p>
+      //           </td>
+      //           <td className="action"></td>
+      //         </tr>
+      //       );
+      //     }
+      //   }
     }
     return orderBlock;
-  });
+  }, [deliveredOrder]);
   return (
     <section className="section__order-status">
       <div className="cart-title">
