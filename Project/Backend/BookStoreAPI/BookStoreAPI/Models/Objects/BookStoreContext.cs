@@ -43,6 +43,8 @@ namespace BookStoreAPI.Models.Objects
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<WishList> WishList { get; set; }
         public virtual DbSet<RawBook> RawBook { get; set; }
+        public virtual DbSet<BookViewTracking> BookViewTracking { get; set; }
+        public virtual DbSet<SearchHistory> SearchHistory { get; set; }
 
         // Unable to generate entity type for table 'dbo.RawUser'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.RawBook'. Please see the warning messages.
@@ -352,6 +354,34 @@ namespace BookStoreAPI.Models.Objects
             modelBuilder.Entity<RawBook>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
+            });
+
+            modelBuilder.Entity<BookViewTracking>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.HasOne(d => d.Book)
+                    .WithMany(p => p.BookViewTracking)
+                    .HasForeignKey(d => d.BookId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookViewTracking_Book");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.BookViewTracking)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookViewTracking_User");
+            });
+
+            modelBuilder.Entity<SearchHistory>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.HasOne(d => d.User)
+                    .WithOne(p => p.SearchHistory)
+                    .HasForeignKey<SearchHistory>(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SearchHistory_User");
             });
         }
     }

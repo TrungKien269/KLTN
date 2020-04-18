@@ -15,6 +15,7 @@ namespace BookStoreAPI.BUS.Control
         private AccountBAL accountBal;
         private PublisherBAL publisherBal;
         private UserBAL UserBal;
+        private SearchHistoryBAL searchHistoryBal;
 
         public MainBAL()
         {
@@ -23,6 +24,7 @@ namespace BookStoreAPI.BUS.Control
             this.accountBal = new AccountBAL();
             publisherBal = new PublisherBAL();
             this.UserBal = new UserBAL();
+            searchHistoryBal = new SearchHistoryBAL();
         }
 
         public async Task<Response> GetListCategory()
@@ -78,6 +80,16 @@ namespace BookStoreAPI.BUS.Control
         public async Task<Response> GetUser(int id)
         {
             return await UserBal.GetUser(id);
+        }
+
+        public async Task<Response> GetListSearchHistory(int userID)
+        {
+            return await searchHistoryBal.GetListSearchHistory(userID);
+        }
+
+        public async Task<Response> CreateSearchHistory(SearchHistory searchHistory)
+        {
+            return await searchHistoryBal.CreateSearchHistory(searchHistory);
         }
 
         //public async Task<Response> GetListSuggestedBooks(int userID)

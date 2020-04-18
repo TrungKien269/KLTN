@@ -20,6 +20,7 @@ namespace BookStoreAPI.Models.Objects
             PublisherBook = new HashSet<PublisherBook>();
             Rating = new HashSet<Rating>();
             SupplierBook = new HashSet<SupplierBook>();
+            BookViewTracking = new HashSet<BookViewTracking>();
         }
 
         [Column("ID")]
@@ -63,5 +64,7 @@ namespace BookStoreAPI.Models.Objects
         public virtual ICollection<SupplierBook> SupplierBook { get; set; }
         [InverseProperty("Book")]
         public virtual ICollection<WishList> WishList { get; set; }
+        [InverseProperty("Book")]
+        public ICollection<BookViewTracking> BookViewTracking { get; set; }
     }
 }

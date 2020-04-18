@@ -9,6 +9,7 @@ namespace BookStoreAPI.Models.Objects
     {
         public User()
         {
+            BookViewTracking = new HashSet<BookViewTracking>();
             Comment = new HashSet<Comment>();
             Order = new HashSet<Order>();
             Rating = new HashSet<Rating>();
@@ -41,5 +42,9 @@ namespace BookStoreAPI.Models.Objects
         public virtual ICollection<Rating> Rating { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<WishList> WishList { get; set; }
+        [InverseProperty("User")]
+        public SearchHistory SearchHistory { get; set; }
+        [InverseProperty("User")]
+        public ICollection<BookViewTracking> BookViewTracking { get; set; }
     }
 }

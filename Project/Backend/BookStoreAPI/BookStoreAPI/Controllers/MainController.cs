@@ -24,65 +24,6 @@ namespace BookStoreAPI.Controllers
             mainBal = new MainBAL();
         }
 
-        [HttpGet("SessionInfo")]
-        public async Task<Response> GetSessionInfo()
-        {
-            string session = HttpContext.Session.GetString("BookStore");
-            if (session is null)
-            {
-                string cookie =
-                    await Task.FromResult<string>(Request.Cookies.Where(x => x.Key.Equals("BookStore")).FirstOrDefault()
-                        .Value);
-                if (cookie != null)
-                {
-                    var account = await mainBal.GetAccountByCookie(cookie);
-                    if (account.Status is true)
-                    {
-                        SessionHelper.SetWebsiteSession(HttpContext.Session, cookie);
-                        SessionHelper.SetUserSession(HttpContext.Session, (account.Obj as Account).Id,
-                            (account.Obj as Account).IdNavigation.FullName);
-                        SessionHelper.CreateCartSession(HttpContext.Session);
-                        SessionHelper.CreateOrdersSession(HttpContext.Session);
-                        //ViewBag.Session = cookie;
-                        //ViewBag.UserID = (account.Obj as Account).Id;
-                        //ViewBag.FullName = account.Obj as Account is null
-                        //    ? null
-                        //    : (account.Obj as Account).IdNavigation.FullName;
-                        if (account.Obj as Account != null)
-                        {
-                            //ViewBag.ListSuggestedBooks =
-                            //    (await mainBal.GetListSuggestedBooks((account.Obj as Account).Id)).Obj as List<Book>;
-                        }
-                    }
-                }
-                else
-                {
-                    SessionHelper.SetAnonymousWebsiteSession(HttpContext.Session);
-                    SessionHelper.CreateCartSession(HttpContext.Session);
-                    SessionHelper.CreateOrdersSession(HttpContext.Session);
-                }
-            }
-            else
-            {
-                //ViewBag.Session = session;
-                var account = await mainBal.GetAccountByCookie(session);
-                if (account.Status is true)
-                {
-                    SessionHelper.SetUserSession(HttpContext.Session, (account.Obj as Account).Id,
-                        (account.Obj as Account).IdNavigation.FullName);
-                }
-                //ViewBag.FullName = account.Obj as Account is null
-                //    ? null
-                //    : (account.Obj as Account).IdNavigation.FullName;
-                if (account.Obj as Account != null)
-                {
-                    //ViewBag.ListSuggestedBooks =
-                    //    (await mainBal.GetListSuggestedBooks((account.Obj as Account).Id)).Obj as List<Book>;
-                }
-            }
-            return new Response("Success", true, 1, HttpContext.Session.GetInt32("UserID"));
-        }
-
         [HttpGet("ListCategory")]
         public async Task<Response> GetListCategory()
         {
@@ -113,24 +54,43 @@ namespace BookStoreAPI.Controllers
             return await mainBal.GetListLowestPriceBook();
         }
 
-        //[Authorize]
-        [HttpGet("Logout")]
-        public async Task<Response> Logout()
+        [Authorize]
+        [HttpGet("SearchHistory")]
+        public async Task<Response> GetListSearchHistory()
         {
-            string cookie =
-                await Task.FromResult<string>(Request.Cookies.Where(x => x.Key.Equals("BookStore")).FirstOrDefault()
-                    .Value);
-            if (cookie is null)
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
             {
-                var session = HttpContext.Session.GetString("BookStore");
-                SessionHelper.ClearSessionLogout(this.HttpContext.Session);
-                return await mainBal.Logout(session);
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
             }
             else
             {
-                Response.Cookies.Delete("BookStore");
-                SessionHelper.ClearSessionLogout(this.HttpContext.Session);
-                return await mainBal.Logout(cookie);
+                int userID = Int32.Parse(checkToken);
+                return await mainBal.GetListSearchHistory(userID);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("SaveSearch")]
+        public async Task<Response> SaveSearch(string words)
+        {
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                var searchHistory = new SearchHistory
+                {
+                    UserId = userID, 
+                    DateTime = DateTime.Now, 
+                    Words = words
+                };
+                return await mainBal.CreateSearchHistory(searchHistory);
             }
         }
     }
