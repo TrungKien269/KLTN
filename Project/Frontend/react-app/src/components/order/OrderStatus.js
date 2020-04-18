@@ -7,6 +7,7 @@ const OrderStatus = () => {
   const [processingOrder, setProcessingOrder] = useState("");
   const [deliveringOrder, setDelivering] = useState("");
   const [deliveredOrder, setDelivered] = useState("");
+  const [cancelledOrder, setCancelledOrder] = useState("");
 
   useEffect(() => {
     Axios({
@@ -49,6 +50,39 @@ const OrderStatus = () => {
       }
     });
   }, []);
+  useEffect(() => {
+    Axios({
+      headers: {
+        Authorization: "Bearer " + getToken(),
+      },
+      method: "get",
+      url: "http://localhost:5000/api/UserOrder/ListCanceled",
+    }).then((res) => {
+      if (res.status) {
+        setCancelledOrder(res.data.obj);
+      }
+    });
+  }, []);
+
+  function handleCancel(event) {
+    let order = [];
+    order = processingOrder;
+    let id = order[0].id;
+    Axios({
+      headers: {
+        Authorization: "Bearer " + getToken(),
+      },
+      method: "post",
+      url: "http://localhost:5000/api/UserOrder/CancelOrder",
+      params: {
+        id: id,
+      },
+    }).then((res) => {
+      if (res.status) {
+        alert("cancelled");
+      }
+    });
+  }
 
   //   for (let i = 0; i < processingOrder.length; i++) {
   //     for (let j = 0; j < processingOrder[i].orderDetail.length; j++) {
@@ -60,7 +94,6 @@ const OrderStatus = () => {
     let orderBlock = [];
     if (processingOrder && processingOrder.length > 0) {
       orderBlock = processingOrder.map((order) => {
-        console.log(order.orderDetail);
         let x = order.orderDetail;
         orderItem = x.map((item) => {
           return (
@@ -125,8 +158,26 @@ const OrderStatus = () => {
         });
         return (
           <div className="order-block">
+            <button
+              onClick={(e) => {
+                handleCancel(e);
+              }}
+            >
+              Cancel Order
+            </button>
             <div className="title-wrapper">
               <h2>Date: {order.createdDate.slice(0, 10)}</h2>
+              <h2>
+                Total:{" "}
+                {
+                  <NumberFormat
+                    displayType="text"
+                    value={order.total}
+                    thousandSeparator={true}
+                    prefix="VND "
+                  ></NumberFormat>
+                }
+              </h2>
               <p>Amount: {order.orderDetail.length} items</p>
             </div>
             <div className="cart-table">
@@ -223,6 +274,17 @@ const OrderStatus = () => {
           <div className="order-block">
             <div className="title-wrapper">
               <h2>Date: {order.createdDate.slice(0, 10)}</h2>
+              <h2>
+                Total:{" "}
+                {
+                  <NumberFormat
+                    displayType="text"
+                    value={order.total}
+                    thousandSeparator={true}
+                    prefix="VND "
+                  ></NumberFormat>
+                }
+              </h2>
               <p>Amount: {order.orderDetail.length} items</p>
             </div>
             <div className="cart-table">
@@ -383,6 +445,17 @@ const OrderStatus = () => {
           <div className="order-block">
             <div className="title-wrapper">
               <h2>Date: {order.createdDate.slice(0, 10)}</h2>
+              <h2>
+                Total:{" "}
+                {
+                  <NumberFormat
+                    displayType="text"
+                    value={order.total}
+                    thousandSeparator={true}
+                    prefix="VND "
+                  ></NumberFormat>
+                }
+              </h2>
               <p>Amount: {order.orderDetail.length} items</p>
             </div>
             <div className="cart-table">
@@ -471,6 +544,111 @@ const OrderStatus = () => {
     }
     return orderBlock;
   }, [deliveredOrder]);
+
+  const listOrderCancelled = useMemo(() => {
+    let orderBlock = [];
+    let orderItem = [];
+    if (cancelledOrder && cancelledOrder.length > 0) {
+      orderBlock = cancelledOrder.map((order) => {
+        let x = order.orderDetail;
+        orderItem = x.map((item) => {
+          return (
+            <tr>
+              <td className="item-name">
+                <div className="item-img">
+                  <a href="#">
+                    <img
+                      src={item.book.image}
+                      className="img-contain img-cover-10"
+                      alt=""
+                    />
+                  </a>
+                </div>
+                <div className="item-title">
+                  <a href="#">{item.book.name}</a>
+                </div>
+              </td>
+              <td className="item-qty">
+                <div className="quantity buttons_added d-flex justify-content-center">
+                  <input
+                    type="text"
+                    step={1}
+                    min={1}
+                    max
+                    name="quantity"
+                    defaultValue={item.quantity}
+                    title="Qty"
+                    className="input-text qty text h-100"
+                    size={4}
+                    pattern
+                    inputMode
+                    disabled
+                  />
+                </div>
+              </td>
+              <td className="item-price">
+                <p>
+                  {
+                    <NumberFormat
+                      displayType="text"
+                      value={item.book.originalPrice}
+                      thousandSeparator={true}
+                      prefix="VND "
+                    ></NumberFormat>
+                  }
+                </p>
+              </td>
+              <td className="item-total">
+                <p>
+                  <NumberFormat
+                    displayType="text"
+                    value={item.book.originalPrice * item.quantity}
+                    thousandSeparator={true}
+                    prefix="VND "
+                  ></NumberFormat>
+                </p>
+              </td>
+              <td className="action"></td>
+            </tr>
+          );
+        });
+        return (
+          <div className="order-block">
+            <div className="title-wrapper">
+              <h2>Date: {order.createdDate.slice(0, 10)}</h2>
+              <h2>
+                Total:{" "}
+                {
+                  <NumberFormat
+                    displayType="text"
+                    value={order.total}
+                    thousandSeparator={true}
+                    prefix="VND "
+                  ></NumberFormat>
+                }
+              </h2>
+              <p>Amount: {order.orderDetail.length} items</p>
+            </div>
+            <div className="cart-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th className="item">Items</th>
+                    <th className="qty">Qty</th>
+                    <th className="price">Price</th>
+                    <th className="total-price">Total</th>
+                    <th className="remove">&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>{orderItem}</tbody>
+              </table>
+            </div>
+          </div>
+        );
+      });
+    }
+    return orderBlock;
+  }, [cancelledOrder]);
   return (
     <section className="section__order-status">
       <div className="cart-title">
@@ -478,7 +656,7 @@ const OrderStatus = () => {
       </div>
       <div className="container">
         <ul className="nav nav-tabs nav-order" id="active-exp">
-          <li className="active">
+          <li className="">
             <a data-toggle="tab" href="#processing">
               Processing
             </a>
@@ -493,6 +671,11 @@ const OrderStatus = () => {
               Delivered
             </a>
           </li>
+          <li>
+            <a data-toggle="tab" href="#cancel">
+              Cancelled orders
+            </a>
+          </li>
         </ul>
         <div className="tab-content tab-content-order">
           <div id="processing" className="tab-pane fade active show">
@@ -503,6 +686,9 @@ const OrderStatus = () => {
           </div>
           <div id="delivered" className="tab-pane fade ">
             {listOrderDelivered}
+          </div>
+          <div id="cancel" className="tab-pane fade ">
+            {listOrderCancelled}
           </div>
         </div>
       </div>
