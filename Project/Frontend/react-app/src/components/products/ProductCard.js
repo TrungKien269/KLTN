@@ -44,6 +44,44 @@ class ProductCard extends Component {
       });
     });
   };
+
+  addToWishList = (event) => {
+    event.preventDefault();
+    axios({
+      headers: {
+        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
+      },
+      method: "post",
+      url: "http://localhost:5000/api/UserWishList/AddToWishList",
+      params: {
+        bookID: this.props.id,
+      },
+    })
+      .then((res) => {
+        if (res.data.status) {
+          Swal.fire({
+            title: "Success",
+            text: "Add this book to wish list successfully",
+            icon: "success",
+          });
+        }
+        else{
+          Swal.fire({
+            title: "Error",
+            text: res.data.message,
+            icon: "error",
+          });
+        }
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: "Error",
+          text: "You have to sign in for this action!",
+          icon: "error",
+        });
+      });
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -67,7 +105,8 @@ class ProductCard extends Component {
               </button>
             </div>
             <div className="badge badge__utilities item-display">
-              <a href="#" className="badge__utilities-blue">
+              <a href="#" className="badge__utilities-blue"
+              onClick={this.addToWishList}>
                 <i className="fas fa-heart" />
               </a>
               <a

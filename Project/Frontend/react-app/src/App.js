@@ -10,6 +10,7 @@ import PublicRoute from "./Utils/PublicRoute";
 import Login from "./pages/index/Login";
 import UserProfile from "./pages/index/UserProfile";
 import UserCart from "./pages/index/UserCart";
+import UserWishList from "./pages/index/UserWishList";
 
 const showPage = (Routers) => {
   var result = null;
@@ -39,6 +40,7 @@ function App() {
           <PublicRoute path="/login" component={Login} />
           <PrivateRoute path="/profile" component={UserProfile} />
           <PrivateRoute path="/cart" component={UserCart} />
+          <PrivateRoute path="/wishlist" component={UserWishList} />
         </Switch>
 
         <Footer />

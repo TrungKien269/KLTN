@@ -3,13 +3,12 @@ import axios from "axios";
 import { Link, withRouter } from "react-router-dom";
 import Swal from "sweetalert2";
 
-
 export default class UserCart extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      data: [],
+      data: []
     };
   }
 
@@ -17,11 +16,11 @@ export default class UserCart extends Component {
     const x = this;
     axios({
       headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
+        Authorization: "Bearer " + window.sessionStorage.getItem("Token")
       },
       method: "get",
-      url: "http://localhost:5000/api/UserCart/Cart",
-    }).then((res) => {
+      url: "http://localhost:5000/api/UserCart/Cart"
+    }).then(res => {
       if (res.data.status) {
         x.setState({ data: res.data.obj.cartBook });
         // console.log(this.state.data);
@@ -29,7 +28,7 @@ export default class UserCart extends Component {
     });
   }
 
-  handleRemoveClicked = (booId, index) => {
+  handleRemoveClicked = (bookId, index) => {
     Swal.fire({
       title: "Confirm",
       text: "Do you want to remove this book?",
@@ -37,27 +36,27 @@ export default class UserCart extends Component {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, remove it!",
-    }).then((result) => {
+      confirmButtonText: "Yes, remove it!"
+    }).then(result => {
       if (result.value) {
         this.setState({
-          data: this.state.data.filter((item) => item.bookId != booId),
+          data: this.state.data.filter(item => item.bookId != bookId)
         });
         axios({
           headers: {
-            Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
+            Authorization: "Bearer " + window.sessionStorage.getItem("Token")
           },
           method: "delete",
           url: "http://localhost:5000/api/UserCart/RemoveBookCart",
           params: {
-            id: booId,
-          },
-        }).then((res) => {
+            id: bookId
+          }
+        }).then(res => {
           if (res.data.status) {
             Swal.fire({
               title: "Done",
               text: "Remove this book from your cart",
-              icon: "success",
+              icon: "success"
             });
           }
         });
@@ -65,7 +64,7 @@ export default class UserCart extends Component {
     });
   };
 
-  handleQuantityChanged = (booId, index) => {
+  handleQuantityChanged = (bookId, index) => {
     let quantity = document.getElementsByClassName("input-text qty text h-100")[
       index
     ].value;
@@ -76,31 +75,31 @@ export default class UserCart extends Component {
     item.subTotal = parseInt(item.book.currentPrice) * parseInt(quantity);
     items[index] = item;
     this.setState({
-      data: items,
+      data: items
     });
 
     axios({
       headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
+        Authorization: "Bearer " + window.sessionStorage.getItem("Token")
       },
       method: "post",
       url: "http://localhost:5000/api/UserCart/EditQuantityCart",
       params: {
-        id: booId,
-        quantity: quantity,
-      },
-    }).then((res) => {
+        id: bookId,
+        quantity: quantity
+      }
+    }).then(res => {
       if (res.data.status) {
         Swal.fire({
           title: "Done",
           text: "Change number of this book in your cart",
-          icon: "success",
+          icon: "success"
         });
       }
     });
   };
 
-  showListBooks = (data) => {
+  showListBooks = data => {
     let bookArr = [];
     if (Object.keys(data).length > 0) {
       bookArr = data.map((item, index) => {
@@ -108,16 +107,16 @@ export default class UserCart extends Component {
           <tr>
             <td className="item-name">
               <div className="item-img">
-                <a href="">
+                <Link to={`/book/${item.bookId}`}>
                   <img
                     src={item.book.image}
                     className="img-contain img-cover-10"
                     alt=""
                   />
-                </a>
+                </Link>
               </div>
               <div className="item-title">
-                <a href="#">{item.book.name}</a>
+                <Link to={`/book/${item.bookId}`}>{item.book.name}</Link>
               </div>
             </td>
             <td className="item-qty">
@@ -126,7 +125,7 @@ export default class UserCart extends Component {
                   type="button"
                   value="-"
                   className="minus quantity__button"
-                  onClick={(event) =>
+                  onClick={event =>
                     this.handleQuantityChanged(item.bookId, index)
                   }
                 />
@@ -146,7 +145,7 @@ export default class UserCart extends Component {
                   type="button"
                   value="+"
                   class="plus quantity__button"
-                  onClick={(event) =>
+                  onClick={event =>
                     this.handleQuantityChanged(item.bookId, index)
                   }
                 />

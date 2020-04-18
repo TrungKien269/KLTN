@@ -31,7 +31,7 @@ function Header() {
         <div className="hidden-md-elements nav__social-icon">
           <div>
             <Link
-              to="/"
+              to="/wishlist"
               data-toggle="tooltip"
               data-placement="bottom"
               title="Wish list"
