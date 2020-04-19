@@ -12,6 +12,7 @@ import UserProfile from "./pages/index/UserProfile";
 import UserCart from "./pages/index/UserCart";
 import UserWishList from "./pages/index/UserWishList";
 import OrderStatus from "./components/order/OrderStatus";
+import ProceedCheckout from "./components/order/ProceedCheckout";
 
 const showPage = (Routers) => {
   var result = null;
@@ -43,6 +44,7 @@ function App() {
           <PrivateRoute path="/cart" component={UserCart} />
           <PrivateRoute path="/wishlist" component={UserWishList} />
           <PrivateRoute path="/orderstatus" component={OrderStatus} />
+          <PrivateRoute path="/proceedcheckout" component={ProceedCheckout} />
         </Switch>
 
         <Footer />

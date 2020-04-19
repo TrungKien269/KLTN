@@ -266,7 +266,7 @@ body::-webkit-scrollbar-thumb {
   font-size: 1.4rem;
   height: 5rem;
   width: 50%;
-  border-radius: 3rem;
+  border-radius: 3px;
   border: 0.5px solid rgba(187, 187, 187, 0.8);
   margin-bottom: 1rem;
 }
@@ -598,7 +598,7 @@ body::-webkit-scrollbar-thumb {
 .cart-table table td {
   position: relative;
   padding: 15px 20px;
-  border-bottom: 1px solid #b8b8b8;
+  /* border-bottom: 1px solid #b8b8b8; */
 }
 .cart-table table td.item-name {
   text-align: left;

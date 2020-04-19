@@ -8,6 +8,7 @@ import ConfirmEmail from "./pages/index/ConfirmEmail";
 import ResetPassword from "./pages/index/ResetPassword";
 import UserCart from "./pages/index/UserCart";
 import OrderStatus from "./components/order/OrderStatus";
+import ProceedCheckout from "./components/order/ProceedCheckout";
 
 const Routers = [
   {

@@ -21,28 +21,29 @@ class ProductCard extends Component {
         id: this.props.id,
         quantity: 1,
       },
-    }).then((res) => {
-      if (res.data.status == true) {
-        Swal.fire({
-          title: "Success",
-          text: "Add this book to cart successfully",
-          icon: "success",
-        });
-      }
-      else{
+    })
+      .then((res) => {
+        if (res.data.status == true) {
+          Swal.fire({
+            title: "Success",
+            text: "Add this book to cart successfully",
+            icon: "success",
+          });
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: res.data.message,
+            icon: "error",
+          });
+        }
+      })
+      .catch((err) => {
         Swal.fire({
           title: "Error",
-          text: res.data.message,
+          text: "You have to sign in for this action!",
           icon: "error",
         });
-      }
-    }).catch((err) => {
-      Swal.fire({
-        title: "Error",
-        text: "You have to sign in for this action!",
-        icon: "error",
       });
-    });
   };
 
   addToWishList = (event) => {
@@ -64,8 +65,7 @@ class ProductCard extends Component {
             text: "Add this book to wish list successfully",
             icon: "success",
           });
-        }
-        else{
+        } else {
           Swal.fire({
             title: "Error",
             text: res.data.message,
@@ -80,7 +80,7 @@ class ProductCard extends Component {
           icon: "error",
         });
       });
-  }
+  };
 
   render() {
     return (
@@ -105,10 +105,12 @@ class ProductCard extends Component {
               </button>
             </div>
             <div className="badge badge__utilities item-display">
-              <a href="#" className="badge__utilities-blue"
-              onClick={this.addToWishList}>
+              <span
+                className="badge__utilities-blue"
+                onClick={this.addToWishList}
+              >
                 <i className="fas fa-heart" />
-              </a>
+              </span>
               <a
                 href="#"
                 className="badge__utilities-blue"

@@ -234,14 +234,15 @@ export default class UserCart extends Component {
                 >
                   Continue Shopping
                 </Link>
-                <button
+                <Link
+                  to={"/proceedcheckout"}
                   className="btn btn--rounded btn--white btn-fit"
                   type="button"
                   name="checkout"
                   id="btnOrder"
                 >
                   Proceed to Checkout
-                </button>
+                </Link>
               </div>
             </div>
           </div>
