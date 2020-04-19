@@ -15,12 +15,14 @@ namespace BookStoreAPI.BUS.Control
         private AccountBAL accountBal;
         private UserBAL userBal;
         private CartBAL cartBal;
+        private FaceBookAccountBAL faceBookAccountBal;
 
         public LoginBAL()
         {
             this.accountBal = new AccountBAL();
             this.userBal = new UserBAL();
             this.cartBal = new CartBAL();
+            this.faceBookAccountBal = new FaceBookAccountBAL();
         }
 
         public async Task<Response> Login(string username, string password)
@@ -64,6 +66,25 @@ namespace BookStoreAPI.BUS.Control
             user.Account.CreatedDateTime = DateTime.Now;
             user.Account.Cookie = null;
             return await Task.FromResult<User>(user);
+        }
+
+        public async Task<User> SettingFielsFaceBook(User user)
+        {
+            var nextID = int.Parse((await userBal.GetNextID()).Obj.ToString());
+            user.Id = nextID;
+            user.FaceBookAccount.Id = nextID;
+            return await Task.FromResult<User>(user);
+        }
+
+        public async Task<Response> LoginWithFaceBook(string facebookID)
+        {
+            return await faceBookAccountBal.CheckAccount(facebookID);
+        }
+
+        public async Task<Response> SignupWithFacebook(User user)
+        {
+            user = await SettingFielsFaceBook(user);
+            return await this.userBal.Create(user);
         }
     }
 }

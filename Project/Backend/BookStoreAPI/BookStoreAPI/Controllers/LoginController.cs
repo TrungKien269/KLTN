@@ -59,6 +59,44 @@ namespace BookStoreAPI.Controllers
             return response;
         }
 
+        [HttpPost("FacebookSignin")]
+        public async Task<Response> FacebookSignin(string facebookID, string fullName)
+        {
+            var checkResponse = await loginBal.LoginWithFaceBook(facebookID);
+            if (checkResponse.Status)
+            {
+                return checkResponse;
+            }
+            else
+            {
+                var facebookAccount = new FaceBookAccount
+                {
+                    FaceBookId = facebookID,
+                    CreatedDateTime = DateTime.Now
+                };
+                var user = new User
+                {
+                    FullName = fullName,
+                    Gender = "Male",
+                    Birthday = DateTime.Now,
+                    PhoneNumber = "090",
+                    Address = "Address",
+                    FaceBookAccount = facebookAccount
+                };
+
+                var response = await loginBal.SignupWithFacebook(user);
+                if (response.Status is true)
+                {
+                    response.Token = JWTHelper.CreateUserToken((response.Obj as User).Id);
+                    return response;
+                }
+                else
+                {
+                    return response;
+                }
+            }
+        }
+
         [HttpPost("Signup")]
         public async Task<Response> Signup(UserRequest userRequest)
         {
