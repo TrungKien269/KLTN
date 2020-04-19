@@ -79,9 +79,7 @@ const OrderStatus = () => {
         let order = processingOrder.find(x => x.id == orderId);
         console.log(order)
         setProcessingOrder(processingOrder.filter(x => x.id != orderId));
-        let newArr = [...cancelledOrder];
-        newArr.unshift(order);
-        setCancelledOrder(newArr);
+        setCancelledOrder(prev => [...prev, order])
 
         Axios({
           headers: {

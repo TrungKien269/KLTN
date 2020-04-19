@@ -8,35 +8,35 @@ import Swal from "sweetalert2";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
 
-const Login = (props) => {
+const Login = props => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { token, refreshToken } = useContext(UserContext);
 
-  const handleUserNameChange = (event) => {
+  const handleUserNameChange = event => {
     setUsername(event.target.value);
   };
 
-  const handlePasswordChange = (event) => {
+  const handlePasswordChange = event => {
     setPassword(event.target.value);
   };
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = event => {
     event.preventDefault();
     axios({
       method: "post",
       url: "http://localhost:5000/api/Login/Signin",
       params: {
         username,
-        password,
-      },
+        password
+      }
     })
-      .then((res) => {
+      .then(res => {
         if (res.data.status) {
           Swal.fire({
             title: "Success",
             text: "Sign in  completely",
-            icon: "success",
+            icon: "success"
           }).then(() => {
             setUserSession(res.data.token);
             refreshToken();
@@ -46,15 +46,15 @@ const Login = (props) => {
           Swal.fire({
             title: "Error",
             text: res.data.message,
-            icon: "error",
+            icon: "error"
           });
         }
       })
-      .catch((err) => {
+      .catch(err => {
         Swal.fire({
           title: "Error",
           text: err,
-          icon: "error",
+          icon: "error"
         });
       });
   };
@@ -63,25 +63,58 @@ const Login = (props) => {
     console.log("CLICK");
   };
 
-  const responseFacebook = (response) => {
-    console.log(response);
+  const responseFacebook = response => {
+    axios({
+      method: "post",
+      url: "http://localhost:5000/api/Login/FacebookSignin",
+      params: {
+        facebookID: response.id,
+        fullName: response.name
+      }
+    })
+      .then(res => {
+        if (res.data.status) {
+          Swal.fire({
+            title: "Success",
+            text: "Sign in completely",
+            icon: "success"
+          }).then(() => {
+            setUserSession(res.data.token);
+            refreshToken();
+            props.history.push("/");
+          });
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: res.data.message,
+            icon: "error"
+          });
+        }
+      })
+      .catch(err => {
+        Swal.fire({
+          title: "Error",
+          text: err,
+          icon: "error"
+        });
+      });
   };
 
-  const responseGoogle = (response) => {
+  const responseGoogle = response => {
     if (response) {
       axios({
         method: "post",
         url: "http://localhost:5000/api/Login/GoogleSignin",
         params: {
-          email: response.profileObj.email,
-        },
+          email: response.profileObj.email
+        }
       })
-        .then((res) => {
+        .then(res => {
           if (res.data.status) {
             Swal.fire({
               title: "Success",
               text: "Sign in completely",
-              icon: "success",
+              icon: "success"
             }).then(() => {
               setUserSession(res.data.token);
               refreshToken();
@@ -91,15 +124,15 @@ const Login = (props) => {
             Swal.fire({
               title: "Error",
               text: res.data.message,
-              icon: "error",
+              icon: "error"
             });
           }
         })
-        .catch((err) => {
+        .catch(err => {
           Swal.fire({
             title: "Error",
             text: err,
-            icon: "error",
+            icon: "error"
           });
         });
     }
@@ -108,14 +141,14 @@ const Login = (props) => {
   return (
     <div className="col-md-6">
       <h1>Login</h1>
-      <form method="post" id="loginForm" onSubmit={(e) => handleFormSubmit(e)}>
+      <form method="post" id="loginForm" onSubmit={e => handleFormSubmit(e)}>
         <div className="field-control">
           <label>Username or Email</label>
           <input
             type="text"
             required
             className="col-md-8"
-            onChange={(e) => handleUserNameChange(e)}
+            onChange={e => handleUserNameChange(e)}
           />
         </div>
         <div className="field-control">
@@ -124,7 +157,7 @@ const Login = (props) => {
             type="password"
             required
             className="col-md-8"
-            onChange={(e) => handlePasswordChange(e)}
+            onChange={e => handlePasswordChange(e)}
           />
         </div>
         <div className="col-md-8 pad-0-0 mar-top-md">
@@ -146,15 +179,15 @@ const Login = (props) => {
               fields="name, email, picture"
               scope="email"
               onClick={() => handleFaceBookClicked()}
-              callback={(e) => responseFacebook(e)}
+              callback={e => responseFacebook(e)}
             />
           </div>
           <div className="col-md-12">
             <GoogleLogin
               clientId="595791710812-b26iddsr8lsqntdqrs6cpmpllq65obfd.apps.googleusercontent.com"
               buttonText="Login"
-              onSuccess={(e) => responseGoogle(e)}
-              onFailure={(e) => responseGoogle(e)}
+              onSuccess={e => responseGoogle(e)}
+              onFailure={e => responseGoogle(e)}
               cookiePolicy={"single_host_origin"}
             />
           </div>

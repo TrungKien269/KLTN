@@ -65,6 +65,7 @@ namespace BookStoreAPI.Controllers
             var checkResponse = await loginBal.LoginWithFaceBook(facebookID);
             if (checkResponse.Status)
             {
+                checkResponse.Token = JWTHelper.CreateUserToken((checkResponse.Obj as FaceBookAccount).Id);
                 return checkResponse;
             }
             else
