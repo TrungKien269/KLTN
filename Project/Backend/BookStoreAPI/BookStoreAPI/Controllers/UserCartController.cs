@@ -78,5 +78,23 @@ namespace BookStoreAPI.Controllers
                 return await userCartBal.EditQuantityInCart(cart.Id, id, int.Parse(quantity));
             }
         }
+
+        [Authorize]
+        [HttpDelete("ResetCart")]
+        public async Task<Response> ResetCart()
+        {
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                var cart = (await userCartBal.GetCart(userID)).Obj as Cart;
+                return await userCartBal.ResetCart(cart.Id);
+            }
+        }
     }
 }
