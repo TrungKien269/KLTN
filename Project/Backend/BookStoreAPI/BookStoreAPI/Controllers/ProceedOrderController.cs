@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BookStoreAPI.BUS.Control;
 using BookStoreAPI.Helper;
 using BookStoreAPI.Models;
+using BookStoreAPI.Models.Checkout;
 using BookStoreAPI.Models.Objects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -42,6 +43,7 @@ namespace BookStoreAPI.Controllers
         }
 
         [HttpGet("OrderUserInfo")]
+        [Authorize]
         public async Task<Response> GetOrderUserInfo()
         {
             string accessToken = HttpContext.Request.Headers["Authorization"];
@@ -54,6 +56,24 @@ namespace BookStoreAPI.Controllers
             {
                 int userID = Int32.Parse(checkToken);
                 return await userOrderBal.GetUser(userID);
+            }
+        }
+
+        [HttpPost("CODCheckout")]
+        [Authorize]
+        public async Task<Response> CreateUserOrder(OrderRequest orderRequest,
+            [FromBody]List<OrderDetailRequest> orderDetailRequests)
+        {
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                return await userOrderBal.CreateOrderProcess(orderRequest, orderDetailRequests, userID);
             }
         }
     }

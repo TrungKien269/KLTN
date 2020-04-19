@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookStoreAPI.BUS.Logic;
 using BookStoreAPI.Models;
+using BookStoreAPI.Models.Checkout;
 using BookStoreAPI.Models.Objects;
 
 namespace BookStoreAPI.BUS.Control
@@ -41,6 +42,12 @@ namespace BookStoreAPI.BUS.Control
         public async Task<Response> CreateOrder(Order order)
         {
             return await orderBal.CreateOrder(order);
+        }
+
+        public async Task<Response> CreateOrderProcess(OrderRequest orderRequest,
+            List<OrderDetailRequest> orderDetailRequests, int userID)
+        {
+            return await orderBal.CreateOrderProcess(orderRequest, orderDetailRequests, userID);
         }
 
         public async Task<Response> GetBook(string bookID)

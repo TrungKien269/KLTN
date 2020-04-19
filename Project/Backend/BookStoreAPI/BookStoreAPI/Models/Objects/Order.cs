@@ -9,7 +9,7 @@ namespace BookStoreAPI.Models.Objects
     {
         public Order()
         {
-            OrderDetail = new HashSet<OrderDetail>();
+            OrderDetail = new List<OrderDetail>();
         }
 
         [Column("ID")]

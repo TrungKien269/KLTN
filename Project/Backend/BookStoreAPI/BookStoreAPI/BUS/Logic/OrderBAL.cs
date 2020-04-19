@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookStoreAPI.Models;
+using BookStoreAPI.Models.Checkout;
 using BookStoreAPI.Models.Objects;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,6 +37,60 @@ namespace BookStoreAPI.BUS.Logic
             {
                 await context.Order.AddAsync(order);
                 var check = await context.SaveChangesAsync();
+                return new Response("Success", true, 1, order);
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
+        public async Task<Response> CreateOrderDetail(OrderDetail orderDetail)
+        {
+            try
+            {
+                await context.OrderDetail.AddAsync(orderDetail);
+                var check = await context.SaveChangesAsync();
+                return new Response("Success", true, 1, orderDetail);
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
+        public async Task<Response> CreateOrderProcess(OrderRequest orderRequest,
+            List<OrderDetailRequest> orderDetailRequests, int userID)
+        {
+            try
+            {
+                var order = new Order
+                {
+                    Id = "Order" + (((await CountOrder()).Obj as int?).Value + 1),
+                    FullName = orderRequest.FullName,
+                    PhoneNumber = orderRequest.PhoneNumber,
+                    Address = orderRequest.Address,
+                    CreatedDate = DateTime.Now,
+                    Status = "Processing", 
+                    UserId = userID, 
+                    Total = orderDetailRequests.Sum(x => x.Quantity * x.CurrentPrice)
+                };
+
+                await CreateOrder(order);
+
+                order.OrderDetail = new List<OrderDetail>();
+                foreach (var orderDetailRequest in orderDetailRequests)
+                {
+                    var orderDetail = new OrderDetail
+                    {
+                        BookId = orderDetailRequest.BookID,
+                        OrderId = order.Id,
+                        Quantity = orderDetailRequest.Quantity
+                    };
+                    order.OrderDetail.Add(orderDetail);
+                    await CreateOrderDetail(orderDetail);
+                }
+
                 return new Response("Success", true, 1, order);
             }
             catch (Exception e)
