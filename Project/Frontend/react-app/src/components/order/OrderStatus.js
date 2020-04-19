@@ -2,21 +2,22 @@ import React, { Component, useState, useMemo, useEffect } from "react";
 import Axios from "axios";
 import { getToken, setUserSession } from "../../Utils/Commons";
 import NumberFormat from "react-number-format";
+import Swal from "sweetalert2";
 
 const OrderStatus = () => {
   const [processingOrder, setProcessingOrder] = useState("");
   const [deliveringOrder, setDelivering] = useState("");
   const [deliveredOrder, setDelivered] = useState("");
-  const [cancelledOrder, setCancelledOrder] = useState("");
+  const [cancelledOrder, setCancelledOrder] = useState([]);
 
   useEffect(() => {
     Axios({
       headers: {
-        Authorization: "Bearer " + getToken(),
+        Authorization: "Bearer " + getToken()
       },
       method: "get",
-      url: "http://localhost:5000/api/UserOrder/ListProcessing",
-    }).then((res) => {
+      url: "http://localhost:5000/api/UserOrder/ListProcessing"
+    }).then(res => {
       if (res) {
         setProcessingOrder(res.data.obj);
       }
@@ -26,11 +27,11 @@ const OrderStatus = () => {
   useEffect(() => {
     Axios({
       headers: {
-        Authorization: "Bearer " + getToken(),
+        Authorization: "Bearer " + getToken()
       },
       method: "get",
-      url: "http://localhost:5000/api/UserOrder/ListDelivery",
-    }).then((res) => {
+      url: "http://localhost:5000/api/UserOrder/ListDelivery"
+    }).then(res => {
       if (res) {
         setDelivering(res.data.obj);
       }
@@ -40,11 +41,11 @@ const OrderStatus = () => {
   useEffect(() => {
     Axios({
       headers: {
-        Authorization: "Bearer " + getToken(),
+        Authorization: "Bearer " + getToken()
       },
       method: "get",
-      url: "http://localhost:5000/api/UserOrder/ListDelivered",
-    }).then((res) => {
+      url: "http://localhost:5000/api/UserOrder/ListDelivered"
+    }).then(res => {
       if (res.status) {
         setDelivered(res.data.obj);
       }
@@ -53,49 +54,77 @@ const OrderStatus = () => {
   useEffect(() => {
     Axios({
       headers: {
-        Authorization: "Bearer " + getToken(),
+        Authorization: "Bearer " + getToken()
       },
       method: "get",
-      url: "http://localhost:5000/api/UserOrder/ListCanceled",
-    }).then((res) => {
+      url: "http://localhost:5000/api/UserOrder/ListCanceled"
+    }).then(res => {
       if (res.status) {
         setCancelledOrder(res.data.obj);
       }
     });
   }, []);
 
-  function handleCancel(event) {
-    let order = [];
-    order = processingOrder;
-    let id = order[0].id;
-    Axios({
-      headers: {
-        Authorization: "Bearer " + getToken(),
-      },
-      method: "post",
-      url: "http://localhost:5000/api/UserOrder/CancelOrder",
-      params: {
-        id: id,
-      },
-    }).then((res) => {
-      if (res.status) {
-        alert("cancelled");
+  const handleCancel = orderId => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This action can't be reversed. Your order will be canceled!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, remove it!",
+    }).then((result) => {
+      if(result.value){
+        let order = processingOrder.find(x => x.id == orderId);
+        console.log(order)
+        setProcessingOrder(processingOrder.filter(x => x.id != orderId));
+        let newArr = [...cancelledOrder];
+        newArr.unshift(order);
+        setCancelledOrder(newArr);
+
+        Axios({
+          headers: {
+            Authorization: "Bearer " + getToken()
+          },
+          method: "post",
+          url: "http://localhost:5000/api/UserOrder/CancelOrder",
+          params: {
+            id: orderId
+          }
+        }).then(res => {
+          if (res.data.status) {
+            Swal.fire({
+              title: "Done",
+              text: "Your order was canceled completely",
+              icon: "success",
+            });
+          }
+          else{
+            Swal.fire({
+              title: "Error",
+              text: res.data.message,
+              icon: "error",
+            });
+          }
+        }).catch((err) => {
+          Swal.fire({
+            title: "Error",
+            text: err,
+            icon: "error",
+          });
+        });
       }
     });
-  }
+  };
 
-  //   for (let i = 0; i < processingOrder.length; i++) {
-  //     for (let j = 0; j < processingOrder[i].orderDetail.length; j++) {
-  //       console.log(processingOrder[i].orderDetail[j]);
-  //     }
-  //   }
   const listOrderProcessing = useMemo(() => {
     let orderItem = [];
     let orderBlock = [];
     if (processingOrder && processingOrder.length > 0) {
-      orderBlock = processingOrder.map((order) => {
+      orderBlock = processingOrder.map(order => {
         let x = order.orderDetail;
-        orderItem = x.map((item) => {
+        orderItem = x.map(item => {
           return (
             <tr>
               <td className="item-name">
@@ -159,8 +188,8 @@ const OrderStatus = () => {
         return (
           <div className="order-block">
             <button
-              onClick={(e) => {
-                handleCancel(e);
+              onClick={e => {
+                handleCancel(order.id);
               }}
             >
               Cancel Order
@@ -207,11 +236,9 @@ const OrderStatus = () => {
     let orderItem = [];
     let orderBlock = [];
     if (deliveringOrder && deliveringOrder.length > 0) {
-      orderBlock = deliveringOrder.map((order) => {
-        console.log(order.orderDetail);
+      orderBlock = deliveringOrder.map(order => {
         let x = order.orderDetail;
-        orderItem = x.map((item) => {
-          console.log(item);
+        orderItem = x.map(item => {
           return (
             <tr>
               <td className="item-name">
@@ -306,72 +333,6 @@ const OrderStatus = () => {
           </div>
         );
       });
-      //   for (let i = 0; i < deliveredOrder.length; i++) {
-      //     const order = deliveredOrder[0];
-      //     console.log(order.orderDetail);
-      //     for (let j = 0; j < order.orderDetail.length; j++) {
-      //       const item = order.orderDetail[j];
-      //       orderItem.push(
-      //         <tr key={order.orderId}>
-      //           <td className="item-name">
-      //             <div className="item-img">
-      //               <a href="#">
-      //                 <img
-      //                   src={item.book.image}
-      //                   className="img-contain img-cover-10"
-      //                   alt=""
-      //                 />
-      //               </a>
-      //             </div>
-      //             <div className="item-title">
-      //               <a href="#">{item.book.name}</a>
-      //             </div>
-      //           </td>
-      //           <td className="item-qty">
-      //             <div className="quantity buttons_added d-flex justify-content-center">
-      //               <input
-      //                 type="text"
-      //                 step={1}
-      //                 min={1}
-      //                 max
-      //                 name="quantity"
-      //                 defaultValue={item.quantity}
-      //                 title="Qty"
-      //                 className="input-text qty text h-100"
-      //                 size={4}
-      //                 pattern
-      //                 inputMode
-      //                 disabled
-      //               />
-      //             </div>
-      //           </td>
-      //           <td className="item-price">
-      //             <p>
-      //               {
-      //                 <NumberFormat
-      //                   displayType="text"
-      //                   value={item.book.originalPrice}
-      //                   thousandSeparator={true}
-      //                   prefix="VND "
-      //                 ></NumberFormat>
-      //               }
-      //             </p>
-      //           </td>
-      //           <td className="item-total">
-      //             <p>
-      //               <NumberFormat
-      //                 displayType="text"
-      //                 value={item.book.originalPrice * item.quantity}
-      //                 thousandSeparator={true}
-      //                 prefix="VND "
-      //               ></NumberFormat>
-      //             </p>
-      //           </td>
-      //           <td className="action"></td>
-      //         </tr>
-      //       );
-      //     }
-      //   }
     } else {
       orderBlock.push(<h2>Nothing here</h2>);
     }
@@ -382,9 +343,9 @@ const OrderStatus = () => {
     let orderBlock = [];
     let orderItem = [];
     if (deliveredOrder && deliveredOrder.length > 0) {
-      orderBlock = deliveredOrder.map((order) => {
+      orderBlock = deliveredOrder.map(order => {
         let x = order.orderDetail;
-        orderItem = x.map((item) => {
+        orderItem = x.map(item => {
           return (
             <tr>
               <td className="item-name">
@@ -479,72 +440,6 @@ const OrderStatus = () => {
           </div>
         );
       });
-      //   for (let i = 0; i < deliveredOrder.length; i++) {
-      //     const order = deliveredOrder[0];
-      //     console.log(order.orderDetail);
-      //     for (let j = 0; j < order.orderDetail.length; j++) {
-      //       const item = order.orderDetail[j];
-      //       orderItem.push(
-      //         <tr key={order.orderId}>
-      //           <td className="item-name">
-      //             <div className="item-img">
-      //               <a href="#">
-      //                 <img
-      //                   src={item.book.image}
-      //                   className="img-contain img-cover-10"
-      //                   alt=""
-      //                 />
-      //               </a>
-      //             </div>
-      //             <div className="item-title">
-      //               <a href="#">{item.book.name}</a>
-      //             </div>
-      //           </td>
-      //           <td className="item-qty">
-      //             <div className="quantity buttons_added d-flex justify-content-center">
-      //               <input
-      //                 type="text"
-      //                 step={1}
-      //                 min={1}
-      //                 max
-      //                 name="quantity"
-      //                 defaultValue={item.quantity}
-      //                 title="Qty"
-      //                 className="input-text qty text h-100"
-      //                 size={4}
-      //                 pattern
-      //                 inputMode
-      //                 disabled
-      //               />
-      //             </div>
-      //           </td>
-      //           <td className="item-price">
-      //             <p>
-      //               {
-      //                 <NumberFormat
-      //                   displayType="text"
-      //                   value={item.book.originalPrice}
-      //                   thousandSeparator={true}
-      //                   prefix="VND "
-      //                 ></NumberFormat>
-      //               }
-      //             </p>
-      //           </td>
-      //           <td className="item-total">
-      //             <p>
-      //               <NumberFormat
-      //                 displayType="text"
-      //                 value={item.book.originalPrice * item.quantity}
-      //                 thousandSeparator={true}
-      //                 prefix="VND "
-      //               ></NumberFormat>
-      //             </p>
-      //           </td>
-      //           <td className="action"></td>
-      //         </tr>
-      //       );
-      //     }
-      //   }
     } else {
       orderBlock.push(<h2>Nothing here</h2>);
     }
@@ -555,9 +450,9 @@ const OrderStatus = () => {
     let orderBlock = [];
     let orderItem = [];
     if (cancelledOrder && cancelledOrder.length > 0) {
-      orderBlock = cancelledOrder.map((order) => {
+      orderBlock = cancelledOrder.map(order => {
         let x = order.orderDetail;
-        orderItem = x.map((item) => {
+        orderItem = x.map(item => {
           return (
             <tr>
               <td className="item-name">
@@ -657,6 +552,7 @@ const OrderStatus = () => {
     }
     return orderBlock;
   }, [cancelledOrder]);
+
   return (
     <section className="section__order-status">
       <div className="cart-title">

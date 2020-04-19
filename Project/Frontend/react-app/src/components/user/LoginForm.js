@@ -35,7 +35,7 @@ const Login = (props) => {
         if (res.data.status) {
           Swal.fire({
             title: "Success",
-            text: "Sign up  completely",
+            text: "Sign in  completely",
             icon: "success",
           }).then(() => {
             setUserSession(res.data.token);
