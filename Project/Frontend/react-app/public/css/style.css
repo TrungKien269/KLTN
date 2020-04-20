@@ -56,6 +56,7 @@ body::-webkit-scrollbar-thumb {
   font-size: 5rem;
   text-transform: uppercase;
   font-weight: 600;
+  z-index: 1;
 }
 @media (max-width: 62em) {
   .promo-text {
