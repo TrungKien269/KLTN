@@ -2,6 +2,7 @@ import React, { Component, useState, useMemo, useEffect } from "react";
 import Axios from "axios";
 import { getToken, setUserSession } from "../../Utils/Commons";
 import NumberFormat from "react-number-format";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const OrderStatus = () => {
@@ -73,13 +74,13 @@ const OrderStatus = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, remove it!",
-    }).then((result) => {
-      if(result.value){
+      confirmButtonText: "Yes, remove it!"
+    }).then(result => {
+      if (result.value) {
         let order = processingOrder.find(x => x.id == orderId);
-        console.log(order)
+        console.log(order);
         setProcessingOrder(processingOrder.filter(x => x.id != orderId));
-        setCancelledOrder(prev => [...prev, order])
+        setCancelledOrder(prev => [...prev, order]);
 
         Axios({
           headers: {
@@ -90,28 +91,29 @@ const OrderStatus = () => {
           params: {
             id: orderId
           }
-        }).then(res => {
-          if (res.data.status) {
-            Swal.fire({
-              title: "Done",
-              text: "Your order was canceled completely",
-              icon: "success",
-            });
-          }
-          else{
+        })
+          .then(res => {
+            if (res.data.status) {
+              Swal.fire({
+                title: "Done",
+                text: "Your order was canceled completely",
+                icon: "success"
+              });
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: res.data.message,
+                icon: "error"
+              });
+            }
+          })
+          .catch(err => {
             Swal.fire({
               title: "Error",
-              text: res.data.message,
-              icon: "error",
+              text: err,
+              icon: "error"
             });
-          }
-        }).catch((err) => {
-          Swal.fire({
-            title: "Error",
-            text: err,
-            icon: "error",
           });
-        });
       }
     });
   };
@@ -127,16 +129,16 @@ const OrderStatus = () => {
             <tr>
               <td className="item-name">
                 <div className="item-img">
-                  <a href="#">
+                  <Link to={`/book/${item.bookId}`}>
                     <img
                       src={item.book.image}
                       className="img-contain img-cover-10"
                       alt=""
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="item-title">
-                  <a href="#">{item.book.name}</a>
+                  <Link to={`/book/${item.bookId}`}>{item.book.name}</Link>
                 </div>
               </td>
               <td className="item-qty">
@@ -241,16 +243,16 @@ const OrderStatus = () => {
             <tr>
               <td className="item-name">
                 <div className="item-img">
-                  <a href="#">
+                  <Link to={`/book/${item.bookId}`}>
                     <img
                       src={item.book.image}
                       className="img-contain img-cover-10"
                       alt=""
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="item-title">
-                  <a href="#">{item.book.name}</a>
+                  <Link to={`/book/${item.bookId}`}>{item.book.name}</Link>
                 </div>
               </td>
               <td className="item-qty">
@@ -348,16 +350,16 @@ const OrderStatus = () => {
             <tr>
               <td className="item-name">
                 <div className="item-img">
-                  <a href="#">
+                  <Link to={`/book/${item.bookId}`}>
                     <img
                       src={item.book.image}
                       className="img-contain img-cover-10"
                       alt=""
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="item-title">
-                  <a href="#">{item.book.name}</a>
+                  <Link to={`/book/${item.bookId}`}>{item.book.name}</Link>
                 </div>
               </td>
               <td className="item-qty">
@@ -455,16 +457,16 @@ const OrderStatus = () => {
             <tr>
               <td className="item-name">
                 <div className="item-img">
-                  <a href="#">
+                  <Link to={`/book/${item.bookId}`}>
                     <img
                       src={item.book.image}
                       className="img-contain img-cover-10"
                       alt=""
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="item-title">
-                  <a href="#">{item.book.name}</a>
+                  <Link to={`/book/${item.bookId}`}>{item.book.name}</Link>
                 </div>
               </td>
               <td className="item-qty">

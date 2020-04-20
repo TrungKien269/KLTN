@@ -60,48 +60,62 @@ const Login = props => {
   };
 
   const handleFaceBookClicked = () => {
-    console.log("CLICK");
+    // console.log("CLICK");
   };
 
   const responseFacebook = response => {
-    axios({
-      method: "post",
-      url: "http://localhost:5000/api/Login/FacebookSignin",
-      params: {
-        facebookID: response.id,
-        fullName: response.name
-      }
-    })
-      .then(res => {
-        if (res.data.status) {
-          Swal.fire({
-            title: "Success",
-            text: "Sign in completely",
-            icon: "success"
-          }).then(() => {
-            setUserSession(res.data.token);
-            refreshToken();
-            props.history.push("/");
-          });
-        } else {
-          Swal.fire({
-            title: "Error",
-            text: res.data.message,
-            icon: "error"
-          });
+    if (response.status && response.status == "unknown") {
+      Swal.fire({
+        title: "Error",
+        text: "Sign in with Facebook fail!",
+        icon: "error"
+      });
+    } else {
+      axios({
+        method: "post",
+        url: "http://localhost:5000/api/Login/FacebookSignin",
+        params: {
+          facebookID: response.id,
+          fullName: response.name
         }
       })
-      .catch(err => {
-        Swal.fire({
-          title: "Error",
-          text: err,
-          icon: "error"
+        .then(res => {
+          if (res.data.status) {
+            Swal.fire({
+              title: "Success",
+              text: "Sign in completely",
+              icon: "success"
+            }).then(() => {
+              setUserSession(res.data.token);
+              refreshToken();
+              props.history.push("/");
+            });
+          } else {
+            Swal.fire({
+              title: "Error",
+              text: res.data.message,
+              icon: "error"
+            });
+          }
+        })
+        .catch(err => {
+          Swal.fire({
+            title: "Error",
+            text: err,
+            icon: "error"
+          });
         });
-      });
+    }
   };
 
   const responseGoogle = response => {
-    if (response) {
+    if (response.error) {
+      Swal.fire({
+        title: "Error",
+        text: "Sign in with Google fail!",
+        icon: "error"
+      });
+    } else {
       axios({
         method: "post",
         url: "http://localhost:5000/api/Login/GoogleSignin",

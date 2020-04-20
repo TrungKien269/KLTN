@@ -63,19 +63,19 @@ function Header() {
               <div className="row">
                 <ul className="list-unstyled">
                   <li>
-                    <Link onClick={handleLogout}>Log out</Link>
-                  </li>
-                  <li>
                     <Link to="/profile">Profile</Link>
                   </li>
                   <li>
                     <Link to="/orderstatus">Your Orders</Link>
                   </li>
-                  <li>
+                  {/*<li>
                     <Link to="#">Limited Offer Time</Link>
                   </li>
                   <li>
                     <Link to="#">FAQs</Link>
+                  </li>*/}
+                  <li>
+                    <Link onClick={handleLogout}>Log out</Link>
                   </li>
                 </ul>
               </div>

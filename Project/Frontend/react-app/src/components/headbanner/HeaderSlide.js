@@ -29,13 +29,11 @@ function HeaderSlide() {
                 >
                   for our student community
                 </h2>
-                <a
-                  href="/"
-                  className="btn btn--rounded btn--lg btn--blue wow fadeIn"
-                  data-wow-delay="1.5s"
-                >
+                <Link to="/login/" 
+                className="btn btn--rounded btn--lg btn--blue wow fadeIn" 
+                data-wow-delay="1.5s">
                   get the deal
-                </a>
+                </Link>
               </div>
               <img
                 className="d-block w-100"
@@ -52,11 +50,11 @@ function HeaderSlide() {
                   className="promo-text-sub wow slideInRight"
                   data-wow-delay=".5s"
                 >
-                  <h2>Getting smart,thin,healthy and happy</h2>
+                  <h2>Getting smart, thin, healthy and happy</h2>
                 </div>
                 <p className="wow fadeInRight" data-wow-delay="1s">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Aperia
+                  Reading books helps your brain to be more active and helps you to find 
+                  out the new real you, gives you a different perspective of life
                 </p>
                 <Link
                   to={"/collections/"}
