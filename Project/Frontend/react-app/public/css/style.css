@@ -916,24 +916,7 @@ body::-webkit-scrollbar-thumb {
   border-radius: 10rem;
 }
 .btn--rounded:hover {
-  transform: translateY(-0.5px);
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.25);
-}
-.btn--rounded:hover::after {
-  transform: scaleX(1.1) scaleY(1.1);
-  opacity: 0;
-}
-.btn--rounded::after {
-  content: "";
-  display: inline-block;
-  height: 100%;
-  width: 100%;
-  border-radius: 10rem;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  transition: all 0.2s;
 }
 
 .btn--blue {
@@ -947,6 +930,15 @@ body::-webkit-scrollbar-thumb {
 }
 .btn--blue::after {
   background-color: transparent;
+}
+.btn--red {
+  background-color: #bd081c;
+  color: #fff;
+}
+.btn--red:hover {
+  background-color: #e04a39;
+  color: #fff;
+  box-shadow: none;
 }
 
 .btn--white {
