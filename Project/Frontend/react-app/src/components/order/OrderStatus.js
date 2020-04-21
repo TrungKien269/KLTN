@@ -1,6 +1,6 @@
-import React, { Component, useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Axios from "axios";
-import { getToken, setUserSession } from "../../Utils/Commons";
+import { getToken } from "../../Utils/Commons";
 import NumberFormat from "react-number-format";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -14,11 +14,11 @@ const OrderStatus = () => {
   useEffect(() => {
     Axios({
       headers: {
-        Authorization: "Bearer " + getToken()
+        Authorization: "Bearer " + getToken(),
       },
       method: "get",
-      url: "http://localhost:5000/api/UserOrder/ListProcessing"
-    }).then(res => {
+      url: "http://localhost:5000/api/UserOrder/ListProcessing",
+    }).then((res) => {
       if (res) {
         setProcessingOrder(res.data.obj);
       }
@@ -28,11 +28,11 @@ const OrderStatus = () => {
   useEffect(() => {
     Axios({
       headers: {
-        Authorization: "Bearer " + getToken()
+        Authorization: "Bearer " + getToken(),
       },
       method: "get",
-      url: "http://localhost:5000/api/UserOrder/ListDelivery"
-    }).then(res => {
+      url: "http://localhost:5000/api/UserOrder/ListDelivery",
+    }).then((res) => {
       if (res) {
         setDelivering(res.data.obj);
       }
@@ -42,11 +42,11 @@ const OrderStatus = () => {
   useEffect(() => {
     Axios({
       headers: {
-        Authorization: "Bearer " + getToken()
+        Authorization: "Bearer " + getToken(),
       },
       method: "get",
-      url: "http://localhost:5000/api/UserOrder/ListDelivered"
-    }).then(res => {
+      url: "http://localhost:5000/api/UserOrder/ListDelivered",
+    }).then((res) => {
       if (res.status) {
         setDelivered(res.data.obj);
       }
@@ -55,18 +55,18 @@ const OrderStatus = () => {
   useEffect(() => {
     Axios({
       headers: {
-        Authorization: "Bearer " + getToken()
+        Authorization: "Bearer " + getToken(),
       },
       method: "get",
-      url: "http://localhost:5000/api/UserOrder/ListCanceled"
-    }).then(res => {
+      url: "http://localhost:5000/api/UserOrder/ListCanceled",
+    }).then((res) => {
       if (res.status) {
         setCancelledOrder(res.data.obj);
       }
     });
   }, []);
 
-  const handleCancel = orderId => {
+  const handleCancel = (orderId) => {
     Swal.fire({
       title: "Are you sure?",
       text: "This action can't be reversed. Your order will be canceled!",
@@ -74,44 +74,44 @@ const OrderStatus = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, remove it!"
-    }).then(result => {
+      confirmButtonText: "Yes, remove it!",
+    }).then((result) => {
       if (result.value) {
-        let order = processingOrder.find(x => x.id == orderId);
+        let order = processingOrder.find((x) => x.id == orderId);
         console.log(order);
-        setProcessingOrder(processingOrder.filter(x => x.id != orderId));
-        setCancelledOrder(prev => [...prev, order]);
+        setProcessingOrder(processingOrder.filter((x) => x.id != orderId));
+        setCancelledOrder((prev) => [...prev, order]);
 
         Axios({
           headers: {
-            Authorization: "Bearer " + getToken()
+            Authorization: "Bearer " + getToken(),
           },
           method: "post",
           url: "http://localhost:5000/api/UserOrder/CancelOrder",
           params: {
-            id: orderId
-          }
+            id: orderId,
+          },
         })
-          .then(res => {
+          .then((res) => {
             if (res.data.status) {
               Swal.fire({
                 title: "Done",
                 text: "Your order was canceled completely",
-                icon: "success"
+                icon: "success",
               });
             } else {
               Swal.fire({
                 title: "Error",
                 text: res.data.message,
-                icon: "error"
+                icon: "error",
               });
             }
           })
-          .catch(err => {
+          .catch((err) => {
             Swal.fire({
               title: "Error",
               text: err,
-              icon: "error"
+              icon: "error",
             });
           });
       }
@@ -122,9 +122,9 @@ const OrderStatus = () => {
     let orderItem = [];
     let orderBlock = [];
     if (processingOrder && processingOrder.length > 0) {
-      orderBlock = processingOrder.map(order => {
+      orderBlock = processingOrder.map((order) => {
         let x = order.orderDetail;
-        orderItem = x.map(item => {
+        orderItem = x.map((item) => {
           return (
             <tr>
               <td className="item-name">
@@ -188,7 +188,7 @@ const OrderStatus = () => {
         return (
           <div className="order-block">
             <button
-              onClick={e => {
+              onClick={(e) => {
                 handleCancel(order.id);
               }}
             >
@@ -236,9 +236,9 @@ const OrderStatus = () => {
     let orderItem = [];
     let orderBlock = [];
     if (deliveringOrder && deliveringOrder.length > 0) {
-      orderBlock = deliveringOrder.map(order => {
+      orderBlock = deliveringOrder.map((order) => {
         let x = order.orderDetail;
-        orderItem = x.map(item => {
+        orderItem = x.map((item) => {
           return (
             <tr>
               <td className="item-name">
@@ -343,9 +343,9 @@ const OrderStatus = () => {
     let orderBlock = [];
     let orderItem = [];
     if (deliveredOrder && deliveredOrder.length > 0) {
-      orderBlock = deliveredOrder.map(order => {
+      orderBlock = deliveredOrder.map((order) => {
         let x = order.orderDetail;
-        orderItem = x.map(item => {
+        orderItem = x.map((item) => {
           return (
             <tr>
               <td className="item-name">
@@ -450,9 +450,9 @@ const OrderStatus = () => {
     let orderBlock = [];
     let orderItem = [];
     if (cancelledOrder && cancelledOrder.length > 0) {
-      orderBlock = cancelledOrder.map(order => {
+      orderBlock = cancelledOrder.map((order) => {
         let x = order.orderDetail;
-        orderItem = x.map(item => {
+        orderItem = x.map((item) => {
           return (
             <tr>
               <td className="item-name">

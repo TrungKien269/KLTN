@@ -2,6 +2,7 @@ import React, { Component, useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import NumberFormat from "react-number-format";
 import Swal from "sweetalert2";
+import { getToken } from "../../Utils/Commons";
 
 class ProductDetailSection extends Component {
   constructor(props) {
@@ -58,28 +59,29 @@ class ProductDetailSection extends Component {
         id: this.state.data.id,
         quantity: this.state.quantity,
       },
-    }).then((res) => {
-      if (res.data.status == true) {
-        Swal.fire({
-          title: "Success",
-          text: "Add this book to cart successfully",
-          icon: "success",
-        });
-      }
-      else{
+    })
+      .then((res) => {
+        if (res.data.status == true) {
+          Swal.fire({
+            title: "Success",
+            text: "Add this book to cart successfully",
+            icon: "success",
+          });
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: res.data.message,
+            icon: "error",
+          });
+        }
+      })
+      .catch((err) => {
         Swal.fire({
           title: "Error",
-          text: res.data.message,
+          text: "You have to sign in for this action!",
           icon: "error",
         });
-      }
-    }).catch((err) => {
-      Swal.fire({
-        title: "Error",
-        text: "You have to sign in for this action!",
-        icon: "error",
       });
-    });
   };
 
   AddToWishList = (event) => {
@@ -101,8 +103,7 @@ class ProductDetailSection extends Component {
             text: "Add this book to wish list successfully",
             icon: "success",
           });
-        }
-        else{
+        } else {
           Swal.fire({
             title: "Error",
             text: res.data.message,
@@ -319,8 +320,7 @@ class ProductDetailSection extends Component {
                           title="Qty"
                           className="input-text qty text h-100"
                           size={4}
-                          pattern
-                          inputMode
+                          inputMode={"text"}
                         />
                         <input
                           type="button"
@@ -490,6 +490,7 @@ class ProductDetailSection extends Component {
               </div>
             </div>
           </div>
+        
         </div>
       </section>
     );

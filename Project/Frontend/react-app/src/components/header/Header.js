@@ -47,7 +47,7 @@ function Header() {
           </div>
 
           <div className="dropdown ">
-            <Link
+            <a
               className=""
               id="navbarDropdownMenuLink4"
               data-toggle="dropdown"
@@ -55,7 +55,7 @@ function Header() {
               aria-expanded="false"
             >
               <i className="far fa-user" />
-            </Link>
+            </a>
             <div
               className="dropdown-menu mega-menu mega-menu-sm "
               aria-labelledby="navbarDropdownMenuLink4"
@@ -75,7 +75,7 @@ function Header() {
                     <Link to="#">FAQs</Link>
                   </li>*/}
                   <li>
-                    <Link onClick={handleLogout}>Log out</Link>
+                    <a onClick={handleLogout}>Log out</a>
                   </li>
                 </ul>
               </div>
@@ -179,7 +179,7 @@ function Header() {
             </li>
             {/*Pages*/}
             <li className="nav-item dropdown">
-              <Link
+              <a
                 className="nav-link dropdown-toggle"
                 id="navbarDropdownMenuLink4"
                 data-toggle="dropdown"
@@ -188,7 +188,7 @@ function Header() {
               >
                 Pages
                 <i className="fa fa-angle-down hidden-xs" />
-              </Link>
+              </a>
               <div
                 className="dropdown-menu mega-menu mega-menu-sm "
                 aria-labelledby="navbarDropdownMenuLink4"
