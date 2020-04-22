@@ -42,7 +42,7 @@ const Index = (props) => {
         Price: "currentPrice",
         Name: "name",
       };
-      if (sorttype == "ASC") {
+      if (sorttype === "ASC") {
         let sortData = flexData || data;
         if (sortfield === "Price")
           sortData.sort((a, b) => a[fields[sortfield]] - b[fields[sortfield]]);

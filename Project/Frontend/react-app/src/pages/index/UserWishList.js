@@ -164,7 +164,7 @@ export default class UserWishList extends Component {
             </td>
             <td className="action">
               <button
-                className="btn btn--blue btn--rounded btn-fit"
+                className="btn btn--red btn--rounded btn-fit"
                 id="btnRemove"
                 onClick={() => this.handleRemoveClicked(item.bookId)}
               >

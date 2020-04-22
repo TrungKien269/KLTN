@@ -12,7 +12,7 @@ const ProductRating = (props) => {
         bookID: props.id,
       },
     }).then((res) => {
-      console.log(res.data.obj);
+      // console.log(res.data.obj);
       setRating(res.data.obj);
     });
   }, []);
@@ -32,7 +32,11 @@ const ProductRating = (props) => {
 
   return (
     <div className="card__book-rating d-flex align-items-center">
-      {showRating} <p>{rating && rating.averagePoint}</p>
+      {showRating} 
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      {rating && rating.averagePoint ? rating.averagePoint.toFixed(1) : 0.0} &nbsp;/&nbsp; 
+      {rating && rating.numberOfRating ? rating.numberOfRating : 0} &nbsp;
+      {rating && rating.numberOfRating <= 1 ? "vote" : "votes"}</p>
     </div>
   );
 };

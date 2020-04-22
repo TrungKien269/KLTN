@@ -21,7 +21,8 @@ namespace BookStoreAPI.BUS.Logic
         {
             try
             {
-                var listComment = await context.Comment.Where(x => x.BookId.Equals(bookID)).OrderByDescending(x => x.DateTime)
+                var listComment = await context.Comment.Include(x => x.User)
+                    .Where(x => x.BookId.Equals(bookID)).OrderByDescending(x => x.DateTime)
                     .ToListAsync();
                 return new Response("Success", true, listComment.Count, listComment);
             }

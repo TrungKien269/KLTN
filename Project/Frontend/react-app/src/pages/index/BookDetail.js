@@ -10,7 +10,7 @@ function BookDetail(props) {
     <div>
       <ProductDetailSection bookInfo={id} />
       <div className="container">
-        <CommentSection />
+        <CommentSection id={id} />
       </div>
     </div>
   );
