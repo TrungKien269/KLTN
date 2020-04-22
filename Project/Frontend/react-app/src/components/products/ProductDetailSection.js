@@ -4,6 +4,7 @@ import NumberFormat from "react-number-format";
 import Swal from "sweetalert2";
 import { getToken } from "../../Utils/Commons";
 import ProductRating from "./ProductRating";
+import ProductRatingVote from "./ProductRatingVote";
 
 class ProductDetailSection extends Component {
   constructor(props) {
@@ -121,7 +122,6 @@ class ProductDetailSection extends Component {
   };
 
   showDetail = (data, authors) => {
-    console.log(data.id);
     return (
       <section className="section__detail">
         <div className="container">
@@ -342,35 +342,17 @@ class ProductDetailSection extends Component {
                       </a>
                     </div>
                   </div>
+                  <div className="row">
+                    <div className="col-md-12 mt-4">
+                      <h3>Rate this book</h3>
+                      <ProductRatingVote id={this.props.bookInfo} />
+                    </div>
+                  </div>
                   <div className="detail__link">
                     <a href="#" onClick={this.AddToWishList}>
                       add to wishlish
                     </a>
-                    {/* <a href="#">add to compare</a> */}
                   </div>
-                  {/* <div className="detail__social">
-                    <a
-                      href="#"
-                      className="detail__social-icon detail__social-icon-twitter"
-                    >
-                      <i className="fab fa-twitter" />
-                      twitter
-                    </a>
-                    <a
-                      href="#"
-                      className="detail__social-icon detail__social-icon-fb"
-                    >
-                      <i className="fab fa-facebook-f" />
-                      facebook
-                    </a>
-                    <a
-                      href="#"
-                      className="detail__social-icon detail__social-icon-gg"
-                    >
-                      <i className="fab fa-google-plus-g" />
-                      google +
-                    </a>
-                  </div> */}
                 </div>
                 <div className="product-table">
                   <table>
@@ -426,69 +408,6 @@ class ProductDetailSection extends Component {
                     </tbody>
                   </table>
                 </div>
-                {/* <div className="container-fluid d-flex pad-0-0 mar-top-md">
-                  <ul className="nav nav-tabs nav-tabs-table" id="active-exp">
-                    <li className="nav-tab-item active">
-                      <a data-toggle="tab" href="#home">
-                        Description
-                      </a>
-                    </li>
-                    <li className="nav-tab-item">
-                      <a data-toggle="tab" href="#menu1">
-                        Specifications
-                      </a>
-                    </li>
-                    <li className="nav-tab-item">
-                      <a data-toggle="tab" href="#menu2">
-                        Video
-                      </a>
-                    </li>
-                    <li className="nav-tab-item">
-                      <a data-toggle="tab" href="#menu3">
-                        Review
-                      </a>
-                    </li>
-                  </ul>
-                  <div className="tab-content tab-detail">
-                    <div id="home" className="tab-pane fade in active show">
-                      <div className="detail__describe mar-0-0">
-                        Our new{" "}
-                        <p className="font-weight-bold d-inline">
-                          HPB12 / A12 battery
-                        </p>{" "}
-                        is rated at 2000mAh and designed to power up Black and
-                        Decker / FireStorm line of 12V tools allowing users to
-                        run multiple devices off the same battery pack. The
-                        HPB12 is compatible with the following Black and Decker
-                        power tool models
-                      </div>
-                    </div>
-                    <div id="menu1" className="tab-pane fade">
-                      <ul>
-                        <li>Chemistry: Ni-CD</li>
-                        <li>Voltage: 12V</li>
-                        <li>AmpHours: 2000mAh</li>
-                        <li>Dimensions: 109.75x79.55x62.20mm</li>
-                      </ul>
-                    </div>
-                    <div id="menu2" className="tab-pane fade">
-                      <p>
-                        <iframe
-                          src="//www.youtube.com/embed/QZd7015XaTQ"
-                          height={350}
-                          width="100%"
-                        ></iframe>
-                      </p>
-                    </div>
-                    <div id="menu3" className="tab-pane fade">
-                      <h3>Menu 3</h3>
-                      <p>
-                        Eaque ipsa quae ab illo inventore veritatis et quasi
-                        architecto beatae vitae dicta sunt explicabo.
-                      </p>
-                    </div>
-                  </div>
-                </div> */}
               </div>
             </div>
           </div>

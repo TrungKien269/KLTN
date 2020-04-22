@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState, useMemo } from "react";
 import { Rating } from "semantic-ui-react";
 import Axios from "axios";
 
-const ProductRating = (props) => {
+const ProductRatingCard = (props) => {
   const [rating, setRating] = useState();
   useEffect(() => {
     Axios({
@@ -34,16 +34,7 @@ const ProductRating = (props) => {
   return (
     <div className="card__book-rating d-flex align-items-center">
       {showRating}
-      <p className="f-1-5">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        {rating && rating.averagePoint
-          ? rating.averagePoint.toFixed(1)
-          : 0.0}{" "}
-        &nbsp;/&nbsp;
-        {rating && rating.numberOfRating ? rating.numberOfRating : 0} &nbsp;
-        {rating && rating.numberOfRating <= 1 ? "vote" : "votes"}
-      </p>
     </div>
   );
 };
-export default ProductRating;
+export default ProductRatingCard;

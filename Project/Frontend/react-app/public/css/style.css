@@ -1139,7 +1139,7 @@ body::-webkit-scrollbar-thumb {
 /* .card-img-top {
   filter: drop-shadow(0 0.3rem 0.4rem rgba(0, 0, 0, 0.4));
 } */
-.card__book-rating{
+.card__book-rating {
   margin-bottom: 1rem;
 }
 
@@ -3291,3 +3291,8 @@ h1 {
   padding: 0 0 0 1rem;
   margin-bottom: 1rem;
 }
+
+.ui.massive.rating {
+  font-size: 3rem;
+}
+

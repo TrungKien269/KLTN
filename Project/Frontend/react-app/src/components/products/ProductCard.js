@@ -7,87 +7,88 @@ import Swal from "sweetalert2";
 import { Button, Modal, Container } from "react-bootstrap";
 import NumberFormat from "react-number-format";
 // import LazyLoad from "react-lazyload";
-import ProductRating from "./ProductRating";
 
-const ProductCard = props => {
+import ProductRatingCard from "./ProductRatingCard";
+
+const ProductCard = (props) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const addToCart = event => {
+  const addToCart = (event) => {
     event.preventDefault();
     axios({
       headers: {
-        Authorization: "Bearer " + getToken()
+        Authorization: "Bearer " + getToken(),
       },
       url: "http://localhost:5000/api/BookInfo/AddToCart",
       method: "post",
       params: {
         id: props.id,
-        quantity: 1
-      }
+        quantity: 1,
+      },
     })
-      .then(res => {
+      .then((res) => {
         if (res.data.status == true) {
           Swal.fire({
             title: "Success",
             text: "Add this book to cart successfully",
-            icon: "success"
+            icon: "success",
           });
         } else {
           Swal.fire({
             title: "Error",
             text: res.data.message,
-            icon: "error"
+            icon: "error",
           });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         Swal.fire({
           title: "Error",
           text: "You have to sign in for this action!",
-          icon: "error"
+          icon: "error",
         });
       });
   };
 
-  const addToWishList = event => {
+  const addToWishList = (event) => {
     event.preventDefault();
     axios({
       headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("Token")
+        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
       },
       method: "post",
       url: "http://localhost:5000/api/UserWishList/AddToWishList",
       params: {
-        bookID: props.id
-      }
+        bookID: props.id,
+      },
     })
-      .then(res => {
+      .then((res) => {
         if (res.data.status) {
           Swal.fire({
             title: "Success",
             text: "Add this book to wish list successfully",
-            icon: "success"
+            icon: "success",
           });
         } else {
           Swal.fire({
             title: "Error",
             text: res.data.message,
-            icon: "error"
+            icon: "error",
           });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         Swal.fire({
           title: "Error",
           text: "You have to sign in for this action!",
-          icon: "error"
+          icon: "error",
         });
       });
   };
 
-  const handleQuickview = e => {
+  const handleQuickview = (e) => {
     console.log(props.id);
   };
 
@@ -113,7 +114,7 @@ const ProductCard = props => {
           <div className="card-body">
             <h5 className="card__book-title">{props.name}</h5>
 
-            <ProductRating id={props.id} />
+            <ProductRatingCard id={props.id} />
 
             <p className="card__book-price">{props.price}</p>
 
