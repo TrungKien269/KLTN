@@ -9,8 +9,9 @@ function BookDetail(props) {
   return (
     <div>
       <ProductDetailSection bookInfo={id} />
-
-      <CommentSection />
+      <div className="container">
+        <CommentSection />
+      </div>
     </div>
   );
 }

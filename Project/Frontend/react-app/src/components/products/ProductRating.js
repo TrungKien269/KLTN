@@ -1,25 +1,39 @@
-// import React, { Component } from "react";
-// import StarRating from "./react-star-ratings";
+import React, { Component, useEffect, useState, useMemo } from "react";
+import { Rating } from "semantic-ui-react";
+import Axios from "axios";
 
-// class ProductRating extends Component {
-//   changeRating(newRating, name) {
-//     this.setState({
-//       rating: newRating,
-//     });
-//   }
+const ProductRating = (props) => {
+  const [rating, setRating] = useState();
+  useEffect(() => {
+    Axios({
+      method: "get",
+      url: "http://localhost:5000/api/BookInfo/RatingInfo",
+      params: {
+        bookID: props.id,
+      },
+    }).then((res) => {
+      console.log(res.data.obj);
+      setRating(res.data.obj);
+    });
+  }, []);
 
-//   render() {
-//     // rating = 2;
-//     return (
-//       <StarRatings
-//         rating={this.state.rating}
-//         starRatedColor="blue"
-//         changeRating={this.changeRating}
-//         numberOfStars={6}
-//         name="rating"
-//       />
-//     );
-//   }
-// }
+  const showRating = useMemo(() => {
+    if (rating) {
+      return (
+        <Rating
+          icon="star"
+          defaultRating={rating.averagePoint / 2}
+          maxRating={5}
+          disabled
+        />
+      );
+    }
+  }, [rating]);
 
-// export default ProductRating;
+  return (
+    <div className="card__book-rating d-flex align-items-center">
+      {showRating} <p>{rating && rating.averagePoint}</p>
+    </div>
+  );
+};
+export default ProductRating;

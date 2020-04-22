@@ -5,14 +5,13 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import GetCategories from "../utilities/GetCategories";
 import SearchBar from "../utilities/SearchBar";
 import { removeUserSession, getToken } from "../../Utils/Commons";
 import { UserContext } from "../../context/userContext";
 
-
-function Header() {
+function Header(props) {
   // const { user, refreshUser } = useContext(UserContext);
   const { token, refreshToken } = useContext(UserContext);
 
@@ -20,10 +19,9 @@ function Header() {
     removeUserSession();
     // refreshUser();
     refreshToken();
+    props.history.push("/");
   };
- 
-  
-  
+
   const loginNav = useMemo(() => {
     if (token) {
       // if (user) {
@@ -223,4 +221,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default withRouter(Header);

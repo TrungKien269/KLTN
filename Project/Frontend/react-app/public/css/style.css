@@ -1130,6 +1130,8 @@ body::-webkit-scrollbar-thumb {
 .card-body {
   padding: 1rem 1rem;
   font-size: 1.4rem;
+  display: flex;
+  flex-direction: column;
 }
 .card-product {
   width: 100%;
@@ -1137,6 +1139,10 @@ body::-webkit-scrollbar-thumb {
 /* .card-img-top {
   filter: drop-shadow(0 0.3rem 0.4rem rgba(0, 0, 0, 0.4));
 } */
+.card__book-rating{
+  margin-bottom: 1rem;
+}
+
 .card__book-title {
   height: 4.32rem;
   text-transform: capitalize;

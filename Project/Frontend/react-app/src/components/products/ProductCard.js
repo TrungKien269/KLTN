@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { Button, Modal, Container } from "react-bootstrap";
 import NumberFormat from "react-number-format";
 // import LazyLoad from "react-lazyload";
-// import ProductRating from "./ProductRating";
+import ProductRating from "./ProductRating";
 
 const ProductCard = (props) => {
   const [show, setShow] = useState(false);
@@ -112,8 +112,11 @@ const ProductCard = (props) => {
 
           <div className="card-body">
             <h5 className="card__book-title">{props.name}</h5>
+
+            <ProductRating id={props.id} />
+
             <p className="card__book-price">{props.price}</p>
-            {/* <ProductRating /> */}
+
             <button
               className="btn btn--rounded btn-fw btn--blue item-display"
               onClick={addToCart}
