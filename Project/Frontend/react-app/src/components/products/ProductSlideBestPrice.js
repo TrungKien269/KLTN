@@ -3,6 +3,7 @@ import axios from "axios";
 import OwlCarousel from "react-owl-carousel2";
 import ProductCard from "./ProductCard";
 import NumberFormat from "react-number-format";
+import { Dimmer, Loader, Image, Segment } from "semantic-ui-react";
 
 class ProductSlideBestPrice extends Component {
   constructor(props) {
@@ -42,6 +43,8 @@ class ProductSlideBestPrice extends Component {
           />
         );
       });
+    } else {
+      return <Loader active inline="centered" size="huge" />;
     }
 
     return result;

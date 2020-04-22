@@ -3,6 +3,7 @@ import axios from "axios";
 import NumberFormat from "react-number-format";
 import Swal from "sweetalert2";
 import { getToken } from "../../Utils/Commons";
+import ProductRating from "./ProductRating";
 
 class ProductDetailSection extends Component {
   constructor(props) {
@@ -36,7 +37,6 @@ class ProductDetailSection extends Component {
       method: "get",
       url: `http://localhost:5000/api/BookInfo/RelatedBook/${this.props.bookInfo}`,
     }).then((res) => {
-      console.log(res.data.obj);
       v.setState({ similarityData: res.data.obj });
     });
   }
@@ -121,6 +121,7 @@ class ProductDetailSection extends Component {
   };
 
   showDetail = (data, authors) => {
+    console.log(data.id);
     return (
       <section className="section__detail">
         <div className="container">
@@ -290,6 +291,7 @@ class ProductDetailSection extends Component {
                   <div className="title-wrapper">
                     <h3>{data.name}</h3>
                   </div>
+                  <ProductRating id={this.props.bookInfo} />
                   <div className="special-author text-dark">{}</div>
                   <h2>
                     <NumberFormat
@@ -490,7 +492,6 @@ class ProductDetailSection extends Component {
               </div>
             </div>
           </div>
-        
         </div>
       </section>
     );

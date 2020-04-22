@@ -1,12 +1,11 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Button, Comment, Form, Header } from "semantic-ui-react";
 import axios from "axios";
-import moment from 'moment';
+import moment from "moment";
 import { getToken } from "../../Utils/Commons";
 import Swal from "sweetalert2";
 
 const CommentExampleComment = (props) => {
-
   const { id } = props;
   const [data, setData] = useState([]);
   const [isLogin, setIsLogin] = useState(false);
@@ -17,8 +16,8 @@ const CommentExampleComment = (props) => {
       method: "get",
       url: "http://localhost:5000/api/BookInfo/ListComment",
       params: {
-        bookID: id
-      }
+        bookID: id,
+      },
     }).then((response) => {
       if (response.data.status) {
         setData(response.data.obj);
@@ -29,14 +28,13 @@ const CommentExampleComment = (props) => {
     if (getToken()) {
       setIsLogin(true);
     }
-    
-  }, [])
+  }, []);
 
-  const handleInputChange = ((e) => {
+  const handleInputChange = (e) => {
     setUserComment(e.target.value);
-  });
+  };
 
-  const handleSubmit = ((e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (getToken() === null || getToken() === undefined) {
       Swal.fire({
@@ -44,34 +42,35 @@ const CommentExampleComment = (props) => {
         text: "You have to sign in for this action!",
         icon: "error",
       });
-    }
-    else {
+    } else {
       axios({
         headers: {
           Authorization: "Bearer " + getToken(),
         },
-        method: "post", 
+        method: "post",
         url: "http://localhost:5000/api/BookInfo/Comment",
         params: {
-          bookID: id, 
-          text: document.getElementById("txtComment").value
-        }
+          bookID: id,
+          text: document.getElementById("txtComment").value,
+        },
       }).then((res) => {
-        if(res.data.status){
+        if (res.data.status) {
           var newComment = {
             id: parseInt(res.data.obj.id),
             bookId: res.data.obj.bookId,
             text: res.data.obj.text,
-            dateTime: moment(res.data.obj.dateTime).format('MM-DD-YYYY, hh:mm:ss'),
+            dateTime: moment(res.data.obj.dateTime).format(
+              "MM-DD-YYYY, hh:mm:ss"
+            ),
             user: {
-              name: "You"
-            }
-          }
-          setData(prev => [newComment, ...data]);
+              name: "You",
+            },
+          };
+          setData((prev) => [newComment, ...data]);
         }
-      })
+      });
     }
-  })
+  };
 
   const listComment = useMemo(() => {
     let commentArr = [];
@@ -87,12 +86,16 @@ const CommentExampleComment = (props) => {
             <Comment.Content>
               <Comment.Author as="a">
                 {Object.keys(cmt).length > 0
-                  ? isLogin ? "You" : cmt.user.fullName
+                  ? isLogin
+                    ? "You"
+                    : cmt.user.fullName
                   : ""}
               </Comment.Author>
               <Comment.Metadata>
                 {Object.keys(cmt).length > 0
-                  ? moment(new Date(cmt.dateTime)).format('MM-DD-YYYY, hh:mm:ss')
+                  ? moment(new Date(cmt.dateTime)).format(
+                      "MM-DD-YYYY, hh:mm:ss"
+                    )
                   : ""}
               </Comment.Metadata>
               <Comment.Text>
@@ -113,7 +116,7 @@ const CommentExampleComment = (props) => {
     <Comment.Group>
       <Header as="h3" dividing>
         Comments
-    </Header>
+      </Header>
 
       {listComment}
 
@@ -162,13 +165,20 @@ const CommentExampleComment = (props) => {
       </Comment> */}
 
       <Form reply onSubmit={(e) => handleSubmit(e)}>
-        <Form.TextArea id="txtComment" required 
-        onChange={(e) => handleInputChange(e)}
-         />
-        <Button content="Add Comment" labelPosition="left" icon="edit" primary />
+        <Form.TextArea
+          id="txtComment"
+          required
+          onChange={(e) => handleInputChange(e)}
+        />
+        <Button
+          content="Add Comment"
+          labelPosition="left"
+          icon="edit"
+          primary
+        />
       </Form>
     </Comment.Group>
-  )
-}
+  );
+};
 
 export default CommentExampleComment;

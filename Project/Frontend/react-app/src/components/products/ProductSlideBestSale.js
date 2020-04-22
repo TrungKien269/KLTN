@@ -4,7 +4,7 @@ import Badge from "../utilities/Badge";
 import axios from "axios";
 import OwlCarousel from "react-owl-carousel2";
 import NumberFormat from "react-number-format";
-//import 'react-owl-carousel2/style.css'; //Allows for server-side rendering.
+import { Dimmer, Loader, Image, Segment } from "semantic-ui-react";
 
 class ProductSlideBestSale extends Component {
   constructor(props) {
@@ -45,8 +45,9 @@ class ProductSlideBestSale extends Component {
           );
         }
       });
+    } else {
+      return <Loader active inline="centered" size="huge" />;
     }
-
     return result;
   };
 
