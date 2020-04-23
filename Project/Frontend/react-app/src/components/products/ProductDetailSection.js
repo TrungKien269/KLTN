@@ -301,7 +301,9 @@ class ProductDetailSection extends Component {
                       prefix={"VND "}
                     ></NumberFormat>
                   </h2>
-                  <div className="detail__describe">{data.summary}</div>
+                  <div className="detail__describe" 
+                  dangerouslySetInnerHTML={{__html: data.summary}}>
+                  </div>
                   <div className="row">
                     <div className="col-md-6">
                       <div className="quantity buttons_added d-flex flex-row mar-top-2">
@@ -403,7 +405,7 @@ class ProductDetailSection extends Component {
                       </tr>
                       <tr className="Description">
                         <td className="first">Summary</td>
-                        <td>{data.summary}</td>
+                        <td dangerouslySetInnerHTML={{__html: data.summary}}></td>
                       </tr>
                     </tbody>
                   </table>

@@ -86,9 +86,7 @@ const CommentExampleComment = (props) => {
             <Comment.Content>
               <Comment.Author as="a">
                 {Object.keys(cmt).length > 0
-                  ? isLogin
-                    ? "You"
-                    : cmt.user.fullName
+                  ? cmt.user.fullName
                   : ""}
               </Comment.Author>
               <Comment.Metadata>

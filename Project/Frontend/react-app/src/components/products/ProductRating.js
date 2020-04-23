@@ -4,6 +4,7 @@ import Axios from "axios";
 
 const ProductRating = (props) => {
   const [rating, setRating] = useState();
+  
   useEffect(() => {
     Axios({
       method: "get",
@@ -22,8 +23,8 @@ const ProductRating = (props) => {
       return (
         <Rating
           icon="star"
-          defaultRating={rating.averagePoint / 2}
-          maxRating={5}
+          defaultRating={rating.averagePoint}
+          maxRating={10}
           disabled
           size="huge"
         />
