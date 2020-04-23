@@ -188,6 +188,7 @@ const OrderStatus = () => {
         return (
           <div className="order-block">
             <button
+              className="btn btn--red btn--rounded btn-fit"
               onClick={(e) => {
                 handleCancel(order.id);
               }}
