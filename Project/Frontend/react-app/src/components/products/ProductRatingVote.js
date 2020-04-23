@@ -22,7 +22,7 @@ const ProductRatingVote = (props) => {
         url: "http://localhost:5000/api/BookInfo/RateBook",
         params: {
           bookID: props.id,
-          point: rate.rating,
+          point: rate.rating * 2,
         },
       }).then((res) => {
         if (res.data.status) {
@@ -55,7 +55,7 @@ const ProductRatingVote = (props) => {
       );
     } else {
       return (
-        <Rating maxRating={10} onRate={handleRate} size="massive" icon="star" />
+        <Rating maxRating={5} onRate={handleRate} size="massive" icon="star" />
       );
     }
   }, [submit]);

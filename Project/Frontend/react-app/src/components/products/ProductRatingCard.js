@@ -22,8 +22,8 @@ const ProductRatingCard = (props) => {
       return (
         <Rating
           icon="star"
-          defaultRating={rating.averagePoint}
-          maxRating={10}
+          defaultRating={rating.averagePoint/2}
+          maxRating={5}
           disabled
           size="huge"
         />
