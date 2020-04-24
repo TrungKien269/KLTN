@@ -5,7 +5,7 @@ import NumberFormat from "react-number-format";
 import Swal from "sweetalert2";
 import { withRouter, Link } from "react-router-dom";
 
-const ProceedCheckout = props => {
+const ProceedCheckout = (props) => {
   var order = [];
   var proceedOrder = [];
   var orderTotal = 0;
@@ -19,37 +19,37 @@ const ProceedCheckout = props => {
   const phoneRef = useRef(null);
   const addressRef = useRef(null);
 
-  const handleNameChange = event => {
+  const handleNameChange = (event) => {
     setFullName(event.target.value);
   };
 
-  const handlePhoneChange = event => {
+  const handlePhoneChange = (event) => {
     setPhoneNumber(event.target.value);
   };
 
-  const handleAdressChange = event => {
+  const handleAdressChange = (event) => {
     setAddress(event.target.value);
   };
 
   useEffect(() => {
     Axios({
       headers: {
-        Authorization: "Bearer " + getToken()
+        Authorization: "Bearer " + getToken(),
       },
       method: "get",
-      url: "http://localhost:5000/api/ProceedOrder/ListCartBook"
-    }).then(res => {
+      url: "http://localhost:5000/api/ProceedOrder/ListCartBook",
+    }).then((res) => {
       setCartBook(res.data.obj);
     });
   }, []);
   useEffect(() => {
     Axios({
       headers: {
-        Authorization: "Bearer " + getToken()
+        Authorization: "Bearer " + getToken(),
       },
       method: "get",
-      url: "http://localhost:5000/api/ProceedOrder/OrderUserInfo"
-    }).then(res => {
+      url: "http://localhost:5000/api/ProceedOrder/OrderUserInfo",
+    }).then((res) => {
       setUserInfor(res.data.obj);
       setFullName(res.data.obj.fullName);
       setPhoneNumber(res.data.obj.phoneNumber);
@@ -66,7 +66,7 @@ const ProceedCheckout = props => {
         order.push({
           bookID: x[i].bookId,
           currentPrice: x[i].book.currentPrice,
-          quantity: x[i].quantity
+          quantity: x[i].quantity,
         });
       }
     }
@@ -74,7 +74,7 @@ const ProceedCheckout = props => {
   }, [cartBook, orderTotal]);
 
   const handleSubmit = () => {
-    if(proceedOrder.length > 0){
+    if (proceedOrder.length > 0) {
       Swal.fire({
         title: "Confirm",
         text: "Do you want to check out?",
@@ -82,63 +82,62 @@ const ProceedCheckout = props => {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, check out!"
-      }).then(result => {
+        confirmButtonText: "Yes, check out!",
+      }).then((result) => {
         if (result.value) {
           Axios({
             headers: {
-              Authorization: "Bearer " + getToken()
+              Authorization: "Bearer " + getToken(),
             },
             method: "post",
             url: "http://localhost:5000/api/ProceedOrder/CODCheckout",
             params: {
               fullName: fullName,
               phoneNumber: phonenumber,
-              address: address
+              address: address,
             },
-            data: proceedOrder
+            data: proceedOrder,
           })
-            .then(res => {
+            .then((res) => {
               if (res.data.status) {
                 setCartBook(null);
                 Swal.fire({
                   title: "Success",
                   text: "Your order is on processing",
                   icon: "success",
-                  confirmButtonText: "Back to store"
+                  confirmButtonText: "Back to store",
                 }).then(() => {
                   props.history.push("/collections/");
                   Axios({
                     headers: {
-                      Authorization: "Bearer " + getToken()
+                      Authorization: "Bearer " + getToken(),
                     },
                     method: "delete",
-                    url: "http://localhost:5000/api/UserCart/ResetCart"
+                    url: "http://localhost:5000/api/UserCart/ResetCart",
                   });
                 });
               } else {
                 Swal.fire({
                   title: "Error",
                   text: res.data.message,
-                  icon: "error"
+                  icon: "error",
                 });
               }
             })
-            .catch(err => {
+            .catch((err) => {
               Swal.fire({
                 title: "Error",
                 text: err,
-                icon: "error"
+                icon: "error",
               });
             });
         }
       });
-    }
-    else{
+    } else {
       Swal.fire({
         title: "Error",
         text: "You must select one or more books before checking out!",
-        icon: "error"
+        icon: "error",
       });
     }
   };
@@ -150,7 +149,7 @@ const ProceedCheckout = props => {
       x = cartBook.cartBook;
       if (x.length > 0) {
         for (let i = 0; i < x.length; i++) {
-          orderBlock = x.map(item => {
+          orderBlock = x.map((item) => {
             return (
               <div className="product-block">
                 <div className="row">
@@ -220,7 +219,7 @@ const ProceedCheckout = props => {
                   id="name"
                   defaultValue={userInfor && userInfor.fullName}
                   ref={fullNameRef}
-                  onChange={e => handleNameChange(e)}
+                  onChange={(e) => handleNameChange(e)}
                 />
                 <input
                   type="number"
@@ -228,7 +227,7 @@ const ProceedCheckout = props => {
                   id="number"
                   defaultValue={userInfor && userInfor.phoneNumber}
                   ref={phoneRef}
-                  onChange={e => handlePhoneChange(e)}
+                  onChange={(e) => handlePhoneChange(e)}
                 />
 
                 <textarea
@@ -239,9 +238,9 @@ const ProceedCheckout = props => {
                   placeholder="Your detail address"
                   defaultValue={userInfor && userInfor.address}
                   ref={addressRef}
-                  onChange={e => handleAdressChange(e)}
+                  onChange={(e) => handleAdressChange(e)}
                 />
-                <input 
+                <input
                   type="button"
                   defaultValue="Confirm your order"
                   className="btn btn--rounded btn-fit btn--blue"

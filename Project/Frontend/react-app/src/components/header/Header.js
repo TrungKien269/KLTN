@@ -100,6 +100,7 @@ function Header(props) {
             <img src={process.env.PUBLIC_URL + "/img/logo.png"} alt="" />
           </Link>
           <SearchBar />
+
           {loginNav}
         </div>
       </nav>
