@@ -9,22 +9,22 @@ const SearchBar = (props) => {
   const [search, setSearch] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
 
-  // useEffect(() => {
-  //   if (getToken()) {
-  //     axios({
-  //       headers: {
-  //         Authorization: "Bearer " + getToken(),
-  //       },
-  //       method: "get",
-  //       url: "http://localhost:5000/api/Main/SearchHistory",
-  //     }).then((response) => {
-  //       if (response.data.status) {
-  //         console.log(response.data.obj);
-  //         setSearchHistory(response.data.obj);
-  //       }
-  //     });
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (getToken()) {
+      axios({
+        headers: {
+          Authorization: "Bearer " + getToken(),
+        },
+        method: "get",
+        url: "http://localhost:5000/api/Main/SearchHistory",
+      }).then((response) => {
+        if (response.data.status) {
+          console.log(response.data.obj);
+          setSearchHistory(response.data.obj);
+        }
+      });
+    }
+  }, []);
 
   const sHistory = useMemo(() => {
     let results = [];
@@ -41,22 +41,40 @@ const SearchBar = (props) => {
   }, [searchHistory]);
 
   const handleSearch = (event) => {
+    if (getToken()) {
+      axios({
+        headers: {
+          Authorization: "Bearer " + getToken(),
+        },
+        method: "get",
+        url: "http://localhost:5000/api/Main/SearchHistory",
+      }).then((response) => {
+        if (response.data.status) {
+          console.log(response.data.obj);
+          setSearchHistory(response.data.obj);
+        }
+      });
+    }
     if (event.key === "Enter") {
       let value = event.target.value;
-      if (getToken()) {
-        axios({
-          headers: {
-            Authorization: "Bearer " + getToken(),
-          },
-          method: "get",
-          url: "http://localhost:5000/api/Main/SearchHistory",
-        }).then((response) => {
-          if (response.data.status) {
-            console.log(response.data.obj);
-            setSearchHistory(response.data.obj);
-          }
-        });
-      }
+<<<<<<< HEAD
+      // if (getToken()) {
+      //   axios({
+      //     headers: {
+      //       Authorization: "Bearer " + getToken(),
+      //     },
+      //     method: "get",
+      //     url: "http://localhost:5000/api/Main/SearchHistory",
+      //   }).then((response) => {
+      //     if (response.data.status) {
+      //       console.log(response.data.obj);
+      //       setSearchHistory(response.data.obj);
+      //     }
+      //   });
+      // }
+=======
+
+>>>>>>> 3e2ce78baf1759422fd351c95c03c75e0495cf19
       setSearch(value);
       if (value != "") {
         let routeString = `?search=${value}`;
@@ -80,7 +98,7 @@ const SearchBar = (props) => {
           },
         }).then((response) => {
           if (response.data.status) {
-            // setSearchHistory((prev) => [response.data.obj, ...prev]);
+            setSearchHistory((prev) => [response.data.obj, ...prev]);
           }
         });
       }
