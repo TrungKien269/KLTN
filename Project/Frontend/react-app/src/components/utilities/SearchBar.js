@@ -57,32 +57,11 @@ const SearchBar = (props) => {
     }
     if (event.key === "Enter") {
       let value = event.target.value;
-      // if (getToken()) {
-      //   axios({
-      //     headers: {
-      //       Authorization: "Bearer " + getToken(),
-      //     },
-      //     method: "get",
-      //     url: "http://localhost:5000/api/Main/SearchHistory",
-      //   }).then((response) => {
-      //     if (response.data.status) {
-      //       console.log(response.data.obj);
-      //       setSearchHistory(response.data.obj);
-      //     }
-      //   });
-      // }
 
       setSearch(value);
       if (value != "") {
         let routeString = `?search=${value}`;
         props.history.push("/collections/" + routeString);
-        // var newSearchHistory = {
-        //   id: 3,
-        //   userId: 4002,
-        //   words: value,
-        //   dateTime: moment().toISOString(),
-        //   user: null
-        // }
 
         axios({
           headers: {
