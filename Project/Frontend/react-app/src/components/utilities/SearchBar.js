@@ -41,22 +41,23 @@ const SearchBar = (props) => {
   }, [searchHistory]);
 
   const handleSearch = (event) => {
+    if (getToken()) {
+      axios({
+        headers: {
+          Authorization: "Bearer " + getToken(),
+        },
+        method: "get",
+        url: "http://localhost:5000/api/Main/SearchHistory",
+      }).then((response) => {
+        if (response.data.status) {
+          console.log(response.data.obj);
+          setSearchHistory(response.data.obj);
+        }
+      });
+    }
     if (event.key === "Enter") {
       let value = event.target.value;
-      if (getToken()) {
-        axios({
-          headers: {
-            Authorization: "Bearer " + getToken(),
-          },
-          method: "get",
-          url: "http://localhost:5000/api/Main/SearchHistory",
-        }).then((response) => {
-          if (response.data.status) {
-            console.log(response.data.obj);
-            setSearchHistory(response.data.obj);
-          }
-        });
-      }
+
       setSearch(value);
       if (value != "") {
         let routeString = `?search=${value}`;
