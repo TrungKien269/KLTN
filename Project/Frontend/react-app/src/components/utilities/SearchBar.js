@@ -9,22 +9,22 @@ const SearchBar = (props) => {
   const [search, setSearch] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
 
-  useEffect(() => {
-    if (getToken()) {
-      axios({
-        headers: {
-          Authorization: "Bearer " + getToken(),
-        },
-        method: "get",
-        url: "http://localhost:5000/api/Main/SearchHistory",
-      }).then((response) => {
-        if (response.data.status) {
-          console.log(response.data.obj);
-          setSearchHistory(response.data.obj);
-        }
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (getToken()) {
+  //     axios({
+  //       headers: {
+  //         Authorization: "Bearer " + getToken(),
+  //       },
+  //       method: "get",
+  //       url: "http://localhost:5000/api/Main/SearchHistory",
+  //     }).then((response) => {
+  //       if (response.data.status) {
+  //         console.log(response.data.obj);
+  //         setSearchHistory(response.data.obj);
+  //       }
+  //     });
+  //   }
+  // }, []);
 
   const sHistory = useMemo(() => {
     let results = [];
@@ -43,20 +43,20 @@ const SearchBar = (props) => {
   const handleSearch = (event) => {
     if (event.key === "Enter") {
       let value = event.target.value;
-      // if (getToken()) {
-      //   axios({
-      //     headers: {
-      //       Authorization: "Bearer " + getToken(),
-      //     },
-      //     method: "get",
-      //     url: "http://localhost:5000/api/Main/SearchHistory",
-      //   }).then((response) => {
-      //     if (response.data.status) {
-      //       console.log(response.data.obj);
-      //       setSearchHistory(response.data.obj);
-      //     }
-      //   });
-      // }
+      if (getToken()) {
+        axios({
+          headers: {
+            Authorization: "Bearer " + getToken(),
+          },
+          method: "get",
+          url: "http://localhost:5000/api/Main/SearchHistory",
+        }).then((response) => {
+          if (response.data.status) {
+            console.log(response.data.obj);
+            setSearchHistory(response.data.obj);
+          }
+        });
+      }
       setSearch(value);
       if (value != "") {
         let routeString = `?search=${value}`;
@@ -80,7 +80,7 @@ const SearchBar = (props) => {
           },
         }).then((response) => {
           if (response.data.status) {
-            setSearchHistory((prev) => [response.data.obj, ...prev]);
+            // setSearchHistory((prev) => [response.data.obj, ...prev]);
           }
         });
       }
