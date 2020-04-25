@@ -48,15 +48,50 @@ namespace BookStoreAPI.Controllers
         }
 
         [HttpPost("GoogleSignin")]
-        public async Task<Response> GoogleSignin(string email)
+        public async Task<Response> GoogleSignin(string email, string fullName)
         {
-            var response = await loginBal.LoginByGoogle(email);
-            if (response.Status is true)
+            //var response = await loginBal.LoginByGoogle(email);
+            //if (response.Status is true)
+            //{
+            //    response.Token = JWTHelper.CreateUserToken((response.Obj as Account).Id);
+            //    return response;
+            //}
+            //return response;
+            var checkResponse = await loginBal.LoginByGoogle(email);
+            if (checkResponse.Status)
             {
-                response.Token = JWTHelper.CreateUserToken((response.Obj as Account).Id);
-                return response;
+                checkResponse.Token = JWTHelper.CreateUserToken((checkResponse.Obj as Account).Id);
+                return checkResponse;
             }
-            return response;
+            else
+            {
+                var account = new Account
+                {
+                    Username = email,
+                    Password = email,
+                    Email = email
+                };
+                var user = new User
+                {
+                    FullName = fullName,
+                    Gender = "Male",
+                    Birthday = DateTime.Now,
+                    PhoneNumber = "090",
+                    Address = "Address",
+                    Account = account
+                };
+
+                var response = await loginBal.Signup(user);
+                if (response.Status is true)
+                {
+                    response.Token = JWTHelper.CreateUserToken((response.Obj as User).Id);
+                    return response;
+                }
+                else
+                {
+                    return response;
+                }
+            }
         }
 
         [HttpPost("FacebookSignin")]

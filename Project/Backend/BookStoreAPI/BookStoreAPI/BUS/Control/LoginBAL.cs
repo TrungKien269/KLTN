@@ -32,7 +32,8 @@ namespace BookStoreAPI.BUS.Control
 
         public async Task<Response> LoginByGoogle(string email)
         {
-            return await accountBal.LoginByGoogle(email);
+            //return await accountBal.LoginByGoogle(email);
+            return await accountBal.CheckGoogleAccount(email);
         }
 
         public async Task<Response> SetCookieForAccount(string cookie, Account account)
@@ -84,6 +85,19 @@ namespace BookStoreAPI.BUS.Control
         public async Task<Response> SignupWithFacebook(User user)
         {
             user = await SettingFielsFaceBook(user);
+            return await this.userBal.Create(user);
+        }
+
+        public async Task<User> SettingFielsGoogle(User user)
+        {
+            var nextID = int.Parse((await userBal.GetNextID()).Obj.ToString());
+            user.Id = nextID;
+            return await Task.FromResult<User>(user);
+        }
+
+        public async Task<Response> SignupWithGoogle(User user)
+        {
+            user = await SettingFielsGoogle(user);
             return await this.userBal.Create(user);
         }
     }
