@@ -57,7 +57,6 @@ const SearchBar = (props) => {
     }
     if (event.key === "Enter") {
       let value = event.target.value;
-<<<<<<< HEAD
       // if (getToken()) {
       //   axios({
       //     headers: {
@@ -72,9 +71,7 @@ const SearchBar = (props) => {
       //     }
       //   });
       // }
-=======
 
->>>>>>> 3e2ce78baf1759422fd351c95c03c75e0495cf19
       setSearch(value);
       if (value != "") {
         let routeString = `?search=${value}`;
