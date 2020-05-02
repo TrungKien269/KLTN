@@ -87,9 +87,10 @@ const SearchBar = (props) => {
         {/* <input type="text" placeholder="Search" onKeyPress={(e) => Search(e)} />
         <i className="fas fa-search" /> */}
         <Search
-          results={sHistory}
-          noResultsMessage="history is empty"
+          // results={sHistory}
+          // noResultsMessage="history is empty"
           onKeyDown={(e) => handleSearch(e)}
+          className=""
         />
       </div>
     </React.Fragment>
