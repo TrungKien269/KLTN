@@ -20,6 +20,7 @@ namespace BookStoreAPI.Models.Objects
         [Column(TypeName = "datetime")]
         public DateTime CreatedDate { get; set; }
         public int Total { get; set; }
+        public int ShippingFee { get; set; }
         [Required]
         public string FullName { get; set; }
         [Required]
@@ -27,6 +28,9 @@ namespace BookStoreAPI.Models.Objects
         public string PhoneNumber { get; set; }
         [Required]
         public string Address { get; set; }
+        [Required]
+        [StringLength(10)]
+        public string Type { get; set; }
         [Required]
         [StringLength(100)]
         public string Status { get; set; }

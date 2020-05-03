@@ -19,6 +19,7 @@ namespace BookStoreAPI.Models.Objects
         [Column(TypeName = "datetime")]
         public DateTime EndedDate { get; set; }
         public string Description { get; set; }
+        public int IsExpired { get; set; }
 
         [InverseProperty("Promotion")]
         public virtual ICollection<PromotionDetail> PromotionDetail { get; set; }

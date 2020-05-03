@@ -72,7 +72,9 @@ namespace BookStoreAPI.BUS.Logic
                     Address = orderRequest.Address,
                     CreatedDate = DateTime.Now,
                     Status = "Processing", 
-                    UserId = userID, 
+                    UserId = userID,
+                    ShippingFee = orderRequest.ShippingFee,
+                    Type = orderRequest.Type,
                     Total = orderDetailRequests.Sum(x => x.Quantity * x.CurrentPrice)
                 };
 
