@@ -1,17 +1,3 @@
-jQuery("button.show-reply").each(function (index) {
-  jQuery(this).attr("id", this.id + index);
-});
-
-jQuery(".reply__group").each(function (index) {
-  jQuery(this).attr("id", this.id + index);
-});
-
-jQuery(".cmt__group").each(function (index) {
-  jQuery("#show-reply" + index).click(function () {
-    jQuery("#reply" + index).slideToggle("slow", function () {});
-  });
-});
-
 $("#active-exp li a").click(function () {
   $(this).parent().addClass("active").siblings().removeClass("active");
 });
@@ -27,7 +13,6 @@ function closeNav() {
   document.getElementById("mySidenav").style.boxShadow =
     "0 10rem 10rem 20rem rgba(0,0,0,0)";
 }
-
 
 function myFunction() {
   var x = document.getElementById("comment__form");

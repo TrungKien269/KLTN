@@ -88,10 +88,6 @@ const ProductCard = (props) => {
       });
   };
 
-  const handleQuickview = (e) => {
-    console.log(props.id);
-  };
-
   return (
     <React.Fragment>
       <Modal show={show} size="lg" onHide={handleClose}>
@@ -129,11 +125,10 @@ const ProductCard = (props) => {
             <span className="badge__utilities-blue" onClick={addToWishList}>
               <i className="fas fa-heart" />
             </span>
-            <a data-toggle="modal" data-target="#modalQuickview">
-              <span className="badge__utilities-blue" onClick={handleShow}>
-                <i className="fas fa-search" />
-              </span>
-            </a>
+
+            <span className="badge__utilities-blue" onClick={handleShow}>
+              <i className="fas fa-search" />
+            </span>
           </div>
         </div>
       </Link>

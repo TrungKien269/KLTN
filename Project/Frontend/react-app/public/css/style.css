@@ -759,6 +759,7 @@ body::-webkit-scrollbar-thumb {
   font-size: 2.5rem;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .nav__social-icon a {
   color: #5e5e5e;
@@ -767,7 +768,9 @@ body::-webkit-scrollbar-thumb {
   text-decoration: none;
 }
 .nav__social-icon svg {
-  margin: 0 1rem;
+  margin-right: 1rem;
+  color: #03a9f4;
+  font-size: 3rem;
 }
 
 .nav-item:not(:last-child) {
@@ -3295,4 +3298,18 @@ h1 {
 .ui.massive.rating {
   font-size: 3rem;
 }
+.ui.icon.input {
+  width: 100%;
+}
+.header-avatar {
+  height: 4rem;
+  width: 4rem;
+  margin-left: 1rem;
+}
 
+.user__ava-signin {
+  font-size: 1.4rem;
+  border-radius: 30px;
+  border: 1px solid #bbbbbb;
+  padding: 0.5rem 0.5rem;
+}

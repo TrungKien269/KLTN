@@ -10,10 +10,12 @@ import GetCategories from "../utilities/GetCategories";
 import SearchBar from "../utilities/SearchBar";
 import { removeUserSession, getToken } from "../../Utils/Commons";
 import { UserContext } from "../../context/userContext";
+import Axios from "axios";
 
-function Header(props) {
+const Header = (props) => {
   // const { user, refreshUser } = useContext(UserContext);
   const { token, refreshToken } = useContext(UserContext);
+  const [user, setUser] = useState();
 
   const handleLogout = () => {
     removeUserSession();
@@ -21,6 +23,20 @@ function Header(props) {
     refreshToken();
     props.history.push("/");
   };
+
+  useEffect(() => {
+    if (token) {
+      Axios({
+        headers: {
+          Authorization: "Bearer " + getToken(),
+        },
+        method: "get",
+        url: "http://localhost:5000/api/UserProfile/Profile",
+      }).then((res) => {
+        setUser(res.data.obj);
+      });
+    }
+  }, []);
 
   const loginNav = useMemo(() => {
     if (token) {
@@ -34,13 +50,13 @@ function Header(props) {
               data-placement="bottom"
               title="Wish list"
             >
-              <i className="fas fa-heart"></i>
+              <i class="fab fa-gratipay"></i>
             </Link>
           </div>
 
           <div className="dropdown">
             <Link to="/cart">
-              <i className="fas fa-shopping-cart" />
+              <i class="fab fa-opencart"></i>
             </Link>
           </div>
 
@@ -52,7 +68,13 @@ function Header(props) {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <i className="far fa-user" />
+              {/* <i className="far fa-user" /> */}
+              <div className="user__ava-signin d-flex align-items-center">
+                {user && user.fullName}
+                <span className="header-avatar">
+                  <img className="img img-cover" src="../img/19-512.png" />
+                </span>
+              </div>
             </a>
             <div
               className="dropdown-menu mega-menu mega-menu-sm "
@@ -90,12 +112,12 @@ function Header(props) {
         </div>
       );
     }
-  }, [token]);
+  }, [token, user]);
 
   return (
     <React.Fragment>
-      <nav className="navbar navbar-shadow justify-content-between">
-        <div className="container">
+      <nav className="navbar navbar-shadow">
+        <div className="container justify-content-between">
           <Link to="/" className="navbar-sm-brand">
             <img src={process.env.PUBLIC_URL + "/img/logo.png"} alt="" />
           </Link>
@@ -220,6 +242,6 @@ function Header(props) {
       </nav>
     </React.Fragment>
   );
-}
+};
 
 export default withRouter(Header);
