@@ -6,6 +6,7 @@ using BookStoreAPI.BUS.Logic;
 using BookStoreAPI.Helper;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
+using BookStoreAPI.Models.Promotion;
 
 namespace BookStoreAPI.BUS.Control
 {
@@ -20,6 +21,8 @@ namespace BookStoreAPI.BUS.Control
         private FormBookBAL formBookBal;
         private SupplierBAL supplierBal;
         private PublisherBAL publisherBal;
+        private PromotionBAL promotionBal;
+        private CRUDPromotionBAL crudPromotionBal;
 
         public AdminBAL()
         {
@@ -32,6 +35,8 @@ namespace BookStoreAPI.BUS.Control
             formBookBal = new FormBookBAL();
             supplierBal = new SupplierBAL();
             publisherBal = new PublisherBAL();
+            promotionBal = new PromotionBAL();
+            crudPromotionBal = new CRUDPromotionBAL();
         }
 
         public async Task<Response> GetListProcessing()
@@ -109,6 +114,37 @@ namespace BookStoreAPI.BUS.Control
         public async Task<Response> StatisticsTop3Users()
         {
             return await bookBal.StatisticsTop3Users();
+        }
+
+        public async Task<Response> GetListPromotion()
+        {
+            return await promotionBal.GetListPromotion();
+        }
+
+        public async Task<Response> CreatePromotion(PromotionRequest promotionRequest,
+            List<PromotionDetailRequest> promotionDetailRequests)
+        {
+            return await crudPromotionBal.CreatePromotionProcess(promotionRequest, promotionDetailRequests);
+        }
+
+        public async Task<Response> UpdatePromotion(Promotion promotion)
+        {
+            return await promotionBal.UpdatePromotion(promotion);
+        }
+
+        public async Task<Response> CreatePromotionDetail(PromotionDetail promotionDetail)
+        {
+            return await promotionBal.CreatePromotionDetail(promotionDetail);
+        }
+
+        public async Task<Response> UpdatePromotionDetail(PromotionDetail promotionDetail)
+        {
+            return await promotionBal.UpdatePromotionDetail(promotionDetail);
+        }
+
+        public async Task<Response> DeletePromotionDetail(int promotionID, string bookID)
+        {
+            return await promotionBal.DeletePromotionDetail(promotionID, bookID);
         }
     }
 }

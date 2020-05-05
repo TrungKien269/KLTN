@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BookStoreAPI.BUS.Control;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
+using BookStoreAPI.Models.Promotion;
 using BookStoreAPI.Models.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -72,8 +73,8 @@ namespace BookStoreAPI.Controllers
 
         [Authorize(Roles = "Administrator")]
         [HttpPost("InsertUpdateBook")]
-        public async Task<Response> InsertOrUpdate(BookRequest bookRequest, List<Author> authors, List<string> images, int cateID,
-            int formID, int supplierID, int publisherID)
+        public async Task<Response> InsertOrUpdate(BookRequest bookRequest, [FromBody] List<string> authors,
+            List<string> images, int cateID, int formID, int supplierID, int publisherID)
         {
             var book = new Book
             {
@@ -89,7 +90,17 @@ namespace BookStoreAPI.Controllers
                 Status = bookRequest.Status
             };
 
-            return await adminBal.InsertBook(book, authors, images, cateID, formID, supplierID, publisherID);
+            var listAuthor = new List<Author>();
+            authors.ForEach(x =>
+            {
+                listAuthor.Add(new Author
+                {
+                    Id = 0,
+                    Name = x
+                });
+            });
+
+            return await adminBal.InsertBook(book, listAuthor, images, cateID, formID, supplierID, publisherID);
         }
 
         [Authorize(Roles = "Administrator")]
@@ -111,6 +122,61 @@ namespace BookStoreAPI.Controllers
         public async Task<Response> StatisticsTop3Users()
         {
             return await adminBal.StatisticsTop3Users();
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("ListPromotion")]
+        public async Task<Response> GetListPromotion()
+        {
+            return await adminBal.GetListPromotion();
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPost("CreatePromotion")]
+        public async Task<Response> CreatePromotion(PromotionRequest promotionRequest,
+            [FromBody]List<PromotionDetailRequest> promotionDetailRequests)
+        {
+            return await adminBal.CreatePromotion(promotionRequest, promotionDetailRequests);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPut("UpdatePromotion")]
+        public async Task<Response> UpdatePromotion(Promotion promotion)
+        {
+            return await adminBal.UpdatePromotion(promotion);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPost("CreatePromotionDetail")]
+        public async Task<Response> CreatePromotionDetail(PromotionDetailRequest promotionDetailRequest)
+        {
+            var promotionDetail = new PromotionDetail
+            {
+                PromotionId = promotionDetailRequest.PromotionID,
+                BookId = promotionDetailRequest.BookID,
+                Discount = promotionDetailRequest.Discount
+            };
+            return await adminBal.CreatePromotionDetail(promotionDetail);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPut("UpdatePromotionDetail")]
+        public async Task<Response> UpdatePromotionDetail(PromotionDetailRequest promotionDetailRequest)
+        {
+            var promotionDetail = new PromotionDetail
+            {
+                PromotionId = promotionDetailRequest.PromotionID,
+                BookId = promotionDetailRequest.BookID,
+                Discount = promotionDetailRequest.Discount
+            };
+            return await adminBal.UpdatePromotionDetail(promotionDetail);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpDelete("DeletePromotionDetail")]
+        public async Task<Response> DeletePromotionDetail(int promotionID, string bookID)
+        {
+            return await adminBal.DeletePromotionDetail(promotionID, bookID);
         }
     }
 }

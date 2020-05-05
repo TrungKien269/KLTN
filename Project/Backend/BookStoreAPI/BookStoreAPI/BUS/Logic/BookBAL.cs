@@ -490,7 +490,6 @@ namespace BookStoreAPI.BUS.Logic
                 }
                 else
                 {
-                    book.Id = SecureHelper.GetSecureOutput(book.Id);
                     return new Response("Success", true, 1, book);
                 }
             }
