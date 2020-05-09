@@ -40,6 +40,7 @@ namespace BookStoreAPI
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
+            services.Configure<PayPalSettings>(Configuration.GetSection("PayPal"));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -154,6 +155,8 @@ namespace BookStoreAPI
             });
 
             StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe")["SecretKey"]);
+            PayPalSettings.ClientId = Configuration.GetSection("PayPal")["ClientId"];
+            PayPalSettings.Secret = Configuration.GetSection("PayPal")["Secret"];
         }
     }
 }
