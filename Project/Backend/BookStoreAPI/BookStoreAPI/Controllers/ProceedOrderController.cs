@@ -61,7 +61,7 @@ namespace BookStoreAPI.Controllers
 
         [HttpPost("CODCheckout")]
         [Authorize]
-        public async Task<Response> CreateUserOrder(OrderRequest orderRequest,
+        public async Task<Response> CreateUserOrder(string email, OrderRequest orderRequest,
             [FromBody]List<OrderDetailRequest> orderDetailRequests)
         {
             string accessToken = HttpContext.Request.Headers["Authorization"];
@@ -73,7 +73,47 @@ namespace BookStoreAPI.Controllers
             else
             {
                 int userID = Int32.Parse(checkToken);
-                return await userOrderBal.CreateOrderProcess(orderRequest, orderDetailRequests, userID);
+                var response = await userOrderBal.CreateTransactionCOD(orderRequest, orderDetailRequests, userID);
+                await OrderMailHelper.SendEmail(email, orderRequest, orderDetailRequests);
+                return response;
+            }
+        }
+
+        [HttpPost("CardCheckout")]
+        [Authorize]
+        public async Task<Response> OnlineCharge(string stripeEmail, string stripeToken, OrderRequest orderRequest,
+            [FromBody]List<OrderDetailRequest> orderDetailRequests)
+        {
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                return await userOrderBal.CreateTransactionStripe(stripeEmail, stripeToken, orderRequest,
+                    orderDetailRequests, userID);
+            }
+        }
+
+        [HttpPost("PayPalCheckout")]
+        [Authorize]
+        public async Task<Response> PayPalCharge(string email, string paypalOrderID, OrderRequest orderRequest,
+            [FromBody]List<OrderDetailRequest> orderDetailRequests)
+        {
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                return await userOrderBal.CreateTransactionPayPal(email, paypalOrderID, orderRequest,
+                    orderDetailRequests, userID);
             }
         }
     }

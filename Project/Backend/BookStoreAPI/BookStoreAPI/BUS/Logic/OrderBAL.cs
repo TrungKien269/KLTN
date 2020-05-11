@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookStoreAPI.Helper;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Checkout;
 using BookStoreAPI.Models.Objects;
@@ -37,7 +38,9 @@ namespace BookStoreAPI.BUS.Logic
             {
                 await context.Order.AddAsync(order);
                 var check = await context.SaveChangesAsync();
-                return new Response("Success", true, 1, order);
+                if (check is 1)
+                    return new Response("Success", true, 1, order);
+                return Response.CatchError("Error when Create Order");
             }
             catch (Exception e)
             {
@@ -51,7 +54,9 @@ namespace BookStoreAPI.BUS.Logic
             {
                 await context.OrderDetail.AddAsync(orderDetail);
                 var check = await context.SaveChangesAsync();
-                return new Response("Success", true, 1, orderDetail);
+                if (check is 1)
+                    return new Response("Success", true, 1, orderDetail);
+                return Response.CatchError("Error when Create Order Detail");
             }
             catch (Exception e)
             {
@@ -71,14 +76,16 @@ namespace BookStoreAPI.BUS.Logic
                     PhoneNumber = orderRequest.PhoneNumber,
                     Address = orderRequest.Address,
                     CreatedDate = DateTime.Now,
-                    Status = "Processing", 
+                    Status = "Processing",
                     UserId = userID,
                     ShippingFee = orderRequest.ShippingFee,
                     Type = orderRequest.Type,
                     Total = orderDetailRequests.Sum(x => x.Quantity * x.CurrentPrice)
                 };
 
-                await CreateOrder(order);
+                var response = await CreateOrder(order);
+                if (response.Status is false)
+                    throw new Exception(response.Message);
 
                 order.OrderDetail = new List<OrderDetail>();
                 foreach (var orderDetailRequest in orderDetailRequests)
@@ -90,15 +97,84 @@ namespace BookStoreAPI.BUS.Logic
                         Quantity = orderDetailRequest.Quantity
                     };
                     order.OrderDetail.Add(orderDetail);
-                    await CreateOrderDetail(orderDetail);
+                    response = await CreateOrderDetail(orderDetail);
+                    if (response.Status is false)
+                        throw new Exception(response.Message);
                 }
-
                 return new Response("Success", true, 1, order);
             }
             catch (Exception e)
             {
                 return Response.CatchError(e.Message);
             }
+        }
+
+        public async Task<Response> CreateTransactionCOD(OrderRequest orderRequest,
+            List<OrderDetailRequest> orderDetailRequests, int userID)
+        {
+            var transaction = await context.Database.BeginTransactionAsync();
+            var task = await CreateOrderProcess(orderRequest, orderDetailRequests, userID);
+            if (task.Status)
+            {
+
+                transaction.Commit();
+            }
+            else
+            {
+                transaction.Rollback();
+            }
+            return task;
+        }
+
+        public async Task<Response> CreateTransactionStripe(string stripeEmail, string stripeToken, OrderRequest orderRequest,
+            List<OrderDetailRequest> orderDetailRequests, int userID)
+        {
+            var transaction = await context.Database.BeginTransactionAsync();
+            var task = await CreateOrderProcess(orderRequest, orderDetailRequests, userID);
+            if (task.Status)
+            {
+                var response = await StripePaymentHelper.CreateOnlineCharge(stripeEmail, stripeToken,
+                    (task.Obj as Order).Id, orderRequest, orderDetailRequests);
+                if (response.Status)
+                {
+                    transaction.Commit();
+                }
+                else
+                {
+                    transaction.Rollback();
+                }
+            }
+            else
+            {
+                transaction.Rollback();
+            }
+            return task;
+        }
+
+        public async Task<Response> CreateTransactionPayPal(string email, string paypalOrderID, OrderRequest orderRequest,
+            List<OrderDetailRequest> orderDetailRequests, int userID)
+        {
+            var transaction = await context.Database.BeginTransactionAsync();
+            var task = await CreateOrderProcess(orderRequest, orderDetailRequests, userID);
+            if (task.Status)
+            {
+                var response =
+                    await PayPalPaymentHelper.CreatePayPalOrder(email, paypalOrderID, orderRequest,
+                        orderDetailRequests);
+                if (response.Status)
+                {
+                    transaction.Commit();
+                }
+                else
+                {
+                    transaction.Rollback();
+                }
+            }
+            else
+            {
+                transaction.Rollback();
+            }
+            return task;
         }
 
         public async Task<Response> GetListProcessingOrders()

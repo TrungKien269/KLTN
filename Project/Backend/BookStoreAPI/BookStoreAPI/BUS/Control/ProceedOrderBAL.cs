@@ -44,10 +44,26 @@ namespace BookStoreAPI.BUS.Control
             return await orderBal.CreateOrder(order);
         }
 
-        public async Task<Response> CreateOrderProcess(OrderRequest orderRequest,
+        public async Task<Response> CreateTransactionCOD(OrderRequest orderRequest,
             List<OrderDetailRequest> orderDetailRequests, int userID)
         {
-            return await orderBal.CreateOrderProcess(orderRequest, orderDetailRequests, userID);
+            return await orderBal.CreateTransactionCOD(orderRequest, orderDetailRequests, userID);
+        }
+
+        public async Task<Response> CreateTransactionStripe(string stripeEmail, string stripeToken,
+            OrderRequest orderRequest,
+            List<OrderDetailRequest> orderDetailRequests, int userID)
+        {
+            return await orderBal.CreateTransactionStripe(stripeEmail, stripeToken, orderRequest, orderDetailRequests,
+                userID);
+        }
+
+        public async Task<Response> CreateTransactionPayPal(string email, string paypalOrderID,
+            OrderRequest orderRequest,
+            List<OrderDetailRequest> orderDetailRequests, int userID)
+        {
+            return await orderBal.CreateTransactionPayPal(email, paypalOrderID, orderRequest, orderDetailRequests,
+                userID);
         }
 
         public async Task<Response> GetBook(string bookID)
