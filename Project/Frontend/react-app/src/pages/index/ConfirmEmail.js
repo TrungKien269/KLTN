@@ -3,6 +3,8 @@ import axios from "axios";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import Header from "../../components/header/Header";
+import Footer from "../../components/Footer";
 
 const ConfirmEmail = (props) => {
   const [email, setEmail] = useState("");
@@ -45,40 +47,44 @@ const ConfirmEmail = (props) => {
   };
 
   return (
-    <section className="section__login">
-      <div className="containter-fluid">
-        <div className="row">
-          <div className="col-md-6">
-            <h1>Confirm via Email</h1>
-            <form
-              method="post"
-              id="confirmForm"
-              onSubmit={(e) => handleFormSubmit(e)}
-            >
-              <div className="field-control">
-                <label>Email</label>
-                <input
-                  type="text"
-                  id="txtEmail"
-                  required
-                  className="col-md-8"
-                  autofocus="true"
-                  onChange={(e) => handleEmailChange(e)}
-                />
-              </div>
-              <div className="col-md-8 pad-0-0 mar-top-md">
-                <input
-                  type="submit"
-                  className="btn btn-fit btn--blue"
-                  value="Send"
-                />
-              </div>
-              <Link to="/login">Login</Link>
-            </form>
+    <React.Fragment>
+      <Header />
+      <section className="section__login">
+        <div className="containter-fluid">
+          <div className="row">
+            <div className="col-md-6">
+              <h1>Confirm via Email</h1>
+              <form
+                method="post"
+                id="confirmForm"
+                onSubmit={(e) => handleFormSubmit(e)}
+              >
+                <div className="field-control">
+                  <label>Email</label>
+                  <input
+                    type="text"
+                    id="txtEmail"
+                    required
+                    className="col-md-8"
+                    autofocus="true"
+                    onChange={(e) => handleEmailChange(e)}
+                  />
+                </div>
+                <div className="col-md-8 pad-0-0 mar-top-md">
+                  <input
+                    type="submit"
+                    className="btn btn-fit btn--blue"
+                    value="Send"
+                  />
+                </div>
+                <Link to="/login">Login</Link>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <Footer />
+    </React.Fragment>
   );
 };
 

@@ -4,6 +4,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { withRouter } from "react-router";
 import { swal } from "sweetalert2/dist/sweetalert2.all";
+import Footer from "../../components/Footer";
+import Header from "../../components/header/Header";
 
 function UserProfile(props) {
   const [userInfor, setUserInfor] = useState();
@@ -223,103 +225,108 @@ function UserProfile(props) {
   }, [gender]);
 
   return (
-    <section class="section__profile">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="title-wrapper">
-              <h3>Profile</h3>
+    <React.Fragment>
+      <Header />
+      <section class="section__profile">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="title-wrapper">
+                <h3>Profile</h3>
+              </div>
+              <form
+                action=""
+                class="profile-wrapper"
+                onSubmit={(e) => handleSubmit(e)}
+              >
+                <label for="name">name</label>
+                <input
+                  type="text"
+                  id="name"
+                  defaultValue={userInfor && fullName}
+                  ref={fullNameRef}
+                  onChange={(e) => handleNameChange(e)}
+                />
+                <label for="Gender">Gender</label>
+                {checkGender}
+                <label for="birthday">Birthday</label>
+                <input
+                  type="date"
+                  defaultValue={userInfor && birthday.slice(0, 10)}
+                  ref={birthDayRef}
+                  onChange={(e) => handleBirthday(e)}
+                />
+                <label for="phone">Phone number</label>
+                <input
+                  defaultValue={userInfor && phonenumber}
+                  type="number"
+                  defaultValue={userInfor && userInfor.phoneNumber}
+                  ref={phoneRef}
+                  onChange={(e) => handlePhoneNumberChanged(e)}
+                />
+                <label for="address">Address</label>
+                <input
+                  type="text"
+                  defaultValue={userInfor && address}
+                  ref={addressRef}
+                  onChange={(e) => handleAddressChanged(e)}
+                />
+                <input
+                  class="btn btn-fit btn--lg btn--rounded btn--blue"
+                  type="submit"
+                  value="Update Profile"
+                />
+              </form>
             </div>
-            <form
-              action=""
-              class="profile-wrapper"
-              onSubmit={(e) => handleSubmit(e)}
-            >
-              <label for="name">name</label>
-              <input
-                type="text"
-                id="name"
-                defaultValue={userInfor && fullName}
-                ref={fullNameRef}
-                onChange={(e) => handleNameChange(e)}
-              />
-              <label for="Gender">Gender</label>
-              {checkGender}
-              <label for="birthday">Birthday</label>
-              <input
-                type="date"
-                defaultValue={userInfor && birthday.slice(0, 10)}
-                ref={birthDayRef}
-                onChange={(e) => handleBirthday(e)}
-              />
-              <label for="phone">Phone number</label>
-              <input
-                defaultValue={userInfor && phonenumber}
-                type="number"
-                defaultValue={userInfor && userInfor.phoneNumber}
-                ref={phoneRef}
-                onChange={(e) => handlePhoneNumberChanged(e)}
-              />
-              <label for="address">Address</label>
-              <input
-                type="text"
-                defaultValue={userInfor && address}
-                ref={addressRef}
-                onChange={(e) => handleAddressChanged(e)}
-              />
-              <input
-                class="btn btn-fit btn--lg btn--rounded btn--blue"
-                type="submit"
-                value="Update Profile"
-              />
-            </form>
-          </div>
-          <div class="col-md-6">
-            <div class="title-wrapper">
-              <h3>Change password</h3>
+            <div class="col-md-6">
+              <div class="title-wrapper">
+                <h3>Change password</h3>
+              </div>
+              <form
+                action=""
+                class="profile-wrapper"
+                onSubmit={(e) => handleChangePass(e)}
+              >
+                <label for="current">Current password</label>
+                <input
+                  type="password"
+                  id="current"
+                  defaultValue=""
+                  ref={curPassRef}
+                  required
+                  onChange={(e) => handlecurrentPass(e)}
+                />
+                <label for="new">New password</label>
+                <input
+                  type="password"
+                  id="new"
+                  defaultValue=""
+                  ref={newPassref}
+                  onChange={(e) => handleNewPass(e)}
+                  required
+                />
+                <label for="comfirm">Confirm password</label>
+                <input
+                  type="password"
+                  id="confirm"
+                  defaultValue=""
+                  ref={confirmPassRef}
+                  onChange={(e) => handleConfirmPass(e)}
+                  required
+                />
+                <input
+                  class="btn btn-fit btn--lg btn--rounded btn--blue"
+                  value="Submit"
+                  type="submit"
+                />
+              </form>
             </div>
-            <form
-              action=""
-              class="profile-wrapper"
-              onSubmit={(e) => handleChangePass(e)}
-            >
-              <label for="current">Current password</label>
-              <input
-                type="password"
-                id="current"
-                defaultValue=""
-                ref={curPassRef}
-                required
-                onChange={(e) => handlecurrentPass(e)}
-              />
-              <label for="new">New password</label>
-              <input
-                type="password"
-                id="new"
-                defaultValue=""
-                ref={newPassref}
-                onChange={(e) => handleNewPass(e)}
-                required
-              />
-              <label for="comfirm">Confirm password</label>
-              <input
-                type="password"
-                id="confirm"
-                defaultValue=""
-                ref={confirmPassRef}
-                onChange={(e) => handleConfirmPass(e)}
-                required
-              />
-              <input
-                class="btn btn-fit btn--lg btn--rounded btn--blue"
-                value="Submit"
-                type="submit"
-              />
-            </form>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <Footer />
+    </React.Fragment>
   );
 }
 

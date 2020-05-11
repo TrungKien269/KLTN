@@ -2,25 +2,27 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Link, withRouter } from "react-router-dom";
 import Swal from "sweetalert2";
+import Header from "../../components/header/Header";
+import Footer from "../../components/Footer";
 
 export default class UserWishList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      data: []
+      data: [],
     };
   }
 
   componentDidMount() {
     axios({
       headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("Token")
+        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
       },
       method: "get",
-      url: "http://localhost:5000/api/UserWishList/UserWishList"
+      url: "http://localhost:5000/api/UserWishList/UserWishList",
     })
-      .then(res => {
+      .then((res) => {
         if (res.data.status) {
           this.setState({ data: res.data.obj });
           console.log(this.state.data);
@@ -28,56 +30,56 @@ export default class UserWishList extends Component {
           Swal.fire({
             title: "Error",
             text: res.data.message,
-            icon: "error"
+            icon: "error",
           });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         Swal.fire({
           title: "Error",
           text: err,
-          icon: "error"
+          icon: "error",
         });
       });
   }
 
-  handleAddClicked = bookID => {
+  handleAddClicked = (bookID) => {
     axios({
       headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("Token")
+        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
       },
       url: "http://localhost:5000/api/BookInfo/AddToCart",
       method: "post",
       params: {
         id: bookID,
-        quantity: 1
-      }
+        quantity: 1,
+      },
     })
-      .then(res => {
+      .then((res) => {
         if (res.data.status == true) {
           Swal.fire({
             title: "Success",
             text: "Add this book to cart successfully",
-            icon: "success"
+            icon: "success",
           });
         } else {
           Swal.fire({
             title: "Error",
             text: res.data.message,
-            icon: "error"
+            icon: "error",
           });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         Swal.fire({
           title: "Error",
           text: err,
-          icon: "error"
+          icon: "error",
         });
       });
   };
 
-  handleRemoveClicked = bookId => {
+  handleRemoveClicked = (bookId) => {
     Swal.fire({
       title: "Confirm",
       text: "Do you want to remove this book?",
@@ -85,49 +87,49 @@ export default class UserWishList extends Component {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, remove it!"
-    }).then(result => {
+      confirmButtonText: "Yes, remove it!",
+    }).then((result) => {
       if (result.value) {
         this.setState({
-          data: this.state.data.filter(item => item.bookId != bookId)
+          data: this.state.data.filter((item) => item.bookId != bookId),
         });
         axios({
           headers: {
-            Authorization: "Bearer " + window.sessionStorage.getItem("Token")
+            Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
           },
           method: "delete",
           url: "http://localhost:5000/api/UserWishList/RemoveFromWishList",
           params: {
-            bookID: bookId
-          }
+            bookID: bookId,
+          },
         })
-          .then(res => {
+          .then((res) => {
             if (res.data.status) {
               Swal.fire({
                 title: "Done",
                 text: "Remove this book from your wish list",
-                icon: "success"
+                icon: "success",
               });
             } else {
               Swal.fire({
                 title: "Error",
                 text: res.data.message,
-                icon: "error"
+                icon: "error",
               });
             }
           })
-          .catch(err => {
+          .catch((err) => {
             Swal.fire({
               title: "Error",
               text: err,
-              icon: "error"
+              icon: "error",
             });
           });
       }
     });
   };
 
-  showListBooks = data => {
+  showListBooks = (data) => {
     let bookArr = [];
     if (Object.keys(data).length > 0) {
       bookArr = data.map((item, index) => {
@@ -181,6 +183,7 @@ export default class UserWishList extends Component {
   render() {
     return (
       <React.Fragment>
+        <Header />
         <div className="cart-title">
           <h2>Wish List</h2>
         </div>
@@ -200,6 +203,7 @@ export default class UserWishList extends Component {
             </table>
           </div>
         </div>
+        <Footer />
       </React.Fragment>
     );
   }

@@ -5,11 +5,14 @@ import ListProducts from "../../components/products/ListProducts";
 import { withRouter } from "react-router-dom";
 import SideBarPriceRange from "../../components/utilities/SideBarPriceRange";
 import SideBarPriceSort from "../../components/utilities/SideBarPriceSort";
+import Header from "../../components/header/Header";
+import Footer from "../../components/Footer";
 
 function Collections(props) {
   const { category = "" } = props.match.params;
   return (
     <React.Fragment>
+      <Header></Header>
       <section className="section__product-list">
         <div className="container">
           <div className="row">
@@ -32,6 +35,7 @@ function Collections(props) {
           </div>
         </div>
       </section>
+      <Footer />
     </React.Fragment>
   );
 }

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Link, withRouter } from "react-router-dom";
 import Swal from "sweetalert2";
+import Header from "../../components/header/Header";
+import Footer from "../../components/Footer";
 
 export default class UserCart extends Component {
   constructor(props) {
@@ -176,6 +178,7 @@ export default class UserCart extends Component {
   render() {
     return (
       <React.Fragment>
+        <Header />
         <div className="cart-title">
           <h2>shopping cart</h2>
         </div>
@@ -247,6 +250,7 @@ export default class UserCart extends Component {
             </div>
           </div>
         </div>
+        <Footer />
       </React.Fragment>
     );
   }
