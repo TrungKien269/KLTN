@@ -93,5 +93,28 @@ namespace BookStoreAPI.Controllers
                 return await mainBal.CreateSearchHistory(searchHistory);
             }
         }
+
+        [Authorize]
+        [HttpPost("SaveTracking")]
+        public async Task<Response> SaveTracking(string bookID)
+        {
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                var tracking = new BookViewTracking
+                {
+                    BookId = bookID,
+                    UserId = userID,
+                    DateTime = DateTime.Now
+                };
+                return await mainBal.CreateTracking(tracking);
+            }
+        }
     }
 }
