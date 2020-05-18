@@ -183,6 +183,7 @@ export default class UserWishList extends Component {
   render() {
     return (
       <React.Fragment>
+        <Header />
         <div className="cart-title">
           <h2>Wish List</h2>
         </div>
@@ -202,6 +203,7 @@ export default class UserWishList extends Component {
             </table>
           </div>
         </div>
+        <Footer />
       </React.Fragment>
     );
   }

@@ -3,6 +3,8 @@ import axios from "axios";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import Header from "../../components/header/Header";
+import Footer from "../../components/Footer";
 
 const ConfirmEmail = (props) => {
   const [email, setEmail] = useState("");
@@ -46,6 +48,7 @@ const ConfirmEmail = (props) => {
 
   return (
     <React.Fragment>
+      <Header />
       <section className="section__login">
         <div className="containter-fluid">
           <div className="row">
@@ -80,6 +83,7 @@ const ConfirmEmail = (props) => {
           </div>
         </div>
       </section>
+      <Footer />
     </React.Fragment>
   );
 };

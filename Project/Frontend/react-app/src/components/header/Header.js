@@ -1,4 +1,10 @@
-import React, { useMemo, useContext, useEffect, useState } from "react";
+import React, {
+  Component,
+  useMemo,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Link, withRouter } from "react-router-dom";
 import GetCategories from "../utilities/GetCategories";
 import SearchBar from "../utilities/SearchBar";
@@ -13,6 +19,7 @@ const Header = (props) => {
 
   const handleLogout = () => {
     removeUserSession();
+    // refreshUser();
     refreshToken();
     props.history.push("/");
   };
