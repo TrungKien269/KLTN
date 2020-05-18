@@ -226,7 +226,6 @@ function UserProfile(props) {
 
   return (
     <React.Fragment>
-      <Header />
       <section class="section__profile">
         <div class="container">
           <div class="row">
@@ -324,8 +323,6 @@ function UserProfile(props) {
           </div>
         </div>
       </section>
-
-      <Footer />
     </React.Fragment>
   );
 }

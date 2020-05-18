@@ -8,7 +8,6 @@ class Login extends Component {
   render() {
     return (
       <React.Fragment>
-        <Header />
         <section className="section__login">
           <div className="containter-fluid">
             <div className="row">
@@ -17,7 +16,6 @@ class Login extends Component {
             </div>
           </div>
         </section>
-        <Footer />
       </React.Fragment>
     );
   }

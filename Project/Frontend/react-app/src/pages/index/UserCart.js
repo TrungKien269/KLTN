@@ -141,7 +141,7 @@ export default class UserCart extends Component {
                   size="4"
                   pattern=""
                   inputmode=""
-                  value={item.quantity}
+                  defaultValue={item.quantity}
                 />
                 <input
                   type="button"
@@ -178,7 +178,6 @@ export default class UserCart extends Component {
   render() {
     return (
       <React.Fragment>
-        <Header />
         <div className="cart-title">
           <h2>shopping cart</h2>
         </div>
@@ -250,7 +249,6 @@ export default class UserCart extends Component {
             </div>
           </div>
         </div>
-        <Footer />
       </React.Fragment>
     );
   }
