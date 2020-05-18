@@ -13,7 +13,6 @@ import UserCart from "./pages/index/UserCart";
 import UserWishList from "./pages/index/UserWishList";
 import OrderStatus from "./components/order/OrderStatus";
 import ProceedCheckout from "./components/order/ProceedCheckout";
-import AdminPage from "./components/admin/AdminPage";
 
 const showPage = (Routers) => {
   var result = null;
@@ -37,6 +36,7 @@ function App() {
   return (
     <Router>
       <React.Fragment>
+        <Header />
         <Switch>
           {showPage(Routers)}
           <PublicRoute path="/login" component={Login} />
@@ -46,6 +46,7 @@ function App() {
           <PrivateRoute path="/orderstatus" component={OrderStatus} />
           <PrivateRoute path="/proceedcheckout" component={ProceedCheckout} />
         </Switch>
+        <Footer />
       </React.Fragment>
     </Router>
   );
