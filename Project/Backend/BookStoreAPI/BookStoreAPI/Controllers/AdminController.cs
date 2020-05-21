@@ -178,5 +178,29 @@ namespace BookStoreAPI.Controllers
         {
             return await adminBal.DeletePromotionDetail(promotionID, bookID);
         }
+
+        [HttpGet("ListSubCategory")]
+        public async Task<Response> GetListSubCategory()
+        {
+            return await adminBal.GetListSubCategory();
+        }
+
+        [HttpGet("ListFormBook")]
+        public async Task<Response> GetListFormBook()
+        {
+            return await adminBal.GetListFormBook();
+        }
+
+        [HttpGet("ListSupplier")]
+        public async Task<Response> GetListSupplier()
+        {
+            return await adminBal.GetListSupplier();
+        }
+
+        [HttpGet("ListPublisher")]
+        public async Task<Response> GetListPublisher()
+        {
+            return await adminBal.GetListPublisher();
+        }
     }
 }
