@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import faker from "faker";
 import _ from "lodash";
 import { Dropdown } from "semantic-ui-react";
@@ -27,6 +27,7 @@ import {
   Label,
   Row,
 } from "reactstrap";
+import Axios from "axios";
 
 const addressDefinitions = faker.definitions.address;
 const stateOptions = _.map(addressDefinitions.state, (state, index) => ({
@@ -34,7 +35,28 @@ const stateOptions = _.map(addressDefinitions.state, (state, index) => ({
   text: state,
   value: addressDefinitions.state[index],
 }));
+
 const Books = () => {
+  const [id, setID] = useState("");
+  const [bookname, setBookname] = useState("");
+  const [orPrice, setOrPrice] = useState("");
+  const [curPrice, setCurPrice] = useState("");
+  const [pubYear, setPubYear] = useState("");
+  const [category, setCategory] = useState();
+
+  useEffect(() => {
+    Axios({
+      method: "get",
+      url: "http://localhost:5000/api/Main/ListCategory",
+    }).then((res) => {
+      setCategory(res.data.obj);
+    });
+  }, []);
+
+  if (category) {
+    console.log(category);
+  }
+
   return (
     <div className="animated fadeIn">
       <Row>
@@ -94,7 +116,7 @@ const Books = () => {
                 </FormGroup>
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="curprice-input">Password</Label>
+                    <Label htmlFor="curprice-input">Current Price</Label>
                   </Col>
                   <Col xs="12" md="9">
                     <Input
@@ -143,7 +165,7 @@ const Books = () => {
                   </Col>
                   <Col xs="12" md="9">
                     <Dropdown
-                      placeholder="State"
+                      placeholder="Categories"
                       fluid
                       multiple
                       text
@@ -154,285 +176,78 @@ const Books = () => {
                 </FormGroup>
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="select">Select</Label>
+                    <Label htmlFor="booksform-input">Book's Form</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="select" name="select" id="select">
-                      <option value="0">Please select</option>
-                      <option value="1">Option #1</option>
-                      <option value="2">Option #2</option>
-                      <option value="3">Option #3</option>
-                    </Input>
+                    <Dropdown
+                      placeholder="Book's form"
+                      fluid
+                      multiple
+                      text
+                      selection
+                      options={stateOptions}
+                    />
                   </Col>
                 </FormGroup>
 
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="multiple-select">Multiple select</Label>
-                  </Col>
-                  <Col md="9">
-                    <Input
-                      type="select"
-                      name="multiple-select"
-                      id="multiple-select"
-                      multiple
-                    >
-                      <option value="1">Option #1</option>
-                      <option value="2">Option #2</option>
-                      <option value="3">Option #3</option>
-                      <option value="4">Option #4</option>
-                      <option value="5">Option #5</option>
-                      <option value="6">Option #6</option>
-                      <option value="7">Option #7</option>
-                      <option value="8">Option #8</option>
-                      <option value="9">Option #9</option>
-                      <option value="10">Option #10</option>
-                    </Input>
-                  </Col>
-                </FormGroup>
-                <FormGroup row>
-                  <Col md="3">
-                    <Label>Radios</Label>
-                  </Col>
-                  <Col md="9">
-                    <FormGroup check className="radio">
-                      <Input
-                        className="form-check-input"
-                        type="radio"
-                        id="radio1"
-                        name="radios"
-                        value="option1"
-                      />
-                      <Label
-                        check
-                        className="form-check-label"
-                        htmlFor="radio1"
-                      >
-                        Option 1
-                      </Label>
-                    </FormGroup>
-                    <FormGroup check className="radio">
-                      <Input
-                        className="form-check-input"
-                        type="radio"
-                        id="radio2"
-                        name="radios"
-                        value="option2"
-                      />
-                      <Label
-                        check
-                        className="form-check-label"
-                        htmlFor="radio2"
-                      >
-                        Option 2
-                      </Label>
-                    </FormGroup>
-                    <FormGroup check className="radio">
-                      <Input
-                        className="form-check-input"
-                        type="radio"
-                        id="radio3"
-                        name="radios"
-                        value="option3"
-                      />
-                      <Label
-                        check
-                        className="form-check-label"
-                        htmlFor="radio3"
-                      >
-                        Option 3
-                      </Label>
-                    </FormGroup>
-                  </Col>
-                </FormGroup>
-                <FormGroup row>
-                  <Col md="3">
-                    <Label>Inline Radios</Label>
-                  </Col>
-                  <Col md="9">
-                    <FormGroup check inline>
-                      <Input
-                        className="form-check-input"
-                        type="radio"
-                        id="inline-radio1"
-                        name="inline-radios"
-                        value="option1"
-                      />
-                      <Label
-                        className="form-check-label"
-                        check
-                        htmlFor="inline-radio1"
-                      >
-                        One
-                      </Label>
-                    </FormGroup>
-                    <FormGroup check inline>
-                      <Input
-                        className="form-check-input"
-                        type="radio"
-                        id="inline-radio2"
-                        name="inline-radios"
-                        value="option2"
-                      />
-                      <Label
-                        className="form-check-label"
-                        check
-                        htmlFor="inline-radio2"
-                      >
-                        Two
-                      </Label>
-                    </FormGroup>
-                    <FormGroup check inline>
-                      <Input
-                        className="form-check-input"
-                        type="radio"
-                        id="inline-radio3"
-                        name="inline-radios"
-                        value="option3"
-                      />
-                      <Label
-                        className="form-check-label"
-                        check
-                        htmlFor="inline-radio3"
-                      >
-                        Three
-                      </Label>
-                    </FormGroup>
-                  </Col>
-                </FormGroup>
-                <FormGroup row>
-                  <Col md="3">
-                    <Label>Checkboxes</Label>
-                  </Col>
-                  <Col md="9">
-                    <FormGroup check className="checkbox">
-                      <Input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="checkbox1"
-                        name="checkbox1"
-                        value="option1"
-                      />
-                      <Label
-                        check
-                        className="form-check-label"
-                        htmlFor="checkbox1"
-                      >
-                        Option 1
-                      </Label>
-                    </FormGroup>
-                    <FormGroup check className="checkbox">
-                      <Input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="checkbox2"
-                        name="checkbox2"
-                        value="option2"
-                      />
-                      <Label
-                        check
-                        className="form-check-label"
-                        htmlFor="checkbox2"
-                      >
-                        Option 2
-                      </Label>
-                    </FormGroup>
-                    <FormGroup check className="checkbox">
-                      <Input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="checkbox3"
-                        name="checkbox3"
-                        value="option3"
-                      />
-                      <Label
-                        check
-                        className="form-check-label"
-                        htmlFor="checkbox3"
-                      >
-                        Option 3
-                      </Label>
-                    </FormGroup>
-                  </Col>
-                </FormGroup>
-                <FormGroup row>
-                  <Col md="3">
-                    <Label>Inline Checkboxes</Label>
-                  </Col>
-                  <Col md="9">
-                    <FormGroup check inline>
-                      <Input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="inline-checkbox1"
-                        name="inline-checkbox1"
-                        value="option1"
-                      />
-                      <Label
-                        className="form-check-label"
-                        check
-                        htmlFor="inline-checkbox1"
-                      >
-                        One
-                      </Label>
-                    </FormGroup>
-                    <FormGroup check inline>
-                      <Input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="inline-checkbox2"
-                        name="inline-checkbox2"
-                        value="option2"
-                      />
-                      <Label
-                        className="form-check-label"
-                        check
-                        htmlFor="inline-checkbox2"
-                      >
-                        Two
-                      </Label>
-                    </FormGroup>
-                    <FormGroup check inline>
-                      <Input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="inline-checkbox3"
-                        name="inline-checkbox3"
-                        value="option3"
-                      />
-                      <Label
-                        className="form-check-label"
-                        check
-                        htmlFor="inline-checkbox3"
-                      >
-                        Three
-                      </Label>
-                    </FormGroup>
-                  </Col>
-                </FormGroup>
-                <FormGroup row>
-                  <Col md="3">
-                    <Label htmlFor="file-input">File input</Label>
+                    <Label htmlFor="publishers-input">Publishers</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="file" id="file-input" name="file-input" />
-                  </Col>
-                </FormGroup>
-                <FormGroup row>
-                  <Col md="3">
-                    <Label htmlFor="file-multiple-input">
-                      Multiple File input
-                    </Label>
-                  </Col>
-                  <Col xs="12" md="9">
-                    <Input
-                      type="file"
-                      id="file-multiple-input"
-                      name="file-multiple-input"
+                    <Dropdown
+                      placeholder="Publishers"
+                      fluid
                       multiple
+                      text
+                      selection
+                      options={stateOptions}
                     />
                   </Col>
                 </FormGroup>
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="suppliers-input">Suppliers</Label>
+                  </Col>
+                  <Col xs="12" md="9">
+                    <Dropdown
+                      placeholder="Suppliers"
+                      fluid
+                      multiple
+                      text
+                      selection
+                      options={stateOptions}
+                    />
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="textarea-input">Description</Label>
+                  </Col>
+                  <Col xs="12" md="9">
+                    <Input
+                      type="textarea"
+                      name="textarea-input"
+                      id="textarea-input"
+                      rows="9"
+                      placeholder="Content..."
+                    />
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="file-input">Thumbnails</Label>
+                  </Col>
+                  <Col xs="12" md="9">
+                    <Input
+                      placeholder="Link thumbnail"
+                      type="text"
+                      id="file-input"
+                      name="file-input"
+                    />
+                  </Col>
+                </FormGroup>
+
                 <FormGroup row hidden>
                   <Col md="3">
                     <Label className="custom-file" htmlFor="custom-file-input">
