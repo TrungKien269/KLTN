@@ -6,6 +6,11 @@ conn = pyodbc.connect("Driver=SQL Server;"
                       "Server=DESKTOP-4UG8V66;"
                       "Database=BookStore;"
                       "Trusted_Connection=yes;")
+                      
+# conn = pyodbc.connect("Driver=SQL Express;"
+#                       "Server=desktop-tk99ngi;"
+#                       "Database=BookStore;"
+#                       "Trusted_Connection=yes;")
 
 books = pd.read_sql_query('Select Book.Id, Book.Name, SubCategory.Name as Category, '
                           'RawBook.Author, RawBook.Supplier, RawBook.Publisher '
@@ -16,42 +21,74 @@ books = pd.read_sql_query('Select Book.Id, Book.Name, SubCategory.Name as Catego
                           "Where Book.Status = 'Available';"
                           , conn)
 
-age_ranges = pd.read_sql_query('Select '
-                            'Case '
-                            "When (DATEDIFF(hour, Birthday, GETDATE())/8766) Between 14 and 20 then '14-20' "
-		                    "When (DATEDIFF(hour, Birthday, GETDATE())/8766) Between 21 and 25 then '21-25' "
-		                    "When (DATEDIFF(hour, Birthday, GETDATE())/8766) Between 26 and 30 then '26-30' "
-		                    "When (DATEDIFF(hour, Birthday, GETDATE())/8766) Between 31 and 35 then '31-35' "
-		                    "When (DATEDIFF(hour, Birthday, GETDATE())/8766) Between 36 and 40 then '36-40' "
-                            'End as Age_Range '
-                            'From dbo.[User] '
-	                        'Where ID = 1 ', conn)
-
-# ratings = pd.read_sql_query('Select Rating.User_ID, RawBook.Id as Book_ID, Point, DateTime ' 
-#                             'From RawBook full join Rating on RawBook.Id = Rating.Book_ID;'
-#                             , conn)
+ratings = pd.read_sql_query('Select * From Rating '
+                            '', conn)
 
 
-ratings = pd.read_sql_query('With AgeRange as '
-                            '( '
-                            'Select dbo.[User].ID, '
-                            'Case '
-                            "When (DATEDIFF(hour, Birthday, GETDATE())/8766) Between 14 and 20 then '14-20' "
-		                    "When (DATEDIFF(hour, Birthday, GETDATE())/8766) Between 21 and 25 then '21-25' "
-		                    "When (DATEDIFF(hour, Birthday, GETDATE())/8766) Between 26 and 30 then '26-30' "
-		                    "When (DATEDIFF(hour, Birthday, GETDATE())/8766) Between 31 and 35 then '31-35' "
-		                    "When (DATEDIFF(hour, Birthday, GETDATE())/8766) Between 36 and 40 then '36-40' "
-                            'End as Age_Range '
-                            'From dbo.[User] '
-	                        'Where ID > 0 '
-                            ')'
-                            'Select Rating.User_ID, Age_Range, RawBook.Id as Book_ID, Point, DateTime '
-                            'From RawBook full join Rating on RawBook.Id = Rating.Book_ID '
-                            'inner join AgeRange on Rating.User_ID = AgeRange.ID '
-                            "Where Age_Range = '" + age_ranges['Age_Range'].iloc[0] + "'"
+tracking = pd.read_sql_query('Select RecentTracking.UserID, RecentTracking.BookID,'
+                            'Count(RecentTracking.ID) as NumberView From( '
+                            'Select * From BookViewTracking '
+                            'Where GETDATE() - BookViewTracking.DateTime <= 14) as RecentTracking '
+                            'Group by RecentTracking.UserID, RecentTracking.BookID', conn)
+
+best_seller = pd.read_sql_query('Select Top 5 dbo.[OrderDetail].Book_ID, '
+                                'SUM(dbo.[OrderDetail].Quantity) as NumberSold '
+                                'From dbo.[Order] inner join dbo.[OrderDetail] '
+                                'on dbo.[Order].ID = dbo.[OrderDetail].Order_ID '
+                                'Where GETDATE() - dbo.[Order].CreatedDate <= 31 '
+                                'Group by dbo.[OrderDetail].Book_ID '
+                                'Order By NumberSold DESC;'
+                                , conn)
+
+def CountUserRating(userID):
+    count_rating = pd.read_sql_query('Select Count(Rating.Book_ID) as NumberRating '
+                                    'From dbo.Rating Where Rating.User_ID = ' + str(userID)
+                                    , conn)
+    return count_rating
+
+def CountUserTracking(userID):
+    count_tracking = pd.read_sql_query('Select Count(BookViewTracking.BookID) as NumberTracking '
+                                    'From dbo.BookViewTracking '
+                                    'Where BookViewTracking.UserID = ' + str(userID) + 
+                                    'and GETDATE() - BookViewTracking.DateTime <= 14'
+                                    , conn)
+    return count_tracking
+
+
+def GetBookWishList(userID):
+    wishlist = pd.read_sql_query('Select BookID '
+                                'From WishList '
+                                'Where WishList.UserID = ' + str(userID) +
+                                'Order by WishList.DateTime DESC;'
+                                , conn)
+    return wishlist
+
+def GetNewestTrackingBook(userID):
+    book = pd.read_sql_query('Select Distinct Top 3 BookID, Tracking.DateTime '
+                            'From BookViewTracking as Tracking '
+                            'Where Tracking.UserID = ' + str(userID) +
+                            'Order by Tracking.DateTime DESC;'
                             , conn)
+    return book
 
+def GetNewestBookRating(userID):
+    rating = pd.read_sql_query('Select Top 1 Book_ID '
+                            'From Rating '
+                            'Where Rating.User_ID = ' + str(userID) +
+                            'Order by Rating.DateTime DESC;'
+                            , conn)
+    return rating
 
+def GetNewestBookBought(userID):
+    book = pd.read_sql_query('Select Book_ID  '
+                            'From dbo.[OrderDetail] '
+                            'Where dbo.[OrderDetail].Order_ID in '
+                            '(Select Top 1 dbo.[Order].ID '
+                            'From dbo.[Order] '
+                            'Where dbo.[Order].User_ID = ' + str(userID) + 
+                            'Order by dbo.[Order].CreatedDate DESC)'
+                            , conn)
+    return book
 
 class Book:
 
@@ -81,15 +118,3 @@ class Book:
 		    print("Error:", row)
 
 bookObj = Book(books)
-
-
-# MongoDB Connection
-
-# from pymongo import *
-
-# client = MongoClient ('localhost:27017')
-# db = client.get_database('BookStore')
-# BookViewTracking = db.get_collection('book_view_tracking')
-
-# book_view_trackings = pd.DataFrame(list(BookViewTracking.find()))
-# # print(book_view_trackings.tail())

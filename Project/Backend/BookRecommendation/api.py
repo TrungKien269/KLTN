@@ -4,10 +4,9 @@ import json
 import book_similarity
 import book_rating
 import search
-
+import recommender
 
 app = flask.Flask(__name__)
-# app.config["DEBUG"] = True
 
 @app.route('/', methods=['GET'])
 def index():
@@ -17,6 +16,9 @@ def index():
 def get_list_similarity(id):
     return jsonify(book_similarity.GetListSimilarityBook(id))
 
+@app.route('/recommend/<userID>', methods=['GET'])
+def recommend_book(userID):
+    return jsonify(recommender.GetListRecommendBook(userID))
 
 @app.route('/search/<arg>', methods=['GET'])
 def get_list_search(arg):
