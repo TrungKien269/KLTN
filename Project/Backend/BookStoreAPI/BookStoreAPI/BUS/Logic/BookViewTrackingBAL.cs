@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookStoreAPI.BUS.Logic
 {
@@ -30,6 +31,19 @@ namespace BookStoreAPI.BUS.Logic
                 {
                     return new Response("Error when tracking", false, 0, tracking);
                 }
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
+        public async Task<Response> CountUserTracking(int userID)
+        {
+            try
+            {
+                var count = await context.BookViewTracking.Where(x => x.UserId.Equals(userID)).CountAsync();
+                return new Response("Success", true, 1, count);
             }
             catch (Exception e)
             {

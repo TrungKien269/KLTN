@@ -99,10 +99,19 @@ namespace BookStoreAPI.BUS.Control
             return await trackingBal.CreateTracking(tracking);
         }
 
-        //public async Task<Response> GetListSuggestedBooks(int userID)
-        //{
-        //    var relatedList = PythonHelper.GetSuggestedBooks(userID);
-        //    return await bookBal.GetListSuggestedBooks(relatedList);
-        //}
+        public async Task<Response> CountTracking(int userID)
+        {
+            return await trackingBal.CountUserTracking(userID);
+        }
+
+        public async Task<Response> GetListBestSeller()
+        {
+            return await bookBal.GetListBestSeller();
+        }
+
+        public async Task<Response> GetListRecommendBook(List<string> recommendList)
+        {
+            return await bookBal.GetListRecommendBooks(recommendList);
+        }
     }
 }

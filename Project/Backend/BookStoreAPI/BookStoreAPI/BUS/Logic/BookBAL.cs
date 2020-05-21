@@ -90,9 +90,7 @@ namespace BookStoreAPI.BUS.Logic
         {
             try
             {
-                var list = await context.Book.Where(x => x.Id.Equals(relatedList[0]) || x.Id.Equals(relatedList[1]) 
-                                                    || x.Id.Equals(relatedList[2]) || x.Id.Equals(relatedList[3]) 
-                                                    || x.Id.Equals(relatedList[4])).ToListAsync();
+                var list = await context.Book.Where(x => relatedList.Contains(x.Id)).ToListAsync();
                 return new Response("Success", true, 0, list);
             }
             catch (Exception e)
@@ -101,14 +99,11 @@ namespace BookStoreAPI.BUS.Logic
             }
         }
 
-        public async Task<Response> GetListSuggestedBooks(List<string> relatedList)
+        public async Task<Response> GetListRecommendBooks(List<string> recommendList)
         {
             try
             {
-                var list = await context.Book.Where(x => x.Id.Equals(relatedList[0]) || x.Id.Equals(relatedList[1])
-                                                         || x.Id.Equals(relatedList[2]) || x.Id.Equals(relatedList[3])
-                                                         || x.Id.Equals(relatedList[4]) || x.Id.Equals(relatedList[5]))
-                    .ToListAsync();
+                var list = await context.Book.Where(x => recommendList.Contains(x.Id)).ToListAsync();
                 return new Response("Success", true, 0, list);
             }
             catch (Exception e)
@@ -637,6 +632,26 @@ namespace BookStoreAPI.BUS.Logic
                     return new Response("Success", true, 1, rating);
 
                 }
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
+        public async Task<Response> GetListBestSeller()
+        {
+            try
+            {
+                var list = await context.OrderDetail.Include(x => x.Order).Include(x => x.Book)
+                    .Where(x => x.Order.Status.Equals("Delivered"))
+                    .GroupBy(x => x.Book)
+                    .Select(x => new BookWithQuantity
+                    {
+                        book = x.Key,
+                        quantity = x.Sum(y => y.Quantity)
+                    }).OrderByDescending(x => x.quantity).Take(10).ToListAsync();
+                return new Response("Success", true, 1, list);
             }
             catch (Exception e)
             {
