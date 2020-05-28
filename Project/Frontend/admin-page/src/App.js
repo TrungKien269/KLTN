@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { HashRouter, Route, Switch } from "react-router-dom";
+import PublicRoute from "./Utils/PublicRoute";
+import PrivateRoute from "./Utils/PrivateRoute";
 // import { renderRoutes } from 'react-router-config';
 import "./App.scss";
 
@@ -22,18 +24,8 @@ class App extends Component {
       <HashRouter>
         <React.Suspense fallback={loading()}>
           <Switch>
-            <Route
-              exact
-              path="/login"
-              name="Login Page"
-              render={(props) => <Login {...props} />}
-            />
-            <Route
-              exact
-              path="/register"
-              name="Register Page"
-              render={(props) => <Register {...props} />}
-            />
+            <PublicRoute path="/login" component={Login} />
+            <PublicRoute path="/register" component={Register} />
             <Route
               exact
               path="/404"
@@ -46,11 +38,7 @@ class App extends Component {
               name="Page 500"
               render={(props) => <Page500 {...props} />}
             />
-            <Route
-              path="/"
-              name="Home"
-              render={(props) => <DefaultLayout {...props} />}
-            />
+            <PrivateRoute path="/" component={DefaultLayout} />
           </Switch>
         </React.Suspense>
       </HashRouter>
