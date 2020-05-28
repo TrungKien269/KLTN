@@ -64,6 +64,7 @@ class Tables extends Component {
                   </tr>
                   </tbody>
                 </Table>
+                
                 <Pagination>
                   <PaginationItem>
                     <PaginationLink previous tag="button"></PaginationLink>

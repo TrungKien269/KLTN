@@ -3,6 +3,7 @@ import faker from "faker";
 import _ from "lodash";
 import { Dropdown } from "semantic-ui-react";
 import {
+  Table,
   Badge,
   Button,
   Card,
@@ -29,13 +30,6 @@ import {
 } from "reactstrap";
 import Axios from "axios";
 
-const addressDefinitions = faker.definitions.address;
-const stateOptions = _.map(addressDefinitions.state, (state, index) => ({
-  key: addressDefinitions.state_abbr[index],
-  text: state,
-  value: addressDefinitions.state[index],
-}));
-
 const Books = () => {
   const [id, setID] = useState("");
   const [bookname, setBookname] = useState("");
@@ -55,6 +49,7 @@ const Books = () => {
   const [formList, setFormList] = useState([]);
   const [publisherList, setPublisherList] = useState([]);
   const [supplierList, setSupplierList] = useState([]);
+  const authorList = [];
 
   useEffect(async () => {
     await Axios({
@@ -68,30 +63,29 @@ const Books = () => {
       method: "get",
       url: "http://localhost:5000/api/Admin/ListFormBook",
     }).then((res) => {
-      setFormList(res.data.obj)
+      setFormList(res.data.obj);
     });
 
     await Axios({
       method: "get",
       url: "http://localhost:5000/api/Admin/ListPublisher",
     }).then((res) => {
-      setPublisherList(res.data.obj)
+      setPublisherList(res.data.obj);
     });
 
     await Axios({
       method: "get",
       url: "http://localhost:5000/api/Admin/ListSupplier",
     }).then((res) => {
-      setSupplierList(res.data.obj)
+      setSupplierList(res.data.obj);
     });
-
   }, []);
 
   const showListCategory = useMemo(() => {
     var categoryOption = _.map(categoryList, (item, index) => ({
       key: item.id,
       text: item.name,
-      value: item.id
+      value: item.id,
     }));
     return (
       <Dropdown
@@ -103,14 +97,14 @@ const Books = () => {
         options={categoryOption}
         onChange={(e, data) => handleSelectCategory(e, data)}
       />
-    )
-  }, [categoryList])
+    );
+  }, [categoryList]);
 
   const showListFormBook = useMemo(() => {
     var formOption = _.map(formList, (item, index) => ({
       key: item.id,
       text: item.name,
-      value: item.id
+      value: item.id,
     }));
     return (
       <Dropdown
@@ -122,14 +116,14 @@ const Books = () => {
         options={formOption}
         onChange={(e, data) => handleSelectForm(e, data)}
       />
-    )
-  }, [formList])
+    );
+  }, [formList]);
 
   const showListPublisher = useMemo(() => {
     var publisherOption = _.map(publisherList, (item, index) => ({
       key: item.id,
       text: item.name,
-      value: item.id
+      value: item.id,
     }));
     return (
       <Dropdown
@@ -141,14 +135,14 @@ const Books = () => {
         options={publisherOption}
         onChange={(e, data) => handleSelectPublisher(e, data)}
       />
-    )
-  }, [publisherList])
+    );
+  }, [publisherList]);
 
   const showListSupplier = useMemo(() => {
     var supplierOption = _.map(supplierList, (item, index) => ({
       key: item.id,
       text: item.name,
-      value: item.id
+      value: item.id,
     }));
     return (
       <Dropdown
@@ -160,8 +154,73 @@ const Books = () => {
         options={supplierOption}
         onChange={(e, data) => handleSelectSupplier(e, data)}
       />
-    )
-  }, [supplierList])
+    );
+  }, [supplierList]);
+
+  const showListAuthors = useMemo(() => {
+    console.log(authorList);
+    if (authorList && authorList.length > 0) {
+      for (var i = 0; i < authorList.length; i++) {
+        return (
+          <tr>
+            <td>{authorList[i]}</td>
+            <td>Main Author</td>
+            <td>
+              <Button type="button" color="danger">
+                Delete
+              </Button>
+            </td>
+          </tr>
+        );
+      }
+    }
+  }, [authorList]);
+
+  const formAddAuthors = useMemo(() => {
+    return (
+      <React.Fragment>
+        <FormGroup row>
+          <Col md="3">
+            <Label htmlFor="author">Authors</Label>
+          </Col>
+          <Col xs="12" md="9">
+            <Input
+              type="text"
+              id="author"
+              name="author"
+              placeholder="Author"
+              onKeyDown={(e) => handleAddAuthors(e)}
+            ></Input>
+          </Col>
+        </FormGroup>
+        <FormGroup row>
+          <Col md="3">
+            <Label htmlFor="authorList">List Authors</Label>
+          </Col>
+          <Col xs="12" md="9">
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Role</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>{showListAuthors}</tbody>
+            </Table>
+          </Col>
+        </FormGroup>
+      </React.Fragment>
+    );
+  }, [authorList]);
+
+  const handleAddAuthors = (e) => {
+    if (e.keyCode === 13 && e.target.value != "") {
+      authorList.push(e.target.value);
+      e.target.value = "";
+      console.log(authorList);
+    }
+  };
 
   const handleSelectCategory = (e, data) => {
     if (data.value[0]) {
@@ -225,13 +284,13 @@ const Books = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    alert("SUBMIT")
-  }
+    alert("Submit");
+  };
 
   return (
     <div className="animated fadeIn">
       <Row>
-        <Col xs="12" sm="12">
+        <Col xs="12" sm="6">
           <Card>
             <CardHeader>
               <strong>Import new book</strong>
@@ -242,7 +301,7 @@ const Books = () => {
                 method="post"
                 encType="multipart/form-data"
                 className="form-horizontal"
-                onSubmit={handleFormSubmit}
+                onSubmit={(e) => handleFormSubmit(e)}
               >
                 <FormGroup row>
                   <Col md="3">
@@ -396,6 +455,7 @@ const Books = () => {
                     {showListSupplier}
                   </Col>
                 </FormGroup>
+                {formAddAuthors}
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="textarea-input">Summary</Label>
@@ -444,14 +504,12 @@ const Books = () => {
                     </Label>
                   </Col>
                 </FormGroup>
-                <CardFooter>
-                  <Button type="submit" size="sm" color="primary">
-                    <i className="fa fa-dot-circle-o"></i> Submit
-              </Button>
-                  <Button type="reset" size="sm" color="danger">
-                    <i className="fa fa-ban"></i> Reset
-              </Button>
-                </CardFooter>
+                <Button type="button" size="sm" color="primary">
+                  <i className="fa fa-dot-circle-o"></i> Submit
+                </Button>
+                <Button type="reset" size="sm" color="danger">
+                  <i className="fa fa-ban"></i> Reset
+                </Button>
               </Form>
             </CardBody>
           </Card>
