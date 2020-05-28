@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookStoreAPI.BUS.Control;
+using BookStoreAPI.Helper;
 using BookStoreAPI.Models;
 using BookStoreAPI.Models.Objects;
 using BookStoreAPI.Models.Promotion;
@@ -25,6 +26,17 @@ namespace BookStoreAPI.Controllers
         public AdminController()
         {
             adminBal = new AdminBAL();
+        }
+
+        [HttpPost("Login")]
+        public async Task<Response> Login(string username, string password)
+        {
+            if (username.Equals("admin") && password.Equals("bookstoreadmin"))
+            {
+                return await Task.FromResult<Response>(new Response("Success", true, 1, username, null,
+                    JWTHelper.CreateAdminToken()));
+            }
+            return await Task.FromResult<Response>(Models.Response.CatchError("Login fail!"));
         }
 
         [Authorize(Roles = "Administrator")]

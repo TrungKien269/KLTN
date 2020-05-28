@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import faker from "faker";
 import _ from "lodash";
+import qs from 'qs';
 import { Dropdown } from "semantic-ui-react";
 import {
   Table,
@@ -49,7 +50,8 @@ const Books = () => {
   const [formList, setFormList] = useState([]);
   const [publisherList, setPublisherList] = useState([]);
   const [supplierList, setSupplierList] = useState([]);
-  const authorList = [];
+  const [authorList, setAuthorList] = useState([]);
+  const [imageList, setImageList] = useState([]);
 
   useEffect(async () => {
     await Axios({
@@ -158,68 +160,81 @@ const Books = () => {
   }, [supplierList]);
 
   const showListAuthors = useMemo(() => {
-    console.log(authorList);
     if (authorList && authorList.length > 0) {
-      for (var i = 0; i < authorList.length; i++) {
+      var authors = authorList.map((author) => {
         return (
           <tr>
-            <td>{authorList[i]}</td>
-            <td>Main Author</td>
+            <td>{authorList.indexOf(author) + 1}</td>
+            <td>{author}</td>
             <td>
-              <Button type="button" color="danger">
+              <Button type="button" color="danger"
+                onClick={(e) => handleRemoveAuthor(e, author)}>
                 Delete
               </Button>
             </td>
           </tr>
         );
-      }
+      });
+      return authors;
     }
-  }, [authorList]);
-
-  const formAddAuthors = useMemo(() => {
-    return (
-      <React.Fragment>
-        <FormGroup row>
-          <Col md="3">
-            <Label htmlFor="author">Authors</Label>
-          </Col>
-          <Col xs="12" md="9">
-            <Input
-              type="text"
-              id="author"
-              name="author"
-              placeholder="Author"
-              onKeyDown={(e) => handleAddAuthors(e)}
-            ></Input>
-          </Col>
-        </FormGroup>
-        <FormGroup row>
-          <Col md="3">
-            <Label htmlFor="authorList">List Authors</Label>
-          </Col>
-          <Col xs="12" md="9">
-            <Table responsive>
-              <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>Role</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>{showListAuthors}</tbody>
-            </Table>
-          </Col>
-        </FormGroup>
-      </React.Fragment>
-    );
+    else {
+      return (
+        <td>No author</td>
+      );
+    }
   }, [authorList]);
 
   const handleAddAuthors = (e) => {
-    if (e.keyCode === 13 && e.target.value != "") {
-      authorList.push(e.target.value);
-      e.target.value = "";
-      console.log(authorList);
+    var author = document.getElementById("author").value;
+    if (author !== "") {
+      var check = authorList.find((x) => x === author)
+      if (check === undefined) {
+        setAuthorList((prev) => [...prev, author]);
+      }
     }
+  };
+
+  const handleRemoveAuthor = (e, author) => {
+    setAuthorList(authorList.filter((x) => x !== author));
+  };
+
+  const showListImage = useMemo(() => {
+    if (imageList && imageList.length > 0) {
+      var images = imageList.map((image) => {
+        return (
+          <tr>
+            <td>{imageList.indexOf(image) + 1}</td>
+            <td>{image}</td>
+            <td>
+              <Button type="button" color="danger"
+                onClick={(e) => handleRemoveImage(e, image)}>
+                Delete
+              </Button>
+            </td>
+          </tr>
+        );
+      });
+      return images;
+    }
+    else {
+      return (
+        <td>No images</td>
+      );
+    }
+  }, [imageList]);
+
+  const handleAddImage = (e) => {
+    var image = document.getElementById("image").value;
+    if (image !== "") {
+      var check = imageList.find((x) => x === image)
+      if (check === undefined) {
+        setImageList((prev) => [...prev, image]);
+      }
+    }
+  };
+
+  const handleRemoveImage = (e, image) => {
+    setImageList(imageList.filter((x) => x !== image));
   };
 
   const handleSelectCategory = (e, data) => {
@@ -282,9 +297,57 @@ const Books = () => {
     setThumbnail(e.target.value);
   };
 
+  const ResetAll = (e) => {
+    document.getElementById("product-id").value = "";
+    document.getElementById("book-name").value = "";
+    document.getElementById("orprice-input").value = "";
+    document.getElementById("curprice-input").value = "";
+    document.getElementById("date-input").value = "";
+    document.getElementById("page-input").value = "";
+    document.getElementById("weight-input").value = "";
+    document.getElementById("author").value = "";
+    document.getElementById("image").value = "";
+    document.getElementById("textarea-input").value = "";
+    document.getElementById("thumbnail-input").value = "";
+  };
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    alert("Submit");
+    // alert("Submit");
+    // console.log(imageList)
+
+    Axios({
+      headers: {
+        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
+      },
+      url: "http://localhost:5000/api/Admin/InsertUpdateBook",
+      method: "post",
+      params:{
+        id: id,
+        name: bookname,
+        originalPrice: parseInt(orPrice),
+        currentPrice: parseInt(curPrice),
+        releaseYear: parseInt(pubYear),
+        weight: parseFloat(weight),
+        numOfPage: parseInt(numPage),
+        image: thumbnail,
+        summary: summary,
+        status: "Available",
+        cateID: parseInt(category),
+        formID: parseInt(form),
+        supplierID: parseInt(supplier),
+        publisherID: parseInt(publisher),
+        images: imageList
+      },
+      data: authorList,
+      paramsSerializer: params => {
+        return qs.stringify(params)
+      }
+    }).then((res) => {
+      console.log(res.data);
+    }).catch((err) => {
+      console.log(err);
+    })
   };
 
   return (
@@ -455,7 +518,76 @@ const Books = () => {
                     {showListSupplier}
                   </Col>
                 </FormGroup>
-                {formAddAuthors}
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="author">Authors</Label>
+                  </Col>
+                  <Col xs="12" md="7">
+                    <Input
+                      type="text"
+                      id="author"
+                      name="author"
+                      placeholder="Author"
+                    ></Input>
+                  </Col>
+                  <Col xs="12" md="2">
+                    <Button color="primary" onClick={(e) => handleAddAuthors(e)}>
+                      Add
+                    </Button>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="authorList">List Authors</Label>
+                  </Col>
+                  <Col xs="12" md="9">
+                    <Table responsive>
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>Name</th>
+                          <th>Remove</th>
+                        </tr>
+                      </thead>
+                      <tbody>{showListAuthors}</tbody>
+                    </Table>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="images">List Images</Label>
+                  </Col>
+                  <Col xs="12" md="7">
+                    <Input
+                      type="text"
+                      id="image"
+                      name="image"
+                      placeholder="Image"
+                    ></Input>
+                  </Col>
+                  <Col xs="12" md="2">
+                    <Button color="primary" onClick={(e) => handleAddImage(e)}>
+                      Add
+                    </Button>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="authorList">List Images</Label>
+                  </Col>
+                  <Col xs="12" md="9">
+                    <Table responsive>
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>Link</th>
+                          <th>Remove</th>
+                        </tr>
+                      </thead>
+                      <tbody>{showListImage}</tbody>
+                    </Table>
+                  </Col>
+                </FormGroup>
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="textarea-input">Summary</Label>
@@ -479,7 +611,7 @@ const Books = () => {
                     <Input
                       placeholder="Link thumbnail"
                       type="text"
-                      id="file-input"
+                      id="thumbnail-input"
                       name="file-input"
                       onChange={(e) => handleTypeThumbnail(e)}
                     />
@@ -504,10 +636,11 @@ const Books = () => {
                     </Label>
                   </Col>
                 </FormGroup>
-                <Button type="button" size="sm" color="primary">
-                  <i className="fa fa-dot-circle-o"></i> Submit
+                <Button type="submit" size="sm" color="primary">
+                  <i className="fa fa-dot-circle-o"></i> Add/Update
                 </Button>
-                <Button type="reset" size="sm" color="danger">
+                <Button type="reset" size="sm" color="danger"
+                onClick={(e) => ResetAll(e)}>
                   <i className="fa fa-ban"></i> Reset
                 </Button>
               </Form>

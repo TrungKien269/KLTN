@@ -37,7 +37,7 @@ const Login = (props) => {
     event.preventDefault();
     axios({
       method: "post",
-      url: "http://localhost:5000/api/Login/Signin",
+      url: "http://localhost:5000/api/Admin/Login",
       params: {
         username,
         password,
@@ -48,7 +48,7 @@ const Login = (props) => {
         // refreshToken();
         props.history.push("/");
       } else {
-        alert("sikesss !");
+        alert(res.data.message);
       }
     });
   };
