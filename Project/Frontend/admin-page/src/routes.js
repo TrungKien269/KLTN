@@ -105,7 +105,12 @@ const routes = [
   { path: "/charts", name: "Charts", component: Charts },
   { path: "/users", exact: true, name: "Users", component: Users },
   { path: "/users/:id", exact: true, name: "User Details", component: User },
-  { path: "/books", exact: true, name: "Book Management", component: Books },
+  {
+    path: "/books",
+    exact: true,
+    name: "Book Management",
+    component: Books,
+  },
 ];
 
 export default routes;
