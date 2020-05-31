@@ -28,10 +28,25 @@ const BookPagination = (props) => {
       }`,
     }).then(function (res) {
       setData(res.data.obj);
+      console.log(res.data.obj);
     });
     setLoadingRange([0, itemsCountPerPage - 1]);
     setActivePage(1);
   }, [category]);
+
+  useEffect(() => {
+    const searchvalue = searchQuery;
+    if (searchvalue != null) {
+      axios({
+        method: "get",
+        url: `http://localhost:5000/api/ListBook/Search/value=${searchvalue}`,
+      }).then((res) => {
+        setData(res.data.obj);
+      });
+      setLoadingRange([0, itemsCountPerPage - 1]);
+      setActivePage(1);
+    }
+  }, [searchQuery]);
 
   const handlePageChange = (pageNumber) => {
     window.scrollTo({
@@ -63,6 +78,8 @@ const BookPagination = (props) => {
             id={book.id}
             name={book.name}
             image={book.image}
+            publishedyear={book.releaseYear}
+            status={book.status}
             price={
               <NumberFormat
                 value={book.currentPrice}
@@ -79,10 +96,6 @@ const BookPagination = (props) => {
         <React.Fragment>
           <div className="w-100">
             <h2>NOT FOUND</h2>
-            <img
-              className="img-contain img-cover-50"
-              src="/img/empty_state.png"
-            />
           </div>
         </React.Fragment>
       );
@@ -92,23 +105,13 @@ const BookPagination = (props) => {
 
   return (
     <>
-      <div className="d-flex justify-content-center w-100">
-        <Pagination
-          hideDisabled={true}
-          activePage={activePage}
-          itemsCountPerPage={itemsCountPerPage}
-          totalItemsCount={flexData ? flexData.length : data ? data.length : 0}
-          pageRangeDisplayed={pageRangeDisplayed}
-          onChange={handlePageChange}
-        />
-      </div>
-
       <Table celled>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Book image</Table.HeaderCell>
-            <Table.HeaderCell>Book name</Table.HeaderCell>
-            <Table.HeaderCell>Price</Table.HeaderCell>
+            <Table.HeaderCell>Book ID</Table.HeaderCell>
+            <Table.HeaderCell>Book infor</Table.HeaderCell>
+            <Table.HeaderCell>Status</Table.HeaderCell>
             <Table.HeaderCell>Actions</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -117,6 +120,8 @@ const BookPagination = (props) => {
 
       <div className="d-flex justify-content-center w-100">
         <Pagination
+          itemClass="page-item"
+          linkClass="page-link"
           hideDisabled={true}
           activePage={activePage}
           itemsCountPerPage={itemsCountPerPage}
