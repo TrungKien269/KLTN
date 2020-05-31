@@ -197,6 +197,7 @@ const BookForm = () => {
       if (check === undefined) {
         setAuthorList((prev) => [...prev, author]);
       }
+      document.getElementById("author").value = "";
     }
   };
 

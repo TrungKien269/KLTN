@@ -8,11 +8,11 @@ const BooksManagement = () => {
   return (
     <div className="animated fadeIn">
       <Row>
-        <Col xs="12" md="6">
+        <Col xs="12" md="12">
           <BookView category=""></BookView>
         </Col>
 
-        <Col xs="12" md="6">
+        <Col xs="12" md="12">
           <BookForm></BookForm>
         </Col>
       </Row>
