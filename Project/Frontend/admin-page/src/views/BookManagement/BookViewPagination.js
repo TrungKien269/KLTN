@@ -13,6 +13,7 @@ const BookPagination = (props) => {
     query,
     sortQuery,
     searchQuery,
+    selectBookID
   } = props;
 
   const [activePage, setActivePage] = useState(1);
@@ -28,7 +29,6 @@ const BookPagination = (props) => {
       }`,
     }).then(function (res) {
       setData(res.data.obj);
-      console.log(res.data.obj);
     });
     setLoadingRange([0, itemsCountPerPage - 1]);
     setActivePage(1);
@@ -88,6 +88,7 @@ const BookPagination = (props) => {
                 prefix={"VND "}
               />
             }
+            selectedBookID={selectBookID}
           />
         );
       }

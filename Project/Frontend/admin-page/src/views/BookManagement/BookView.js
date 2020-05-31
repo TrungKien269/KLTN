@@ -6,7 +6,7 @@ import SearchBar from "./SearchBar";
 import { useLocation } from "react-router-dom";
 
 const BookView = (props) => {
-  const { category } = props;
+  const { category, onSelectBook } = props;
 
   const useQuery = () => {
     return new URLSearchParams(useLocation().search);
@@ -25,6 +25,7 @@ const BookView = (props) => {
           category={encodeURI(category)}
           itemsCountPerPage={10}
           pageRangeDisplayed={3}
+          selectBookID={onSelectBook}
         ></BookPagination>
       </CardBody>
     </Card>

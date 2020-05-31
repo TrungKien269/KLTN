@@ -31,7 +31,10 @@ import {
 } from "reactstrap";
 import Axios from "axios";
 
-const BookForm = () => {
+const BookForm = (props) => {
+
+  const { selectedID } = props;
+
   const [id, setID] = useState("");
   const [bookname, setBookname] = useState("");
   const [orPrice, setOrPrice] = useState(0);
@@ -52,6 +55,52 @@ const BookForm = () => {
   const [supplierList, setSupplierList] = useState([]);
   const [authorList, setAuthorList] = useState([]);
   const [imageList, setImageList] = useState([]);
+
+  useEffect(() => {
+    if (selectedID !== null) {
+      Axios({
+        method: "get",
+        url: `http://localhost:5000/api/BookInfo/Book/${selectedID}`,
+      }).then((res) => {
+        console.log(res.data.obj)
+        document.getElementById("product-id").value = res.data.obj.id;
+        document.getElementById("book-name").value = res.data.obj.name;
+        document.getElementById("orprice-input").value = res.data.obj.originalPrice;
+        document.getElementById("curprice-input").value = res.data.obj.currentPrice;
+        document.getElementById("date-input").value = res.data.obj.releaseYear;
+        document.getElementById("page-input").value = res.data.obj.numOfPage;
+        document.getElementById("weight-input").value = res.data.obj.weight;
+        document.getElementById("textarea-input").value = res.data.obj.summary;
+        document.getElementById("thumbnail-input").value = res.data.obj.image;
+
+        setID(res.data.obj.id)
+        setBookname(res.data.obj.name);
+        setOrPrice(parseInt(res.data.obj.originalPrice));
+        setCurPrice(parseInt(res.data.obj.currentPrice));
+        setPubYear(parseInt(res.data.obj.releaseYear));
+        setNumPage(parseInt(res.data.obj.numOfPage));
+        setWeight(parseFloat(res.data.obj.weight));
+        setSummary(res.data.obj.summary);
+        setThumbnail(res.data.obj.image);
+        setForm(parseInt(res.data.obj.formBook[0].formId));
+        setPublisher(parseInt(res.data.obj.publisherBook[0].publisherId));
+        setSupplier(parseInt(res.data.obj.supplierBook[0].supplierId));
+        setCategory(parseInt(res.data.obj.bookCategory[0].cateId));
+
+        setAuthorList([]);
+        var authorBookArr = res.data.obj.authorBook;
+        authorBookArr.forEach(author => {
+          setAuthorList((prev) => [...prev, author.author.name]);
+        });
+
+        setImageList([]);
+        var imageBookArr = res.data.obj.imageBook;
+        imageBookArr.forEach(img => {
+          setImageList((prev) => [...prev, img.path]);
+        });
+      })
+    }
+  }, [selectedID])
 
   useEffect(async () => {
     await Axios({
@@ -93,14 +142,13 @@ const BookForm = () => {
       <Dropdown
         placeholder="Categories"
         fluid
-        multiple
-        text
-        selection
+        search
         options={categoryOption}
         onChange={(e, data) => handleSelectCategory(e, data)}
+        value={category != 0 ? form : null}
       />
     );
-  }, [categoryList]);
+  }, [categoryList, category]);
 
   const showListFormBook = useMemo(() => {
     var formOption = _.map(formList, (item, index) => ({
@@ -112,14 +160,13 @@ const BookForm = () => {
       <Dropdown
         placeholder="Book's form"
         fluid
-        multiple
-        text
-        selection
+        search
         options={formOption}
         onChange={(e, data) => handleSelectForm(e, data)}
+        value={form != 0 ? form : null}
       />
     );
-  }, [formList]);
+  }, [formList, form]);
 
   const showListPublisher = useMemo(() => {
     var publisherOption = _.map(publisherList, (item, index) => ({
@@ -131,14 +178,13 @@ const BookForm = () => {
       <Dropdown
         placeholder="Publishers"
         fluid
-        multiple
-        text
-        selection
+        search
         options={publisherOption}
         onChange={(e, data) => handleSelectPublisher(e, data)}
+        value={publisher != 0 ? form : null}
       />
     );
-  }, [publisherList]);
+  }, [publisherList, publisher]);
 
   const showListSupplier = useMemo(() => {
     var supplierOption = _.map(supplierList, (item, index) => ({
@@ -150,14 +196,13 @@ const BookForm = () => {
       <Dropdown
         placeholder="Suppliers"
         fluid
-        multiple
-        text
-        selection
+        search
         options={supplierOption}
         onChange={(e, data) => handleSelectSupplier(e, data)}
+        value={supplier != 0 ? form : null}
       />
     );
-  }, [supplierList]);
+  }, [supplierList, supplier]);
 
   const showListAuthors = useMemo(() => {
     if (authorList && authorList.length > 0) {
@@ -245,27 +290,19 @@ const BookForm = () => {
   };
 
   const handleSelectCategory = (e, data) => {
-    if (data.value[0]) {
-      setCategory(parseInt(data.value[0]));
-    }
+    setCategory(parseInt(data.value));
   };
 
   const handleSelectForm = (e, data) => {
-    if (data.value[0]) {
-      setForm(parseInt(data.value[0]));
-    }
+    setForm(parseInt(data.value));
   };
 
   const handleSelectPublisher = (e, data) => {
-    if (data.value[0]) {
-      setPublisher(parseInt(data.value[0]));
-    }
+    setPublisher(parseInt(data.value));
   };
 
   const handleSelectSupplier = (e, data) => {
-    if (data.value[0]) {
-      setSupplier(parseInt(data.value[0]));
-    }
+    setSupplier(parseInt(data.value));
   };
 
   const handleTypeID = (e) => {

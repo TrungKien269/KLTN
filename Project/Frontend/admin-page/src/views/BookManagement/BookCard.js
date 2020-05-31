@@ -2,6 +2,11 @@ import React from "react";
 import { Header, Image, Table, Button } from "semantic-ui-react";
 
 const BookCard = (props) => {
+
+  const handleUpdate = (e) => {
+    props.selectedBookID(props.id)
+  };
+
   return (
     <Table.Row>
       <Table.Cell>
@@ -25,7 +30,7 @@ const BookCard = (props) => {
       </Table.Cell>
       <Table.Cell>{props.status}</Table.Cell>
       <Table.Cell collapsing textAlign="right">
-        <Button>Update</Button>
+        <Button onClick={(e) => handleUpdate(e)}>Update</Button>
         <Button>Disable</Button>
       </Table.Cell>
     </Table.Row>
