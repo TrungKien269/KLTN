@@ -24,8 +24,18 @@ class App extends Component {
       <HashRouter>
         <React.Suspense fallback={loading()}>
           <Switch>
-            <PublicRoute path="/login" component={Login} />
-            <PublicRoute path="/register" component={Register} />
+            <PublicRoute
+              exact
+              path="/login"
+              name="Login Page"
+              component={(props) => <Login {...props} />}
+            />
+            <PublicRoute
+              exact
+              path="/register"
+              name="Register Page"
+              component={(props) => <Register {...props} />}
+            />
             <Route
               exact
               path="/404"
@@ -38,7 +48,11 @@ class App extends Component {
               name="Page 500"
               render={(props) => <Page500 {...props} />}
             />
-            <PrivateRoute path="/" component={DefaultLayout} />
+            <PrivateRoute
+              path="/"
+              name="Home"
+              component={(props) => <DefaultLayout {...props} />}
+            />
           </Switch>
         </React.Suspense>
       </HashRouter>

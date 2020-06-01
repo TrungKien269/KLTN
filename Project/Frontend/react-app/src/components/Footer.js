@@ -23,11 +23,11 @@ function Footer() {
           <div className="col-md-3">
             <img src="img/footer_logo.webp" alt="" />
             <p>
-            Provides clients with solutions to their same-day delivery
-            needs. You can make your payments in various ways, fast and easy. 
-            We're confident if you buy any of these now, you're getting a
-            good deal. A safer, faster, more secure way to pay online with, your
-            payments.
+              Provides clients with solutions to their same-day delivery needs.
+              You can make your payments in various ways, fast and easy. We're
+              confident if you buy any of these now, you're getting a good deal.
+              A safer, faster, more secure way to pay online with, your
+              payments.
             </p>
           </div>
           <div className="col-md-3">
@@ -39,9 +39,8 @@ function Footer() {
               Our main office
             </h4>
             <p>
-              1 Vo Van Ngan, Thu Duc Dist, Ho Chi Minh, VietNam 
-              BOX: 553204 Phone: (+84) 987654321 
-              Mail: admin@bookshop.com
+              1 Vo Van Ngan, Thu Duc Dist, Ho Chi Minh, VietNam BOX: 553204
+              Phone: (+84) 987654321 Mail: admin@bookshop.com
             </p>
           </div>
           <div className="col-md-3">

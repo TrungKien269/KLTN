@@ -2,8 +2,8 @@ import React, { useMemo, useContext, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { getToken } from "../../Utils/Commons";
 import axios from "axios";
-import moment from "moment";
-import { Search, Grid, Header, Segment } from "semantic-ui-react";
+import { Row, Col, Button, FormGroup } from "reactstrap";
+import { Search } from "semantic-ui-react";
 
 const SearchBar = (props) => {
   const [search, setSearch] = useState("");
@@ -40,6 +40,10 @@ const SearchBar = (props) => {
     return results;
   }, [searchHistory]);
 
+  const handleClear = () => {
+    setSearch("");
+    props.history.push("/books");
+  };
   const handleSearch = (event) => {
     if (getToken()) {
       axios({
@@ -83,16 +87,19 @@ const SearchBar = (props) => {
 
   return (
     <React.Fragment>
-      <div className="input__search-bar">
-        {/* <input type="text" placeholder="Search" onKeyPress={(e) => Search(e)} />
-        <i className="fas fa-search" /> */}
-        <Search
-          // results={sHistory}
-          // noResultsMessage="history is empty"
-          onKeyDown={(e) => handleSearch(e)}
-          className=""
-        />
-      </div>
+      <Row>
+        <Col className="d-flex">
+          <Search
+            id="search"
+            results={sHistory}
+            onKeyDown={(e) => handleSearch(e)}
+            className=""
+          />
+          <Button color="danger" className="btn-pill" onClick={handleClear}>
+            <i className="fa fa-lightbulb-o"></i>&nbsp; Clear search
+          </Button>
+        </Col>
+      </Row>
     </React.Fragment>
   );
 };

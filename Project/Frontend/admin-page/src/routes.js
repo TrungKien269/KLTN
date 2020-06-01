@@ -107,7 +107,6 @@ const routes = [
   { path: "/users/:id", exact: true, name: "User Details", component: User },
   {
     path: "/books",
-    exact: true,
     name: "Book Management",
     component: Books,
   },
