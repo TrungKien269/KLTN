@@ -353,12 +353,26 @@ const BookForm = (props) => {
     document.getElementById("image").value = "";
     document.getElementById("textarea-input").value = "";
     document.getElementById("thumbnail-input").value = "";
+
+    setID("");
+    setBookname("");
+    setOrPrice(0);
+    setCurPrice(0);
+    setWeight(0);
+    setPubYear(0);
+    setNumPage(0);
+    setSummary("");
+    setThumbnail("");
+    setForm(0);
+    setCategory(0);
+    setPublisher(0);
+    setSupplier(0);
+    setAuthorList([]);
+    setImageList([]);
   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    // alert("Submit");
-    // console.log(imageList)
 
     Axios({
       headers: {
