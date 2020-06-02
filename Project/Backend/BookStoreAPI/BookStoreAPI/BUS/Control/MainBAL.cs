@@ -64,21 +64,6 @@ namespace BookStoreAPI.BUS.Control
             return await bookBal.GetBookFromFamousPublisher(id);
         }
 
-        public async Task<Response> GetAccountByCookie(string cookie)
-        {
-            return await accountBal.GetAccountByCookie(cookie);
-        }
-
-        public async Task<Response> Logout(string cookie)
-        {
-            var account = await accountBal.GetAccountByCookie(cookie);
-            if (account is null)
-            {
-                return await Task.FromResult(new Response("Success", true, 0, null));
-            }
-            return await accountBal.SetCookie(null, account.Obj as Account);
-        }
-
         public async Task<Response> GetUser(int id)
         {
             return await UserBal.GetUser(id);

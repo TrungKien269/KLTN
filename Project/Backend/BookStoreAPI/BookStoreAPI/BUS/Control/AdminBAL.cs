@@ -13,6 +13,7 @@ namespace BookStoreAPI.BUS.Control
     public class AdminBAL
     {
         private AccountBAL accountBal;
+        private UserBAL userBal;
         private OrderBAL orderBal;
         private BookBAL bookBal;
         private AuthorBAL authorBal;
@@ -27,6 +28,7 @@ namespace BookStoreAPI.BUS.Control
         public AdminBAL()
         {
             accountBal = new AccountBAL();
+            userBal = new UserBAL();
             orderBal = new OrderBAL();
             bookBal = new BookBAL();
             authorBal = new AuthorBAL();
@@ -81,7 +83,6 @@ namespace BookStoreAPI.BUS.Control
 
         public async Task<Response> GetOrder(string secureID)
         {
-            //return await orderBal.GetOrder(SecureHelper.GetOriginalInput(secureID));
             return await orderBal.GetOrder(secureID);
         }
 
@@ -145,6 +146,16 @@ namespace BookStoreAPI.BUS.Control
         public async Task<Response> DeletePromotionDetail(int promotionID, string bookID)
         {
             return await promotionBal.DeletePromotionDetail(promotionID, bookID);
+        }
+
+        public async Task<Response> GetListUser()
+        {
+            return await userBal.GetListUser();
+        }
+
+        public async Task<Response> StatisticUser(int userID)
+        {
+            return await userBal.StatisticUser(userID);
         }
     }
 }

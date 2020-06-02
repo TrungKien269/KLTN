@@ -30,17 +30,15 @@ namespace BookStoreAPI.Controllers
             var response = await loginBal.Login(username, password);
             if (response.Status == true)
             {
-                if ((response.Obj as Account).Username.Equals("admin"))
+                if ((response.Obj as Account).State.Equals("Banned"))
                 {
-                    response.Token = JWTHelper.CreateAdminToken();
+                    response.Message = "Your account has been banned!";
+                    response.Status = false;
                     return response;
                 }
                 else
                 {
-                    if (response.Status is true)
-                    {
-                        response.Token = JWTHelper.CreateUserToken((response.Obj as Account).Id);
-                    }
+                    response.Token = JWTHelper.CreateUserToken((response.Obj as Account).Id);
                     return response;
                 }
             }
@@ -50,18 +48,20 @@ namespace BookStoreAPI.Controllers
         [HttpPost("GoogleSignin")]
         public async Task<Response> GoogleSignin(string email, string fullName)
         {
-            //var response = await loginBal.LoginByGoogle(email);
-            //if (response.Status is true)
-            //{
-            //    response.Token = JWTHelper.CreateUserToken((response.Obj as Account).Id);
-            //    return response;
-            //}
-            //return response;
             var checkResponse = await loginBal.LoginByGoogle(email);
             if (checkResponse.Status)
             {
-                checkResponse.Token = JWTHelper.CreateUserToken((checkResponse.Obj as Account).Id);
-                return checkResponse;
+                if ((checkResponse.Obj as Account).State.Equals("Banned"))
+                {
+                    checkResponse.Status = false;
+                    checkResponse.Message = "Your account has been banned!";
+                    return checkResponse;
+                }
+                else
+                {
+                    checkResponse.Token = JWTHelper.CreateUserToken((checkResponse.Obj as Account).Id);
+                    return checkResponse;
+                }
             }
             else
             {
@@ -69,7 +69,8 @@ namespace BookStoreAPI.Controllers
                 {
                     Username = email,
                     Password = email,
-                    Email = email
+                    Email = email,
+                    State = "Available"
                 };
                 var user = new User
                 {
@@ -140,7 +141,8 @@ namespace BookStoreAPI.Controllers
             {
                 Username = userRequest.AccountRequest.Username,
                 Password = userRequest.AccountRequest.Password,
-                Email = userRequest.AccountRequest.Email
+                Email = userRequest.AccountRequest.Email,
+                State = "Available"
             };
 
             var user = new User

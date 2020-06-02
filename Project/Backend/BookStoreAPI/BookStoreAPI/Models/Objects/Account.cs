@@ -21,7 +21,7 @@ namespace BookStoreAPI.Models.Objects
         public string Email { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedDateTime { get; set; }
-        public string Cookie { get; set; }
+        public string State { get; set; }
 
         [ForeignKey("Id")]
         [InverseProperty("Account")]

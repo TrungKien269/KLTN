@@ -106,5 +106,52 @@ namespace BookStoreAPI.BUS.Logic
                 return Response.CatchError(e.Message);
             }
         }
+
+        public async Task<Response> GetListUser()
+        {
+            try
+            {
+                var list = await context.User.Include(x => x.Account).Include(x => x.FaceBookAccount)
+                    .Where(x => x.Id > 0)
+                    .Select(x => new
+                    {
+                        ID = x.Id,
+                        FullName = x.FullName,
+                        Email = x.Account != null ? x.Account.Email : null,
+                        CreatedDateTime = x.Account != null ? x.Account.CreatedDateTime : DateTime.Now,
+                        State = x.Account != null ? x.Account.State : null
+                    })
+                    .ToListAsync();
+                return new Response("Success", true, 1, list);
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
+        public async Task<Response> StatisticUser(int userID)
+        {
+            try
+            {
+                var info = await context.User.Include(x => x.Order).Include(x => x.Account).Include(x => x.Rating)
+                    .Where(x => x.Id.Equals(userID))
+                    .Select(x => new
+                    {
+                        ID = x.Id,
+                        FullName = x.FullName,
+                        Email = x.Account != null ? x.Account.Email : null,
+                        CreatedDateTime = x.Account != null ? x.Account.CreatedDateTime : DateTime.Now,
+                        State = x.Account != null ? x.Account.State : null,
+                        NumberOrder = x.Order.Count,
+                        NumberRating = x.Rating.Count
+                    }).FirstOrDefaultAsync();
+                return new Response("Success", true, 1, info);
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
     }
 }

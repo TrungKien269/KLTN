@@ -214,5 +214,19 @@ namespace BookStoreAPI.Controllers
         {
             return await adminBal.GetListPublisher();
         }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("GetListUser")]
+        public async Task<Response> GetListUser()
+        {
+            return await adminBal.GetListUser();
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("StatisticUser")]
+        public async Task<Response> StatisticUser(int userID)
+        {
+            return await adminBal.StatisticUser(userID);
+        }
     }
 }

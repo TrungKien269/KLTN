@@ -32,13 +32,7 @@ namespace BookStoreAPI.BUS.Control
 
         public async Task<Response> LoginByGoogle(string email)
         {
-            //return await accountBal.LoginByGoogle(email);
             return await accountBal.CheckGoogleAccount(email);
-        }
-
-        public async Task<Response> SetCookieForAccount(string cookie, Account account)
-        {
-            return await accountBal.SetCookie(cookie, account);
         }
 
         public async Task<Response> Signup(User user)
@@ -65,7 +59,7 @@ namespace BookStoreAPI.BUS.Control
             user.Account.Salt = salt;
             user.Account.Password = CryptographyHelper.GenerateHash(user.Account.Password, salt);
             user.Account.CreatedDateTime = DateTime.Now;
-            user.Account.Cookie = null;
+            user.Account.State = "Available";
             return await Task.FromResult<User>(user);
         }
 

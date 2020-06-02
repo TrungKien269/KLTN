@@ -83,49 +83,6 @@ namespace BookStoreAPI.BUS.Logic
             }
         }
 
-        public async Task<Response> SetCookie(string cookie, Account account)
-        {
-            try
-            {
-                account.Cookie = cookie;
-                context.Account.Update(account);
-                var check = await context.SaveChangesAsync();
-                if (check == 1)
-                {
-                    return new Response("Success", true, 1, 1);
-                }
-                else
-                {
-                    return new Response("Fail", false, 0, 0);
-                }
-            }
-            catch (Exception e)
-            {
-                return Response.CatchError(e.Message);
-            }
-        }
-
-        public async Task<Response> GetAccountByCookie(string cookie)
-        {
-            try
-            {
-                var account = await context.Account.Include(x => x.IdNavigation).Where(x => x.Cookie.Equals(cookie))
-                    .FirstOrDefaultAsync();
-                if (account is null)
-                {
-                    return new Response("Not found", false, 0, null);
-                }
-                else
-                {
-                    return new Response("Success", true, 1, account);
-                }
-            }
-            catch (Exception e)
-            {
-                return Response.CatchError(e.Message);
-            }
-        }
-
         public async Task<Response> GetAccount(int userID)
         {
             try
