@@ -25,7 +25,7 @@ const BookPagination = (props) => {
     axios({
       method: "get",
       url: `http://localhost:5000/api/ListBook/${
-        category.length > 0 ? `Category/${category}` : "GetAll"
+        category != null ? `Category/${category}` : "GetAll"
       }`,
     }).then(function (res) {
       setData(res.data.obj);
@@ -35,12 +35,57 @@ const BookPagination = (props) => {
   }, [category]);
 
   useEffect(() => {
+    const { sortfield, sorttype } = sortQuery || {};
+    if (data && sortfield && sorttype) {
+      const fields = {
+        Price: "currentPrice",
+        Name: "name",
+      };
+      if (sorttype === "ASC") {
+        let sortData = flexData || data;
+        if (sortfield === "Price")
+          sortData.sort((a, b) => a[fields[sortfield]] - b[fields[sortfield]]);
+        else {
+          sortData.sort((a, b) =>
+            a[fields[sortfield]].localeCompare(b[fields[sortfield]])
+          );
+        }
+        setFlexData([...sortData]);
+      } else {
+        let sortData = flexData || data;
+        if (sortfield === "Price")
+          sortData.sort((a, b) => b[fields[sortfield]] - a[fields[sortfield]]);
+        else
+          sortData.sort((a, b) =>
+            b[fields[sortfield]].localeCompare(a[fields[sortfield]])
+          );
+        setFlexData([...sortData]);
+      }
+    }
+  }, [sortQuery, data]);
+
+  useEffect(() => {
+    setLoadingRange([0, itemsCountPerPage - 1]);
+    const { from, to } = query || {};
+    if (data) {
+      if (from && to && from !== "-1" && to !== "-1") {
+        const newData = data.filter(
+          (v) => v.currentPrice >= from && v.currentPrice <= to
+        );
+        setFlexData(newData);
+      } else setFlexData(null);
+    }
+  }, [query, data]);
+
+  useEffect(() => {
     let url = "";
     const searchvalue = searchQuery;
     if (searchvalue != null) {
       url = `http://localhost:5000/api/ListBook/Search/value=${searchvalue}`;
     } else {
-      url = `http://localhost:5000/api/ListBook/GetAll`;
+      url = `http://localhost:5000/api/ListBook/${
+        category != null ? `Category/${category}` : "GetAll"
+      }`;
     }
     axios({
       method: "get",
@@ -98,7 +143,7 @@ const BookPagination = (props) => {
       }
     } else {
       result.push(
-        <React.Fragment >
+        <React.Fragment>
           <div className="w-100">
             <h2>NOT FOUND</h2>
           </div>

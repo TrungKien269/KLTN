@@ -103,28 +103,28 @@ const BookForm = (props) => {
   }, [selectedID]);
 
   useEffect(() => {
-     Axios({
+    Axios({
       method: "get",
       url: "http://localhost:5000/api/Admin/ListSubCategory",
     }).then((res) => {
       setCategoryList(res.data.obj);
     });
 
-     Axios({
+    Axios({
       method: "get",
       url: "http://localhost:5000/api/Admin/ListFormBook",
     }).then((res) => {
       setFormList(res.data.obj);
     });
 
-     Axios({
+    Axios({
       method: "get",
       url: "http://localhost:5000/api/Admin/ListPublisher",
     }).then((res) => {
       setPublisherList(res.data.obj);
     });
 
-     Axios({
+    Axios({
       method: "get",
       url: "http://localhost:5000/api/Admin/ListSupplier",
     }).then((res) => {

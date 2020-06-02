@@ -3,62 +3,65 @@ import { withRouter } from "react-router-dom";
 import { getToken } from "../../Utils/Commons";
 import axios from "axios";
 import { Row, Col, Button, FormGroup } from "reactstrap";
-import { Search } from "semantic-ui-react";
+import { Search, Dropdown } from "semantic-ui-react";
+import { setGlobalCssModule } from "reactstrap/lib/utils";
 
 const SearchBar = (props) => {
   const [search, setSearch] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
+  const [category, setCategory] = useState();
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const sortOptions = [
+    { key: "1", value: "Price ASC", text: "Giá tăng dần" },
+    { key: "2", value: "Price DES", text: "Giá giảm dần" },
+    { key: "3", value: "Name ASC", text: "Tên từ A-Z" },
+    { key: "4", value: "Name DES", text: "Tên từ Z-A" },
+  ];
+  let categoryOptions = [];
 
   useEffect(() => {
-    if (getToken()) {
-      axios({
-        headers: {
-          Authorization: "Bearer " + getToken(),
-        },
-        method: "get",
-        url: "http://localhost:5000/api/Main/SearchHistory",
-      }).then((response) => {
-        if (response.data.status) {
-          console.log(response.data.obj);
-          setSearchHistory(response.data.obj);
-        }
-      });
-    }
+    axios({
+      method: "get",
+      url: "http://localhost:5000/api/Main/ListCategory",
+    }).then((res) => {
+      if (res.data.status) {
+        setCategory(res.data.obj);
+      }
+    });
   }, []);
 
-  const sHistory = useMemo(() => {
-    let results = [];
-    let dataSearch = [];
-    if (searchHistory && searchHistory.length > 0) {
-      dataSearch = searchHistory.map((sh) => {
-        results.push({
-          title: sh.words,
-          key: sh.id,
-        });
-      });
-    }
-    return results;
-  }, [searchHistory]);
+  if (category) {
+    categoryOptions = category.map((category) => {
+      return { key: category.id, value: category.name, text: category.name };
+    });
+  }
+
+  // if (category) {
+  //   console.log(category);
+  // }
 
   const handleClear = () => {
-    setSearch("");
     props.history.push("/bookmanagement");
   };
-  const handleSearch = (event) => {
-    if (getToken()) {
-      axios({
-        headers: {
-          Authorization: "Bearer " + getToken(),
-        },
-        method: "get",
-        url: "http://localhost:5000/api/Main/SearchHistory",
-      }).then((response) => {
-        if (response.data.status) {
-          console.log(response.data.obj);
-          setSearchHistory(response.data.obj);
-        }
-      });
+  const handleSelectCategory = (event, data) => {
+    let value = data.value;
+    setSelectedCategory(data.value);
+    if (value != "") {
+      let routeString = `?category=${value}`;
+      props.history.push(routeString);
     }
+  };
+  const handleSelectSort = (e, data) => {
+    let value = data.value;
+    if (value != "") {
+      let routeString = "";
+      let field = value.split(" ")[0];
+      let type = value.split(" ")[1];
+      routeString = `?sortfield=${field}&sorttype=${type}`;
+      props.history.push(routeString);
+    }
+  };
+  const handleSearch = (event) => {
     if (event.key === "Enter") {
       let value = event.target.value;
 
@@ -81,9 +84,7 @@ const SearchBar = (props) => {
             setSearchHistory((prev) => [response.data.obj, ...prev]);
           }
         });
-      }
-      else{
-          
+      } else {
       }
     }
   };
@@ -92,14 +93,23 @@ const SearchBar = (props) => {
     <React.Fragment>
       <Row>
         <Col className="d-flex">
-          <Search
-            id="search"
-            results={sHistory}
-            onKeyDown={(e) => handleSearch(e)}
-            className=""
+          <Search id="search" onKeyDown={(e) => handleSearch(e)} />
+          <Dropdown
+            selection
+            className="ml-1"
+            placeholder="Select category"
+            options={categoryOptions}
+            onChange={(e, data) => handleSelectCategory(e, data)}
           />
-          <Button color="danger" className="btn-pill" onClick={handleClear}>
-            <i className="fa fa-lightbulb-o"></i>&nbsp; Clear search
+          <Dropdown
+            selection
+            className="ml-1"
+            placeholder="Sort"
+            options={sortOptions}
+            onChange={(e, data) => handleSelectSort(e, data)}
+          />
+          <Button color="danger" className="btn ml-1" onClick={handleClear}>
+            <i className="fa fa-close"></i> Clear search
           </Button>
         </Col>
       </Row>
