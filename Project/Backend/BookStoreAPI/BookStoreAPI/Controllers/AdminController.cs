@@ -228,5 +228,12 @@ namespace BookStoreAPI.Controllers
         {
             return await adminBal.StatisticUser(userID);
         }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPut("UpdateUserState")]
+        public async Task<Response> UpdateUserState(int userID, string state)
+        {
+            return await adminBal.UpdateAccountState(userID, state);
+        }
     }
 }
