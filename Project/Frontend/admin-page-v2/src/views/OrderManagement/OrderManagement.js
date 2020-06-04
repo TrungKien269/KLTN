@@ -15,6 +15,7 @@ import {
   Row,
   Table,
 } from "reactstrap";
+import { Link, withRouter } from "react-router-dom";
 
 const OrderManagement = () => {
   const [processingOrders, setProcessingOrders] = useState();
@@ -76,12 +77,31 @@ const OrderManagement = () => {
     });
   }, []);
 
-  const handleConfirm = (e) => {};
+  const handleConfirm = (order) => {
+    Axios({
+      headers: {
+        Authorization: "Bearer " + getToken(),
+      },
+      method: "post",
+      url: "http://localhost:5000/api/Admin/ConfirmOrder",
+      data: {
+        id: order.id,
+        status: order.status,
+      },
+    }).then((res) => {
+      if (res.data.status) {
+        alert("success");
+      }
+    });
+    console.log(order);
+  };
 
   const showProcOrders = useMemo(() => {
     let results = "";
     if (processingOrders) {
       results = processingOrders.map((processingOrders) => {
+        const linktodetail = `/ordermanagement/${processingOrders.id}`;
+
         return (
           <tbody>
             <tr>
@@ -104,18 +124,24 @@ const OrderManagement = () => {
                   displayType={"text"}
                   thousandSeparator={true}
                   suffix={" VND"}
-                />
+                />{" "}
+                / {processingOrders.type}
               </td>
               <td>
                 <Badge color="warning">{processingOrders.status}</Badge>
               </td>
               <td>
                 <Button.Group size="mini">
-                  <Button positive onClick={(e) => handleConfirm(e)}>
+                  <Button
+                    positive
+                    onClick={(order) => handleConfirm(processingOrders)}
+                  >
                     Confirm
                   </Button>
                   <Button.Or text="or" />
-                  <Button negative>Deny</Button>
+                  <Link to={linktodetail}>
+                    <Button>Detail</Button>
+                  </Link>
                 </Button.Group>
               </td>
             </tr>
@@ -163,7 +189,7 @@ const OrderManagement = () => {
                     Confirm
                   </Button>
                   <Button.Or text="or" />
-                  <Button negative>Deny</Button>
+                  <Button negative>Detail</Button>
                 </Button.Group>
               </td>
             </tr>
@@ -211,7 +237,7 @@ const OrderManagement = () => {
                     Confirm
                   </Button>
                   <Button.Or text="or" />
-                  <Button negative>Deny</Button>
+                  <Button negative>Detail</Button>
                 </Button.Group>
               </td>
             </tr>
@@ -262,7 +288,7 @@ const OrderManagement = () => {
   }, [deliveredOrders]);
   const panes = [
     {
-      menuItem: "processing orders",
+      menuItem: "Processing orders",
       pane: (
         <Tab.Pane>
           <Card>
@@ -468,4 +494,4 @@ const OrderManagement = () => {
     </div>
   );
 };
-export default OrderManagement;
+export default withRouter(OrderManagement);
