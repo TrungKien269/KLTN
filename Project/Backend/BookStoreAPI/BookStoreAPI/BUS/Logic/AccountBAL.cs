@@ -193,5 +193,35 @@ namespace BookStoreAPI.BUS.Logic
                 return Response.CatchError(e.Message);
             }
         }
+
+        public async Task<Response> UpdateAccountState(int userID, string state)
+        {
+            try
+            {
+                var account = await context.Account.Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+                if (account is null)
+                {
+                    return new Response("This account is wrong", false, 0, null);
+                }
+                else
+                {
+                    account.State = state;
+                    context.Account.Update(account);
+                    int check = await context.SaveChangesAsync();
+                    if (check is 1)
+                    {
+                        return new Response("Update state successfully!", true, 1, account);
+                    }
+                    else
+                    {
+                        return new Response("Update state fail!", false, 0, account);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
     }
 }

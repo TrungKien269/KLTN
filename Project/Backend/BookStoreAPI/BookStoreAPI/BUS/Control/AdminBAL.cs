@@ -157,5 +157,10 @@ namespace BookStoreAPI.BUS.Control
         {
             return await userBal.StatisticUser(userID);
         }
+
+        public async Task<Response> UpdateAccountState(int userID, string state)
+        {
+            return await accountBal.UpdateAccountState(userID, state);
+        }
     }
 }
