@@ -26,7 +26,9 @@ const Buttons = React.lazy(() => import("./views/Buttons/Buttons"));
 const Charts = React.lazy(() => import("./views/Charts"));
 const Dashboard = React.lazy(() => import("./views/Dashboard"));
 const BookManagement = React.lazy(() => import("./views/BookManagement"));
-const OrderManagement = React.lazy(() => import("./views/OrderManagement"));
+const OrderManagement = React.lazy(() =>
+  import("./views/OrderManagement/OrderManagement")
+);
 const OrderDetail = React.lazy(() =>
   import("./views/OrderManagement/OrderDetail")
 );
@@ -56,6 +58,7 @@ const routes = [
   },
   {
     path: "/ordermanagement",
+    exact: true,
     name: "Order Management",
     component: OrderManagement,
   },
