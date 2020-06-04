@@ -86,6 +86,7 @@ class Tables extends Component {
                 </Pagination>
               </CardBody>
             </Card>
+          
           </Col>
 
           <Col xs="12" lg="6">

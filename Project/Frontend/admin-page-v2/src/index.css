@@ -1,3 +1,6 @@
 .ui.search .prompt {
     border-radius: 3px;
 }
+.badge {
+    padding: 0.75em 0.5em !important;
+}

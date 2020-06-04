@@ -25,6 +25,9 @@ const BookCard = (props) => {
           <Header.Subheader>
             Price: <strong>{props.price}</strong>
           </Header.Subheader>
+          <Header.Subheader>
+            Author: <strong>{props.author}</strong>
+          </Header.Subheader>
         </Header.Content>
       </Table.Cell>
       <Table.Cell>{props.status}</Table.Cell>

@@ -2,7 +2,15 @@ import React, { useState, useMemo, useEffect } from "react";
 import Pagination from "react-js-pagination";
 import BookCard from "./BookCard";
 import NumberFormat from "react-number-format";
-import { Header, Image, Table, Button } from "semantic-ui-react";
+import {
+  Header,
+  Image,
+  Table,
+  Button,
+  Dimmer,
+  Segment,
+  Loader,
+} from "semantic-ui-react";
 import axios from "axios";
 
 const BookPagination = (props) => {
@@ -20,12 +28,13 @@ const BookPagination = (props) => {
   const [loadingRange, setLoadingRange] = useState([0, itemsCountPerPage - 1]);
   const [data, setData] = useState(null);
   const [flexData, setFlexData] = useState(null);
+  const [bookInfor, setBookInfor] = useState();
 
   useEffect(() => {
     axios({
       method: "get",
       url: `http://localhost:5000/api/ListBook/${
-        category != null ? `Category/${category}` : "GetAll"
+        category !== null ? `Category/${category}` : "GetAll"
       }`,
     }).then(function (res) {
       setData(res.data.obj);
@@ -80,11 +89,11 @@ const BookPagination = (props) => {
   useEffect(() => {
     let url = "";
     const searchvalue = searchQuery;
-    if (searchvalue != null) {
+    if (searchvalue !== null) {
       url = `http://localhost:5000/api/ListBook/Search/value=${searchvalue}`;
     } else {
       url = `http://localhost:5000/api/ListBook/${
-        category != null ? `Category/${category}` : "GetAll"
+        category !== null ? `Category/${category}` : "GetAll"
       }`;
     }
     axios({
@@ -113,6 +122,7 @@ const BookPagination = (props) => {
   const showListData = useMemo(() => {
     let result = [];
     let listData = flexData || data;
+    let getAuthor = "";
     if (listData && listData.length > 0) {
       let start = loadingRange[0];
       let end =
@@ -121,6 +131,7 @@ const BookPagination = (props) => {
           : loadingRange[1];
       for (let i = start; i <= end; i++) {
         const book = listData[i];
+
         result.push(
           <BookCard
             key={book.id}
@@ -142,12 +153,10 @@ const BookPagination = (props) => {
         );
       }
     } else {
-      result.push(
-        <React.Fragment>
-          <div className="w-100">
-            <h2>NOT FOUND</h2>
-          </div>
-        </React.Fragment>
+      return (
+        <Table.Row>
+          <Loader active inline="centered" />
+        </Table.Row>
       );
     }
     return result;

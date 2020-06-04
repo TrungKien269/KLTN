@@ -26,6 +26,7 @@ const Buttons = React.lazy(() => import("./views/Buttons/Buttons"));
 const Charts = React.lazy(() => import("./views/Charts"));
 const Dashboard = React.lazy(() => import("./views/Dashboard"));
 const BookManagement = React.lazy(() => import("./views/BookManagement"));
+const OrderManagement = React.lazy(() => import("./views/OrderManagement"));
 const CoreUIIcons = React.lazy(() => import("./views/Icons/CoreUIIcons"));
 const Flags = React.lazy(() => import("./views/Icons/Flags"));
 const FontAwesome = React.lazy(() => import("./views/Icons/FontAwesome"));
@@ -49,6 +50,11 @@ const routes = [
     path: "/bookmanagement",
     name: "Book Management",
     component: BookManagement,
+  },
+  {
+    path: "/ordermanagement",
+    name: "Order Management",
+    component: OrderManagement,
   },
   { path: "/theme", exact: true, name: "Theme", component: Colors },
   { path: "/theme/colors", name: "Colors", component: Colors },

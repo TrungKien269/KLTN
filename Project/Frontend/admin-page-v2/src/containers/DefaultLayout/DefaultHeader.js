@@ -55,6 +55,12 @@ class DefaultHeader extends Component {
               Book's Management
             </NavLink>
           </NavItem>
+
+          <NavItem className="px-3">
+            <NavLink to="/ordermanagement" className="nav-link">
+              Order Management
+            </NavLink>
+          </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
           <NavItem className="d-md-down-none">
