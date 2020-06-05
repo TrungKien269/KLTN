@@ -34,7 +34,7 @@ const BookPagination = (props) => {
     axios({
       method: "get",
       url: `http://localhost:5000/api/ListBook/${
-        category !== null ? `Category/${category}` : "GetAll"
+        category !== null ? `Category/${category.replace("@", "&")}` : "GetAll"
       }`,
     }).then(function (res) {
       setData(res.data.obj);
@@ -93,7 +93,7 @@ const BookPagination = (props) => {
       url = `http://localhost:5000/api/ListBook/Search/value=${searchvalue}`;
     } else {
       url = `http://localhost:5000/api/ListBook/${
-        category !== null ? `Category/${category}` : "GetAll"
+        category !== null ? `Category/${category.replace("@", "&")}` : "GetAll"
       }`;
     }
     axios({

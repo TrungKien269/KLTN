@@ -7,16 +7,17 @@ import { Search, Dropdown } from "semantic-ui-react";
 import { setGlobalCssModule } from "reactstrap/lib/utils";
 
 const SearchBar = (props) => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(null);
   const [searchHistory, setSearchHistory] = useState([]);
   const [category, setCategory] = useState();
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const sortOptions = [
     { key: "1", value: "Price ASC", text: "Giá tăng dần" },
     { key: "2", value: "Price DES", text: "Giá giảm dần" },
     { key: "3", value: "Name ASC", text: "Tên từ A-Z" },
     { key: "4", value: "Name DES", text: "Tên từ Z-A" },
   ];
+  const [selectedSort, setSelectedSort] = useState(null);
   let categoryOptions = [];
 
   useEffect(() => {
@@ -36,23 +37,23 @@ const SearchBar = (props) => {
     });
   }
 
-  // if (category) {
-  //   console.log(category);
-  // }
-
   const handleClear = () => {
     props.history.push("/bookmanagement");
+    setSearch(null);
+    setSelectedCategory(null);
+    setSelectedSort(null);
   };
   const handleSelectCategory = (event, data) => {
     let value = data.value;
     setSelectedCategory(data.value);
     if (value != "") {
-      let routeString = `?category=${value}`;
+      let routeString = `?category=${value.replace("&", "@")}`;
       props.history.push(routeString);
     }
   };
   const handleSelectSort = (e, data) => {
     let value = data.value;
+    setSelectedSort(value);
     if (value != "") {
       let routeString = "";
       let field = value.split(" ")[0];
@@ -93,13 +94,15 @@ const SearchBar = (props) => {
     <React.Fragment>
       <Row>
         <Col className="d-flex">
-          <Search id="search" onKeyDown={(e) => handleSearch(e)} />
+          <Search id="search" onKeyDown={(e) => handleSearch(e)}
+          defaultValue={search ? search : ""}/>
           <Dropdown
             selection
             className="ml-1"
             placeholder="Select category"
             options={categoryOptions}
             onChange={(e, data) => handleSelectCategory(e, data)}
+            value={selectedCategory ? selectedCategory : ""}
           />
           <Dropdown
             selection

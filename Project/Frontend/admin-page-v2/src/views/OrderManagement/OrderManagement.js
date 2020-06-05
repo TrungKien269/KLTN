@@ -16,12 +16,13 @@ import {
   Table,
 } from "reactstrap";
 import { Link, withRouter } from "react-router-dom";
+import moment from 'moment';
 
 const OrderManagement = () => {
-  const [processingOrders, setProcessingOrders] = useState();
-  const [deliveringOrders, setDeliveringOrders] = useState();
-  const [deliveredOrders, setDeliveredOrders] = useState();
-  const [cancelOrders, setCancelOrders] = useState();
+  const [processingOrders, setProcessingOrders] = useState([]);
+  const [deliveringOrders, setDeliveringOrders] = useState([]);
+  const [deliveredOrders, setDeliveredOrders] = useState([]);
+  const [cancelOrders, setCancelOrders] = useState([]);
 
   useEffect(() => {
     Axios({
@@ -77,20 +78,32 @@ const OrderManagement = () => {
     });
   }, []);
 
-  const handleConfirm = (order) => {
+  const handleConfirm = (order, newState) => {
     Axios({
       headers: {
         Authorization: "Bearer " + getToken(),
       },
       method: "post",
       url: "http://localhost:5000/api/Admin/ConfirmOrder",
-      data: {
+      params: {
         id: order.id,
-        status: order.status,
+        status: newState,
       },
     }).then((res) => {
       if (res.data.status) {
         alert("success");
+        if(order.status === "Processing"){
+          order.status = "Delivering";
+          let newprocessingOrders = processingOrders.filter((x) => x.id !== order.id);
+          setProcessingOrders(newprocessingOrders);
+          setDeliveringOrders((prev) => [order, ...prev]);
+        }
+        else if(order.status === "Delivering") {
+          order.status = "Delivered";
+          let newdeliveringOrders = deliveringOrders.filter((x) => x.id !== order.id);
+          setDeliveringOrders(newdeliveringOrders);
+          setDeliveredOrders((prev) => [order, ...prev]);
+        }
       }
     });
     console.log(order);
@@ -99,20 +112,20 @@ const OrderManagement = () => {
   const showProcOrders = useMemo(() => {
     let results = "";
     if (processingOrders) {
-      results = processingOrders.map((processingOrders) => {
+      results = processingOrders.map((processingOrder) => {
         const linktodetail = `/ordermanagement/${processingOrders.id}`;
 
         return (
           <tbody>
             <tr>
-              <td>{processingOrders.userId}</td>
-              <td>{processingOrders.fullName}</td>
-              <td>{processingOrders.phoneNumber}</td>
-              <td>{processingOrders.createdDate.replace("T", " ")}</td>
-              <td>{processingOrders.id}</td>
+              <td>{processingOrder.userId}</td>
+              <td>{processingOrder.fullName}</td>
+              <td>{processingOrder.phoneNumber}</td>
+              <td>{moment(processingOrder.createdDate).format("YYYY-MM-DD hh:mm:ss")}</td>
+              <td>{processingOrder.id}</td>
               <td>
                 <NumberFormat
-                  value={processingOrders.shippingFee}
+                  value={processingOrder.shippingFee}
                   displayType={"text"}
                   thousandSeparator={true}
                   suffix={" VND"}
@@ -120,21 +133,21 @@ const OrderManagement = () => {
               </td>
               <td>
                 <NumberFormat
-                  value={processingOrders.total}
+                  value={processingOrder.total}
                   displayType={"text"}
                   thousandSeparator={true}
                   suffix={" VND"}
                 />{" "}
-                / {processingOrders.type}
+                / {processingOrder.type}
               </td>
               <td>
-                <Badge color="warning">{processingOrders.status}</Badge>
+                <Badge color="warning">{processingOrder.status}</Badge>
               </td>
               <td>
                 <Button.Group size="mini">
                   <Button
                     positive
-                    onClick={(order) => handleConfirm(processingOrders)}
+                    onClick={(order) => handleConfirm(processingOrder, "Delivering")}
                   >
                     Confirm
                   </Button>
@@ -155,18 +168,18 @@ const OrderManagement = () => {
   const showDeliveringOrders = useMemo(() => {
     let results = "";
     if (deliveringOrders) {
-      results = deliveringOrders.map((deliveringOrders) => {
+      results = deliveringOrders.map((deliveringOrder) => {
         return (
           <tbody>
             <tr>
-              <td>{deliveringOrders.userId}</td>
-              <td>{deliveringOrders.fullName}</td>
-              <td>{deliveringOrders.phoneNumber}</td>
-              <td>{deliveringOrders.createdDate.replace("T", " ")}</td>
-              <td>{deliveringOrders.id}</td>
+              <td>{deliveringOrder.userId}</td>
+              <td>{deliveringOrder.fullName}</td>
+              <td>{deliveringOrder.phoneNumber}</td>
+              <td>{moment(deliveringOrder.createdDate).format("YYYY-MM-DD hh:mm:ss")}</td>
+              <td>{deliveringOrder.id}</td>
               <td>
                 <NumberFormat
-                  value={deliveringOrders.shippingFee}
+                  value={deliveringOrder.shippingFee}
                   displayType={"text"}
                   thousandSeparator={true}
                   suffix={" VND"}
@@ -174,18 +187,18 @@ const OrderManagement = () => {
               </td>
               <td>
                 <NumberFormat
-                  value={deliveringOrders.total}
+                  value={deliveringOrder.total}
                   displayType={"text"}
                   thousandSeparator={true}
                   suffix={" VND"}
                 />
               </td>
               <td>
-                <Badge color="green">{deliveringOrders.status}</Badge>
+                <Badge color="green">{deliveringOrder.status}</Badge>
               </td>
               <td>
                 <Button.Group size="mini">
-                  <Button positive onClick={(e) => handleConfirm(e)}>
+                  <Button positive onClick={(order) => handleConfirm(deliveringOrder, "Delivered")}>
                     Confirm
                   </Button>
                   <Button.Or text="or" />
@@ -207,14 +220,14 @@ const OrderManagement = () => {
         return (
           <tbody>
             <tr>
-              <td>{deliveredOrders.userId}</td>
-              <td>{deliveredOrders.fullName}</td>
-              <td>{deliveredOrders.phoneNumber}</td>
-              <td>{deliveredOrders.createdDate.replace("T", " ")}</td>
-              <td>{deliveredOrders.id}</td>
+              <td>{deliveredOrder.userId}</td>
+              <td>{deliveredOrder.fullName}</td>
+              <td>{deliveredOrder.phoneNumber}</td>
+              <td>{moment(deliveredOrder.createdDate).format("YYYY-MM-DD hh:mm:ss")}</td>
+              <td>{deliveredOrder.id}</td>
               <td>
                 <NumberFormat
-                  value={deliveredOrders.shippingFee}
+                  value={deliveredOrder.shippingFee}
                   displayType={"text"}
                   thousandSeparator={true}
                   suffix={" VND"}
@@ -222,18 +235,18 @@ const OrderManagement = () => {
               </td>
               <td>
                 <NumberFormat
-                  value={deliveredOrders.total}
+                  value={deliveredOrder.total}
                   displayType={"text"}
                   thousandSeparator={true}
                   suffix={" VND"}
                 />
               </td>
               <td>
-                <Badge color="green">{deliveredOrders.status}</Badge>
+                <Badge color="green">{deliveredOrder.status}</Badge>
               </td>
               <td>
                 <Button.Group size="mini">
-                  <Button positive onClick={(e) => handleConfirm(e)}>
+                  <Button positive onClick={(order) => handleConfirm(deliveredOrder, "Delivered")}>
                     Confirm
                   </Button>
                   <Button.Or text="or" />
@@ -258,7 +271,7 @@ const OrderManagement = () => {
               <td>{cancelOrders.userId}</td>
               <td>{cancelOrders.fullName}</td>
               <td>{cancelOrders.phoneNumber}</td>
-              <td>{cancelOrders.createdDate.replace("T", " ")}</td>
+              <td>{moment(cancelOrders.createdDate).format("YYYY-MM-DD hh:mm:ss")}</td>
               <td>{cancelOrders.id}</td>
               <td>
                 <NumberFormat
