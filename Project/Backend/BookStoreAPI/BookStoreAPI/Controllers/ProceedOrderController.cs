@@ -116,5 +116,19 @@ namespace BookStoreAPI.Controllers
                     orderDetailRequests, userID);
             }
         }
+
+        [HttpGet("USDCurrency")]
+        public async Task<Response> CurrencyConvertingCrawler()
+        {
+            var usdCurrency = CurrencyConverterHelper.USDCurrency();
+            if (usdCurrency is -1)
+            {
+                return await Task.FromResult(new Response("Fail", false, 0, null));
+            }
+            else
+            {
+                return await Task.FromResult(new Response("Success", true, 1, usdCurrency));
+            }
+        }
     }
 }
