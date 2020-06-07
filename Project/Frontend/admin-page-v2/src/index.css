@@ -4,3 +4,6 @@
 .badge {
     padding: 0.75em 0.5em !important;
 }
+.modal-dialog {
+    max-width: 75vw !important;
+}

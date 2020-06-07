@@ -29,6 +29,9 @@ const BookManagement = React.lazy(() => import("./views/BookManagement"));
 const OrderManagement = React.lazy(() =>
   import("./views/OrderManagement/OrderManagement")
 );
+const PromotionManagement = React.lazy(() =>
+  import("./views/PromotionManagement/PromotionManagement")
+);
 const OrderDetail = React.lazy(() =>
   import("./views/OrderManagement/OrderDetail")
 );
@@ -67,6 +70,12 @@ const routes = [
     exact: true,
     name: "Order Details",
     component: OrderDetail,
+  },
+  {
+    path: "/promotionmanagement",
+    exact: true,
+    name: "Promotion management",
+    component: PromotionManagement,
   },
   { path: "/theme", exact: true, name: "Theme", component: Colors },
   { path: "/theme/colors", name: "Colors", component: Colors },

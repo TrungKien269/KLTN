@@ -16,7 +16,7 @@ import {
   Table,
 } from "reactstrap";
 import { Link, withRouter } from "react-router-dom";
-import moment from 'moment';
+import moment from "moment";
 
 const OrderManagement = () => {
   const [processingOrders, setProcessingOrders] = useState([]);
@@ -92,15 +92,18 @@ const OrderManagement = () => {
     }).then((res) => {
       if (res.data.status) {
         alert("success");
-        if(order.status === "Processing"){
+        if (order.status === "Processing") {
           order.status = "Delivering";
-          let newprocessingOrders = processingOrders.filter((x) => x.id !== order.id);
+          let newprocessingOrders = processingOrders.filter(
+            (x) => x.id !== order.id
+          );
           setProcessingOrders(newprocessingOrders);
           setDeliveringOrders((prev) => [order, ...prev]);
-        }
-        else if(order.status === "Delivering") {
+        } else if (order.status === "Delivering") {
           order.status = "Delivered";
-          let newdeliveringOrders = deliveringOrders.filter((x) => x.id !== order.id);
+          let newdeliveringOrders = deliveringOrders.filter(
+            (x) => x.id !== order.id
+          );
           setDeliveringOrders(newdeliveringOrders);
           setDeliveredOrders((prev) => [order, ...prev]);
         }
@@ -121,7 +124,11 @@ const OrderManagement = () => {
               <td>{processingOrder.userId}</td>
               <td>{processingOrder.fullName}</td>
               <td>{processingOrder.phoneNumber}</td>
-              <td>{moment(processingOrder.createdDate).format("YYYY-MM-DD hh:mm:ss")}</td>
+              <td>
+                {moment(processingOrder.createdDate).format(
+                  "YYYY-MM-DD hh:mm:ss"
+                )}
+              </td>
               <td>{processingOrder.id}</td>
               <td>
                 <NumberFormat
@@ -147,7 +154,9 @@ const OrderManagement = () => {
                 <Button.Group size="mini">
                   <Button
                     positive
-                    onClick={(order) => handleConfirm(processingOrder, "Delivering")}
+                    onClick={(order) =>
+                      handleConfirm(processingOrder, "Delivering")
+                    }
                   >
                     Confirm
                   </Button>
@@ -175,7 +184,11 @@ const OrderManagement = () => {
               <td>{deliveringOrder.userId}</td>
               <td>{deliveringOrder.fullName}</td>
               <td>{deliveringOrder.phoneNumber}</td>
-              <td>{moment(deliveringOrder.createdDate).format("YYYY-MM-DD hh:mm:ss")}</td>
+              <td>
+                {moment(deliveringOrder.createdDate).format(
+                  "YYYY-MM-DD hh:mm:ss"
+                )}
+              </td>
               <td>{deliveringOrder.id}</td>
               <td>
                 <NumberFormat
@@ -198,7 +211,12 @@ const OrderManagement = () => {
               </td>
               <td>
                 <Button.Group size="mini">
-                  <Button positive onClick={(order) => handleConfirm(deliveringOrder, "Delivered")}>
+                  <Button
+                    positive
+                    onClick={(order) =>
+                      handleConfirm(deliveringOrder, "Delivered")
+                    }
+                  >
                     Confirm
                   </Button>
                   <Button.Or text="or" />
@@ -223,7 +241,11 @@ const OrderManagement = () => {
               <td>{deliveredOrder.userId}</td>
               <td>{deliveredOrder.fullName}</td>
               <td>{deliveredOrder.phoneNumber}</td>
-              <td>{moment(deliveredOrder.createdDate).format("YYYY-MM-DD hh:mm:ss")}</td>
+              <td>
+                {moment(deliveredOrder.createdDate).format(
+                  "YYYY-MM-DD hh:mm:ss"
+                )}
+              </td>
               <td>{deliveredOrder.id}</td>
               <td>
                 <NumberFormat
@@ -246,7 +268,12 @@ const OrderManagement = () => {
               </td>
               <td>
                 <Button.Group size="mini">
-                  <Button positive onClick={(order) => handleConfirm(deliveredOrder, "Delivered")}>
+                  <Button
+                    positive
+                    onClick={(order) =>
+                      handleConfirm(deliveredOrder, "Delivered")
+                    }
+                  >
                     Confirm
                   </Button>
                   <Button.Or text="or" />
@@ -271,7 +298,9 @@ const OrderManagement = () => {
               <td>{cancelOrders.userId}</td>
               <td>{cancelOrders.fullName}</td>
               <td>{cancelOrders.phoneNumber}</td>
-              <td>{moment(cancelOrders.createdDate).format("YYYY-MM-DD hh:mm:ss")}</td>
+              <td>
+                {moment(cancelOrders.createdDate).format("YYYY-MM-DD hh:mm:ss")}
+              </td>
               <td>{cancelOrders.id}</td>
               <td>
                 <NumberFormat

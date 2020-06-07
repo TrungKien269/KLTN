@@ -55,7 +55,11 @@ class DefaultHeader extends Component {
               Book's Management
             </NavLink>
           </NavItem>
-
+          <NavItem className="px-3">
+            <NavLink to="/promotionmanagement" className="nav-link">
+              Promotion Management
+            </NavLink>
+          </NavItem>
           <NavItem className="px-3">
             <NavLink to="/ordermanagement" className="nav-link">
               Order Management
