@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, withRouter } from "react-router-dom";
 import {
   Badge,
   UncontrolledDropdown,
@@ -18,6 +18,7 @@ import {
 } from "@coreui/react";
 import logo from "../../assets/img/brand/logo.svg";
 import sygnet from "../../assets/img/brand/sygnet.svg";
+import { removeUserSession } from "../../Utils/Commons";
 
 const propTypes = {
   children: PropTypes.node,
@@ -29,7 +30,10 @@ class DefaultHeader extends Component {
   render() {
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
-
+    const onLogout = (e) => {
+      removeUserSession();
+      this.props.history.push("/");
+    };
     return (
       <React.Fragment>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
@@ -134,7 +138,7 @@ class DefaultHeader extends Component {
               <DropdownItem>
                 <i className="fa fa-shield"></i> Lock Account
               </DropdownItem>
-              <DropdownItem onClick={(e) => this.props.onLogout(e)}>
+              <DropdownItem onClick={(e) => onLogout(e)}>
                 <i className="fa fa-lock"></i> Logout
               </DropdownItem>
             </DropdownMenu>
@@ -150,4 +154,4 @@ class DefaultHeader extends Component {
 DefaultHeader.propTypes = propTypes;
 DefaultHeader.defaultProps = defaultProps;
 
-export default DefaultHeader;
+export default withRouter(DefaultHeader);

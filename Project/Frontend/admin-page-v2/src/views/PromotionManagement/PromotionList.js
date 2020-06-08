@@ -24,11 +24,17 @@ const PromotionLList = () => {
     var results = "";
     if (listPromo) {
       x = listPromo.map((data) => {
+        console.log(data);
         var d = data.promotionDetail;
         results = d.map((da) => {
           return <div key={da.book.id}>{da.book.name}</div>;
         });
-        return <div>{results}</div>;
+        return (
+          <div>
+            <strong>Promo: {data.description}</strong>
+            {results}
+          </div>
+        );
       });
     }
     return x;
