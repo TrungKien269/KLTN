@@ -24,14 +24,19 @@ const PromotionLList = () => {
     var results = "";
     if (listPromo) {
       x = listPromo.map((data) => {
-        return data.promotionDetail;
+        var d = data.promotionDetail;
+        results = d.map((da) => {
+          console.log(da);
+          return <div key={da.book.id}>{da.book.name}</div>;
+        });
+        return <div>{results}</div>;
       });
     }
     return x;
   }, [listPromo]);
 
-  console.log(showListPromo);
+  // console.log(showListPromo);
 
-  return <div>{}</div>;
+  return <div>{showListPromo}</div>;
 };
 export default PromotionLList;

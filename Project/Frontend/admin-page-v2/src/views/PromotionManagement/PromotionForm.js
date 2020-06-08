@@ -1,38 +1,25 @@
-import React, { useState, useEffect, useMemo, useDebugValue } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Axios from "axios";
 import { getToken } from "../../Utils/Commons";
 import { Dropdown } from "semantic-ui-react";
-import _ from "lodash";
 import {
-  Badge,
   Button,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Col,
-  Collapse,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Fade,
   Form,
   FormGroup,
-  FormText,
-  FormFeedback,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButtonDropdown,
-  InputGroupText,
   Label,
   Row,
 } from "reactstrap";
-const PromotionForm = (props) => {
+const PromotionForm = () => {
   const [data, setData] = useState();
   const [endedDate, setEndedDate] = useState();
   const [description, setDescription] = useState();
-  const promotionDetailRequest = [];
+  const [book, setBook] = useState([]);
+  const [discount, setDiscount] = useState(0);
 
   useEffect(() => {
     Axios({
@@ -54,13 +41,7 @@ const PromotionForm = (props) => {
   }, [data]);
 
   const handleChange = (e, data) => {
-    var i = data.value.length;
-    promotionDetailRequest.push({
-      promotionID: 0,
-      bookID: data.value[i - 1],
-      discount: 5,
-    });
-    console.log(promotionDetailRequest);
+    setBook(data.value);
   };
 
   const handleDate = (e) => {
@@ -70,6 +51,29 @@ const PromotionForm = (props) => {
   const handleDescription = (e) => {
     setDescription(e.target.value);
   };
+
+  const handleDiscount = (e) => {
+    setDiscount(e.target.value);
+  };
+
+  const DetailRequest = useMemo(() => {
+    var arr = [];
+    if (book) {
+      var len = book.length;
+      for (var i = 0; i < len; i++) {
+        arr.push({
+          promotionID: 0,
+          bookID: book[i],
+          discount: discount,
+        });
+      }
+    }
+    return arr;
+  }, [book, discount]);
+
+  console.log(DetailRequest);
+  console.log(endedDate);
+  console.log(description);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -83,7 +87,7 @@ const PromotionForm = (props) => {
         endedDate: endedDate,
         description: description,
       },
-      data: promotionDetailRequest,
+      data: DetailRequest,
     }).then((res) => {
       if (res.status) {
         alert("success");
@@ -161,7 +165,18 @@ const PromotionForm = (props) => {
                   Select Book to add to Promotion
                 </Label>
               </Col>
-              <Col md="9">{multiSelectBooks}</Col>
+              <Col md="6">{multiSelectBooks}</Col>
+              <Col md="3">
+                <Input
+                  required
+                  type="number"
+                  min="0"
+                  id="number-input"
+                  name="number-input"
+                  placeholder="discount"
+                  onChange={(e) => handleDiscount(e)}
+                />
+              </Col>
             </FormGroup>
             <Button type="submit" size="sm" color="primary">
               <i className="fa fa-dot-circle-o"></i> Submit
