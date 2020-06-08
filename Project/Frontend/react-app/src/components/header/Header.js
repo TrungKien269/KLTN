@@ -14,7 +14,7 @@ const Header = (props) => {
   const handleLogout = () => {
     removeUserSession();
     refreshToken();
-    this.props.history.push("/");
+    props.history.push("/");
   };
 
   useEffect(() => {

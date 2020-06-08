@@ -4,20 +4,28 @@ import { getToken } from "../../Utils/Commons";
 import NumberFormat from "react-number-format";
 import Swal from "sweetalert2";
 import { withRouter, Link } from "react-router-dom";
+import data from '../../data/local.json';
 
 const ProceedCheckout = (props) => {
   var order = [];
   var proceedOrder = [];
-  var orderTotal = 0;
   const [cartBook, setCartBook] = useState(null);
   const [userInfor, setUserInfor] = useState(null);
   const [fullName, setFullName] = useState("");
   const [phonenumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
+  const [email, setEmail] = useState("");
+
+  const [cities, setCities] = useState([]);
+  const [city, setCity] = useState("");
+
+  const [orderTotal, setOrderTotal] = useState(0);
+  const [shippingFee, setShippingFee] = useState(0);
 
   const fullNameRef = useRef(null);
   const phoneRef = useRef(null);
   const addressRef = useRef(null);
+  const emailRef = useRef(null);
 
   const handleNameChange = (event) => {
     setFullName(event.target.value);
@@ -31,6 +39,10 @@ const ProceedCheckout = (props) => {
     setAddress(event.target.value);
   };
 
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value)
+  }
+
   useEffect(() => {
     Axios({
       headers: {
@@ -42,6 +54,7 @@ const ProceedCheckout = (props) => {
       setCartBook(res.data.obj);
     });
   }, []);
+
   useEffect(() => {
     Axios({
       headers: {
@@ -57,18 +70,26 @@ const ProceedCheckout = (props) => {
     });
   }, []);
 
+  useEffect(() => {
+    setCities(data);
+    setShippingFee(25000);
+  }, [])
+
   proceedOrder = useMemo(() => {
     if (cartBook) {
       let x = [];
+      var total = 0;
       x = cartBook.cartBook;
       for (let i = 0; i < x.length; i++) {
-        orderTotal = orderTotal + x[i].subTotal;
+        total = total + parseInt(x[i].subTotal);
         order.push({
           bookID: x[i].bookId,
+          bookName: x[i].book.Name,
           currentPrice: x[i].book.currentPrice,
           quantity: x[i].quantity,
         });
       }
+      setOrderTotal(parseInt(total) + shippingFee);
     }
     return order;
   }, [cartBook, orderTotal]);
@@ -92,6 +113,9 @@ const ProceedCheckout = (props) => {
             method: "post",
             url: "http://localhost:5000/api/ProceedOrder/CODCheckout",
             params: {
+              email: email,
+              type: "COD",
+              shippingFee: shippingFee,
               fullName: fullName,
               phoneNumber: phonenumber,
               address: address,
@@ -142,6 +166,12 @@ const ProceedCheckout = (props) => {
     }
   };
 
+  const SelectCity = (e) => {
+    if (e.target.value) {
+      setCity(e.target.value)
+    }
+  }
+
   const showListProduct = useMemo(() => {
     let orderBlock = [];
     let x = [];
@@ -168,7 +198,7 @@ const ProceedCheckout = (props) => {
                           value={item.book.currentPrice}
                           thousandSeparator={true}
                           displayType="text"
-                          prefix={"VND "}
+                          suffix={" VND"}
                         ></NumberFormat>
                       }
                     </div>
@@ -199,6 +229,19 @@ const ProceedCheckout = (props) => {
     return orderBlock;
   });
 
+  const showListCity = useMemo(() => {
+    let cityItems = [];
+    if (cities && cities.length > 0) {
+      cityItems = cities.map((city) => {
+        return (
+          // <option value={city.ID}>{city.Title}</option>
+          <option value={city.id}>{city.name}</option>
+        )
+      });
+    }
+    return cityItems;
+  }, [cities]);
+
   return (
     <div>
       <section className="section__checkout">
@@ -213,6 +256,14 @@ const ProceedCheckout = (props) => {
                 {/* <a href="/login.html">Login</a> */}
               </div>
               <form className="form-checkout">
+                <input
+                  type="email"
+                  placeholder="Email for receive notification"
+                  id="email"
+                  defaultValue={userInfor && userInfor.account.email}
+                  ref={emailRef}
+                  onChange={(e) => handleEmailChange(e)}
+                />
                 <input
                   type="text"
                   placeholder="Your name"
@@ -229,7 +280,11 @@ const ProceedCheckout = (props) => {
                   ref={phoneRef}
                   onChange={(e) => handlePhoneChange(e)}
                 />
-
+                <select name="city" id="cbCity" className="form-control"
+                  onChange={(e) => SelectCity(e)}>
+                  <option selected hidden>Choose City</option>
+                  {showListCity}
+                </select>
                 <textarea
                   name
                   id
@@ -251,7 +306,22 @@ const ProceedCheckout = (props) => {
             <div className="col-md">
               <div className="order">
                 <div className="title-wrapper">
-                  <h2>Your order</h2>
+                  <h2 style={{
+                    textAlign: "center"
+                  }}>Your order</h2>
+                </div>
+                <div className="title-wrapper">
+                  <h2>Shipping Fee</h2>
+                  <div className="product-price">
+                    {
+                      <NumberFormat
+                        value={shippingFee}
+                        thousandSeparator={true}
+                        displayType={"text"}
+                        suffix=" VND"
+                      ></NumberFormat>
+                    }
+                  </div>
                 </div>
                 <div className="title-wrapper">
                   <h2>Total</h2>
@@ -261,7 +331,7 @@ const ProceedCheckout = (props) => {
                         value={orderTotal}
                         thousandSeparator={true}
                         displayType={"text"}
-                        prefix="VND "
+                        suffix=" VND"
                       ></NumberFormat>
                     }
                   </div>
