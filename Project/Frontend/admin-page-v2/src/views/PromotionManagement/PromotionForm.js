@@ -16,8 +16,8 @@ import {
 } from "reactstrap";
 const PromotionForm = () => {
   const [data, setData] = useState();
-  const [endedDate, setEndedDate] = useState();
-  const [description, setDescription] = useState();
+  const [endedDate, setEndedDate] = useState("");
+  const [description, setDescription] = useState("");
   const [book, setBook] = useState([]);
   const [discount, setDiscount] = useState(0);
 
@@ -45,15 +45,17 @@ const PromotionForm = () => {
   };
 
   const handleDate = (e) => {
-    setEndedDate(e.target.value);
+    if (e.target.value)
+      setEndedDate(e.target.value);
   };
 
   const handleDescription = (e) => {
-    setDescription(e.target.value);
+    if (e.target.value)
+      setDescription(e.target.value);
   };
 
   const handleDiscount = (e) => {
-    setDiscount(e.target.value);
+    setDiscount(parseFloat(e.target.value));
   };
 
   const DetailRequest = useMemo(() => {
@@ -62,21 +64,18 @@ const PromotionForm = () => {
       var len = book.length;
       for (var i = 0; i < len; i++) {
         arr.push({
-          promotionID: 0,
+          promotionID: 1,
           bookID: book[i],
-          discount: discount,
+          discount: parseFloat(discount),
         });
       }
     }
-    return arr;
+    return [...arr];
   }, [book, discount]);
 
-  console.log("detail req:", DetailRequest);
-  console.log("ended day:", endedDate);
-  console.log("description:", description);
-
-  const handleSubmit = (e) => {
+  const handleFormSubmit = e => {
     e.preventDefault();
+    console.log(DetailRequest)
     Axios({
       headers: {
         Authorization: "Bearer " + getToken(),
@@ -84,12 +83,13 @@ const PromotionForm = () => {
       method: "POST",
       url: "http://localhost:5000/api/Admin/CreatePromotion",
       params: {
-        endedDate: endedDate,
-        description: description,
+        endedDate: document.getElementById("date-input").value,
+        description: document.getElementById("text-input").value,
       },
-      data: DetailRequest,
+      data: DetailRequest
     }).then((res) => {
       if (res.status) {
+        console.log(res.data)
         alert("success");
       } else {
         alert("failed");
@@ -98,7 +98,6 @@ const PromotionForm = () => {
   };
 
   const multiSelectBooks = useMemo(() => {
-    console.log(bookOptions);
     return (
       <Dropdown
         id="book-select"
@@ -126,7 +125,7 @@ const PromotionForm = () => {
             method="post"
             encType="multipart/form-data"
             className="form-horizontal"
-            onSubmit={(e) => handleSubmit(e)}
+            onSubmit={handleFormSubmit}
           >
             <FormGroup row>
               <Col md="3">
@@ -171,6 +170,8 @@ const PromotionForm = () => {
                   required
                   type="number"
                   min="0"
+                  max="1"
+                  step="0.01"
                   id="number-input"
                   name="number-input"
                   placeholder="discount"
