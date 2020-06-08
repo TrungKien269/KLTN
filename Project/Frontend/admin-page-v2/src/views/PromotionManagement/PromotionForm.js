@@ -71,9 +71,9 @@ const PromotionForm = () => {
     return arr;
   }, [book, discount]);
 
-  console.log(DetailRequest);
-  console.log(endedDate);
-  console.log(description);
+  console.log("detail req:", DetailRequest);
+  console.log("ended day:", endedDate);
+  console.log("description:", description);
 
   const handleSubmit = (e) => {
     e.preventDefault();

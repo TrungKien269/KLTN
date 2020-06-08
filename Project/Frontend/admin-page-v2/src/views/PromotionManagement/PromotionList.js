@@ -26,7 +26,6 @@ const PromotionLList = () => {
       x = listPromo.map((data) => {
         var d = data.promotionDetail;
         results = d.map((da) => {
-          console.log(da);
           return <div key={da.book.id}>{da.book.name}</div>;
         });
         return <div>{results}</div>;
