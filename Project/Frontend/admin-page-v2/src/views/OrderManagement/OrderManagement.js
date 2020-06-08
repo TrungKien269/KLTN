@@ -60,7 +60,6 @@ const OrderManagement = () => {
     }).then((res) => {
       if (res.data.status) {
         setDeliveredOrders(res.data.obj);
-        console.log("delivered ", res.data.obj);
       }
     });
 
@@ -73,7 +72,6 @@ const OrderManagement = () => {
     }).then((res) => {
       if (res.data.status) {
         setCancelOrders(res.data.obj);
-        console.log("cancel ", res.data.obj);
       }
     });
   }, []);
@@ -109,14 +107,13 @@ const OrderManagement = () => {
         }
       }
     });
-    console.log(order);
   };
 
   const showProcOrders = useMemo(() => {
     let results = "";
     if (processingOrders) {
       results = processingOrders.map((processingOrder) => {
-        const linktodetail = `/ordermanagement/${processingOrders.id}`;
+        const linktodetail = `/ordermanagement/${processingOrder.id}`;
 
         return (
           <tbody>
@@ -178,6 +175,7 @@ const OrderManagement = () => {
     let results = "";
     if (deliveringOrders) {
       results = deliveringOrders.map((deliveringOrder) => {
+        const linktodetail = `/ordermanagement/${deliveringOrder.id}`;
         return (
           <tbody>
             <tr>
@@ -220,7 +218,9 @@ const OrderManagement = () => {
                     Confirm
                   </Button>
                   <Button.Or text="or" />
-                  <Button negative>Detail</Button>
+                  <Link to={linktodetail}>
+                    <Button>Detail</Button>
+                  </Link>
                 </Button.Group>
               </td>
             </tr>
@@ -235,6 +235,7 @@ const OrderManagement = () => {
     let results = "";
     if (deliveredOrders) {
       results = deliveredOrders.map((deliveredOrder) => {
+        const linktodetail = `/ordermanagement/${deliveredOrder.id}`;
         return (
           <tbody>
             <tr>
@@ -277,7 +278,9 @@ const OrderManagement = () => {
                     Confirm
                   </Button>
                   <Button.Or text="or" />
-                  <Button negative>Detail</Button>
+                  <Link to={linktodetail}>
+                    <Button>Detail</Button>
+                  </Link>
                 </Button.Group>
               </td>
             </tr>
@@ -291,20 +294,20 @@ const OrderManagement = () => {
   const showCancelOrders = useMemo(() => {
     let results = "";
     if (cancelOrders) {
-      results = cancelOrders.map((cancelOrders) => {
+      results = cancelOrders.map((cancelOrder) => {
         return (
           <tbody>
             <tr>
-              <td>{cancelOrders.userId}</td>
-              <td>{cancelOrders.fullName}</td>
-              <td>{cancelOrders.phoneNumber}</td>
+              <td>{cancelOrder.userId}</td>
+              <td>{cancelOrder.fullName}</td>
+              <td>{cancelOrder.phoneNumber}</td>
               <td>
-                {moment(cancelOrders.createdDate).format("YYYY-MM-DD hh:mm:ss")}
+                {moment(cancelOrder.createdDate).format("YYYY-MM-DD hh:mm:ss")}
               </td>
-              <td>{cancelOrders.id}</td>
+              <td>{cancelOrder.id}</td>
               <td>
                 <NumberFormat
-                  value={cancelOrders.shippingFee}
+                  value={cancelOrder.shippingFee}
                   displayType={"text"}
                   thousandSeparator={true}
                   suffix={" VND"}
@@ -312,14 +315,14 @@ const OrderManagement = () => {
               </td>
               <td>
                 <NumberFormat
-                  value={cancelOrders.total}
+                  value={cancelOrder.total}
                   displayType={"text"}
                   thousandSeparator={true}
                   suffix={" VND"}
                 />
               </td>
               <td>
-                <Badge color="secondary">{cancelOrders.status}</Badge>
+                <Badge color="secondary">{cancelOrder.status}</Badge>
               </td>
             </tr>
           </tbody>

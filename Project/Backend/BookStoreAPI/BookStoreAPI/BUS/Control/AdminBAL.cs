@@ -81,9 +81,9 @@ namespace BookStoreAPI.BUS.Control
             return await publisherBal.GetListPublishers();
         }
 
-        public async Task<Response> GetOrder(string secureID)
+        public async Task<Response> GetOrder(string orderID)
         {
-            return await orderBal.GetOrder(secureID);
+            return await orderBal.GetOrder(orderID);
         }
 
         public async Task<Response> UpdateStatus(Order order, string status)

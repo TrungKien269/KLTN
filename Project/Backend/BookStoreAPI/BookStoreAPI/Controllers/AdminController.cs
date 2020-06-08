@@ -68,6 +68,13 @@ namespace BookStoreAPI.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
+        [HttpGet("GetOrderDetails")]
+        public async Task<Response> GetListOrderDetail(string orderID)
+        {
+            return await adminBal.GetOrder(orderID);
+        }
+
+        [Authorize(Roles = "Administrator")]
         [HttpPost("ConfirmOrder")]
         public async Task<Response> ConfirmOrder(string id, string status)
         {
