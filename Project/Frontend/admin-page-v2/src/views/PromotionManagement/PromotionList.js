@@ -24,7 +24,7 @@ const PromotionLList = () => {
     var results = "";
     if (listPromo) {
       x = listPromo.map((data) => {
-        console.log(data);
+
         var d = data.promotionDetail;
         results = d.map((da) => {
           return <div key={da.book.id}>{da.book.name}</div>;

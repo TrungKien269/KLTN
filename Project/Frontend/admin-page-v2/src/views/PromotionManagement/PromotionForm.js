@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import Axios from "axios";
+import { withRouter } from "react-router";
+import { BrowserRouter } from "react-router-dom";
 import { getToken } from "../../Utils/Commons";
 import { Dropdown } from "semantic-ui-react";
 import {
@@ -14,12 +16,16 @@ import {
   Label,
   Row,
 } from "reactstrap";
-const PromotionForm = () => {
+const PromotionForm = (props) => {
   const [data, setData] = useState();
   const [endedDate, setEndedDate] = useState("");
   const [description, setDescription] = useState("");
   const [book, setBook] = useState([]);
   const [discount, setDiscount] = useState(0);
+  const [detailReq, setDetailReq] = useState([]);
+
+  const detailReqRef = useRef(null);
+  detailReqRef.current = detailReq;
 
   useEffect(() => {
     Axios({
@@ -45,37 +51,50 @@ const PromotionForm = () => {
   };
 
   const handleDate = (e) => {
-    if (e.target.value)
-      setEndedDate(e.target.value);
+    if (e.target.value) setEndedDate(e.target.value);
   };
 
   const handleDescription = (e) => {
-    if (e.target.value)
-      setDescription(e.target.value);
+    if (e.target.value) setDescription(e.target.value);
   };
 
   const handleDiscount = (e) => {
     setDiscount(parseFloat(e.target.value));
   };
 
-  const DetailRequest = useMemo(() => {
-    var arr = [];
-    if (book) {
+  // useEffect(() => console.log(detailReq), [detailReq]);
+
+  useEffect(() => {
+    if (book.length > 0) {
       var len = book.length;
-      for (var i = 0; i < len; i++) {
-        arr.push({
+      setDetailReq((prev) => [
+        ...prev,
+        {
           promotionID: 1,
-          bookID: book[i],
+          bookID: book[len - 1],
           discount: parseFloat(discount),
-        });
-      }
+        },
+      ]);
     }
-    return [...arr];
   }, [book, discount]);
 
-  const handleFormSubmit = e => {
+  // const DetailRequest = () => {
+  //   var arr = [];
+  //   if (bookRef.current) {
+  //     var len = bookRef.current.length;
+  //     for (var i = 0; i < len; i++) {
+  //       arr.push({
+  //         promotionID: 1,
+  //         bookID: bookRef.current[i],
+  //         discount: parseFloat(discountRef.current),
+  //       });
+  //     }
+  //   }
+  //   return [...arr];
+  // };
+
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log(DetailRequest)
     Axios({
       headers: {
         Authorization: "Bearer " + getToken(),
@@ -86,11 +105,12 @@ const PromotionForm = () => {
         endedDate: document.getElementById("date-input").value,
         description: document.getElementById("text-input").value,
       },
-      data: DetailRequest
+      data: detailReqRef.current,
     }).then((res) => {
       if (res.status) {
-        console.log(res.data)
+        console.log(res.data);
         alert("success");
+        window.location.reload();
       } else {
         alert("failed");
       }
@@ -120,13 +140,7 @@ const PromotionForm = () => {
           <strong>Basic Form</strong> Elements
         </CardHeader>
         <CardBody>
-          <Form
-            action=""
-            method="post"
-            encType="multipart/form-data"
-            className="form-horizontal"
-            onSubmit={handleFormSubmit}
-          >
+          <Form className="form-horizontal" onSubmit={handleFormSubmit}>
             <FormGroup row>
               <Col md="3">
                 <Label htmlFor="date-input">Ended day</Label>
@@ -179,7 +193,7 @@ const PromotionForm = () => {
                 />
               </Col>
             </FormGroup>
-            <Button type="submit" size="sm" color="primary">
+            <Button className="mr-1" type="submit" size="sm" color="primary">
               <i className="fa fa-dot-circle-o"></i> Submit
             </Button>
             <Button type="reset" size="sm" color="danger">
@@ -193,4 +207,4 @@ const PromotionForm = () => {
 
   return <div>{showForm}</div>;
 };
-export default PromotionForm;
+export default withRouter(PromotionForm);
