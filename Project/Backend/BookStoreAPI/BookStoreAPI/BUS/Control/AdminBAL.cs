@@ -122,6 +122,11 @@ namespace BookStoreAPI.BUS.Control
             return await promotionBal.GetListPromotion();
         }
 
+        public async Task<Response> GetPromotion(int id)
+        {
+            return await promotionBal.GetPromotion(id);
+        }
+
         public async Task<Response> CreatePromotion(PromotionRequest promotionRequest,
             List<PromotionDetailRequest> promotionDetailRequests)
         {
