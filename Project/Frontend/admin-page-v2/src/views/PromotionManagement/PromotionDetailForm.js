@@ -17,8 +17,10 @@ import {
   Row,
   CardFooter,
 } from "reactstrap";
-const PromotionDetailForm = () => {
+const PromotionDetailForm = (props) => {
   const [data, setData] = useState();
+  const [bookID, setBookID] = useState("0");
+  const [discount, setDiscount] = useState(0);
 
   useEffect(() => {
     Axios({
@@ -28,6 +30,7 @@ const PromotionDetailForm = () => {
       setData(res.data.obj);
     });
   }, []);
+
   const bookOptions = useMemo(() => {
     let bookArr = [];
     if (data) {
@@ -37,6 +40,7 @@ const PromotionDetailForm = () => {
     }
     return bookArr;
   }, [data]);
+
   const multiSelectBooks = useMemo(() => {
     return (
       <Dropdown
@@ -47,31 +51,57 @@ const PromotionDetailForm = () => {
         selection
         options={bookOptions}
         placeholder="Select Books"
+        onChange={(e, data) => handleChange(e, data)}
       />
     );
   }, [bookOptions]);
 
+  const handleChange = (e, data) => {
+    if(data.value)
+      setBookID(data.value);
+  };
+
+  const handleDiscount = (e) => {
+    var value = e.target.value;
+    if(value){
+      setDiscount(parseFloat(value));
+    }
+  }
+
+  const handleReset = () => {
+    setBookID(null);
+    setDiscount(0);
+  }
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    Axios({
+      headers: {
+        Authorization: "Bearer " + getToken(),
+      },
+      url: "http://localhost:5000/api/Admin/CreatePromotionDetail",
+      method: "post",
+      params: {
+        promotionID: parseInt(props.id),
+        bookID: bookID,
+        discount: parseFloat(discount)
+      }
+    }).then((res) => {
+      if(res.data.status){
+        console.log(res.data)
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+  };
+
   return (
     <Card>
       <CardHeader>
-        <strong>Create promotion</strong>
+        <strong>Create promotion detail</strong>
       </CardHeader>
       <CardBody>
-        <Form className="form-horizontal">
-          <FormGroup row>
-            <Col md="3">
-              <Label htmlFor="id-input">Ended day</Label>
-            </Col>
-            <Col xs="12" md="9">
-              <Input
-                required
-                type="text"
-                id="id-input"
-                name="id-input"
-                placeholder="Promotion ID"
-              />
-            </Col>
-          </FormGroup>
+        <Form className="form-horizontal" onSubmit={handleFormSubmit}>
           <FormGroup row>
             <Col md="3">
               <Label htmlFor="book-select">
@@ -81,7 +111,6 @@ const PromotionDetailForm = () => {
             <Col md="6">{multiSelectBooks}</Col>
             <Col md="3">
               <Input
-                required
                 type="number"
                 min="0"
                 max="1"
@@ -89,15 +118,18 @@ const PromotionDetailForm = () => {
                 id="number-input"
                 name="number-input"
                 placeholder="discount"
+                defaultValue={discount}
+                onChange={(e) => handleDiscount(e)}
               />
             </Col>
           </FormGroup>
           <div className="text-right">
             {" "}
             <Button className="mr-1" type="submit" size="sm" color="primary">
-              <i className="fa fa-dot-circle-o"></i> Submit
+              <i className="fa fa-dot-circle-o"></i> Add
             </Button>
-            <Button type="reset" size="sm" color="danger">
+            <Button type="reset" size="sm" color="danger"
+            onClick={handleReset}>
               <i className="fa fa-ban"></i> Reset
             </Button>
           </div>

@@ -338,7 +338,7 @@ const OrderManagement = () => {
         <Tab.Pane>
           <Card>
             <CardHeader>
-              <i className="fa fa-align-justify"></i> Simple Table
+              <i className="fa fa-align-justify"></i> List Order
             </CardHeader>
             <CardBody>
               <Table responsive>
@@ -388,7 +388,7 @@ const OrderManagement = () => {
         <Tab.Pane>
           <Card>
             <CardHeader>
-              <i className="fa fa-align-justify"></i> Simple Table
+              <i className="fa fa-align-justify"></i> List Order
             </CardHeader>
             <CardBody>
               <Table responsive>
@@ -438,7 +438,7 @@ const OrderManagement = () => {
         <Tab.Pane>
           <Card>
             <CardHeader>
-              <i className="fa fa-align-justify"></i> Simple Table
+              <i className="fa fa-align-justify"></i> List Order
             </CardHeader>
             <CardBody>
               <Table responsive>
@@ -488,7 +488,7 @@ const OrderManagement = () => {
         <Tab.Pane>
           <Card>
             <CardHeader>
-              <i className="fa fa-align-justify"></i> Simple Table
+              <i className="fa fa-align-justify"></i> List Order
             </CardHeader>
             <CardBody>
               <Table responsive>

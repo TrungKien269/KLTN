@@ -84,21 +84,6 @@ const PromotionForm = (props) => {
     }
   }, [book, discount]);
 
-  // const DetailRequest = () => {
-  //   var arr = [];
-  //   if (bookRef.current) {
-  //     var len = bookRef.current.length;
-  //     for (var i = 0; i < len; i++) {
-  //       arr.push({
-  //         promotionID: 1,
-  //         bookID: bookRef.current[i],
-  //         discount: parseFloat(discountRef.current),
-  //       });
-  //     }
-  //   }
-  //   return [...arr];
-  // };
-
   const handleFormSubmit = (e) => {
     e.preventDefault();
     Axios({

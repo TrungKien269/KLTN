@@ -85,12 +85,14 @@ function UserPagination(props) {
     setTimeTyping(setTimeout(() => {
       if (userState) {
         setSearchValue(value);
+        setData(rawData)
         let filterData = flexData || data;
         filterData = filterData.filter((x) => x.fullName.includes(value));
         setData([...filterData]);
       }
       else {
         setSearchValue(value);
+        setData(rawData)
         let filterData = rawData;
         filterData = filterData.filter((x) => x.fullName.includes(value));
         setData([...filterData]);
@@ -101,12 +103,14 @@ function UserPagination(props) {
   const handleSelectState = (event, field) => {
     let value = field.value;
     if (searchValue) {
+      setData(rawData)
       let filterData = flexData || data;
       filterData = filterData.filter((x) => x.state === value);
       setData([...filterData]);
       setUserState(value);
     }
     else {
+      setData(rawData)
       let filterData = rawData;
       filterData = filterData.filter((x) => x.state === value);
       setData([...filterData]);

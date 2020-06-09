@@ -42,7 +42,9 @@ const OrderDetail = (props) => {
           <tr key={orderD.book.id}>
             <td> {orderD.book.id}</td>
             <td>{orderD.book.name}</td>
-            <td>{orderD.quantity} Items</td>
+            <td>{orderD.book.currentPrice}</td>
+            <td>{orderD.quantity}</td>
+            <td>{orderD.quantity * orderD.book.currentPrice}</td>
           </tr>
         );
       });
@@ -106,7 +108,9 @@ const OrderDetail = (props) => {
                 <tr>
                   <th>Book ID</th>
                   <th>Book name</th>
+                  <th>Price</th>
                   <th>Quantity</th>
+                  <th>SubTotal</th>
                 </tr>
               </thead>
               <tbody>{results}</tbody>

@@ -145,7 +145,7 @@ const BookForm = (props) => {
         search
         options={categoryOption}
         onChange={(e, data) => handleSelectCategory(e, data)}
-        value={category != 0 ? form : null}
+        value={category != 0 ? category : null}
       />
     );
   }, [categoryList, category]);
@@ -181,7 +181,7 @@ const BookForm = (props) => {
         search
         options={publisherOption}
         onChange={(e, data) => handleSelectPublisher(e, data)}
-        value={publisher != 0 ? form : null}
+        value={publisher != 0 ? publisher : null}
       />
     );
   }, [publisherList, publisher]);
@@ -199,7 +199,7 @@ const BookForm = (props) => {
         search
         options={supplierOption}
         onChange={(e, data) => handleSelectSupplier(e, data)}
-        value={supplier != 0 ? form : null}
+        value={supplier != 0 ? supplier : null}
       />
     );
   }, [supplierList, supplier]);
