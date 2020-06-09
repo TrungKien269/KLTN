@@ -145,7 +145,7 @@ const BookPagination = (props) => {
                 value={book.currentPrice}
                 displayType={"text"}
                 thousandSeparator={true}
-                prefix={"VND "}
+                suffix={" VND"}
               />
             }
             selectedBookID={selectBookID}

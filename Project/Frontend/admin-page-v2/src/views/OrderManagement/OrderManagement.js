@@ -205,7 +205,7 @@ const OrderManagement = () => {
                 />
               </td>
               <td>
-                <Badge color="green">{deliveringOrder.status}</Badge>
+                <Badge color="success">{deliveringOrder.status}</Badge>
               </td>
               <td>
                 <Button.Group size="mini">
@@ -265,7 +265,7 @@ const OrderManagement = () => {
                 />
               </td>
               <td>
-                <Badge color="green">{deliveredOrder.status}</Badge>
+                <Badge color="success">{deliveredOrder.status}</Badge>
               </td>
               <td>
                 <Button.Group size="mini">

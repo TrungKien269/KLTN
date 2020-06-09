@@ -22,7 +22,12 @@ const PromotionForm = (props) => {
   const [description, setDescription] = useState("");
   const [book, setBook] = useState([]);
   const [discount, setDiscount] = useState(0);
-  const [detailReq, setDetailReq] = useState([]);
+  let detailReq = [];
+
+  const endedDateRef = useRef(null);
+  endedDateRef.current = endedDate;
+  const descriptionRef = useRef(null);
+  descriptionRef.current = description;
 
   const detailReqRef = useRef(null);
   detailReqRef.current = detailReq;
@@ -67,14 +72,15 @@ const PromotionForm = (props) => {
   useEffect(() => {
     if (book.length > 0) {
       var len = book.length;
-      setDetailReq((prev) => [
-        ...prev,
-        {
+      for (var i = 0; i < len; i++) {
+        detailReq.push({
           promotionID: 1,
           bookID: book[len - 1],
           discount: parseFloat(discount),
-        },
-      ]);
+        });
+      }
+    } else {
+      detailReq = [];
     }
   }, [book, discount]);
 
@@ -102,8 +108,8 @@ const PromotionForm = (props) => {
       method: "POST",
       url: "http://localhost:5000/api/Admin/CreatePromotion",
       params: {
-        endedDate: document.getElementById("date-input").value,
-        description: document.getElementById("text-input").value,
+        endedDate: endedDateRef.current,
+        description: descriptionRef.current,
       },
       data: detailReqRef.current,
     }).then((res) => {
@@ -137,7 +143,7 @@ const PromotionForm = (props) => {
     return (
       <Card>
         <CardHeader>
-          <strong>Basic Form</strong> Elements
+          <strong>Create promotion</strong>
         </CardHeader>
         <CardBody>
           <Form className="form-horizontal" onSubmit={handleFormSubmit}>

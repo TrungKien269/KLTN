@@ -10,7 +10,7 @@ const PromotionManagement = () => {
         <Col md="6" xs="12">
           <PromotionForm></PromotionForm>
         </Col>
-        <Col md="6" xs="12">
+        <Col md="12" xs="12">
           <PromotionLList></PromotionLList>
         </Col>
       </Row>

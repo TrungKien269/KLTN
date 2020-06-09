@@ -32,6 +32,9 @@ const OrderManagement = React.lazy(() =>
 const PromotionManagement = React.lazy(() =>
   import("./views/PromotionManagement/PromotionManagement")
 );
+const PromotionDetail = React.lazy(() =>
+  import("./views/PromotionManagement/PromotionDetail")
+);
 const OrderDetail = React.lazy(() =>
   import("./views/OrderManagement/OrderDetail")
 );
@@ -76,6 +79,12 @@ const routes = [
     exact: true,
     name: "Promotion management",
     component: PromotionManagement,
+  },
+  {
+    path: "/promotionmanagement/:id",
+    exact: true,
+    name: "Promotion Detail",
+    component: PromotionDetail,
   },
   { path: "/theme", exact: true, name: "Theme", component: Colors },
   { path: "/theme/colors", name: "Colors", component: Colors },
