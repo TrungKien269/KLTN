@@ -697,5 +697,24 @@ namespace BookStoreAPI.BUS.Logic
                 return Response.CatchError(e.Message);
             }
         }
+
+        public async Task<Response> StatisticsNumberBookSoldWithMonth()
+        {
+            try
+            {
+                var books = await context.OrderDetail.Include(x => x.Book).Include(x => x.Order)
+                    .Where(x => x.Order.Status.Equals("Delivered"))
+                    .GroupBy(x => x.Order.CreatedDate.Month).Select(x => new
+                    {
+                        Month = x.Key,
+                        NumberBook = x.Sum(y => y.Quantity)
+                    }).OrderBy(x => x.Month).ToListAsync();
+                return new Response("Success", true, books.Count, books);
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
     }
 }

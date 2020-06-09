@@ -167,5 +167,20 @@ namespace BookStoreAPI.BUS.Control
         {
             return await accountBal.UpdateAccountState(userID, state);
         }
+
+        public async Task<Response> StatisticsNumberExportedOrderWithMonth()
+        {
+            return await orderBal.StatisticsNumberExportedOrderWithMonth();
+        }
+
+        public async Task<Response> StatisticsNumberBookSoldWithMonth()
+        {
+            return await bookBal.StatisticsNumberBookSoldWithMonth();
+        }
+
+        public async Task<Response> StatisticsNumberAccountWithYear()
+        {
+            return await accountBal.StatisticsNumberAccountWithYear();
+        }
     }
 }

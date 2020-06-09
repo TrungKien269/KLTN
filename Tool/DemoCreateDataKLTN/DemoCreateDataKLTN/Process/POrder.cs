@@ -50,23 +50,25 @@ namespace DemoCreateDataKLTN.Process
                     FullName = dsUser.Tables[0].Rows[i][1].ToString(),
                     PhoneNumber = dsUser.Tables[0].Rows[i][4].ToString(),
                     Address = dsUser.Tables[0].Rows[i][5].ToString(),
-                    CreatedDate = DateTime.Now
+                    CreatedDate = GetRandomDateTime(),
+                    Type = "COD",
+                    ShippingFee = GetRandomShippingFee()
                 };
 
                 orderBal.InsertOrder(order);
                 orderDetailBal.InsertOrderDetail(orderDetail);
-                QRHelper.GenerateAndSaveQRCode("Order" + i);
+                //QRHelper.GenerateAndSaveQRCode("Order" + i);
 
                 Console.WriteLine(dsUser.Tables[0].Rows[i][0].ToString());
             }
         }
 
-        //public int GetRandomNumberIndexBookList()
-        //{
-        //    Random r = new Random();
-        //    int result = r.Next(0, 4739);
-        //    return result;
-        //}
+        public int GetRandomShippingFee()
+        {
+            Random r = new Random();
+            int result = r.Next(15, 100);
+            return result * 1000;
+        }
 
         public int GetRandomNumberQuantity()
         {
@@ -80,6 +82,17 @@ namespace DemoCreateDataKLTN.Process
             Random r = new Random();
             int result = r.Next(0, 3);
             return result;
+        }
+
+        public DateTime GetRandomDateTime()
+        {
+            Random r = new Random();
+            var from = new DateTime(2020, 1, 1);
+            var range = DateTime.Now - from;
+            var randomUpperBound = (Int32)range.TotalSeconds;
+            var randTimeSpan = TimeSpan.FromSeconds((Int64)(range.TotalSeconds - r.Next(0, randomUpperBound)));
+
+            return from + randTimeSpan;
         }
     }
 }

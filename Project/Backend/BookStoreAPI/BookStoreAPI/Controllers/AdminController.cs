@@ -130,20 +130,6 @@ namespace BookStoreAPI.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpGet("BookWithQuantityByMonth")]
-        public async Task<Response> StatisticsBookWithQuantityByMonth()
-        {
-            return await adminBal.StatisticsBookWithQuantityByMonth();
-        }
-
-        [Authorize(Roles = "Administrator")]
-        [HttpGet("Top3Users")]
-        public async Task<Response> StatisticsTop3Users()
-        {
-            return await adminBal.StatisticsTop3Users();
-        }
-
-        [Authorize(Roles = "Administrator")]
         [HttpGet("ListPromotion")]
         public async Task<Response> GetListPromotion()
         {
@@ -237,6 +223,13 @@ namespace BookStoreAPI.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
+        [HttpPut("UpdateUserState")]
+        public async Task<Response> UpdateUserState(int userID, string state)
+        {
+            return await adminBal.UpdateAccountState(userID, state);
+        }
+
+        [Authorize(Roles = "Administrator")]
         [HttpGet("StatisticUser")]
         public async Task<Response> StatisticUser(int userID)
         {
@@ -244,10 +237,38 @@ namespace BookStoreAPI.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpPut("UpdateUserState")]
-        public async Task<Response> UpdateUserState(int userID, string state)
+        [HttpGet("BookWithQuantityByMonth")]
+        public async Task<Response> StatisticsBookWithQuantityByMonth()
         {
-            return await adminBal.UpdateAccountState(userID, state);
+            return await adminBal.StatisticsBookWithQuantityByMonth();
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("Top3Users")]
+        public async Task<Response> StatisticsTop3Users()
+        {
+            return await adminBal.StatisticsTop3Users();
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("NumberExportedOrderWithMonth")]
+        public async Task<Response> StatisticsNumberExportedOrderWithMonth()
+        {
+            return await adminBal.StatisticsNumberExportedOrderWithMonth();
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("NumberBookSoldWithMonth")]
+        public async Task<Response> StatisticsNumberBookSoldWithMonth()
+        {
+            return await adminBal.StatisticsNumberBookSoldWithMonth();
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("NumberAccountWithYear")]
+        public async Task<Response> StatisticsNumberAccountWithYear()
+        {
+            return await adminBal.StatisticsNumberAccountWithYear();
         }
     }
 }

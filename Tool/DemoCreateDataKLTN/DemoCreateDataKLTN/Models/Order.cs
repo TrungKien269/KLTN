@@ -14,5 +14,7 @@ namespace DemoCreateDataKLTN.Models
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public string Status { get; set; }
+        public int ShippingFee { get; set; }
+        public string Type { get; set; }
     }
 }

@@ -13,8 +13,11 @@ namespace DemoCreateDataKLTN
         {
             try
             {
-                PSearchHistory pSearchHistory = new PSearchHistory();
-                pSearchHistory.Execute();
+                POrder pOrder = new POrder();
+                for (int i = 0; i < 5; i++)
+                {
+                    pOrder.Execute();
+                }
             }
             catch (Exception e)
             {

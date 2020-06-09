@@ -74,7 +74,7 @@ namespace BookStoreAPI.Helper
                 smtp.Credentials = new NetworkCredential("pokemon.ute19.06@gmail.com", "Pokemon@123");
                 await smtp.SendMailAsync(message);
 
-                return new Response("Success", true, 1, "trungkien2691998@gmail.com");
+                return new Response("Success", true, 1, email);
             }
             catch (Exception e)
             {

@@ -223,5 +223,23 @@ namespace BookStoreAPI.BUS.Logic
                 return Response.CatchError(e.Message);
             }
         }
+
+        public async Task<Response> StatisticsNumberAccountWithYear()
+        {
+            try
+            {
+                var accounts = await context.Account
+                    .GroupBy(x => x.CreatedDateTime.Year).Select(x => new
+                    {
+                        Year = x.Key,
+                        NumberAccount = x.Count()
+                    }).OrderBy(x => x.Year).ToListAsync();
+                return new Response("Success", true, accounts.Count, accounts);
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
     }
 }

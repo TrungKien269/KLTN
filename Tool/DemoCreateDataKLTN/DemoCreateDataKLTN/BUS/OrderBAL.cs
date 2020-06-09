@@ -27,13 +27,15 @@ namespace DemoCreateDataKLTN.BUS
         public Notification InsertOrder(Order order)
         {
             string strSQL =
-                "Insert into dbo.[Order] Values(@ID, @User_ID, @CreatedDate, @Total, @FullName, @PhoneNumber, @Address, @Status)";
+                "Insert into dbo.[Order] Values(@ID, @User_ID, @CreatedDate, @Total, @ShippingFee, @FullName, @PhoneNumber, @Address, " +
+                "@Type, @Status)";
 
             return sql.ExecuteNonQuery(strSQL, CommandType.Text, new SqlParameter("@ID", order.Id),
                 new SqlParameter("@User_ID", order.UserId), new SqlParameter("@CreatedDate", order.CreatedDate),
                 new SqlParameter("@Total", order.Total), new SqlParameter("@FullName", order.FullName),
                 new SqlParameter("@PhoneNumber", order.PhoneNumber), new SqlParameter("@Address", order.Address),
-                new SqlParameter("@Status", order.Status));
+                new SqlParameter("@Status", order.Status), new SqlParameter("@ShippingFee", order.ShippingFee),
+                new SqlParameter("@Type", order.Type));
         }
     }
 }
