@@ -31,6 +31,21 @@ namespace BookStoreAPI.BUS.Logic
             }
         }
 
+        public async Task<Response> GetPromotion(int id)
+        {
+            try
+            {
+                var response = await context.Promotion.Include(x => x.PromotionDetail).ThenInclude(x => x.Book)
+                    .Where(x => x.Id.Equals(id))
+                    .FirstOrDefaultAsync();
+                return new Response("Success", true, 1, response);
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
         public async Task<Response> CountPromotion()
         {
             try

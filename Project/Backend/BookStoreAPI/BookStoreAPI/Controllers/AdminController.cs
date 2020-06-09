@@ -151,6 +151,13 @@ namespace BookStoreAPI.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
+        [HttpGet("GetPromotion")]
+        public async Task<Response> GetPromotion(int id)
+        {
+            return await adminBal.GetPromotion(id);
+        }
+
+        [Authorize(Roles = "Administrator")]
         [HttpPost("CreatePromotion")]
         public async Task<Response> CreatePromotion(PromotionRequest promotionRequest,
             [FromBody]List<PromotionDetailRequest> promotionDetailRequests)
