@@ -1,5 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import { Button } from "semantic-ui-react";
+import PromotionDetailForm from "./PromotionDetailForm";
 import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
   Badge,
   Card,
   CardBody,
@@ -11,12 +17,36 @@ import {
   Row,
   Table,
 } from "reactstrap";
+import PromotionForm from "./PromotionForm";
 const PromotionDetail = () => {
+  const [modal, setModal] = useState(false);
+
+  const toggle = () => setModal(!modal);
   return (
     <div>
+      <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Update Promotion</ModalHeader>
+        <ModalBody>
+          <PromotionDetailForm></PromotionDetailForm>
+        </ModalBody>
+      </Modal>
       <Card>
-        <CardHeader>
-          <i className="fa fa-align-justify"></i> Promotion id : (Promotion ID)
+        <CardHeader className="d-flex justify-content-lg-between">
+          <span>
+            {" "}
+            <i className="fa fa-align-justify"></i> Promotion id : (Promotion
+            ID)
+          </span>
+
+          <Button.Group size="mini">
+            <Button positive onClick={toggle}>
+              Add
+            </Button>
+            <Button.Or text="or" />
+            <Button onClick={toggle}>Update</Button>
+            <Button.Or text="or" />
+            <Button negative>Delete</Button>
+          </Button.Group>
         </CardHeader>
         <CardBody>
           <Table responsive>

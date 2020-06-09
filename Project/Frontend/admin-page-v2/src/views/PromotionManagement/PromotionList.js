@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import Axios from "axios";
 import { getToken } from "../../Utils/Commons";
 import { Button, Loader } from "semantic-ui-react";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import {
   Badge,
   Card,
@@ -15,10 +16,14 @@ import {
   Table,
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import PromotionForm from "./PromotionForm";
 
 const PromotionLList = () => {
   const [listPromo, setListPromo] = useState();
 
+  const [modal, setModal] = useState(false);
+
+  const toggle = () => setModal(!modal);
   useEffect(() => {
     Axios({
       headers: {
@@ -56,13 +61,17 @@ const PromotionLList = () => {
                 <Badge color="secondary">Disabled</Badge>
               )}
             </td>
-            <td>
+            <td className="text-center">
               <Button.Group size="mini">
-                <Button positive>Update</Button>
+                <Button positive onClick={toggle}>
+                  Update
+                </Button>
                 <Button.Or text="or" />
                 <Link to={linktodetail}>
                   <Button>Detail</Button>
                 </Link>
+                <Button.Or text="or" />
+                <Button negative>Disabled</Button>
               </Button.Group>
             </td>
           </tr>
@@ -77,6 +86,22 @@ const PromotionLList = () => {
   if (listPromo) {
     return (
       <div>
+        <div>
+          <Modal isOpen={modal} toggle={toggle}>
+            <ModalHeader toggle={toggle}>Update Promotion</ModalHeader>
+            <ModalBody>
+              <PromotionForm></PromotionForm>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={toggle}>
+                Do Something
+              </Button>{" "}
+              <Button color="secondary" onClick={toggle}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
         <Card>
           <CardHeader>
             <i className="fa fa-align-justify"></i> List Promotion
@@ -89,7 +114,7 @@ const PromotionLList = () => {
                   <th>Description</th>
                   <th>Ended day</th>
                   <th>Status</th>
-                  <th>Action</th>
+                  <th className="text-center">Action</th>
                 </tr>
               </thead>
               <tbody>{showListPromo}</tbody>
