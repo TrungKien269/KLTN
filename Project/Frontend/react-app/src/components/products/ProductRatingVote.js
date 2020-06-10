@@ -3,10 +3,13 @@ import { Rating } from "semantic-ui-react";
 import Axios from "axios";
 import { getToken } from "../../Utils/Commons";
 import Swal from "sweetalert2";
+import { useTranslation } from 'react-i18next';
 
 const ProductRatingVote = (props) => {
   const [rate, setRate] = useState({});
   const [submit, setSubmit] = useState(false);
+
+  const { t, i18n } = useTranslation();
 
   const handleRate = (e, { rating }) => {
     setRate({ rating });
@@ -64,7 +67,7 @@ const ProductRatingVote = (props) => {
     <div className="d-flex flex-row align-items-center">
       {rateForm}
       <button className="btn btn-fit" onClick={handleSubmit}>
-        Vote
+        {t('Vote')}
       </button>
     </div>
   );

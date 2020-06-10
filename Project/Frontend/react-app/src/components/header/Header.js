@@ -5,11 +5,20 @@ import SearchBar from "../utilities/SearchBar";
 import { removeUserSession, getToken } from "../../Utils/Commons";
 import { UserContext } from "../../context/userContext";
 import Axios from "axios";
+import useDarkMode from 'use-dark-mode';
+import { Trans, useTranslation } from 'react-i18next';
 
 const Header = (props) => {
-  // const { user, refreshUser } = useContext(UserContext);
   const { token, refreshToken } = useContext(UserContext);
   const [user, setUser] = useState();
+
+  const darkMode = useDarkMode(false);
+
+  const { t, i18n } = useTranslation();
+
+  const handleClick = (lang) => {
+    i18n.changeLanguage(lang);
+  };
 
   const handleLogout = () => {
     removeUserSession();
@@ -33,76 +42,82 @@ const Header = (props) => {
 
   const loginNav = useMemo(() => {
     if (token) {
-      // if (user) {
       return (
-        <div className="hidden-md-elements nav__social-icon">
-          <div>
-            <Link
-              to="/wishlist"
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Wish list"
-            >
-              <i class="fab fa-gratipay"></i>
-            </Link>
-          </div>
+        <Trans i18nKey="user">
+          <React.Fragment>
+            <div>
+              <Link
+                to="/wishlist"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title={'Wish list'}
+              >
+                <i class="fab fa-gratipay"></i>
+              </Link>
+            </div>
 
-          <div className="dropdown">
-            <Link to="/cart">
-              <i class="fab fa-opencart"></i>
-            </Link>
-          </div>
+            <div className="dropdown">
+              <Link
+                to="/cart"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title={'Cart'}>
+                <i class="fab fa-opencart"></i>
+              </Link>
+            </div>
 
-          <div className="dropdown ">
-            <a
-              className=""
-              id="navbarDropdownMenuLink4"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              {/* <i className="far fa-user" /> */}
-              <div className="user__ava-signin d-flex align-items-center">
-                {user && user.fullName}
-                <span className="header-avatar">
-                  <img className="img img-cover" src="../img/19-512.png" />
-                </span>
-              </div>
-            </a>
-            <div
-              className="dropdown-menu mega-menu mega-menu-sm "
-              aria-labelledby="navbarDropdownMenuLink4"
-            >
-              <div className="row">
-                <ul className="list-unstyled">
-                  <li>
-                    <Link to="/profile">Profile</Link>
-                  </li>
-                  <li>
-                    <Link to="/orderstatus">Your Orders</Link>
-                  </li>
-                  {/*<li>
-                    <Link to="#">Limited Offer Time</Link>
-                  </li>
-                  <li>
-                    <Link to="#">FAQs</Link>
-                  </li>*/}
-                  <li>
-                    <a onClick={handleLogout}>Log out</a>
-                  </li>
-                </ul>
+            <div className="dropdown ">
+              <a
+                className=""
+                id="navbarDropdownMenuLink4"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <div className="user__ava-signin d-flex align-items-center">
+                  {user && user.fullName}
+                  <span className="header-avatar">
+                    <img className="img img-cover" src="../img/19-512.png" />
+                  </span>
+                </div>
+              </a>
+              <div
+                className="dropdown-menu mega-menu mega-menu-sm "
+                aria-labelledby="navbarDropdownMenuLink4"
+              >
+                <div className="row">
+                  <ul className="list-unstyled">
+                    <li>
+                      <Link to="/profile">{'Profile'}</Link>
+                    </li>
+                    <li>
+                      <Link to="/orderstatus">{'Your Orders'}</Link>
+                    </li>
+                    <li>
+                      <a onClick={handleLogout}>{'Log out'}</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </React.Fragment>
+        </Trans>
       );
     } else {
       return (
-        <div className="hidden-md-elements nav__social-icon">
-          <Link to="/login">
-            <i className="fas fa-sign-in-alt"></i>
-          </Link>
-        </div>
+        <Trans i18nKey="visitor">
+          <React.Fragment>
+            <Link
+              to="/login"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title={'Log in'}>
+              <i className="fas fa-sign-in-alt"></i>
+            </Link>
+            <div>
+            </div>
+          </React.Fragment>
+        </Trans>
       );
     }
   }, [token, user]);
@@ -116,7 +131,59 @@ const Header = (props) => {
           </Link>
           <SearchBar />
 
-          {loginNav}
+          <div className="hidden-md-elements nav__social-icon">
+            <div className="dropdown ">
+              <a className=""
+                id="navbarDropdownMenuLink2"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                title={'Language'}>
+                <i class="fa fa-language"></i>
+              </a>
+              <div
+                className="dropdown-menu mega-menu mega-menu-sm "
+                aria-labelledby="navbarDropdownMenuLink2"
+              >
+                <div className="row">
+                  <ul className="list-unstyled">
+                    <li>
+                      <Link onClick={() => handleClick('en')}>{t('English')}</Link>
+                    </li>
+                    <li>
+                      <Link onClick={() => handleClick('vn')}>{t('Vietnamese')}</Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="dropdown ">
+              <a className=""
+                id="navbarDropdownMenuLink1"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                title={'Theme'}>
+                <i class="fa fa-palette"></i>
+              </a>
+              <div
+                className="dropdown-menu mega-menu mega-menu-sm "
+                aria-labelledby="navbarDropdownMenuLink1"
+              >
+                <div className="row">
+                  <ul className="list-unstyled">
+                    <li>
+                      <Link onClick={darkMode.disable}>{t("Light")}</Link>
+                    </li>
+                    <li>
+                      <Link onClick={darkMode.enable}>{t("Dark")}</Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <>{loginNav}</>
+          </div>
         </div>
       </nav>
       <nav className="navbar navbar-pad-sm navbar-expand-lg bg-light hidden-lg-elements">
@@ -139,12 +206,6 @@ const Header = (props) => {
         >
           {/* Links */}
           <ul className="navbar-nav">
-            {/* Magazine */}
-            <li className="nav-item mega-dropdown">
-              <Link to="/news.html" className="nav-link dropdown-toggle">
-                Magazines
-              </Link>
-            </li>
             {/* Textbooks */}
             <li className="nav-item dropdown mega-dropdown">
               <Link
@@ -155,7 +216,7 @@ const Header = (props) => {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                Categories
+                {t('Categories')}
                 <i className="fa fa-angle-down hidden-xs" />
               </Link>
               <div
@@ -173,7 +234,7 @@ const Header = (props) => {
                 to="/collections/productX.html"
                 className="nav-link dropdown-toggle"
               >
-                Audio books
+                {t('Ebooks')}
               </Link>
             </li>
             {/* recommended */}
@@ -182,13 +243,13 @@ const Header = (props) => {
                 to="/collections/productX.html"
                 className="nav-link dropdown-toggle"
               >
-                Recommended
+                {t('Recommend')}
               </Link>
             </li>
             {/* Sale */}
             <li className="nav-item mega-dropdown">
               <Link to="#" className="nav-link dropdown-toggle">
-                Sale
+                {t('Sale')}
               </Link>
             </li>
             {/*Pages*/}

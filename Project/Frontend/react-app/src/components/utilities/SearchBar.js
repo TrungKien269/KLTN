@@ -19,7 +19,6 @@ const SearchBar = (props) => {
         url: "http://localhost:5000/api/Main/SearchHistory",
       }).then((response) => {
         if (response.data.status) {
-          console.log(response.data.obj);
           setSearchHistory(response.data.obj);
         }
       });
@@ -50,7 +49,6 @@ const SearchBar = (props) => {
         url: "http://localhost:5000/api/Main/SearchHistory",
       }).then((response) => {
         if (response.data.status) {
-          console.log(response.data.obj);
           setSearchHistory(response.data.obj);
         }
       });

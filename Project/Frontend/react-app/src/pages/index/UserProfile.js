@@ -6,6 +6,7 @@ import { withRouter } from "react-router";
 import { swal } from "sweetalert2/dist/sweetalert2.all";
 import Footer from "../../components/Footer";
 import Header from "../../components/header/Header";
+import { useTranslation } from 'react-i18next';
 
 function UserProfile(props) {
   const [userInfor, setUserInfor] = useState();
@@ -25,6 +26,8 @@ function UserProfile(props) {
   const curPassRef = useRef(null);
   const newPassref = useRef(null);
   const confirmPassRef = useRef(null);
+
+  const { t, i18n } = useTranslation();
 
   const handleNameChange = (event) => {
     setFullName(event.target.value);
@@ -50,7 +53,6 @@ function UserProfile(props) {
   const handleConfirmPass = (event) => {
     setConfirmPass(event.target.value);
   };
-  // console.log(fullName, phonenumber, address, birthday, gender);
 
   useEffect(() => {
     axios({
@@ -167,7 +169,7 @@ function UserProfile(props) {
               checked
               onClick={(e) => handleGenderChanged(e)}
             />
-            <label for="f-option">Male</label>
+            <label for="f-option">{t('Male')}</label>
 
             <div class="check"></div>
           </li>
@@ -180,7 +182,7 @@ function UserProfile(props) {
               value="Female"
               onClick={(e) => handleGenderChanged(e)}
             />
-            <label for="s-option">Female</label>
+            <label for="s-option">{t('Female')}</label>
 
             <div class="check">
               <div class="inside"></div>
@@ -238,7 +240,7 @@ function UserProfile(props) {
                 class="profile-wrapper"
                 onSubmit={(e) => handleSubmit(e)}
               >
-                <label for="name">name</label>
+                <label for="name">{t('Full name')}</label>
                 <input
                   type="text"
                   id="name"
@@ -246,16 +248,16 @@ function UserProfile(props) {
                   ref={fullNameRef}
                   onChange={(e) => handleNameChange(e)}
                 />
-                <label for="Gender">Gender</label>
+                <label for="Gender">{t('Gender')}</label>
                 {checkGender}
-                <label for="birthday">Birthday</label>
+                <label for="birthday">{t('Birthday')}</label>
                 <input
                   type="date"
                   defaultValue={userInfor && birthday.slice(0, 10)}
                   ref={birthDayRef}
                   onChange={(e) => handleBirthday(e)}
                 />
-                <label for="phone">Phone number</label>
+                <label for="phone">{t('Phone number')}</label>
                 <input
                   defaultValue={userInfor && phonenumber}
                   type="number"
@@ -263,7 +265,7 @@ function UserProfile(props) {
                   ref={phoneRef}
                   onChange={(e) => handlePhoneNumberChanged(e)}
                 />
-                <label for="address">Address</label>
+                <label for="address">{t('Address')}</label>
                 <input
                   type="text"
                   defaultValue={userInfor && address}
@@ -273,20 +275,20 @@ function UserProfile(props) {
                 <input
                   class="btn btn-fit btn--lg btn--rounded btn--blue"
                   type="submit"
-                  value="Update Profile"
+                  value={t('Update')}
                 />
               </form>
             </div>
             <div class="col-md-6">
               <div class="title-wrapper">
-                <h3>Change password</h3>
+                <h3>{t('Change password')}</h3>
               </div>
               <form
                 action=""
                 class="profile-wrapper"
                 onSubmit={(e) => handleChangePass(e)}
               >
-                <label for="current">Current password</label>
+                <label for="current">{t('Current password')}</label>
                 <input
                   type="password"
                   id="current"
@@ -295,7 +297,7 @@ function UserProfile(props) {
                   required
                   onChange={(e) => handlecurrentPass(e)}
                 />
-                <label for="new">New password</label>
+                <label for="new">{t('New password')}</label>
                 <input
                   type="password"
                   id="new"
@@ -304,7 +306,7 @@ function UserProfile(props) {
                   onChange={(e) => handleNewPass(e)}
                   required
                 />
-                <label for="comfirm">Confirm password</label>
+                <label for="comfirm">{t('Confirm password')}</label>
                 <input
                   type="password"
                   id="confirm"
@@ -315,7 +317,7 @@ function UserProfile(props) {
                 />
                 <input
                   class="btn btn-fit btn--lg btn--rounded btn--blue"
-                  value="Submit"
+                  value={t('Change')}
                   type="submit"
                 />
               </form>

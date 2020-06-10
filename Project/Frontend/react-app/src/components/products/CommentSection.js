@@ -4,12 +4,15 @@ import axios from "axios";
 import moment from "moment";
 import { getToken } from "../../Utils/Commons";
 import Swal from "sweetalert2";
+import { useTranslation } from 'react-i18next';
 
 const CommentExampleComment = (props) => {
   const { id } = props;
   const [data, setData] = useState([]);
   const [isLogin, setIsLogin] = useState(false);
   const [userComment, setUserComment] = useState("");
+
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     axios({
@@ -21,8 +24,6 @@ const CommentExampleComment = (props) => {
     }).then((response) => {
       if (response.data.status) {
         setData(response.data.obj);
-        // let diffTime = Math.abs(new Date(moment()) - new Date(response.data.obj[0].dateTime));
-        // console.log(Math.ceil(diffTime / (1000 * 60 * 60 * 24)))
       }
     });
     if (getToken()) {
@@ -113,7 +114,7 @@ const CommentExampleComment = (props) => {
   return (
     <Comment.Group>
       <Header as="h3" dividing>
-        Comments
+        {t('Comments')}
       </Header>
 
       {listComment}
@@ -125,7 +126,7 @@ const CommentExampleComment = (props) => {
           onChange={(e) => handleInputChange(e)}
         />
         <Button
-          content="Add Comment"
+          content={t('Add Comment')}
           labelPosition="left"
           icon="edit"
           primary

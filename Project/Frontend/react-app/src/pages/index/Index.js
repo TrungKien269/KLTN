@@ -5,15 +5,19 @@ import ProductSlideBestSale from "../../components/products/ProductSlideBestSale
 import ProductSlideBestPrice from "../../components/products/ProductSlideBestPrice";
 import Header from "../../components/header/Header";
 import Footer from "../../components/Footer";
+import { useTranslation } from 'react-i18next';
 
 function Index() {
+
+  const { t, i18n } = useTranslation();
+
   return (
     <React.Fragment>
       <HeaderBanner></HeaderBanner>
       <div className="section__bestseller">
         <div className="container">
           <div className="title-wrapper">
-            <h3>Current bestsellers</h3>
+            <h3>{t('Best Price')}</h3>
           </div>
           <ProductSlideBestSale />
         </div>
@@ -21,7 +25,7 @@ function Index() {
       <div className="section__bestseller">
         <div className="container">
           <div className="title-wrapper">
-            <h3>Best price books</h3>
+            <h3>{t('Best Sellers')}</h3>
           </div>
           <ProductSlideBestPrice />
         </div>

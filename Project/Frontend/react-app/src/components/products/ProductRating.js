@@ -1,9 +1,12 @@
 import React, { Component, useEffect, useState, useMemo } from "react";
 import { Rating } from "semantic-ui-react";
 import Axios from "axios";
+import { useTranslation } from 'react-i18next';
 
 const ProductRating = (props) => {
   const [rating, setRating] = useState();
+
+  const { t, i18n } = useTranslation();
   
   useEffect(() => {
     Axios({
@@ -42,7 +45,7 @@ const ProductRating = (props) => {
           : 0.0}{" "}
         &nbsp;/&nbsp;
         {rating && rating.numberOfRating ? rating.numberOfRating : 0} &nbsp;
-        {rating && rating.numberOfRating <= 1 ? "vote" : "votes"}
+        {rating && rating.numberOfRating <= 1 ? t('vote') : t('votes')}
       </p>
     </div>
   );

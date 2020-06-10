@@ -1,9 +1,10 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import UserContextProvider from "../src/context/userContext";
+import './i18next';
 
 ReactDOM.render(
   <React.StrictMode>

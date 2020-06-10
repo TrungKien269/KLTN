@@ -1,20 +1,17 @@
-import React, { Component } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import axios from "axios";
 import { Link, withRouter } from "react-router-dom";
 import Swal from "sweetalert2";
 import Header from "../../components/header/Header";
 import Footer from "../../components/Footer";
+import { useTranslation } from 'react-i18next';
 
-export default class UserWishList extends Component {
-  constructor(props) {
-    super(props);
+function UserWishList(props) {
+  const [data, setData] = useState([]);
 
-    this.state = {
-      data: [],
-    };
-  }
+  const { t, i18n } = useTranslation();
 
-  componentDidMount() {
+  useEffect(() => {
     axios({
       headers: {
         Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
@@ -24,8 +21,7 @@ export default class UserWishList extends Component {
     })
       .then((res) => {
         if (res.data.status) {
-          this.setState({ data: res.data.obj });
-          console.log(this.state.data);
+          setData(res.data.obj);
         } else {
           Swal.fire({
             title: "Error",
@@ -41,9 +37,9 @@ export default class UserWishList extends Component {
           icon: "error",
         });
       });
-  }
+  }, [])
 
-  handleAddClicked = (bookID) => {
+  const handleAddClicked = (bookID) => {
     axios({
       headers: {
         Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
@@ -79,7 +75,7 @@ export default class UserWishList extends Component {
       });
   };
 
-  handleRemoveClicked = (bookId) => {
+  const handleRemoveClicked = (bookId) => {
     Swal.fire({
       title: "Confirm",
       text: "Do you want to remove this book?",
@@ -90,9 +86,8 @@ export default class UserWishList extends Component {
       confirmButtonText: "Yes, remove it!",
     }).then((result) => {
       if (result.value) {
-        this.setState({
-          data: this.state.data.filter((item) => item.bookId != bookId),
-        });
+        var newData = data.filter((item) => item.bookId != bookId);
+        setData(prev => [...newData]);
         axios({
           headers: {
             Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
@@ -129,9 +124,9 @@ export default class UserWishList extends Component {
     });
   };
 
-  showListBooks = (data) => {
+  const showListBooks = useMemo(() => {
     let bookArr = [];
-    if (Object.keys(data).length > 0) {
+    if (data && data.length > 0) {
       bookArr = data.map((item, index) => {
         return (
           <tr>
@@ -159,18 +154,18 @@ export default class UserWishList extends Component {
               <button
                 className="btn btn--blue btn--rounded btn-fit"
                 id="btnAddToCart"
-                onClick={() => this.handleAddClicked(item.bookId)}
+                onClick={() => handleAddClicked(item.bookId)}
               >
-                Add to cart
+                {t('Add to cart')}
               </button>
             </td>
             <td className="action">
               <button
                 className="btn btn--red btn--rounded btn-fit"
                 id="btnRemove"
-                onClick={() => this.handleRemoveClicked(item.bookId)}
+                onClick={() => handleRemoveClicked(item.bookId)}
               >
-                Remove
+                {t('Remove')}
               </button>
             </td>
           </tr>
@@ -178,31 +173,31 @@ export default class UserWishList extends Component {
       });
       return bookArr;
     }
-  };
+  });
 
-  render() {
-    return (
-      <React.Fragment>
-        <div className="cart-title">
-          <h2>Wish List</h2>
+  return (
+    <React.Fragment>
+      <div className="cart-title">
+        <h2>{t('Wish List')}</h2>
+      </div>
+      <div className="container">
+        <div className="cart-table">
+          <table>
+            <thead>
+              <tr>
+                <th className="item">{t('Book')}</th>
+                <th className="qty">{t('Price')}</th>
+                <th className="price">{t('Added Date')}</th>
+                <th className="cart">&nbsp;</th>
+                <th className="remove">&nbsp;</th>
+              </tr>
+              {showListBooks}
+            </thead>
+          </table>
         </div>
-        <div className="container">
-          <div className="cart-table">
-            <table>
-              <thead>
-                <tr>
-                  <th className="item">Book</th>
-                  <th className="qty">Price</th>
-                  <th className="price">Added Date</th>
-                  <th className="cart">&nbsp;</th>
-                  <th className="remove">&nbsp;</th>
-                </tr>
-                {this.showListBooks(this.state.data)}
-              </thead>
-            </table>
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  }
+      </div>
+    </React.Fragment>
+  );
 }
+
+export default withRouter(UserWishList)

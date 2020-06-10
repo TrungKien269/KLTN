@@ -4,12 +4,15 @@ import { getToken } from "../../Utils/Commons";
 import NumberFormat from "react-number-format";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useTranslation } from 'react-i18next';
 
 const OrderStatus = () => {
   const [processingOrder, setProcessingOrder] = useState("");
   const [deliveringOrder, setDelivering] = useState("");
   const [deliveredOrder, setDelivered] = useState("");
   const [cancelledOrder, setCancelledOrder] = useState([]);
+
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     Axios({
@@ -193,7 +196,7 @@ const OrderStatus = () => {
                 handleCancel(order.id);
               }}
             >
-              Cancel Order
+              Cancel
             </button>
             <div className="title-wrapper">
               <h2>Date: {order.createdDate.slice(0, 10)}</h2>
@@ -535,8 +538,8 @@ const OrderStatus = () => {
               <table>
                 <thead>
                   <tr>
-                    <th className="item">Items</th>
-                    <th className="qty">Qty</th>
+                    <th className="item">Book</th>
+                    <th className="qty">Quantity</th>
                     <th className="price">Price</th>
                     <th className="total-price">Total</th>
                     <th className="remove">&nbsp;</th>
@@ -563,22 +566,22 @@ const OrderStatus = () => {
         <ul className="nav nav-tabs nav-order" id="active-exp">
           <li className="">
             <a data-toggle="tab" href="#processing">
-              Processing
+              {t('Processing')}
             </a>
           </li>
           <li>
             <a data-toggle="tab" href="#delivering">
-              Delivering
+              {t('Delivering')}
             </a>
           </li>
           <li>
             <a data-toggle="tab" href="#delivered">
-              Delivered
+              {t('Delivered')}
             </a>
           </li>
           <li>
             <a data-toggle="tab" href="#cancel">
-              Cancelled orders
+              {t('Cancelled')}
             </a>
           </li>
         </ul>

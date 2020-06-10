@@ -1,21 +1,18 @@
-import React, { Component } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { Link, withRouter } from "react-router-dom";
 import Swal from "sweetalert2";
 import Header from "../../components/header/Header";
 import Footer from "../../components/Footer";
+import { useTranslation } from 'react-i18next';
 
-export default class UserCart extends Component {
-  constructor(props) {
-    super(props);
+function UserCart() {
 
-    this.state = {
-      data: [],
-    };
-  }
+  const [data, setData] = useState([]);
 
-  componentDidMount() {
-    const x = this;
+  const { t, i18n } = useTranslation();
+
+  useEffect(() => {
     axios({
       headers: {
         Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
@@ -24,13 +21,12 @@ export default class UserCart extends Component {
       url: "http://localhost:5000/api/UserCart/Cart",
     }).then((res) => {
       if (res.data.status) {
-        x.setState({ data: res.data.obj.cartBook });
-        // console.log(this.state.data);
+        setData(res.data.obj.cartBook)
       }
     });
-  }
+  }, []);
 
-  handleRemoveClicked = (bookId, index) => {
+  const handleRemoveClicked = (bookId, index) => {
     Swal.fire({
       title: "Confirm",
       text: "Do you want to remove this book?",
@@ -41,9 +37,8 @@ export default class UserCart extends Component {
       confirmButtonText: "Yes, remove it!",
     }).then((result) => {
       if (result.value) {
-        this.setState({
-          data: this.state.data.filter((item) => item.bookId != bookId),
-        });
+        var newData = data.filter((item) => item.bookId != bookId);
+        setData((prev) => [...newData]);
         axios({
           headers: {
             Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
@@ -66,19 +61,15 @@ export default class UserCart extends Component {
     });
   };
 
-  handleQuantityChanged = (bookId, index) => {
-    let quantity = document.getElementsByClassName("input-text qty text h-100")[
-      index
-    ].value;
+  const handleQuantityChanged = (bookId, index) => {
+    let quantity = document.getElementsByClassName("input-text qty text h-100")[index].value;
 
-    let items = [...this.state.data];
+    let items = [...data];
     let item = items[index];
     item.quantity = parseInt(quantity);
     item.subTotal = parseInt(item.book.currentPrice) * parseInt(quantity);
     items[index] = item;
-    this.setState({
-      data: items,
-    });
+    setData((prev) => [...items])
 
     axios({
       headers: {
@@ -101,9 +92,9 @@ export default class UserCart extends Component {
     });
   };
 
-  showListBooks = (data) => {
+  const showListBooks = useMemo(() => {
     let bookArr = [];
-    if (Object.keys(data).length > 0) {
+    if (data && data.length > 0) {
       bookArr = data.map((item, index) => {
         return (
           <tr>
@@ -127,8 +118,8 @@ export default class UserCart extends Component {
                   type="button"
                   value="-"
                   className="minus quantity__button"
-                  onClick={(event) =>
-                    this.handleQuantityChanged(item.bookId, index)
+                  onClick={() =>
+                    handleQuantityChanged(item.bookId, index)
                   }
                 />
                 <input
@@ -147,8 +138,8 @@ export default class UserCart extends Component {
                   type="button"
                   value="+"
                   class="plus quantity__button"
-                  onClick={(event) =>
-                    this.handleQuantityChanged(item.bookId, index)
+                  onClick={() =>
+                    handleQuantityChanged(item.bookId, index)
                   }
                 />
               </div>
@@ -163,9 +154,9 @@ export default class UserCart extends Component {
               <button
                 className="btn btn--red btn--rounded btn-fit"
                 id="btnRemove"
-                onClick={() => this.handleRemoveClicked(item.bookId, index)}
+                onClick={() => handleRemoveClicked(item.bookId, index)}
               >
-                Remove
+                {t('Remove')}
               </button>
             </td>
           </tr>
@@ -173,83 +164,66 @@ export default class UserCart extends Component {
       });
       return bookArr;
     }
-  };
+  });
 
-  render() {
-    return (
-      <React.Fragment>
-        <div className="cart-title">
-          <h2>shopping cart</h2>
+  return (
+    <React.Fragment>
+      <div className="cart-title">
+        <h2>{t('shopping cart')}</h2>
+      </div>
+      <div className="container">
+        <div className="cart-table">
+          <table>
+            <thead>
+              <tr>
+                <th className="item">{t('Book')}</th>
+                <th className="qty">{t('Quantity')}</th>
+                <th className="price">{t('Price')}</th>
+                <th className="total-price">{t('Total')}</th>
+                <th className="remove">&nbsp;</th>
+              </tr>
+              {showListBooks}
+            </thead>
+          </table>
         </div>
-        <div className="container">
-          <div className="cart-table">
-            <table>
-              <thead>
-                <tr>
-                  <th className="item">Book</th>
-                  <th className="qty">Quantity</th>
-                  <th className="price">Price</th>
-                  <th className="total-price">Total</th>
-                  <th className="remove">&nbsp;</th>
-                </tr>
-                {this.showListBooks(this.state.data)}
-              </thead>
-            </table>
+        <div className="row">
+          <div className="col-sm-6 col-xs-12 cart-left">
+            
           </div>
-          <div className="row">
-            <div className="col-sm-6 col-xs-12 cart-left">
-              <div className="cart-order-note">
-                <h3>Add a note to your order</h3>
-                <div class="cart-note">
-                  <textarea name="note" id="CartSpecialInstructions"></textarea>
-                </div>
+
+          <div className="col-sm-6 col-xs-12 cart-right">
+            <div className="cart-right-table">
+              
+              <div className="note-tax">
+                <span>
+                  {t('Shipping, taxes and discounts will be calculated at checkout')}
+                </span>
               </div>
             </div>
 
-            <div className="col-sm-6 col-xs-12 cart-right">
-              <div className="cart-right-table">
-                <div class="total-price">
-                  Total{" "}
-                  <span rv-html="cart.total_price | money">
-                    <span
-                      className="money"
-                      data-currency-usd="$20.00"
-                      data-currency="USD"
-                    >
-                      $20.00
-                    </span>
-                  </span>
-                </div>
-                <div className="note-tax">
-                  <span className="nt-title">Shipping</span>{" "}
-                  <span>
-                    Shipping, taxes and discounts will be calculated at
-                    checkout.
-                  </span>
-                </div>
-              </div>
-
-              <div className="cart-action">
-                <Link
-                  to="/collections/"
-                  className="btn btn--rounded btn--blue btn-fit"
-                >
-                  Continue Shopping
-                </Link>
-                <Link
-                  to={"/proceedcheckout"}
-                  className="btn btn--rounded btn--white btn-fit"
-                  type="button"
-                  name="checkout"
-                  id="btnOrder"
-                >
-                  Proceed to Checkout
-                </Link>
-              </div>
+            <div className="cart-action">
+              <Link
+                to="/collections/"
+                className="btn btn--rounded btn--blue btn-fit"
+              >
+                {t('Continue Shopping')}
+              </Link>
+              <Link
+                to={"/proceedcheckout"}
+                className="btn btn--rounded btn--white btn-fit"
+                type="button"
+                name="checkout"
+                id="btnOrder"
+              >
+                {t('Proceed to Checkout')}
+              </Link>
             </div>
           </div>
         </div>
-      </React.Fragment>
-    );
-  }
+      </div>
+    </React.Fragment>
+  );
+
 }
+
+export default withRouter(UserCart)

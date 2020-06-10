@@ -6,7 +6,7 @@ import { getToken } from "../../Utils/Commons";
 import Swal from "sweetalert2";
 import { Button, Modal, Container } from "react-bootstrap";
 import NumberFormat from "react-number-format";
-// import LazyLoad from "react-lazyload";
+import { useTranslation } from 'react-i18next';
 
 import ProductRatingCard from "./ProductRatingCard";
 
@@ -14,6 +14,8 @@ const ProductCard = (props) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const { t, i18n } = useTranslation();
 
   const addToCart = (event) => {
     event.preventDefault();
@@ -99,7 +101,7 @@ const ProductCard = (props) => {
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
       </Modal>
-      <Link to={`/book/${props.id}`}>
+      <Link to={`/book/${props.id}`} title={props.name}>
         <div className="card display-on-hover">
           <img
             className="card-img-top img-contain img-contain-25"
@@ -118,7 +120,7 @@ const ProductCard = (props) => {
               className="btn btn--rounded btn-fw btn--blue item-display"
               onClick={addToCart}
             >
-              Add to cart
+              {t('Add to cart')}
             </button>
           </div>
           <div className="badge badge__utilities item-display">

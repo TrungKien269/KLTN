@@ -1,9 +1,11 @@
 import React, { Component, useState, useEffect } from "react";
 import axios from "axios";
 import { withRouter, Link } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const GetCategories = () => {
   const [categories, setCategories] = useState([]);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     axios({
@@ -15,13 +17,12 @@ const GetCategories = () => {
   }, []);
 
   const showListCategories = (categories) => {
-    // console.log(categories.length);
     if (categories.length > 0) {
       return categories.map((v) => {
         return (
           <div className="col-md-3" key={v.id}>
             <Link to={`/collections/${v.name}`}>
-              <h3>{v.name}</h3>
+              <h3>{t(v.name)}</h3>
             </Link>
           </div>
         );
@@ -29,21 +30,6 @@ const GetCategories = () => {
     }
     return null;
   };
-
-  //   showListSubCategory = (categories) => {
-  //     let result = "";
-  //     for (let i = 0; i < categories.length; i++) {
-  //       result = categories[i].map((category) => {
-  //         console.log(result);
-  //         return (
-  //           <React.Fragment>
-  //             <li>{category.subCategory.name}</li>
-  //           </React.Fragment>
-  //         );
-  //       });
-  //     }
-  //     return result;
-  //   };
 
   return <React.Fragment>{showListCategories(categories)}</React.Fragment>;
 };
