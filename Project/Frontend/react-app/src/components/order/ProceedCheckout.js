@@ -5,10 +5,19 @@ import NumberFormat from "react-number-format";
 import Swal from "sweetalert2";
 import { withRouter, Link } from "react-router-dom";
 import data from '../../data/local.json';
+import { useTranslation } from 'react-i18next';
+import { Tab, Button } from "semantic-ui-react";
+import CardCheckout from './CardCheckout';
+import PayPalCheckout from './PayPalCheckout';
 
 const ProceedCheckout = (props) => {
   var order = [];
   var proceedOrder = [];
+  const { t, i18n } = useTranslation();
+  const codName = t('Cash on Delivery');
+  const cardName = t('Card');
+  const paypalName = t('PayPal');
+
   const [cartBook, setCartBook] = useState(null);
   const [userInfor, setUserInfor] = useState(null);
   const [fullName, setFullName] = useState("");
@@ -21,6 +30,8 @@ const ProceedCheckout = (props) => {
 
   const [orderTotal, setOrderTotal] = useState(0);
   const [shippingFee, setShippingFee] = useState(0);
+
+  const [isCheckout, setIsCheckout] = useState(false);
 
   const fullNameRef = useRef(null);
   const phoneRef = useRef(null);
@@ -40,7 +51,13 @@ const ProceedCheckout = (props) => {
   };
 
   const handleEmailChange = (event) => {
-    setEmail(event.target.value)
+    setEmail(event.target.value);
+  }
+
+  const handleCheckout = (check) => {
+    if(check === true){
+      setCartBook(null);
+    }
   }
 
   useEffect(() => {
@@ -84,7 +101,7 @@ const ProceedCheckout = (props) => {
         total = total + parseInt(x[i].subTotal);
         order.push({
           bookID: x[i].bookId,
-          bookName: x[i].book.Name,
+          bookName: x[i].book.name,
           currentPrice: x[i].book.currentPrice,
           quantity: x[i].quantity,
         });
@@ -205,15 +222,15 @@ const ProceedCheckout = (props) => {
                     <table>
                       <tbody>
                         <tr>
-                          <td className="first">Delivery type</td>
-                          <td className="second">Shipping</td>
+                          <td className="first">{t('Delivery type')}</td>
+                          <td className="second">{t('Shipping')}</td>
                         </tr>
                         <tr>
-                          <td className="first">Product code</td>
+                          <td className="first">{t('Product code')}</td>
                           <td className="second">{item.bookId}</td>
                         </tr>
                         <tr>
-                          <td className="first">Amount</td>
+                          <td className="first">{t('Amount')}</td>
                           <td className="second">{item.quantity}</td>
                         </tr>
                       </tbody>
@@ -242,76 +259,106 @@ const ProceedCheckout = (props) => {
     return cityItems;
   }, [cities]);
 
+  const panes = [
+    {
+      menuItem: codName,
+      pane: (
+        <Tab.Pane>
+          <div className="title-wrapper">
+            <h2>{t('Please provide complete information')}</h2>
+          </div>
+          <form className="form-checkout">
+            <input
+              type="email"
+              placeholder={t('Email for receive notification')}
+              id="email"
+              defaultValue={userInfor && userInfor.account.email}
+              ref={emailRef}
+              onChange={(e) => handleEmailChange(e)}
+            />
+            <input
+              type="text"
+              placeholder={t('Your name')}
+              id="name"
+              defaultValue={userInfor && userInfor.fullName}
+              ref={fullNameRef}
+              onChange={(e) => handleNameChange(e)}
+            />
+            <input
+              type="number"
+              placeholder={t('Phone number')}
+              id="number"
+              defaultValue={userInfor && userInfor.phoneNumber}
+              ref={phoneRef}
+              onChange={(e) => handlePhoneChange(e)}
+            />
+            <select name="city" id="cbCity" className="form-control"
+              onChange={(e) => SelectCity(e)}>
+              <option selected hidden>{t('Choose City')}</option>
+              {showListCity}
+            </select>
+            <textarea
+              name
+              id
+              cols={30}
+              rows={5}
+              placeholder={t('Your detail address')}
+              defaultValue={userInfor && userInfor.address}
+              ref={addressRef}
+              onChange={(e) => handleAdressChange(e)}
+            />
+            <input
+              type="button"
+              defaultValue={t('Confirm your order')}
+              className="btn btn--rounded btn-fit btn--blue"
+              onClick={() => handleSubmit()}
+            />
+          </form>
+        </Tab.Pane>
+      )
+    },
+    {
+      menuItem: cardName,
+      pane: (
+        <Tab.Pane>
+          <CardCheckout userInfo={userInfor}
+            cartBook={cartBook} isCheckout={(check) => handleCheckout(check)}
+          />
+        </Tab.Pane>
+      )
+    },
+    {
+      menuItem: paypalName,
+      pane: (
+        <Tab.Pane>
+          <PayPalCheckout userInfo={userInfor}
+            cartBook={cartBook} isCheckout={(check) => handleCheckout(check)}
+          />
+        </Tab.Pane>
+      )
+    }
+  ]
+
   return (
     <div>
       <section className="section__checkout">
         <div className="cart-title">
-          <h2>check out</h2>
+          <h2>{t('check out')}</h2>
         </div>
         <div className="container">
           <div className="row">
             <div className="col-md-8">
-              <div className="title-wrapper">
-                <h2>Please provide complete information</h2>
-                {/* <a href="/login.html">Login</a> */}
-              </div>
-              <form className="form-checkout">
-                <input
-                  type="email"
-                  placeholder="Email for receive notification"
-                  id="email"
-                  defaultValue={userInfor && userInfor.account.email}
-                  ref={emailRef}
-                  onChange={(e) => handleEmailChange(e)}
-                />
-                <input
-                  type="text"
-                  placeholder="Your name"
-                  id="name"
-                  defaultValue={userInfor && userInfor.fullName}
-                  ref={fullNameRef}
-                  onChange={(e) => handleNameChange(e)}
-                />
-                <input
-                  type="number"
-                  placeholder="Phone number"
-                  id="number"
-                  defaultValue={userInfor && userInfor.phoneNumber}
-                  ref={phoneRef}
-                  onChange={(e) => handlePhoneChange(e)}
-                />
-                <select name="city" id="cbCity" className="form-control"
-                  onChange={(e) => SelectCity(e)}>
-                  <option selected hidden>Choose City</option>
-                  {showListCity}
-                </select>
-                <textarea
-                  name
-                  id
-                  cols={30}
-                  rows={5}
-                  placeholder="Your detail address"
-                  defaultValue={userInfor && userInfor.address}
-                  ref={addressRef}
-                  onChange={(e) => handleAdressChange(e)}
-                />
-                <input
-                  type="button"
-                  defaultValue="Confirm your order"
-                  className="btn btn--rounded btn-fit btn--blue"
-                  onClick={() => handleSubmit()}
-                />
-              </form>
+              <Tab panes={panes} renderActiveOnly={false} />
             </div>
             <div className="col-md">
               <div className="order">
                 <div className="title-wrapper">
                   <h2 style={{
                     textAlign: "center"
-                  }}>Your order</h2>
+                  }}>{t('Your Order')}</h2>
                 </div>
                 <div className="title-wrapper">
-                  <h2>Shipping Fee</h2>
+                  <h2>{t('Shipping Fee')}</h2>
                   <div className="product-price">
                     {
                       <NumberFormat
@@ -324,7 +371,7 @@ const ProceedCheckout = (props) => {
                   </div>
                 </div>
                 <div className="title-wrapper">
-                  <h2>Total</h2>
+                  <h2>{t('Total')}</h2>
                   <div className="product-price">
                     {
                       <NumberFormat
