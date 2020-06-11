@@ -4,7 +4,7 @@ import axios from "axios";
 import moment from "moment";
 import { getToken } from "../../Utils/Commons";
 import Swal from "sweetalert2";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const CommentExampleComment = (props) => {
   const { id } = props;
@@ -86,9 +86,7 @@ const CommentExampleComment = (props) => {
             <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/elliot.jpg" />
             <Comment.Content>
               <Comment.Author as="a">
-                {Object.keys(cmt).length > 0
-                  ? cmt.user.fullName
-                  : ""}
+                {Object.keys(cmt).length > 0 ? cmt.user.fullName : ""}
               </Comment.Author>
               <Comment.Metadata>
                 {Object.keys(cmt).length > 0
@@ -114,19 +112,19 @@ const CommentExampleComment = (props) => {
   return (
     <Comment.Group>
       <Header as="h3" dividing>
-        {t('Comments')}
+        {t("Comments")}
       </Header>
 
       {listComment}
 
-      <Form reply onSubmit={(e) => handleSubmit(e)}>
+      <Form onSubmit={(e) => handleSubmit(e)}>
         <Form.TextArea
           id="txtComment"
           required
           onChange={(e) => handleInputChange(e)}
         />
         <Button
-          content={t('Add Comment')}
+          content={t("Add Comment")}
           labelPosition="left"
           icon="edit"
           primary

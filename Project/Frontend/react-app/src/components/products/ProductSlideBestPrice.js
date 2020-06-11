@@ -1,31 +1,25 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import OwlCarousel from "react-owl-carousel2";
 import ProductCard from "./ProductCard";
 import NumberFormat from "react-number-format";
 import { Dimmer, Loader, Image, Segment } from "semantic-ui-react";
 
-class ProductSlideBestPrice extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { data: [] };
-  }
-  componentDidMount() {
-    const books = this;
+const ProductSlideBestPrice = () => {
+  const [book, setBook] = useState();
+  useEffect(() => {
     axios({
       method: "get",
       url: "http://localhost:5000/api/Main/ListLowestPriceBook",
-    }).then(function (res) {
-      books.setState({
-        data: res.data.obj,
-      });
+    }).then((res) => {
+      setBook(res.data.obj);
     });
-  }
+  }, []);
 
-  showLowestPriceBook = (data) => {
+  const showLowestPriceBook = useMemo(() => {
     let result = {};
-    if (Object.keys(data).length > 0) {
-      result = data.map((book) => {
+    if (book) {
+      result = book.map((book) => {
         return (
           <ProductCard
             key={book.id}
@@ -46,10 +40,10 @@ class ProductSlideBestPrice extends Component {
     } else {
       return <Loader active inline="centered" size="huge" />;
     }
-
     return result;
-  };
-  options = {
+  }, [book]);
+
+  const options = {
     nav: true,
     items: 4,
     margin: 20,
@@ -78,13 +72,8 @@ class ProductSlideBestPrice extends Component {
       "<span aria-label='Next'>›</span>",
     ],
   };
-  render() {
-    return (
-      <OwlCarousel options={this.options}>
-        {this.showLowestPriceBook(this.state.data)}
-      </OwlCarousel>
-    );
-  }
-}
+
+  return <OwlCarousel options={options}>{showLowestPriceBook}</OwlCarousel>;
+};
 
 export default ProductSlideBestPrice;

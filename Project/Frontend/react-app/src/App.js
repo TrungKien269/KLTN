@@ -13,6 +13,7 @@ import UserCart from "./pages/index/UserCart";
 import UserWishList from "./pages/index/UserWishList";
 import OrderStatus from "./components/order/OrderStatus";
 import ProceedCheckout from "./components/order/ProceedCheckout";
+import "lightgallery.js/dist/css/lightgallery.css";
 
 const showPage = (Routers) => {
   var result = null;

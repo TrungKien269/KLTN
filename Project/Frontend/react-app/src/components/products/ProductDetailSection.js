@@ -5,12 +5,13 @@ import Swal from "sweetalert2";
 import { getToken } from "../../Utils/Commons";
 import ProductRating from "./ProductRating";
 import ProductRatingVote from "./ProductRatingVote";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+import OwlCarousel from "react-owl-carousel2";
+import { LightgalleryProvider, LightgalleryItem } from "react-lightgallery";
 
 function ProductDetailSection(props) {
-
   const [data, setData] = useState(null);
-  const [authors, setAuthors] = useState("")
+  const [authors, setAuthors] = useState("");
   const [similarityData, setSimilarityData] = useState([]);
   const [quantity, setQuantity] = useState(1);
 
@@ -21,13 +22,15 @@ function ProductDetailSection(props) {
     axios({
       method: "get",
       url: `http://localhost:5000/api/BookInfo/Book/${props.bookInfo}`,
-    }).then(function (response) {
+    }).then((response) => {
       setData(response.data.obj);
-      var author = "";
-      for (var i = 0; i < response.data.obj.authorBook.length; i++) {
-        author += response.data.obj.authorBook[i].author.name + ", ";
-      }
-      setAuthors(author.substring(0, author.length - 2));
+      var authors = response.data.obj.authorBook;
+      var results = authors.map((author) => {
+        return <React.Fragment> {author.author.name}</React.Fragment>;
+      });
+
+      setAuthors(results);
+      console.log(response.data.obj);
     });
     axios({
       method: "get",
@@ -36,6 +39,68 @@ function ProductDetailSection(props) {
       setSimilarityData(res.data.obj);
     });
   }, []);
+
+  const PhotoItem = ({ image, group }) => (
+    <div>
+      <LightgalleryItem group={group} src={image}>
+        <img src={image} style={{ width: "100%" }} />
+      </LightgalleryItem>
+    </div>
+  );
+
+  const showSlideBooks = useMemo(() => {
+    var results = [];
+
+    if (data) {
+      results = data.imageBook.map((image) => {
+        return (
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {" "}
+            <PhotoItem key={image.bookId} image={image.path} group="group1" />
+          </div>
+        );
+      });
+      console.log(results);
+    }
+
+    return results;
+  }, [data]);
+
+  const options = {
+    items: 1,
+    nav: true,
+    rewind: true,
+    autoplay: true,
+    navText: [
+      "<span aria-label='Previous'>‹</span>",
+      "<span aria-label='Next'>›</span>",
+    ],
+  };
+  //show related book
+  const showRelatedBooks = useMemo(() => {
+    var results = "";
+    if (similarityData) {
+      results = similarityData.map((data) => {
+        return (
+          <li>
+            <div className="row">
+              <div className="col-md-6">
+                <img
+                  src="https://cdn0.fahasa.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/i/m/image_129416.jpg"
+                  className="img-cover shadow-lg"
+                  alt=""
+                />
+              </div>
+              <div className="col-md">
+                <a href="#">Product example #1</a>
+                <p className="card__book-price">50$</p>
+              </div>
+            </div>
+          </li>
+        );
+      });
+    }
+  }, [similarityData]);
 
   const handleQuantityChanged = (event) => {
     setQuantity(parseInt(document.getElementById("txtQuantity").value));
@@ -51,7 +116,7 @@ function ProductDetailSection(props) {
       method: "post",
       params: {
         id: data.id,
-        quantity: parseInt(quantity)
+        quantity: parseInt(quantity),
       },
     })
       .then((res) => {
@@ -114,179 +179,56 @@ function ProductDetailSection(props) {
       });
   };
 
-  const showDetail = (data, authors) => {
-    if (data && authors) {
+  const showDetail = useMemo(() => {
+    if (data) {
       return (
         <section className="section__detail">
           <div className="container">
             <div className="row">
               <div className="col-md">
+                <div className="sidebar-block">
+                  <h2>Related Books</h2>
+                  <ul className="list-unstyled sidebar-list">
+                    {/* show related book */}
+                    <li>
+                      <div className="row">
+                        <div className="col-6">
+                          <img
+                            src="https://cdn0.fahasa.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/i/m/image_129416.jpg"
+                            className="img-cover shadow-lg"
+                            alt=""
+                          />
+                        </div>
+                        <div className="col">
+                          <a href="#">Product example #1</a>
+                          <p className="card__book-price">50$</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div className="col-md-9">
                 <div className="row">
                   <div className="col-md-5 mar-right-sm d-flex align-items-center">
                     {/*Carousel-slide*/}
-                    <div className="container-fluid">
-                      {/*Carousel Wrapper*/}
-                      {/* <div className="badge sale__badge">SALE</div> */}
-                      <div
-                        id="carousel-example-1z"
-                        className="carousel slide carousel-slide pointer-event "
-                        data-ride="carousel"
-                        data-interval={0}
-                      >
-                        {/*Slides*/}
-                        <div className="carousel-inner" role="listbox">
-                          {/*First slide*/}
-                          <div
-                            className="carousel-item active cursor-zoom"
-                            data-image={data.image}
-                            data-toggle="zoom"
-                            style={{ position: "relative", overflow: "hidden" }}
-                          >
-                            <div className="card">
-                              <img
-                                src={data.image}
-                                className="card-img-top img-cover"
-                                alt="..."
-                              />
-                            </div>
-                            <img
-                              role="presentation"
-                              alt=""
-                              src={data.image}
-                              className="zoomImg"
-                              style={{
-                                position: "absolute",
-                                top: "0px",
-                                left: "0px",
-                                opacity: 0,
-                                width: "270px",
-                                height: "380px",
-                                border: "none",
-                                maxWidth: "none",
-                                maxHeight: "none",
-                              }}
-                            />
-                          </div>
-                          {/*/First slide*/}
-                          {/*Second slide*/}
-                          <div
-                            className="carousel-item cursor-zoom"
-                            data-image="img/img__product-1-front.webp"
-                            data-toggle="zoom"
-                          >
-                            <div className="card">
-                              <img
-                                src="data/book6.webp"
-                                className="card-img-top img-cover"
-                                alt="..."
-                              />
-                            </div>
-                          </div>
-                          {/*/Second slide*/}
-                          {/*Third slide*/}
-                          <div
-                            className="carousel-item cursor-zoom"
-                            data-image="data/book6.webp"
-                            data-toggle="zoom"
-                            style={{ position: "relative", overflow: "hidden" }}
-                          >
-                            <div className="card">
-                              <img
-                                src="data/book6.webp"
-                                className="card-img-top img-cover"
-                                alt="..."
-                              />
-                            </div>
-                            <img
-                              role="presentation"
-                              alt=""
-                              src="data/book6.webp"
-                              className="zoomImg"
-                              style={{
-                                position: "absolute",
-                                top: "0px",
-                                left: "0px",
-                                opacity: 0,
-                                width: "270px",
-                                height: "380px",
-                                border: "none",
-                                maxWidth: "none",
-                                maxHeight: "none",
-                              }}
-                            />
-                          </div>
-                          {/*/Third slide*/}
-                          {/*Fourth slide*/}
-                          <div
-                            className="carousel-item cursor-zoom"
-                            data-image="data/book6.webp"
-                            data-toggle="zoom"
-                            style={{ position: "relative", overflow: "hidden" }}
-                          >
-                            <div className="card">
-                              <img
-                                src="data/book6.webp"
-                                className="card-img-top img-cover"
-                                alt="..."
-                              />
-                            </div>
-                            <img
-                              role="presentation"
-                              alt=""
-                              src="data/book6.webp"
-                              className="zoomImg"
-                              style={{
-                                position: "absolute",
-                                top: "0px",
-                                left: "0px",
-                                opacity: 0,
-                                width: "270px",
-                                height: "380px",
-                                border: "none",
-                                maxWidth: "none",
-                                maxHeight: "none",
-                              }}
-                            />
-                          </div>
-                          {/*/Fourth slide*/}
-                        </div>
-                        {/*/.Slides*/}
-                        {/*Indicators*/}
-                        <ol className="carousel-indicators carousel-indicators-dark">
-                          <li
-                            data-target="#carousel-example-1z"
-                            data-slide-to={0}
-                            className="active"
-                            style={{ backgroundImage: 'url("data/book6.webp")' }}
-                          ></li>
-                          <li
-                            data-target="#carousel-example-1z"
-                            data-slide-to={1}
-                            style={{ backgroundImage: 'url("data/book6.webp")' }}
-                          />
-                          <li
-                            data-target="#carousel-example-1z"
-                            data-slide-to={2}
-                            style={{ backgroundImage: 'url("data/book6.webp")' }}
-                          />
-                          <li
-                            data-target="#carousel-example-1z"
-                            data-slide-to={3}
-                            style={{ backgroundImage: 'url("data/book6.webp")' }}
-                          />
-                        </ol>
-                        {/*/.Indicators*/}
-                      </div>
-                      {/*/.Carousel Wrapper*/}
-                    </div>
+                    {/* <div className="container-fluid">{showSlideBooks}</div> */}
                     {/*/Carousel-slide*/}
+                    <LightgalleryProvider>
+                      <OwlCarousel options={options}>
+                        {showSlideBooks}
+                      </OwlCarousel>
+                    </LightgalleryProvider>
                   </div>
                   <div className="col-md">
                     <div className="title-wrapper">
                       <h3>{data.name}</h3>
                     </div>
                     <ProductRating id={props.bookInfo} />
-                    <div className="special-author text-dark">{}</div>
+                    <div className="special-author text-dark">
+                      Authors:
+                      {authors}
+                    </div>
                     <h2>
                       <NumberFormat
                         value={data.currentPrice}
@@ -295,9 +237,10 @@ function ProductDetailSection(props) {
                         prefix={"VND "}
                       ></NumberFormat>
                     </h2>
-                    <div className="detail__describe"
-                      dangerouslySetInnerHTML={{ __html: data.summary }}>
-                    </div>
+                    <div
+                      className="detail__describe"
+                      dangerouslySetInnerHTML={{ __html: data.summary }}
+                    ></div>
                     <div className="row">
                       <div className="col-md-6">
                         <div className="quantity buttons_added d-flex flex-row mar-top-2">
@@ -334,19 +277,19 @@ function ProductDetailSection(props) {
                           className="btn btn-fw btn--rounded btn--blue"
                           onClick={AddToCart}
                         >
-                          {t('Add to cart')}
+                          {t("Add to cart")}
                         </a>
                       </div>
                     </div>
                     <div className="row">
                       <div className="col-md-12 mt-4">
-                        <h3>{t('Rate this book')}</h3>
+                        <h3>{t("Rate this book")}</h3>
                         <ProductRatingVote id={props.bookInfo} />
                       </div>
                     </div>
                     <div className="detail__link">
                       <a href="#" onClick={AddToWishList}>
-                        {t('Add to wish list')}
+                        {t("Add to wish list")}
                       </a>
                     </div>
                   </div>
@@ -354,15 +297,15 @@ function ProductDetailSection(props) {
                     <table>
                       <tbody>
                         <tr className="title">
-                          <td className="first">{t('Title')}</td>
+                          <td className="first">{t("Title")}</td>
                           <td>{data.name}</td>
                         </tr>
                         <tr className="author">
-                          <td className="first">{t('Authors')}</td>
+                          <td className="first">{t("Authors")}</td>
                           <td>{authors}</td>
                         </tr>
                         <tr className="type">
-                          <td className="first">{t('Category')}</td>
+                          <td className="first">{t("Category")}</td>
                           <td>
                             {Object.keys(data).length > 0
                               ? data.bookCategory[0].cate.name
@@ -370,11 +313,11 @@ function ProductDetailSection(props) {
                           </td>
                         </tr>
                         <tr className="title">
-                          <td className="first">{t('Released Year')}</td>
+                          <td className="first">{t("Released Year")}</td>
                           <td>{data.releaseYear}</td>
                         </tr>
                         <tr className="provider">
-                          <td className="first">{t('Supplier')}</td>
+                          <td className="first">{t("Supplier")}</td>
                           <td>
                             {Object.keys(data).length > 0
                               ? data.supplierBook[0].supplier.name
@@ -382,7 +325,7 @@ function ProductDetailSection(props) {
                           </td>
                         </tr>
                         <tr className="publisher">
-                          <td className="first">{t('Publisher')}</td>
+                          <td className="first">{t("Publisher")}</td>
                           <td>
                             {Object.keys(data).length > 0
                               ? data.publisherBook[0].publisher.name
@@ -390,16 +333,18 @@ function ProductDetailSection(props) {
                           </td>
                         </tr>
                         <tr className="weight">
-                          <td className="first">{t('Weight')}</td>
+                          <td className="first">{t("Weight")}</td>
                           <td>{data.weight}</td>
                         </tr>
                         <tr className="Pages">
-                          <td className="first">{t('Number of pages')}</td>
+                          <td className="first">{t("Number of pages")}</td>
                           <td>{data.numOfPage}</td>
                         </tr>
                         <tr className="Description">
-                          <td className="first">{t('Summary')}</td>
-                          <td dangerouslySetInnerHTML={{ __html: data.summary }}></td>
+                          <td className="first">{t("Summary")}</td>
+                          <td
+                            dangerouslySetInnerHTML={{ __html: data.summary }}
+                          ></td>
                         </tr>
                       </tbody>
                     </table>
@@ -411,13 +356,9 @@ function ProductDetailSection(props) {
         </section>
       );
     }
-  };
+  }, [data, authors]);
 
-  return (
-    <div>
-      {showDetail(data, authors)}
-    </div>
-  );
+  return <div>{showDetail}</div>;
 }
 
 export default ProductDetailSection;

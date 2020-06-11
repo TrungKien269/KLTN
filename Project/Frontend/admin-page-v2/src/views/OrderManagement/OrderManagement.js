@@ -24,57 +24,57 @@ const OrderManagement = () => {
   const [deliveredOrders, setDeliveredOrders] = useState([]);
   const [cancelOrders, setCancelOrders] = useState([]);
 
-  useEffect(() => {
-    Axios({
-      headers: {
-        Authorization: "Bearer " + getToken(),
-      },
-      method: "Get",
-      url: "http://localhost:5000/api/Admin/ListProcessingAdmin",
-    }).then((res) => {
-      if (res.data.status) {
-        setProcessingOrders(res.data.obj);
-        console.log("process ", res.data.obj);
-      }
-    });
+  // useEffect(() => {
+  //   Axios({
+  //     headers: {
+  //       Authorization: "Bearer " + getToken(),
+  //     },
+  //     method: "Get",
+  //     url: "http://localhost:5000/api/Admin/ListProcessingAdmin",
+  //   }).then((res) => {
+  //     if (res.data.status) {
+  //       setProcessingOrders(res.data.obj);
+  //       console.log("process ", res.data.obj);
+  //     }
+  //   });
 
-    Axios({
-      headers: {
-        Authorization: "Bearer " + getToken(),
-      },
-      method: "Get",
-      url: "http://localhost:5000/api/Admin/ListDeliveringAdmin",
-    }).then((res) => {
-      if (res.data.status) {
-        setDeliveringOrders(res.data.obj);
-        console.log("delivering ", res.data.obj);
-      }
-    });
+  //   Axios({
+  //     headers: {
+  //       Authorization: "Bearer " + getToken(),
+  //     },
+  //     method: "Get",
+  //     url: "http://localhost:5000/api/Admin/ListDeliveringAdmin",
+  //   }).then((res) => {
+  //     if (res.data.status) {
+  //       setDeliveringOrders(res.data.obj);
+  //       console.log("delivering ", res.data.obj);
+  //     }
+  //   });
 
-    Axios({
-      headers: {
-        Authorization: "Bearer " + getToken(),
-      },
-      method: "Get",
-      url: "http://localhost:5000/api/Admin/ListDeliveredAdmin",
-    }).then((res) => {
-      if (res.data.status) {
-        setDeliveredOrders(res.data.obj);
-      }
-    });
+  //   Axios({
+  //     headers: {
+  //       Authorization: "Bearer " + getToken(),
+  //     },
+  //     method: "Get",
+  //     url: "http://localhost:5000/api/Admin/ListDeliveredAdmin",
+  //   }).then((res) => {
+  //     if (res.data.status) {
+  //       setDeliveredOrders(res.data.obj);
+  //     }
+  //   });
 
-    Axios({
-      headers: {
-        Authorization: "Bearer " + getToken(),
-      },
-      method: "Get",
-      url: "http://localhost:5000/api/Admin/ListCanceledAdmin",
-    }).then((res) => {
-      if (res.data.status) {
-        setCancelOrders(res.data.obj);
-      }
-    });
-  }, []);
+  //   Axios({
+  //     headers: {
+  //       Authorization: "Bearer " + getToken(),
+  //     },
+  //     method: "Get",
+  //     url: "http://localhost:5000/api/Admin/ListCanceledAdmin",
+  //   }).then((res) => {
+  //     if (res.data.status) {
+  //       setCancelOrders(res.data.obj);
+  //     }
+  //   });
+  // }, []);
 
   const handleConfirm = (order, newState) => {
     Axios({
