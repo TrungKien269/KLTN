@@ -23,7 +23,7 @@ class ProductSlideBestSale extends Component {
   }
 
   ShowTop6 = (data) => {
-    let result = "";
+    let result = {};
     if (Object.keys(data).length > 0) {
       result = data.map((book) => {
         if (book.status) {

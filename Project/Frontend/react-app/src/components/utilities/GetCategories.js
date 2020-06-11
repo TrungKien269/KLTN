@@ -1,7 +1,7 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { Component, useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { withRouter, Link } from "react-router-dom";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const GetCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -16,8 +16,8 @@ const GetCategories = () => {
     });
   }, []);
 
-  const showListCategories = (categories) => {
-    if (categories.length > 0) {
+  const showListCategories = useMemo(() => {
+    if (categories) {
       return categories.map((v) => {
         return (
           <div className="col-md-3" key={v.id}>
@@ -29,9 +29,9 @@ const GetCategories = () => {
       });
     }
     return null;
-  };
+  }, [categories]);
 
-  return <React.Fragment>{showListCategories(categories)}</React.Fragment>;
+  return <React.Fragment>{showListCategories}</React.Fragment>;
 };
 
 export default withRouter(GetCategories);

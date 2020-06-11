@@ -23,7 +23,7 @@ class ProductSlideBestPrice extends Component {
   }
 
   showLowestPriceBook = (data) => {
-    let result = "";
+    let result = {};
     if (Object.keys(data).length > 0) {
       result = data.map((book) => {
         return (
