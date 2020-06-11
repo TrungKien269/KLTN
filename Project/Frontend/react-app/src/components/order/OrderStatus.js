@@ -211,14 +211,14 @@ const OrderStatus = () => {
                   ></NumberFormat>
                 }
               </h2>
-              <p>Amount: {order.orderDetail.length} items</p>
+              <p>Amount: {order.orderDetail.length}</p>
             </div>
             <div className="cart-table">
               <table>
                 <thead>
                   <tr>
-                    <th className="item">Items</th>
-                    <th className="qty">Qty</th>
+                    <th className="item">{t('Book')}</th>
+                    <th className="qty">Quantity</th>
                     <th className="price">Price</th>
                     <th className="total-price">Total</th>
                     <th className="remove">&nbsp;</th>
@@ -318,14 +318,14 @@ const OrderStatus = () => {
                   ></NumberFormat>
                 }
               </h2>
-              <p>Amount: {order.orderDetail.length} items</p>
+              <p>Amount: {order.orderDetail.length}</p>
             </div>
             <div className="cart-table">
               <table>
                 <thead>
                   <tr>
-                    <th className="item">Items</th>
-                    <th className="qty">Qty</th>
+                    <th className="item">Book</th>
+                    <th className="qty">Quantity</th>
                     <th className="price">Price</th>
                     <th className="total-price">Total</th>
                     <th className="remove">&nbsp;</th>
@@ -425,14 +425,14 @@ const OrderStatus = () => {
                   ></NumberFormat>
                 }
               </h2>
-              <p>Amount: {order.orderDetail.length} items</p>
+              <p>Amount: {order.orderDetail.length}</p>
             </div>
             <div className="cart-table">
               <table>
                 <thead>
                   <tr>
-                    <th className="item">Items</th>
-                    <th className="qty">Qty</th>
+                    <th className="item">Book</th>
+                    <th className="qty">Quantity</th>
                     <th className="price">Price</th>
                     <th className="total-price">Total</th>
                     <th className="remove">&nbsp;</th>
@@ -532,7 +532,7 @@ const OrderStatus = () => {
                   ></NumberFormat>
                 }
               </h2>
-              <p>Amount: {order.orderDetail.length} items</p>
+              <p>Amount: {order.orderDetail.length}</p>
             </div>
             <div className="cart-table">
               <table>
@@ -560,7 +560,7 @@ const OrderStatus = () => {
   return (
     <section className="section__order-status">
       <div className="cart-title">
-        <h2>Orders</h2>
+        <h2>{t('Orders')}</h2>
       </div>
       <div className="container">
         <ul className="nav nav-tabs nav-order" id="active-exp">

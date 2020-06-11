@@ -17,7 +17,7 @@ i18n
 
     react: {
       useSuspense: false,
-      wait: true
+      wait: false 
     },
 
     interpolation: {
