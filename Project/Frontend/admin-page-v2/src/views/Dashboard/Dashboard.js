@@ -44,7 +44,8 @@ const Dashboard = () => {
     numberExportedOrderWithMonth,
     setNumberExportedOrderWithMonth,
   ] = useState([]);
-  var data1 = {};
+  var data1 = "";
+  var cardChartOpts = "";
 
   useEffect(() => {
     axios({
@@ -71,10 +72,70 @@ const Dashboard = () => {
           },
         ],
       };
+      cardChartOpts = {
+        tooltips: {
+          enabled: false,
+          custom: CustomTooltips,
+        },
+        maintainAspectRatio: false,
+        legend: {
+          display: false,
+        },
+        scales: {
+          xAxes: [
+            {
+              gridLines: {
+                color: "transparent",
+                zeroLineColor: "transparent",
+              },
+              ticks: {
+                fontSize: 2,
+                fontColor: "transparent",
+              },
+            },
+          ],
+          yAxes: [
+            {
+              display: false,
+              ticks: {
+                display: false,
+                min: Math.min.apply(Math, data1.datasets[0].data) - 5,
+                max: Math.max.apply(Math, data1.datasets[0].data) + 5,
+              },
+            },
+          ],
+        },
+        elements: {
+          line: {
+            borderWidth: 1,
+          },
+          point: {
+            radius: 4,
+            hitRadius: 10,
+            hoverRadius: 4,
+          },
+        },
+      };
+
+      console.log(data1);
     });
   }, []);
 
-  return <div>Hi from dashboard</div>;
+  return (
+    <div>
+      {" "}
+      <Card className="text-white bg-info">
+        <CardBody className="pb-0">
+          <ButtonGroup className="float-right"></ButtonGroup>
+          <div className="text-value">9.823</div>
+          <div>Members online</div>
+        </CardBody>
+        <div className="chart-wrapper mx-3" style={{ height: "70px" }}>
+          <Line data={data1} options={cardChartOpts} height={70} />
+        </div>
+      </Card>
+    </div>
+  );
 };
 export default Dashboard;
 
