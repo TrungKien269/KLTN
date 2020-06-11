@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
+import { Link } from 'react-router-dom';
 import axios from "axios";
 import NumberFormat from "react-number-format";
 import Swal from "sweetalert2";
@@ -12,13 +13,26 @@ import { LightgalleryProvider, LightgalleryItem } from "react-lightgallery";
 function ProductDetailSection(props) {
   const [data, setData] = useState(null);
   const [authors, setAuthors] = useState("");
-  const [similarityData, setSimilarityData] = useState([]);
+  const [similarityData, setSimilarityData] = useState(null);
   const [quantity, setQuantity] = useState(1);
+
+  const similarityRef = useRef(null);
+  similarityRef.current = similarityData;
 
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    axios({
+      method: "get",
+      url: `http://localhost:5000/api/BookInfo/RelatedBook/${props.bookInfo}`,
+    }).then((res) => {
+      if (res.data.status) {
+        setSimilarityData(prev => [...res.data.obj]);
+      }
+    });
+
     axios({
       method: "get",
       url: `http://localhost:5000/api/BookInfo/Book/${props.bookInfo}`,
@@ -28,17 +42,33 @@ function ProductDetailSection(props) {
       var results = authors.map((author) => {
         return <React.Fragment> {author.author.name}</React.Fragment>;
       });
-
       setAuthors(results);
-      console.log(response.data.obj);
     });
+  }, []);
+
+  useEffect(() => {
+
     axios({
       method: "get",
       url: `http://localhost:5000/api/BookInfo/RelatedBook/${props.bookInfo}`,
     }).then((res) => {
-      setSimilarityData(res.data.obj);
+      if (res.data.status) {
+        setSimilarityData(prev => [...res.data.obj]);
+      }
     });
-  }, []);
+
+    axios({
+      method: "get",
+      url: `http://localhost:5000/api/BookInfo/Book/${props.bookInfo}`,
+    }).then((response) => {
+      setData(response.data.obj);
+      var authors = response.data.obj.authorBook;
+      var results = authors.map((author) => {
+        return <React.Fragment> {author.author.name}</React.Fragment>;
+      });
+      setAuthors(results);
+    });
+  }, [props.bookInfo])
 
   const PhotoItem = ({ image, group }) => (
     <div>
@@ -60,7 +90,6 @@ function ProductDetailSection(props) {
           </div>
         );
       });
-      console.log(results);
     }
 
     return results;
@@ -76,31 +105,40 @@ function ProductDetailSection(props) {
       "<span aria-label='Next'>›</span>",
     ],
   };
+
   //show related book
   const showRelatedBooks = useMemo(() => {
     var results = "";
-    if (similarityData) {
-      results = similarityData.map((data) => {
+    if (similarityRef.current && similarityRef.current.length > 0) {
+      results = similarityRef.current.map((book) => {
         return (
           <li>
             <div className="row">
               <div className="col-md-6">
-                <img
-                  src="https://cdn0.fahasa.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/i/m/image_129416.jpg"
-                  className="img-cover shadow-lg"
-                  alt=""
-                />
+                <Link to={`/book/${book.id}`} title={book.name}>
+                  <img
+                    src={book.image}
+                    className="img-cover shadow-lg"
+                    alt=""
+                  />
+                </Link>
               </div>
               <div className="col-md">
-                <a href="#">Product example #1</a>
-                <p className="card__book-price">50$</p>
+                <Link to={`/book/${book.id}`} title={book.name}>{book.name}</Link>
+                <p className="card__book-price"><NumberFormat
+                  value={book.currentPrice}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  suffix={" VND"}
+                ></NumberFormat></p>
               </div>
             </div>
           </li>
         );
       });
-    }
-  }, [similarityData]);
+    };
+    return results;
+  }, [similarityRef.current]);
 
   const handleQuantityChanged = (event) => {
     setQuantity(parseInt(document.getElementById("txtQuantity").value));
@@ -179,7 +217,7 @@ function ProductDetailSection(props) {
       });
   };
 
-  const showDetail = useMemo(() => {
+  const showDetail = (data, authors) => {
     if (data) {
       return (
         <section className="section__detail">
@@ -187,24 +225,10 @@ function ProductDetailSection(props) {
             <div className="row">
               <div className="col-md">
                 <div className="sidebar-block">
-                  <h2>Related Books</h2>
+                  <h2>{t('Related Books')}</h2>
                   <ul className="list-unstyled sidebar-list">
                     {/* show related book */}
-                    <li>
-                      <div className="row">
-                        <div className="col-6">
-                          <img
-                            src="https://cdn0.fahasa.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/i/m/image_129416.jpg"
-                            className="img-cover shadow-lg"
-                            alt=""
-                          />
-                        </div>
-                        <div className="col">
-                          <a href="#">Product example #1</a>
-                          <p className="card__book-price">50$</p>
-                        </div>
-                      </div>
-                    </li>
+                    {showRelatedBooks}
                   </ul>
                 </div>
               </div>
@@ -216,6 +240,10 @@ function ProductDetailSection(props) {
                     {/*/Carousel-slide*/}
                     <LightgalleryProvider>
                       <OwlCarousel options={options}>
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          {" "}
+                          <PhotoItem key={data.bookId} image={data.image} group="group1" />
+                        </div>
                         {showSlideBooks}
                       </OwlCarousel>
                     </LightgalleryProvider>
@@ -226,7 +254,7 @@ function ProductDetailSection(props) {
                     </div>
                     <ProductRating id={props.bookInfo} />
                     <div className="special-author text-dark">
-                      Authors:
+                      {t('Authors')}:
                       {authors}
                     </div>
                     <h2>
@@ -234,7 +262,7 @@ function ProductDetailSection(props) {
                         value={data.currentPrice}
                         displayType={"text"}
                         thousandSeparator={true}
-                        prefix={"VND "}
+                        suffix={" VND"}
                       ></NumberFormat>
                     </h2>
                     <div
@@ -356,9 +384,9 @@ function ProductDetailSection(props) {
         </section>
       );
     }
-  }, [data, authors]);
+  };
 
-  return <div>{showDetail}</div>;
+  return <div>{showDetail(data, authors)}</div>;
 }
 
 export default ProductDetailSection;

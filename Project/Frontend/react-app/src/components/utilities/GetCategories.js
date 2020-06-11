@@ -16,7 +16,7 @@ const GetCategories = () => {
     });
   }, []);
 
-  const showListCategories = useMemo(() => {
+  const showListCategories = () => {
     if (categories) {
       return categories.map((v) => {
         return (
@@ -29,9 +29,9 @@ const GetCategories = () => {
       });
     }
     return null;
-  }, [categories]);
+  };
 
-  return <React.Fragment>{showListCategories}</React.Fragment>;
+  return <React.Fragment>{showListCategories()}</React.Fragment>;
 };
 
 export default withRouter(GetCategories);
