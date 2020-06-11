@@ -28,6 +28,7 @@ function UserProfile(props) {
   const confirmPassRef = useRef(null);
 
   const { t, i18n } = useTranslation();
+  const GenderArr = [t('Male'), t('Female')];
 
   const handleNameChange = (event) => {
     setFullName(event.target.value);
@@ -156,7 +157,7 @@ function UserProfile(props) {
     });
   };
 
-  const checkGender = useMemo(() => {
+  const checkGender = (userInfor, gender) => {
     if (userInfor && gender === "Male") {
       return (
         <ul id="Gender">
@@ -169,7 +170,7 @@ function UserProfile(props) {
               checked
               onClick={(e) => handleGenderChanged(e)}
             />
-            <label for="f-option">{t('Male')}</label>
+            <label for="f-option">{GenderArr[0]}</label>
 
             <div class="check"></div>
           </li>
@@ -182,7 +183,7 @@ function UserProfile(props) {
               value="Female"
               onClick={(e) => handleGenderChanged(e)}
             />
-            <label for="s-option">{t('Female')}</label>
+            <label for="s-option">{GenderArr[1]}</label>
 
             <div class="check">
               <div class="inside"></div>
@@ -201,7 +202,7 @@ function UserProfile(props) {
               value="Male"
               onClick={(e) => handleGenderChanged(e)}
             />
-            <label for="f-option">Male</label>
+            <label for="f-option">{GenderArr[0]}</label>
 
             <div class="check"></div>
           </li>
@@ -215,7 +216,7 @@ function UserProfile(props) {
               checked
               onClick={(e) => handleGenderChanged(e)}
             />
-            <label for="s-option">Female</label>
+            <label for="s-option">{GenderArr[1]}</label>
 
             <div class="check">
               <div class="inside"></div>
@@ -224,7 +225,7 @@ function UserProfile(props) {
         </ul>
       );
     }
-  }, [gender]);
+  };
 
   return (
     <React.Fragment>
@@ -249,7 +250,7 @@ function UserProfile(props) {
                   onChange={(e) => handleNameChange(e)}
                 />
                 <label for="Gender">{t('Gender')}</label>
-                {checkGender}
+                {checkGender(userInfor, gender)}
                 <label for="birthday">{t('Birthday')}</label>
                 <input
                   type="date"

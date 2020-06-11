@@ -132,7 +132,7 @@ const OrderStatus = () => {
             <tr>
               <td className="item-name">
                 <div className="item-img">
-                  <Link to={`/book/${item.bookId}`}>
+                  <Link to={`/book/${item.bookId}`} title={item.book.name}>
                     <img
                       src={item.book.image}
                       className="img-contain img-cover-10"
@@ -169,7 +169,7 @@ const OrderStatus = () => {
                       displayType="text"
                       value={item.book.originalPrice}
                       thousandSeparator={true}
-                      prefix="VND "
+                      suffix=" VND"
                     ></NumberFormat>
                   }
                 </p>
@@ -180,7 +180,7 @@ const OrderStatus = () => {
                     displayType="text"
                     value={item.book.originalPrice * item.quantity}
                     thousandSeparator={true}
-                    prefix="VND "
+                    suffix=" VND"
                   ></NumberFormat>
                 </p>
               </td>
@@ -207,7 +207,7 @@ const OrderStatus = () => {
                     displayType="text"
                     value={order.total}
                     thousandSeparator={true}
-                    prefix="VND "
+                    suffix=" VND"
                   ></NumberFormat>
                 }
               </h2>
@@ -236,7 +236,7 @@ const OrderStatus = () => {
     return orderBlock;
   }, [processingOrder]);
 
-  const listOrderDelivering = useMemo(() => {
+  const listOrderDelivering = useMemo((tr) => {
     let orderItem = [];
     let orderBlock = [];
     if (deliveringOrder && deliveringOrder.length > 0) {
@@ -247,7 +247,7 @@ const OrderStatus = () => {
             <tr>
               <td className="item-name">
                 <div className="item-img">
-                  <Link to={`/book/${item.bookId}`}>
+                  <Link to={`/book/${item.bookId}`} title={item.book.name}>
                     <img
                       src={item.book.image}
                       className="img-contain img-cover-10"
@@ -284,7 +284,7 @@ const OrderStatus = () => {
                       displayType="text"
                       value={item.book.originalPrice}
                       thousandSeparator={true}
-                      prefix="VND "
+                      suffix=" VND"
                     ></NumberFormat>
                   }
                 </p>
@@ -295,7 +295,7 @@ const OrderStatus = () => {
                     displayType="text"
                     value={item.book.originalPrice * item.quantity}
                     thousandSeparator={true}
-                    prefix="VND "
+                    suffix=" VND"
                   ></NumberFormat>
                 </p>
               </td>
@@ -314,7 +314,7 @@ const OrderStatus = () => {
                     displayType="text"
                     value={order.total}
                     thousandSeparator={true}
-                    prefix="VND "
+                    suffix=" VND"
                   ></NumberFormat>
                 }
               </h2>
@@ -354,7 +354,7 @@ const OrderStatus = () => {
             <tr>
               <td className="item-name">
                 <div className="item-img">
-                  <Link to={`/book/${item.bookId}`}>
+                  <Link to={`/book/${item.bookId}`} title={item.book.name}>
                     <img
                       src={item.book.image}
                       className="img-contain img-cover-10"
@@ -391,7 +391,7 @@ const OrderStatus = () => {
                       displayType="text"
                       value={item.book.originalPrice}
                       thousandSeparator={true}
-                      prefix="VND "
+                      suffix=" VND"
                     ></NumberFormat>
                   }
                 </p>
@@ -402,7 +402,7 @@ const OrderStatus = () => {
                     displayType="text"
                     value={item.book.originalPrice * item.quantity}
                     thousandSeparator={true}
-                    prefix="VND "
+                    suffix=" VND"
                   ></NumberFormat>
                 </p>
               </td>
@@ -421,7 +421,7 @@ const OrderStatus = () => {
                     displayType="text"
                     value={order.total}
                     thousandSeparator={true}
-                    prefix="VND "
+                    suffix=" VND"
                   ></NumberFormat>
                 }
               </h2>
@@ -461,7 +461,7 @@ const OrderStatus = () => {
             <tr>
               <td className="item-name">
                 <div className="item-img">
-                  <Link to={`/book/${item.bookId}`}>
+                  <Link to={`/book/${item.bookId}`} title={item.book.name}>
                     <img
                       src={item.book.image}
                       className="img-contain img-cover-10"
@@ -498,7 +498,7 @@ const OrderStatus = () => {
                       displayType="text"
                       value={item.book.originalPrice}
                       thousandSeparator={true}
-                      prefix="VND "
+                      suffix=" VND"
                     ></NumberFormat>
                   }
                 </p>
@@ -509,7 +509,7 @@ const OrderStatus = () => {
                     displayType="text"
                     value={item.book.originalPrice * item.quantity}
                     thousandSeparator={true}
-                    prefix="VND "
+                    suffix=" VND"
                   ></NumberFormat>
                 </p>
               </td>
@@ -528,7 +528,7 @@ const OrderStatus = () => {
                     displayType="text"
                     value={order.total}
                     thousandSeparator={true}
-                    prefix="VND "
+                    suffix=" VND"
                   ></NumberFormat>
                 }
               </h2>

@@ -43,7 +43,7 @@
 	"Log in": "Đăng nhập",
 	"Full name": "Họ tên",
 	"Gender": "Giới tính",
-	"Male": "Name",
+	"Male": "Nam",
 	"Female": "Nữ",
 	"Birthday": "Ngày sinh",
 	"Phone number": "Số điện thoại",
@@ -93,5 +93,6 @@
 	"Your detail address": "Địa chỉ chi tiết",
 	"Confirm your order": "Xác nhận thanh toán",
 	"Cash on Delivery": "Giao hàng thanh toán",
-	"Card": "Thẻ ngân hàng"
+	"Card": "Thẻ ngân hàng",
+	"Related Books": "Sách liên quan"
 }

@@ -1,28 +1,27 @@
-import React, { useState, useEffect, useMemo, Component } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import SpecialItemCard from "./SpecialItemCard";
 import axios from "axios";
 import OwlCarousel from "react-owl-carousel2";
 import NumberFormat from "react-number-format";
-class SpecialItemSlide extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { data: [] };
-  }
 
-  componentDidMount() {
-    const x = this;
+function SpecialItemSlide(props) {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
     axios({
       method: "GET",
       url: "http://localhost:5000/api/Main/List3FeaturedBook",
     }).then(function (res) {
-      x.setState({ data: res.data.obj });
+      if (res.data.status) {
+        setData(res.data.obj);
+      }
     });
-  }
+  }, [])
 
-  showFeatureBook = (data) => {
+  const showFeatureBook = (data) => {
     let result = "";
     let authors = "";
-    if (Object.keys(data).length > 0) {
+    if (data && data.length > 0) {
       result = data.map((book) => {
         return (
           <SpecialItemCard
@@ -45,7 +44,8 @@ class SpecialItemSlide extends Component {
     }
     return result;
   };
-  options = {
+
+  const options = {
     nav: false,
     items: 1.25,
     center: true,
@@ -55,13 +55,11 @@ class SpecialItemSlide extends Component {
     dots: false,
   };
 
-  render() {
-    return (
-      <OwlCarousel options={this.options}>
-        {this.showFeatureBook(this.state.data)}
-      </OwlCarousel>
-    );
-  }
+  return (
+    <OwlCarousel options={options}>
+      {showFeatureBook(data)}
+    </OwlCarousel>
+  );
 }
 
 export default SpecialItemSlide;
