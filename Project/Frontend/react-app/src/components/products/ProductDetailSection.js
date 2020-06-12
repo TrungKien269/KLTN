@@ -68,7 +68,49 @@ function ProductDetailSection(props) {
       });
       setAuthors(results);
     });
-  }, [props.bookInfo])
+  }, [props.bookInfo]);
+
+  const ShowPriceBook = (originalPrice, currentPrice) => {
+    if (currentPrice < originalPrice) {
+      return (
+        <div>
+          <h4>
+            <del>
+              <NumberFormat
+                value={originalPrice}
+                displayType={"text"}
+                thousandSeparator={true}
+                suffix={" VND"}>
+              </NumberFormat>
+            </del>
+          </h4>
+          <h2>
+            <NumberFormat
+              value={currentPrice}
+              displayType={"text"}
+              thousandSeparator={true}
+              suffix={" VND"} 
+              style={{
+                color: "red"
+              }}>
+            </NumberFormat>
+          </h2>
+        </div>
+      )
+    }
+    else {
+      return (
+        <h2>
+          <NumberFormat
+            value={currentPrice}
+            displayType={"text"}
+            thousandSeparator={true}
+            suffix={" VND"}>
+          </NumberFormat>
+        </h2>
+      )
+    }
+  };
 
   const PhotoItem = ({ image, group }) => (
     <div>
@@ -125,12 +167,14 @@ function ProductDetailSection(props) {
               </div>
               <div className="col-md">
                 <Link to={`/book/${book.id}`} title={book.name}>{book.name}</Link>
-                <p className="card__book-price"><NumberFormat
-                  value={book.currentPrice}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  suffix={" VND"}
-                ></NumberFormat></p>
+                <p className="card__book-price">
+                  <NumberFormat
+                    value={book.currentPrice}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    suffix={" VND"}
+                  ></NumberFormat>
+                </p>
               </div>
             </div>
           </li>
@@ -257,14 +301,7 @@ function ProductDetailSection(props) {
                       {t('Authors')}:
                       {authors}
                     </div>
-                    <h2>
-                      <NumberFormat
-                        value={data.currentPrice}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        suffix={" VND"}
-                      ></NumberFormat>
-                    </h2>
+                    {ShowPriceBook(data.originalPrice, data.currentPrice)}
                     <div
                       className="detail__describe"
                       dangerouslySetInnerHTML={{ __html: data.summary }}

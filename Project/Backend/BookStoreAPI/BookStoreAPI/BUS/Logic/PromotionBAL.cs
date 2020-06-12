@@ -31,6 +31,20 @@ namespace BookStoreAPI.BUS.Logic
             }
         }
 
+        public async Task<Response> GetListCurrentPromotion()
+        {
+            try
+            {
+                var list = await context.Promotion.Include(x => x.PromotionDetail).ThenInclude(x => x.Book)
+                    .Where(x => x.IsExpired.Equals(1)).OrderBy(x => x.EndedDate).ToListAsync();
+                return new Response("Success", true, list.Count, list);
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
         public async Task<Response> GetPromotion(int id)
         {
             try

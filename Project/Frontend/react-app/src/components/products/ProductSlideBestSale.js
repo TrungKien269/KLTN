@@ -38,7 +38,7 @@ class ProductSlideBestSale extends Component {
                   value={book.currentPrice}
                   displayType={"text"}
                   thousandSeparator={true}
-                  prefix={"VND "}
+                  suffix={" VND"}
                 />
               }
             />

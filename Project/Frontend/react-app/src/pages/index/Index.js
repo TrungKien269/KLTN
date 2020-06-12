@@ -3,8 +3,10 @@ import HeaderBanner from "../../components/headbanner/HeaderBanner";
 import SpecialItemSlide from "../../components/products/SpecialItemSlide";
 import ProductSlideBestSale from "../../components/products/ProductSlideBestSale";
 import ProductSlideBestPrice from "../../components/products/ProductSlideBestPrice";
+import ProductSlidePromotion from "../../components/products/ProductSlidePromotion";
 import Header from "../../components/header/Header";
 import Footer from "../../components/Footer";
+import TimeCounting from "../../components/utilities/TimeCounter";
 import { useTranslation } from 'react-i18next';
 
 function Index() {
@@ -34,8 +36,8 @@ function Index() {
         <SpecialItemSlide />
       </div>
       <div className="section__promo">
-        <h2>Limited time offer</h2>
-        <div className="container">{/* <TimeCounting /> */}</div>
+        <h2>{t('Limited time offer for sales')}</h2>
+        <div className="container">{<ProductSlidePromotion />}</div>
       </div>
     </React.Fragment>
   );

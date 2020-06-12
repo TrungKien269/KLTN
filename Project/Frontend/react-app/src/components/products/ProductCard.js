@@ -17,6 +17,30 @@ const ProductCard = (props) => {
 
   const { t, i18n } = useTranslation();
 
+  const ShowSaleOff = () => {
+    if (props.sale) {
+      return (
+        <div class="badge badge__sale">{props.sale}%</div>
+      )
+    }
+  }
+
+  const ShowPrice = () => {
+    if (props.originalPrice) {
+      return (
+        <div>
+          <p className="card__book-price"><del><small>{props.originalPrice}</small></del></p>
+          <p className="card__book-price">{props.price}</p>
+        </div>
+      )
+    }
+    else {
+      return (
+        <p className="card__book-price">{props.price}</p>
+      )
+    }
+  }
+
   const addToCart = (event) => {
     event.preventDefault();
     axios({
@@ -103,6 +127,7 @@ const ProductCard = (props) => {
       </Modal>
       <Link to={`/book/${props.id}`} title={props.name}>
         <div className="card display-on-hover">
+          {ShowSaleOff()}
           <img
             className="card-img-top img-contain img-contain-25"
             src={props.image}
@@ -114,7 +139,7 @@ const ProductCard = (props) => {
 
             <ProductRatingCard id={props.id} />
 
-            <p className="card__book-price">{props.price}</p>
+            {ShowPrice()}
 
             <button
               className="btn btn--rounded btn-fw btn--blue item-display"

@@ -4,13 +4,16 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import UserContextProvider from "../src/context/userContext";
+import I18nContextProvider from '../src/context/I18nContext';
 import './i18next';
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserContextProvider>
-      <App />
-    </UserContextProvider>
+    <I18nContextProvider>
+      <UserContextProvider>
+        <App />
+      </UserContextProvider>
+    </I18nContextProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

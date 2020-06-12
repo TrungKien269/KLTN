@@ -7,6 +7,7 @@ import { UserContext } from "../../context/userContext";
 import Axios from "axios";
 import useDarkMode from 'use-dark-mode';
 import { Trans, useTranslation } from 'react-i18next';
+import { I18nContext } from "../../context/I18nContext";
 
 const Header = (props) => {
   const { token, refreshToken } = useContext(UserContext);
@@ -15,9 +16,11 @@ const Header = (props) => {
   const darkMode = useDarkMode(false);
 
   const { t, i18n } = useTranslation();
+  // const { t, changeLanguage } = useContext(I18nContext);
 
   const handleClick = (lang) => {
     i18n.changeLanguage(lang);
+    // changeLanguage(lang);
   };
 
   const handleLogout = () => {

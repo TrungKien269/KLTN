@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import ProductSlidePromotion from "../products/ProductSlidePromotion";
+import { useTranslation } from 'react-i18next';
 
-function TimeCounting() {
-  var countDownDate = new Date("Jul 5, 2020 15:37:25").getTime();
+function TimeCounting(props) {
+  const [countDownDate, setCountDownDate] = 
+  useState(new Date(props.endedDate).getTime());
+  const [days, setDays] = useState(0);
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+
+  const { t, i18n } = useTranslation();
 
   // Update the count down every 1 second
   var x = setInterval(function () {
@@ -12,55 +21,50 @@ function TimeCounting() {
     var distance = countDownDate - now;
 
     // Time calculations for days, hours, minutes and seconds
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor(
+    setDays(Math.floor(distance / (1000 * 60 * 60 * 24)));
+    setHours(Math.floor(
       (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    // Output the result in an element with id="demo"
-    document.getElementById("count-days").innerHTML = days + "d";
-    document.getElementById("count-hours").innerHTML = hours + "h";
-    document.getElementById("count-minutes").innerHTML = minutes + "m";
-    document.getElementById("count-seconds").innerHTML = seconds + "s";
+    ));
+    setMinutes(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
+    setSeconds(Math.floor((distance % (1000 * 60)) / 1000));
 
     // If the count down is over, write some text
     if (distance < 0) {
       clearInterval(x);
-      document.getElementById("count-days").innerHTML = "EXPIRED";
-      document.getElementById("count-hours").innerHTML = "EXPIRED";
-      document.getElementById("count-minutes").innerHTML = "EXPIRED";
-      document.getElementById("count-seconds").innerHTML = "EXPIRED";
+      setDays("EXPIRED");
+      setHours("EXPIRED");
+      setMinutes("EXPIRED");
+      setSeconds("EXPIRED");
     }
   }, 1000);
+
   return (
     <div className="counting">
       <div className="container">
         <div className="row d-flex justify-content-center">
           <div className="counting-box">
             <div className="counting__number" id="count-days">
-              90
+              {days}
             </div>
-            <div className="counting__text">days</div>
+            <div className="counting__text">{t('days')}</div>
           </div>
           <div className="counting-box">
             <div className="counting__number" id="count-hours">
-              90
+              {hours}
             </div>
-            <div className="counting__text">hours</div>
+            <div className="counting__text">{t('hours')}</div>
           </div>
           <div className="counting-box">
             <div className="counting__number" id="count-minutes">
-              90
+              {minutes}
             </div>
-            <div className="counting__text">minutes</div>
+            <div className="counting__text">{t('minutes')}</div>
           </div>
           <div className="counting-box">
             <div className="counting__number" id="count-seconds">
-              90
+              {seconds}
             </div>
-            <div className="counting__text">seconds</div>
+            <div className="counting__text">{t('seconds')}</div>
           </div>
         </div>
       </div>

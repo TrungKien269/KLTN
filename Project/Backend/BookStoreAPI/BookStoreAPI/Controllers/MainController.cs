@@ -56,6 +56,12 @@ namespace BookStoreAPI.Controllers
             return await mainBal.GetListLowestPriceBook();
         }
 
+        [HttpGet("ListCurrentPromotion")]
+        public async Task<Response> GetListCurrentPromotion()
+        {
+            return await mainBal.GetListCurrentPromotion();
+        }
+
         [Authorize]
         [HttpGet("SearchHistory")]
         public async Task<Response> GetListSearchHistory()
