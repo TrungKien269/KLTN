@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { Tab, Button } from "semantic-ui-react";
 import CardCheckout from './CardCheckout';
 import PayPalCheckout from './PayPalCheckout';
+import { CalculateDistance } from "../../Utils/MapDistance";
+import { GetShippingFee } from "../../Utils/ShippingFee"
 
 const ProceedCheckout = (props) => {
   var order = [];
@@ -33,6 +35,8 @@ const ProceedCheckout = (props) => {
 
   const [isCheckout, setIsCheckout] = useState(false);
 
+  const [timeTyping, setTimeTyping] = useState(null);
+
   const fullNameRef = useRef(null);
   const phoneRef = useRef(null);
   const addressRef = useRef(null);
@@ -47,8 +51,28 @@ const ProceedCheckout = (props) => {
   };
 
   const handleAdressChange = (event) => {
-    setAddress(event.target.value);
+    var value = event.target.value;
+    if (timeTyping) {
+      clearTimeout(timeTyping)
+    }
+    setTimeTyping(setTimeout(() => {
+      setAddress(value);
+    }, 1500));
   };
+
+  const handleShippingFeeChange = (fee) => {
+    setShippingFee(parseInt(fee));
+  }
+
+  useEffect(() => {
+    if(city != "" && address != ""){
+      var fullAddress = address + " " + city;
+      CalculateDistance(fullAddress).then((res) => {
+        alert(GetShippingFee(res));
+        setShippingFee(parseInt(GetShippingFee(res)));
+      });
+    }
+  }, [address, city]);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -109,7 +133,7 @@ const ProceedCheckout = (props) => {
       setOrderTotal(parseInt(total) + shippingFee);
     }
     return order;
-  }, [cartBook, orderTotal]);
+  }, [cartBook, orderTotal, shippingFee]);
 
   const handleSubmit = () => {
     if (proceedOrder.length > 0) {
@@ -323,6 +347,7 @@ const ProceedCheckout = (props) => {
         <Tab.Pane>
           <CardCheckout userInfo={userInfor}
             cartBook={cartBook} isCheckout={(check) => handleCheckout(check)}
+            shippingFeeChanged={(fee) => handleShippingFeeChange(fee)}
           />
         </Tab.Pane>
       )
@@ -333,6 +358,7 @@ const ProceedCheckout = (props) => {
         <Tab.Pane>
           <PayPalCheckout userInfo={userInfor}
             cartBook={cartBook} isCheckout={(check) => handleCheckout(check)}
+            shippingFeeChanged={(fee) => handleShippingFeeChange(fee)}
           />
         </Tab.Pane>
       )

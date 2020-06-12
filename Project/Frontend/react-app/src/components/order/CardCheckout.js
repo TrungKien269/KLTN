@@ -7,6 +7,8 @@ import { withRouter, Link } from "react-router-dom";
 import data from '../../data/local.json';
 import { useTranslation } from 'react-i18next';
 import Cleave from "cleave.js/react";
+import { CalculateDistance } from "../../Utils/MapDistance";
+import { GetShippingFee } from "../../Utils/ShippingFee";
 
 function CardCheckout(props) {
   var order = [];
@@ -31,6 +33,8 @@ function CardCheckout(props) {
 
   const [orderTotal, setOrderTotal] = useState(0);
   const [shippingFee, setShippingFee] = useState(0);
+
+  const [timeTyping, setTimeTyping] = useState(null);
 
   const loadStripe = () => {
     if (!window.document.getElementById("stripe-script")) {
@@ -114,8 +118,25 @@ function CardCheckout(props) {
   };
 
   const handleAdressChange = (event) => {
-    setAddress(event.target.value);
+    var value = event.target.value;
+    if (timeTyping) {
+      clearTimeout(timeTyping)
+    }
+    setTimeTyping(setTimeout(() => {
+      setAddress(value);
+    }, 1500));
   };
+
+  useEffect(() => {
+    if(city != "" && address != ""){
+      var fullAddress = address + " " + city;
+      CalculateDistance(fullAddress).then((res) => {
+        alert(GetShippingFee(res));
+        setShippingFee(parseInt(GetShippingFee(res)));
+        props.shippingFeeChanged(GetShippingFee(res));
+      });
+    }
+  }, [address, city]);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value)

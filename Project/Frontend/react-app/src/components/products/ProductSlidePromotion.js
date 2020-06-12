@@ -27,7 +27,6 @@ function ProductSlidePromotion(props) {
     let result = {};
     if (promotion) {
       result = promotion[0].promotionDetail.map((promo) => {
-        console.log(promo.book.originalPrice)
         return (
           <ProductCard
             key={promo.book.id}

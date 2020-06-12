@@ -1,6 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
+import MapContainer from './MapContainer';
 
 function Footer() {
+
+  const [email, setEmail] = useState();
+
+  const handleEmailChange = (e) => {
+    var value = e.target.value;
+    if(value) {
+      setEmail(value);
+    }
+  }
+
+  const handleSubscribe = () => {
+  }
+
   return (
     <footer className="footer">
       <div className="subcribe-form">
@@ -10,15 +24,28 @@ function Footer() {
             <input
               type="text"
               className="input__subcribe"
-              placeholder="Enter your e-mail address"
+              placeholder="Enter your e-mail address" 
+              onChange={(e) => handleEmailChange(e)}
             />
-            <a href="/" className="btn btn--rounded btn-fit btn--blue">
+            <button className="btn btn--rounded btn-fit btn--blue" 
+            onClick={handleSubscribe}>
               Subcribe
-            </a>
+            </button>
           </div>
         </div>
       </div>
       <div className="container mar-top-lg">
+        <div className="row"
+          style={{
+            width: `50%`,
+            height: `300px`,
+            backgroundColor: `grey`,
+            marginTop: `-2%`,
+            marginBottom: `2%`,
+            marginLeft: `50%`,
+            transform: `translateX(-50%)`
+          }}> {/* <MapContainer></MapContainer> */}
+        </div>
         <div className="row">
           <div className="col-md-3">
             <img src="img/footer_logo.webp" alt="" />
@@ -108,6 +135,7 @@ function Footer() {
             </ul>
           </div>
         </div>
+
       </div>
     </footer>
   );

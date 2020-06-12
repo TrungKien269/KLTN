@@ -7,6 +7,8 @@ import { withRouter, Link } from "react-router-dom";
 import data from '../../data/local.json';
 import { useTranslation } from 'react-i18next';
 import { PayPalButton } from "react-paypal-button-v2";
+import { CalculateDistance } from "../../Utils/MapDistance";
+import { GetShippingFee } from "../../Utils/ShippingFee";
 
 function PayPalCheckout(props) {
   var order = [];
@@ -27,6 +29,8 @@ function PayPalCheckout(props) {
   const [orderTotal, setOrderTotal] = useState(0);
   const [shippingFee, setShippingFee] = useState(0);
   const [usdCurrency, setUSDCurrency] = useState(0.0);
+
+  const [timeTyping, setTimeTyping] = useState(null);
 
   useEffect(() => {
     setCities(data);
@@ -102,8 +106,25 @@ function PayPalCheckout(props) {
   };
 
   const handleAdressChange = (event) => {
-    setAddress(event.target.value);
+    var value = event.target.value;
+    if (timeTyping) {
+      clearTimeout(timeTyping)
+    }
+    setTimeTyping(setTimeout(() => {
+      setAddress(value);
+    }, 1500));
   };
+
+  useEffect(() => {
+    if(city != "" && address != ""){
+      var fullAddress = address + " " + city;
+      CalculateDistance(fullAddress).then((res) => {
+        alert(GetShippingFee(res));
+        setShippingFee(parseInt(GetShippingFee(res)));
+        props.shippingFeeChanged(GetShippingFee(res));
+      });
+    }
+  }, [address, city]);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value)
