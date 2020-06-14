@@ -74,6 +74,7 @@
 	"Supplier": "Nhà phát hành",
 	"Publisher": "Nhà xuất bản",
 	"Weight": "Khối lượng",
+	"Size": "Dung lượng",
 	"Number of pages": "Số trang",
 	"Summary": "Tóm tắt",
 	"Comments": "Bình luận",
@@ -99,5 +100,16 @@
 	"days": "Ngày", 
 	"hours": "Giờ",
 	"minutes": "Phút",
-	"seconds": "Giây"
+	"seconds": "Giây",
+	"Read": "Đọc",
+	"Archaeology": "Khảo cổ",
+	"Architecture": "Kiến trúc",
+	"Economic": "Kinh tế",
+	"History": "Lịch sử",
+	"Law": "Luật",
+	"Music": "Âm nhạc",
+	"Physics": "Vật lý",
+	"Poetry": "Thơ ca",
+	"Psychology": "Tâm lý",
+	"Travel": "Du lịch"
 }

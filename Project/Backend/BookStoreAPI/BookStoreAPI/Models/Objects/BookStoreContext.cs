@@ -46,6 +46,7 @@ namespace BookStoreAPI.Models.Objects
         public virtual DbSet<BookViewTracking> BookViewTracking { get; set; }
         public virtual DbSet<SearchHistory> SearchHistory { get; set; }
         public virtual DbSet<FaceBookAccount> FaceBookAccount { get; set; }
+        public virtual DbSet<EBook> EBook { get; set; }
 
         // Unable to generate entity type for table 'dbo.RawUser'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.RawBook'. Please see the warning messages.
@@ -394,6 +395,11 @@ namespace BookStoreAPI.Models.Objects
                     .HasForeignKey<FaceBookAccount>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_FaceBookAccount_User");
+            });
+
+            modelBuilder.Entity<EBook>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
             });
         }
     }

@@ -9,6 +9,9 @@ import ResetPassword from "./pages/index/ResetPassword";
 import UserCart from "./pages/index/UserCart";
 import OrderStatus from "./components/order/OrderStatus";
 import ProceedCheckout from "./components/order/ProceedCheckout";
+import EBookCollection from './pages/index/EBookCollection';
+import EBookDetail from './pages/index/EBookDetail';
+import ReadEBook from './pages/index/ReadEBook';
 
 const Routers = [
   {
@@ -45,6 +48,26 @@ const Routers = [
     path: "/resetpassword",
     exact: true,
     main: () => <ResetPassword />,
+  },
+  {
+    path: "/ebooks/",
+    exact: true,
+    main: () => <EBookCollection />,
+  },
+  {
+    path: "/ebooks/:category",
+    exact: true,
+    main: () => <EBookCollection />,
+  },
+  {
+    path: "/ebook/:id",
+    exact: true,
+    main: () => <EBookDetail />,
+  },
+  {
+    path: "/ebook/read/:id",
+    exact: true,
+    main: () => <ReadEBook />,
   },
 ];
 

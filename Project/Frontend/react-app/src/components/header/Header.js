@@ -13,7 +13,7 @@ const Header = (props) => {
   const { token, refreshToken } = useContext(UserContext);
   const [user, setUser] = useState();
 
-  const darkMode = useDarkMode(false);
+  const darkMode = useDarkMode(true);
 
   const { t, i18n } = useTranslation();
   // const { t, changeLanguage } = useContext(I18nContext);
@@ -234,7 +234,7 @@ const Header = (props) => {
             {/* Audio book */}
             <li className="nav-item mega-dropdown">
               <Link
-                to="/collections/productX.html"
+                to="/ebooks/"
                 className="nav-link dropdown-toggle"
               >
                 {t('Ebooks')}
