@@ -1,17 +1,34 @@
-import React from "react";
+import React, { useMemo } from "react";
 import HeaderBanner from "../../components/headbanner/HeaderBanner";
 import SpecialItemSlide from "../../components/products/SpecialItemSlide";
 import ProductSlideBestSale from "../../components/products/ProductSlideBestSale";
 import ProductSlideBestPrice from "../../components/products/ProductSlideBestPrice";
 import ProductSlidePromotion from "../../components/products/ProductSlidePromotion";
+import ProductSlideRecommend from "../../components/products/ProductSlideRecommend";
 import Header from "../../components/header/Header";
 import Footer from "../../components/Footer";
 import TimeCounting from "../../components/utilities/TimeCounter";
+import { getToken } from "../../Utils/Commons";
 import { useTranslation } from 'react-i18next';
 
 function Index() {
 
   const { t, i18n } = useTranslation();
+
+  const ShowListRecommendBook = () => {
+    if (getToken()) {
+      return (
+        <div className="section__bestseller">
+          <div className="container">
+            <div className="title-wrapper">
+              <h3>{t('Recommend for you')}</h3>
+            </div>
+            <ProductSlideRecommend />
+          </div>
+        </div>
+      );
+    }
+  };
 
   return (
     <React.Fragment>
@@ -32,6 +49,7 @@ function Index() {
           <ProductSlideBestPrice />
         </div>
       </div>
+      {ShowListRecommendBook()}
       <div className="section__feature">
         <SpecialItemSlide />
       </div>

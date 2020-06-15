@@ -25,11 +25,8 @@ def GetListSimilarityBook(id):
 	listBook = []
 	for element in sorted_similar_books:
 		if i > 0:
-			# print(data.bookObj.get_title_from_index(element[0]) + "\t\t" 
-			# + data.bookObj.get_id_from_index(element[0])
-			# + "\t Score: " + str(round(element[1], 3)))
 			listBook.append(data.bookObj.get_id_from_index(element[0]))
 		i = i + 1
-		if i > 5:
+		if i > 10:
 			break
 	return listBook

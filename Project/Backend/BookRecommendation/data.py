@@ -28,16 +28,15 @@ ratings = pd.read_sql_query('Select * From Rating '
 tracking = pd.read_sql_query('Select RecentTracking.UserID, RecentTracking.BookID,'
                             'Count(RecentTracking.ID) as NumberView From( '
                             'Select * From BookViewTracking '
-                            'Where GETDATE() - BookViewTracking.DateTime <= 14) as RecentTracking '
+                            'Where GETDATE() - BookViewTracking.DateTime <= 30) as RecentTracking '
                             'Group by RecentTracking.UserID, RecentTracking.BookID', conn)
 
-best_seller = pd.read_sql_query('Select Top 5 dbo.[OrderDetail].Book_ID, '
-                                'SUM(dbo.[OrderDetail].Quantity) as NumberSold '
+best_seller = pd.read_sql_query('Select Top 15 dbo.[OrderDetail].Book_ID '
                                 'From dbo.[Order] inner join dbo.[OrderDetail] '
                                 'on dbo.[Order].ID = dbo.[OrderDetail].Order_ID '
                                 'Where GETDATE() - dbo.[Order].CreatedDate <= 31 '
                                 'Group by dbo.[OrderDetail].Book_ID '
-                                'Order By NumberSold DESC;'
+                                'Order By SUM(dbo.[OrderDetail].Quantity) DESC;'
                                 , conn)
 
 def CountUserRating(userID):
@@ -50,10 +49,17 @@ def CountUserTracking(userID):
     count_tracking = pd.read_sql_query('Select Count(BookViewTracking.BookID) as NumberTracking '
                                     'From dbo.BookViewTracking '
                                     'Where BookViewTracking.UserID = ' + str(userID) + 
-                                    'and GETDATE() - BookViewTracking.DateTime <= 14'
+                                    'and GETDATE() - BookViewTracking.DateTime <= 30'
                                     , conn)
     return count_tracking
 
+def CountRecentOrder(userID):
+    count_order = pd.read_sql_query('Select Count(*) as NumberOrder '
+                                    'From dbo.[Order] '
+                                    'Where dbo.[Order].User_ID = ' + str(userID) + 
+                                    'and GETDATE() - dbo.[Order].CreatedDate <= 90;'
+                                    , conn)
+    return count_order
 
 def GetBookWishList(userID):
     wishlist = pd.read_sql_query('Select BookID '
@@ -83,10 +89,11 @@ def GetNewestBookBought(userID):
     book = pd.read_sql_query('Select Book_ID  '
                             'From dbo.[OrderDetail] '
                             'Where dbo.[OrderDetail].Order_ID in '
-                            '(Select Top 1 dbo.[Order].ID '
+                            '(Select dbo.[Order].ID '
                             'From dbo.[Order] '
                             'Where dbo.[Order].User_ID = ' + str(userID) + 
-                            'Order by dbo.[Order].CreatedDate DESC)'
+                            'and GETDATE() - dbo.[Order].CreatedDate <= 90)'
+                            # 'Order by dbo.[Order].CreatedDate DESC)'
                             , conn)
     return book
 

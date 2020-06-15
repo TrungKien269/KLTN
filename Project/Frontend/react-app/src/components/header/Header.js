@@ -13,7 +13,7 @@ const Header = (props) => {
   const { token, refreshToken } = useContext(UserContext);
   const [user, setUser] = useState();
 
-  const darkMode = useDarkMode(true);
+  const darkMode = useDarkMode(false);
 
   const { t, i18n } = useTranslation();
   // const { t, changeLanguage } = useContext(I18nContext);
@@ -42,6 +42,39 @@ const Header = (props) => {
       });
     }
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      Axios({
+        headers: {
+          Authorization: "Bearer " + getToken(),
+        },
+        method: "get",
+        url: "http://localhost:5000/api/UserProfile/Profile",
+      }).then((res) => {
+        setUser(res.data.obj);
+      });
+    }
+  }, [token]);
+
+  const ScrollToRecommendSection = () => {
+    if (token) {
+      var i = 10;
+      var int = setInterval(function () {
+        window.scrollTo({ top: i, left: 0, behavior: 'smooth' });
+        i += 10;
+        if (i >= 1380) clearInterval(int);
+      }, 5);
+    }
+    else {
+      var i = 10;
+      var int = setInterval(function () {
+        window.scrollTo({ top: i, left: 0, behavior: 'smooth' });
+        i += 10;
+        if (i >= 1440) clearInterval(int);
+      }, 5);
+    }
+  }
 
   const loginNav = useMemo(() => {
     if (token) {
@@ -80,7 +113,8 @@ const Header = (props) => {
                 <div className="user__ava-signin d-flex align-items-center">
                   {user && user.fullName}
                   <span className="header-avatar">
-                    <img className="img img-cover" src="../img/19-512.png" />
+                    <img className="img img-cover" src="../img/19-512.png"
+                      title={user && user.fullName} />
                   </span>
                 </div>
               </a>
@@ -243,8 +277,8 @@ const Header = (props) => {
             {/* recommended */}
             <li className="nav-item mega-dropdown">
               <Link
-                to="/collections/productX.html"
                 className="nav-link dropdown-toggle"
+                onClick={ScrollToRecommendSection}
               >
                 {t('Recommend')}
               </Link>

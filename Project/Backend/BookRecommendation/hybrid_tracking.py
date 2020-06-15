@@ -45,12 +45,12 @@ def ContentBase(id):
 
 def Hybrid(userID, bookID):
 	model = joblib.load('./models/tracking.sav')
-	BaseID = ContentBase('8934986044395')
+	BaseID = ContentBase(bookID)
 	estList = []
 
 	for i in range(0, len(BaseID)):
 		estList.append([BaseID[i][0], BaseID[i][1], 
-					model.predict(4003, BaseID[i][0], clip=False).est])
+					model.predict(userID, BaseID[i][0], clip=False).est])
 
 	df = pd.DataFrame(estList, columns=['ID', 'Name', 'EST'])
 	df = df.sort_values("EST", ascending=False)

@@ -144,20 +144,26 @@ namespace BookStoreAPI.Controllers
             else
             {
                 int userID = Int32.Parse(checkToken);
-                var countTracking = await mainBal.CountTracking(userID);
-                if (countTracking.Obj as int? is 0)
-                {
-                    return await mainBal.GetListBestSeller();
-                }
-                else
-                {
-                    var httpClient = new HttpClient();
-                    var listBook = new List<string>();
-                    var response = httpClient.GetAsync("http://localhost:6000/recommend/" + userID);
-                    string apiResponse = await response.Result.Content.ReadAsStringAsync();
-                    listBook = JsonConvert.DeserializeObject<List<string>>(apiResponse);
-                    return await mainBal.GetListRecommendBook(listBook);
-                }
+				var httpClient = new HttpClient();
+                var listBook = new List<string>();
+                var response = httpClient.GetAsync("http://localhost:6000/recommend/" + userID);
+                string apiResponse = await response.Result.Content.ReadAsStringAsync();
+                listBook = JsonConvert.DeserializeObject<List<string>>(apiResponse);
+                return await mainBal.GetListRecommendBook(listBook);
+                // var countTracking = await mainBal.CountTracking(userID);
+                // if (countTracking.Obj as int? is 0)
+                // {
+                    // return await mainBal.GetListBestSeller();
+                // }
+                // else
+                // {
+                    // var httpClient = new HttpClient();
+                    // var listBook = new List<string>();
+                    // var response = httpClient.GetAsync("http://localhost:6000/recommend/" + userID);
+                    // string apiResponse = await response.Result.Content.ReadAsStringAsync();
+                    // listBook = JsonConvert.DeserializeObject<List<string>>(apiResponse);
+                    // return await mainBal.GetListRecommendBook(listBook);
+                // }
             }
         }
     }

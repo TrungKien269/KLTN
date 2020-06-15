@@ -44,6 +44,21 @@ function ProductDetailSection(props) {
       });
       setAuthors(results);
     });
+
+    if(getToken()){
+      axios({
+        headers: {
+          Authorization: "Bearer " + getToken()
+        },
+        method: "post",
+        url: "http://localhost:5000/api/Main/SaveTracking",
+        params: {
+          bookID: props.bookInfo
+        }
+      }).then((res) => {
+      })
+    }
+
   }, []);
 
   useEffect(() => {
@@ -68,6 +83,21 @@ function ProductDetailSection(props) {
       });
       setAuthors(results);
     });
+
+    if(getToken()){
+      axios({
+        headers: {
+          Authorization: "Bearer " + getToken()
+        },
+        method: "post",
+        url: "http://localhost:5000/api/Main/SaveTracking",
+        params: {
+          bookID: props.bookInfo
+        }
+      }).then((res) => {
+      })
+    }
+
   }, [props.bookInfo]);
 
   const ShowPriceBook = (originalPrice, currentPrice) => {
@@ -152,7 +182,7 @@ function ProductDetailSection(props) {
   const showRelatedBooks = useMemo(() => {
     var results = "";
     if (similarityRef.current && similarityRef.current.length > 0) {
-      results = similarityRef.current.map((book) => {
+      results = similarityRef.current.slice(0, 5).map((book) => {
         return (
           <li>
             <div className="row">
