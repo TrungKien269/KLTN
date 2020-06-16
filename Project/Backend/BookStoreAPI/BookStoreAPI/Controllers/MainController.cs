@@ -166,5 +166,15 @@ namespace BookStoreAPI.Controllers
                 // }
             }
         }
+
+        [HttpPost("Subcribe")]
+        public async Task<Response> Subcribe(string email)
+        {
+            return await mainBal.Subscribe(new SubscriptionEmail
+            {
+                Email = email,
+                SubcribeDateTime = DateTime.Now
+            });
+        }
     }
 }

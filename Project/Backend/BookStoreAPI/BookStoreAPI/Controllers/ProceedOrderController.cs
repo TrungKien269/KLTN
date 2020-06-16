@@ -130,5 +130,11 @@ namespace BookStoreAPI.Controllers
                 return await Task.FromResult(new Response("Success", true, 1, usdCurrency));
             }
         }
+
+        [HttpGet("CheckCoupon")]
+        public async Task<Response> CheckCoupon(string code)
+        {
+            return await userOrderBal.CheckCoupon(code);
+        }
     }
 }

@@ -18,6 +18,7 @@ namespace BookStoreAPI.BUS.Control
         private PromotionBAL promotionBal;
         private SearchHistoryBAL searchHistoryBal;
         private BookViewTrackingBAL trackingBal;
+        private SubcriptionEmailBAL SubcriptionEmailBal;
 
         public MainBAL()
         {
@@ -29,6 +30,7 @@ namespace BookStoreAPI.BUS.Control
             promotionBal = new PromotionBAL();
             searchHistoryBal = new SearchHistoryBAL();
             trackingBal = new BookViewTrackingBAL();
+            SubcriptionEmailBal = new SubcriptionEmailBAL();
         }
 
         public async Task<Response> GetListCategory()
@@ -104,6 +106,11 @@ namespace BookStoreAPI.BUS.Control
         public async Task<Response> GetListRecommendBook(List<string> recommendList)
         {
             return await bookBal.GetListRecommendBooks(recommendList);
+        }
+
+        public async Task<Response> Subscribe(SubscriptionEmail email)
+        {
+            return await SubcriptionEmailBal.InsertEmail(email);
         }
     }
 }

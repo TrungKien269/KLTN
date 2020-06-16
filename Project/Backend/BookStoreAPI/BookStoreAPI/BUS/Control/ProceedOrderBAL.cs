@@ -15,6 +15,7 @@ namespace BookStoreAPI.BUS.Control
         private UserBAL userBal;
         private OrderBAL orderBal;
         private BookBAL bookBal;
+        private CouponCodeBAL couponCodeBal;
 
         public ProceedOrderBAL()
         {
@@ -22,6 +23,7 @@ namespace BookStoreAPI.BUS.Control
             this.userBal = new UserBAL();
             this.orderBal = new OrderBAL();
             this.bookBal = new BookBAL();
+            couponCodeBal = new CouponCodeBAL();
         }
 
         public async Task<Response> GetCart(int userID)
@@ -74,6 +76,11 @@ namespace BookStoreAPI.BUS.Control
         public async Task<Response> GetUser(int userID)
         {
             return await userBal.GetUser(userID);
+        }
+
+        public async Task<Response> CheckCoupon(string code)
+        {
+            return await couponCodeBal.CheckCoupon(code);
         }
     }
 }

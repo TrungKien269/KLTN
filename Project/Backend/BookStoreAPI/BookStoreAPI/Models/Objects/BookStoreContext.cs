@@ -47,6 +47,8 @@ namespace BookStoreAPI.Models.Objects
         public virtual DbSet<SearchHistory> SearchHistory { get; set; }
         public virtual DbSet<FaceBookAccount> FaceBookAccount { get; set; }
         public virtual DbSet<EBook> EBook { get; set; }
+        public virtual DbSet<SubscriptionEmail> SubscriptionEmail { get; set; }
+        public virtual DbSet<CouponCode> CouponCode { get; set; }
 
         // Unable to generate entity type for table 'dbo.RawUser'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.RawBook'. Please see the warning messages.
@@ -400,6 +402,16 @@ namespace BookStoreAPI.Models.Objects
             modelBuilder.Entity<EBook>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
+            });
+
+            modelBuilder.Entity<CouponCode>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+            });
+
+            modelBuilder.Entity<SubscriptionEmail>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
             });
         }
     }
