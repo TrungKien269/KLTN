@@ -10,6 +10,10 @@ intents:
   - ask_name
   - ask_book_category
   - ask_book_publisher
+  - ask_book_best_seller
+  - ask_current_book_sales
+  - ask_highest_rating_book
+  - ask_payment_method
 
 actions:
 - utter_greet
@@ -24,6 +28,10 @@ actions:
 - utter_thank
 - action_find_book_category
 - action_find_book_publisher
+- action_find_book_best_seller
+- action_find_current_book_sales
+- action_find_highest_rating_book
+- utter_ask_for_payment_method
 
 templates:
   utter_greet:
@@ -56,6 +64,10 @@ templates:
   utter_ask_func_list:
   - text: "I can talk with you, give you some information that you need!"
   - text: "Tôi có thể trò chuyện, trả lời câu hỏi và cung cấ thông tin bạn cần!"
+
+  utter_ask_for_payment_method:
+  - text: "We have three ways for payment: COD, Online Card and PayPal"
+  - text: "Chúng tôi có ba phương thức thanh toán, Giao hàng thanh toán, Thẻ tín dụng, PayPal"
 
 session_config:
   session_expiration_time: 60

@@ -172,3 +172,56 @@
 - sách của nhà xuất bản nào?
 - có các nhà xuất bản gì?
 - có bao nhiêu nhà xuất bản?
+
+## intent:ask_book_best_seller
+- best seller book
+- best seller
+- best sell
+- list book best seller
+- I want to find list book best seller
+- sách bán chạy
+- danh sách bán chạy
+
+## intent:ask_current_book_sales
+- book sales
+- book sale
+- book are on sale
+- book are on promotion
+- promotion
+- promotion book
+- sale
+- sales
+- current promotion
+- current sales
+- current sale
+- sách đang khuyến mãi
+- sách khuyến mãi
+- khuyến mãi
+- danh sách sách khuyến mãi
+
+## intent:ask_highest_rating_book
+- high rated book
+- high rating
+- rating book
+- rating high
+- sách được đánh giá cao
+- sách rating cao
+- đánh giá cao
+- đánh giá
+
+## intent:ask_payment_method
+- payment
+- payment method
+- payment methods
+- how to pay
+- check out
+- how to check out
+- check out ways
+- check out way
+- check out method
+- proceed order
+- phương thức thanh toán
+- thanh toán
+- cách thức thanh toán
+- cách thanh toán
+- thanh toán đơn hàng

@@ -56,9 +56,11 @@
 * goodbye
   - utter_goodbye
 
-## ask name - ask functionality
+## ask name
 * ask_name
   - utter_ask_name
+
+## ask functionality
 * ask_func_list
   - utter_ask_func_list
 
@@ -67,13 +69,26 @@
   - utter_thank
 
 ## ask book category
-* greet
-  - utter_greet
 * ask_book_category
   - action_find_book_category
 
 ## ask book publisher
-* greet
-  - utter_greet
 * ask_book_publisher
   - action_find_book_publisher
+
+## ask book best seller
+* ask_book_best_seller
+  - action_find_book_best_seller
+
+## ask current book sales
+* ask_current_book_sales
+  - action_find_current_book_sales
+
+## ask highest rating book
+* ask_highest_rating_book
+  - action_find_highest_rating_book
+
+## ask payment method
+* ask_payment_method
+  - utter_ask_for_payment_method
+

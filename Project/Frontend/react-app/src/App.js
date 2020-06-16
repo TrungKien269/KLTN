@@ -14,6 +14,7 @@ import UserWishList from "./pages/index/UserWishList";
 import OrderStatus from "./components/order/OrderStatus";
 import ProceedCheckout from "./components/order/ProceedCheckout";
 import "lightgallery.js/dist/css/lightgallery.css";
+import Chatbot from "./components/Chatbot";
 
 const showPage = (Routers) => {
   var result = null;
@@ -47,6 +48,7 @@ function App() {
           <PrivateRoute path="/orderstatus" component={OrderStatus} />
           <PrivateRoute path="/proceedcheckout" component={ProceedCheckout} />
         </Switch>
+        <Chatbot />
         <Footer />
       </React.Fragment>
     </Router>

@@ -76,3 +76,70 @@ class ActionFindBookPublisher(Action):
             )
 
         return []
+
+class ActionFindBookBestSeller(Action):
+    def name(self) -> Text:
+        return "action_find_book_best_seller"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        import data
+        idList = data.best_seller['Book_ID'].to_list()
+        nameList = data.best_seller['Name'].to_list()
+
+        responstText = "There are some best seller book: \n"
+        for i in range(0, len(idList)):
+            responstText = responstText + "\n - " + nameList[i] + "\n" + "Link: " + "http://localhost:3000/book/" + idList[i] + ""
+
+        dispatcher.utter_message(
+            text=responstText
+        )
+
+        return []
+
+class ActionFindCurrentBookSales(Action):
+    def name(self) -> Text:
+        return "action_find_current_book_sales"
+
+    def run(self, dispatcher: CollectingDispatcher, 
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        import data
+        idList = data.current_sales['ID'].to_list()
+        nameList = data.best_seller['Name'].to_list()
+
+        responstText = "Books are on promotion: \n"
+        for i in range(0, len(idList)):
+            responstText = responstText + "\n - " + nameList[i] + "\n" + "Link: " + "http://localhost:3000/book/" + idList[i] + ""
+
+        dispatcher.utter_message(
+            text=responstText
+        )
+
+        return []
+
+class ActionFindHighestRatingBook(Action):
+    def name(self) -> Text:
+        return "action_find_highest_rating_book"
+
+    def run(self, dispatcher: CollectingDispatcher, 
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        import data
+        idList = data.current_sales['ID'].to_list()
+        nameList = data.best_seller['Name'].to_list()
+
+        responstText = "Books are rated high: \n"
+        for i in range(0, len(idList)):
+            responstText = responstText + "\n - " + nameList[i] + "\n" + "Link: " + "http://localhost:3000/book/" + idList[i] + ""
+
+        dispatcher.utter_message(
+            text=responstText
+        )
+
+        return []
+
