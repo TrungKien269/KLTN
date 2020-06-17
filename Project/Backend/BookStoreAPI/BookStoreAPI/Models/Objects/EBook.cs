@@ -9,11 +9,6 @@ namespace BookStoreAPI.Models.Objects
 {
     public partial class EBook
     {
-        public EBook()
-        {
-            
-        }
-
         [Column("ID")]
         [StringLength(20)]
         public string Id { get; set; }
@@ -22,9 +17,10 @@ namespace BookStoreAPI.Models.Objects
         public string Authors { get; set; }
         public int? ReleaseYear { get; set; }
         public int? NumOfPage { get; set; }
-        public Single? Size { get; set; }
+        public float? Size { get; set; }
         public string Language { get; set; }
         [Required]
+        [StringLength(50)]
         public string Category { get; set; }
         public string Image { get; set; }
         public int? State { get; set; }

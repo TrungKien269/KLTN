@@ -49,9 +49,9 @@ namespace BookStoreAPI.Models.Objects
         public virtual DbSet<EBook> EBook { get; set; }
         public virtual DbSet<SubscriptionEmail> SubscriptionEmail { get; set; }
         public virtual DbSet<CouponCode> CouponCode { get; set; }
-
-        // Unable to generate entity type for table 'dbo.RawUser'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.RawBook'. Please see the warning messages.
+        public virtual DbSet<EbookPayment> EbookPayment { get; set; }
+        public virtual DbSet<EbookRentalPolicy> EbookRentalPolicy { get; set; }
+        public virtual DbSet<UserEbook> UserEbook { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -412,6 +412,39 @@ namespace BookStoreAPI.Models.Objects
             modelBuilder.Entity<SubscriptionEmail>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<EbookPayment>(entity =>
+            {
+                entity.Property(e => e.PaymentId).ValueGeneratedNever();
+
+                entity.HasOne(d => d.Policy)
+                    .WithMany(p => p.EbookPayment)
+                    .HasForeignKey(d => d.PolicyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EBookPayment_EBookRentalPolicy");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.EbookPayment)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EBookPayment_UserEBook");
+            });
+
+            modelBuilder.Entity<EbookRentalPolicy>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+            });
+
+            modelBuilder.Entity<UserEbook>(entity =>
+            {
+                entity.Property(e => e.UserId).ValueGeneratedNever();
+
+                entity.HasOne(d => d.User)
+                    .WithOne(p => p.UserEbook)
+                    .HasForeignKey<UserEbook>(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserEBook_User");
             });
         }
     }

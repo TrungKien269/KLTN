@@ -48,5 +48,7 @@ namespace BookStoreAPI.Models.Objects
         public ICollection<BookViewTracking> BookViewTracking { get; set; }
         [InverseProperty("IdNavigation")]
         public virtual FaceBookAccount FaceBookAccount { get; set; }
+        [InverseProperty("User")]
+        public UserEbook UserEbook { get; set; }
     }
 }
