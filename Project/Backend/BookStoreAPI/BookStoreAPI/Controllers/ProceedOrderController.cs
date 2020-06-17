@@ -136,5 +136,11 @@ namespace BookStoreAPI.Controllers
         {
             return await userOrderBal.CheckCoupon(code);
         }
+
+        [HttpPut("DisableCoupon")]
+        public async Task<Response> DisableCoupon(string code)
+        {
+            return await userOrderBal.DisableCoupon(code);
+        }
     }
 }

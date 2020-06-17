@@ -30,19 +30,47 @@ namespace BookStoreAPI.BUS.Logic
             }
         }
 
+        public async Task<Response> CheckEmail(string email)
+        {
+            try
+            {
+                var subEmail = await context.SubscriptionEmail.Where(x => x.Email.Equals(email)).FirstOrDefaultAsync();
+                if (subEmail is null)
+                {
+                    return new Response("Success", true, 0, email);
+                }
+                else
+                {
+                    return new Response("This email has been subcribed", false, 0, email);
+                }
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
         public async Task<Response> InsertEmail(SubscriptionEmail email)
         {
             try
             {
-                await context.SubscriptionEmail.AddAsync(email);
-                var check = await context.SaveChangesAsync();
-                if (check is 1)
+                var check = await CheckEmail(email.Email);
+                if (check.Status is true)
                 {
-                    return new Response("Success", true, 1, email);
+                    await context.SubscriptionEmail.AddAsync(email);
+                    var response = await context.SaveChangesAsync();
+                    if (response is 1)
+                    {
+                        return new Response("Success", true, 1, email);
+                    }
+                    else
+                    {
+                        return new Response("Can not save this email", false, 0, null);
+                    }
                 }
                 else
                 {
-                    return new Response("Can not save this email", false, 0, null);
+                    return check;
                 }
             }
             catch (Exception e)

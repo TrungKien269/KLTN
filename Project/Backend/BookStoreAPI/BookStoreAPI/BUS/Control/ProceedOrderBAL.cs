@@ -82,5 +82,10 @@ namespace BookStoreAPI.BUS.Control
         {
             return await couponCodeBal.CheckCoupon(code);
         }
+
+        public async Task<Response> DisableCoupon(string code)
+        {
+            return await couponCodeBal.DisableCoupon(code);
+        }
     }
 }

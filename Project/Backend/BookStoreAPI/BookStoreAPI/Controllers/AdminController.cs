@@ -270,5 +270,11 @@ namespace BookStoreAPI.Controllers
         {
             return await adminBal.StatisticsNumberAccountWithYear();
         }
+
+        [HttpPost("SendPromotionEmail")]
+        public async Task<Response> SendPromotionEmail(int promotionID)
+        {
+            return await PromotionEmailHelper.SendEmail(promotionID);
+        }
     }
 }

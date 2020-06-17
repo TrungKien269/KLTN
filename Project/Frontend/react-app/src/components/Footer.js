@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import MapContainer from './MapContainer';
+import Swal from "sweetalert2";
+import Axios from "axios";
 
 function Footer() {
 
@@ -13,6 +15,42 @@ function Footer() {
   }
 
   const handleSubscribe = () => {
+    if(validateEmail(email)){
+      Axios({
+        url: "http://localhost:5000/api/Main/Subcribe",
+        method: "post",
+        params: {
+          email: email
+        }
+      }).then((res) => {
+        if(res.data.status){
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Subcribe email successfully!",
+          });
+        }
+        else{
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: res.data.message,
+          });
+        }
+      })
+    }
+    else{
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "You have to type email correctly!",
+      });
+    }
+  }
+
+  const validateEmail = (email) => {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
   }
 
   return (
@@ -22,7 +60,7 @@ function Footer() {
           <h2>Subcribe to our new letters</h2>
           <div className="d-flex justify-content-center align-items-center">
             <input
-              type="text"
+              type="email"
               className="input__subcribe"
               placeholder="Enter your e-mail address" 
               onChange={(e) => handleEmailChange(e)}
@@ -44,7 +82,7 @@ function Footer() {
             marginBottom: `2%`,
             marginLeft: `50%`,
             transform: `translateX(-50%)`
-          }}> {/* <MapContainer></MapContainer> */}
+          }}> { /* <MapContainer></MapContainer> */ }
         </div>
         <div className="row">
           <div className="col-md-3">

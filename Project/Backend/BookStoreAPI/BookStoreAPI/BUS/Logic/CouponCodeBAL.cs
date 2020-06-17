@@ -64,5 +64,28 @@ namespace BookStoreAPI.BUS.Logic
                 return Response.CatchError(e.Message);
             }
         }
+
+        public async Task<Response> DisableCoupon(string code)
+        {
+            try
+            {
+                var coupon = await context.CouponCode.Where(x => x.Id.Equals(code)).FirstOrDefaultAsync();
+                coupon.State = 0;
+                context.CouponCode.Update(coupon);
+                var check = await context.SaveChangesAsync();
+                if (check is 1)
+                {
+                    return new Response("Success", true, 1, coupon);
+                }
+                else
+                {
+                    return new Response("Fail!", false, 0, coupon);
+                }
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
     }
 }
