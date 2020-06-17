@@ -40,12 +40,10 @@ const Dashboard = () => {
   const brandInfo = getStyle("--info");
   const brandWarning = getStyle("--warning");
   const brandDanger = getStyle("--danger");
-  const [
-    numberExportedOrderWithMonth,
-    setNumberExportedOrderWithMonth,
-  ] = useState([]);
-  var data1 = "";
-  var cardChartOpts = "";
+
+  const [data1, setData1] = useState();
+  const [dataBookSold, setDataBookSold] = useState();
+  const [totalOrder, setTotalOrder] = useState();
 
   useEffect(() => {
     axios({
@@ -55,86 +53,182 @@ const Dashboard = () => {
       method: "get",
       url: "http://localhost:5000/api/Admin/NumberExportedOrderWithMonth",
     }).then((res) => {
+      var sum = 0;
       var months = res.data.obj.map((data) => {
-        return data.month;
+        return data.month === 1
+          ? "Jan"
+          : data.month === 2
+          ? "Feb"
+          : data.month === 3
+          ? "Mar"
+          : data.month === 4
+          ? "Apr"
+          : data.month === 5
+          ? "May"
+          : data.month === 6
+          ? "Jun"
+          : data.month === 7
+          ? "Jul"
+          : data.month === 8
+          ? "Aug"
+          : data.month === 9
+          ? "Sep"
+          : data.month === 10
+          ? "Oct"
+          : data.month === 11
+          ? "Nov"
+          : data.month === 12
+          ? "Dec"
+          : "";
       });
       var data = res.data.obj.map((data) => {
+        sum = sum + data.numberOrder;
         return data.numberOrder;
       });
-      data1 = {
-        labels: [months],
+      setTotalOrder(sum);
+      setData1({
+        labels: months,
         datasets: [
           {
-            labels: "Orders in month",
-            backgroundColor: brandPrimary,
+            label: "Orders by month",
+            backgroundColor: "transparent",
             borderColor: "rgba(255,255,255,.55)",
             data: data,
           },
         ],
-      };
-      cardChartOpts = {
-        tooltips: {
-          enabled: false,
-          custom: CustomTooltips,
-        },
-        maintainAspectRatio: false,
-        legend: {
-          display: false,
-        },
-        scales: {
-          xAxes: [
-            {
-              gridLines: {
-                color: "transparent",
-                zeroLineColor: "transparent",
-              },
-              ticks: {
-                fontSize: 2,
-                fontColor: "transparent",
-              },
-            },
-          ],
-          yAxes: [
-            {
-              display: false,
-              ticks: {
-                display: false,
-                min: Math.min.apply(Math, data1.datasets[0].data) - 5,
-                max: Math.max.apply(Math, data1.datasets[0].data) + 5,
-              },
-            },
-          ],
-        },
-        elements: {
-          line: {
-            borderWidth: 1,
-          },
-          point: {
-            radius: 4,
-            hitRadius: 10,
-            hoverRadius: 4,
-          },
-        },
-      };
+      });
+    });
 
-      console.log(data1);
+    axios({
+      headers: {
+        Authorization: "Bearer " + getToken(),
+      },
+      method: "get",
+      url: "http://localhost:5000/api/Admin/NumberBookSoldWithMonth",
+    }).then((res) => {
+      var months = res.data.obj.map((data) => {
+        return data.month === 1
+          ? "Jan"
+          : data.month === 2
+          ? "Feb"
+          : data.month === 3
+          ? "Mar"
+          : data.month === 4
+          ? "Apr"
+          : data.month === 5
+          ? "May"
+          : data.month === 6
+          ? "Jun"
+          : data.month === 7
+          ? "Jul"
+          : data.month === 8
+          ? "Aug"
+          : data.month === 9
+          ? "Sep"
+          : data.month === 10
+          ? "Oct"
+          : data.month === 11
+          ? "Nov"
+          : data.month === 12
+          ? "Dec"
+          : "";
+      });
+      var data = res.data.obj.map((data) => {
+        return data.numberBook;
+      });
+      setDataBookSold({
+        labels: months,
+        datasets: [
+          {
+            label: "Books sold by month",
+            backgroundColor: "transparent",
+            borderColor: "rgba(255,255,255,.55)",
+            data: data,
+          },
+        ],
+      });
     });
   }, []);
 
+  const options = {
+    tooltips: {
+      enabled: false,
+      custom: CustomTooltips,
+    },
+    maintainAspectRatio: true,
+    legend: {
+      display: true,
+    },
+    // scales: {
+    //   xAxes: [
+    //     {
+    //       gridLines: {
+    //         color: "transparent",
+    //         zeroLineColor: "transparent",
+    //       },
+    //     },
+    //   ],
+    //   yAxes: [
+    //     {
+    //       gridLines: {
+    //         color: "transparent",
+    //         zeroLineColor: "transparent",
+    //       },
+    //       ticks: {
+    //         display: true,
+    //         // min: Math.min.apply(Math, dataBookSold.datasets[0].data) - 5,
+    //         // max: Math.max.apply(Math, dataBookSold.datasets[0].data) + 5,
+    //       },
+    //     },
+    //   ],
+    // },
+    elements: {
+      line: {
+        tension: 0.00001,
+        borderWidth: 2,
+      },
+      point: {
+        radius: 4,
+        hitRadius: 10,
+        hoverRadius: 4,
+      },
+    },
+  };
+
+  const showChart1 = useMemo(() => {
+    console.log(data1);
+    return <Line data={data1} options={options} />;
+  }, [data1]);
+  const showChart2 = useMemo(() => {
+    return <Line data={dataBookSold} options={options} />;
+  });
+  const showTotalOrder = useMemo(() => {
+    return <div className="text-value">{totalOrder}</div>;
+  }, [totalOrder]);
+
   return (
-    <div>
-      {" "}
-      <Card className="text-white bg-info">
-        <CardBody className="pb-0">
-          <ButtonGroup className="float-right"></ButtonGroup>
-          <div className="text-value">9.823</div>
-          <div>Members online</div>
-        </CardBody>
-        <div className="chart-wrapper mx-3" style={{ height: "70px" }}>
-          <Line data={data1} options={cardChartOpts} height={70} />
-        </div>
-      </Card>
-    </div>
+    <Row>
+      <Col xs="12" md="6" lg="6">
+        <Card className="text-white bg-primary">
+          <CardBody className="pb-0">
+            <ButtonGroup className="float-right"></ButtonGroup>
+            {showTotalOrder}
+            <div>Order by months</div>
+          </CardBody>
+          <div className="chart-wrapper mx-3">{showChart1}</div>
+        </Card>
+      </Col>
+      <Col xs="12" md="6" lg="6">
+        <Card className="text-white bg-info">
+          <CardBody className="pb-0">
+            <ButtonGroup className="float-right"></ButtonGroup>
+            {showTotalOrder}
+            <div>Books Sold by months</div>
+          </CardBody>
+          <div className="chart-wrapper mx-3">{showChart2}</div>
+        </Card>
+      </Col>
+    </Row>
   );
 };
 export default Dashboard;
@@ -211,49 +305,49 @@ export default Dashboard;
 // };
 
 // const cardChartOpts2 = {
-//   tooltips: {
-//     enabled: false,
-//     custom: CustomTooltips,
-//   },
-//   maintainAspectRatio: false,
-//   legend: {
-//     display: false,
-//   },
-//   scales: {
-//     xAxes: [
-//       {
-//         gridLines: {
-//           color: "transparent",
-//           zeroLineColor: "transparent",
-//         },
-//         ticks: {
-//           fontSize: 2,
-//           fontColor: "transparent",
-//         },
+// tooltips: {
+//   enabled: false,
+//   custom: CustomTooltips,
+// },
+// maintainAspectRatio: false,
+// legend: {
+//   display: false,
+// },
+// scales: {
+//   xAxes: [
+//     {
+//       gridLines: {
+//         color: "transparent",
+//         zeroLineColor: "transparent",
 //       },
-//     ],
-//     yAxes: [
-//       {
+//       ticks: {
+//         fontSize: 2,
+//         fontColor: "transparent",
+//       },
+//     },
+//   ],
+//   yAxes: [
+//     {
+//       display: false,
+//       ticks: {
 //         display: false,
-//         ticks: {
-//           display: false,
-//           min: Math.min.apply(Math, cardChartData2.datasets[0].data) - 5,
-//           max: Math.max.apply(Math, cardChartData2.datasets[0].data) + 5,
-//         },
+//         min: Math.min.apply(Math, cardChartData2.datasets[0].data) - 5,
+//         max: Math.max.apply(Math, cardChartData2.datasets[0].data) + 5,
 //       },
-//     ],
-//   },
-//   elements: {
-//     line: {
-//       tension: 0.00001,
-//       borderWidth: 1,
 //     },
-//     point: {
-//       radius: 4,
-//       hitRadius: 10,
-//       hoverRadius: 4,
-//     },
+//   ],
+// },
+// elements: {
+//   line: {
+//     tension: 0.00001,
+//     borderWidth: 1,
 //   },
+//   point: {
+//     radius: 4,
+//     hitRadius: 10,
+//     hoverRadius: 4,
+//   },
+// },
 // };
 
 // // Card Chart 3
