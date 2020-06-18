@@ -33,6 +33,9 @@ const ProceedCheckout = (props) => {
   const [orderTotal, setOrderTotal] = useState(0);
   const [shippingFee, setShippingFee] = useState(0);
 
+  const [coupon, setCoupon] = useState(null);
+  const [discount, setDiscount] = useState(0);
+
   const [isCheckout, setIsCheckout] = useState(false);
 
   const [timeTyping, setTimeTyping] = useState(null);
@@ -65,10 +68,9 @@ const ProceedCheckout = (props) => {
   }
 
   useEffect(() => {
-    if(city != "" && address != ""){
+    if (city != "" && address != "") {
       var fullAddress = address + " " + city;
       CalculateDistance(fullAddress).then((res) => {
-        alert(GetShippingFee(res));
         setShippingFee(parseInt(GetShippingFee(res)));
       });
     }
@@ -79,10 +81,53 @@ const ProceedCheckout = (props) => {
   }
 
   const handleCheckout = (check) => {
-    if(check === true){
+    if (check === true) {
       setCartBook(null);
+      props.history.push("/collections/");
     }
   }
+
+  const handleCouponChange = (event) => {
+    var value = event.target.value;
+    if (timeTyping) {
+      clearTimeout(timeTyping)
+    }
+    setTimeTyping(setTimeout(() => {
+      setCoupon(value);
+    }, 2000));
+  }
+
+  useEffect(() => {
+    if(coupon && coupon != ""){
+      Axios({
+        method: "get",
+        url: "http://localhost:5000/api/ProceedOrder/CheckCoupon",
+        params: {
+          code: coupon
+        }
+      }).then((res) => {
+        if(res.data.status){
+          Swal.fire({
+            title: "Done",
+            text: "This coupon is accepted",
+            icon: "success",
+          });
+          setDiscount(parseFloat(res.data.obj.value));
+        }
+        else{
+          setDiscount(0);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: res.data.message,
+          });
+        }
+      })
+    }
+    else{
+      setDiscount(0);
+    }
+  }, [coupon])
 
   useEffect(() => {
     Axios({
@@ -156,10 +201,11 @@ const ProceedCheckout = (props) => {
             params: {
               email: email,
               type: "COD",
+              total: parseInt(orderTotal) - parseInt(orderTotal) * discount,
               shippingFee: shippingFee,
               fullName: fullName,
               phoneNumber: phonenumber,
-              address: address,
+              address: address + " " + city,
             },
             data: proceedOrder,
           })
@@ -209,7 +255,7 @@ const ProceedCheckout = (props) => {
 
   const SelectCity = (e) => {
     if (e.target.value) {
-      setCity(e.target.value)
+      setCity(cities[parseInt(e.target.value) - 1].name)
     }
   }
 
@@ -348,6 +394,7 @@ const ProceedCheckout = (props) => {
           <CardCheckout userInfo={userInfor}
             cartBook={cartBook} isCheckout={(check) => handleCheckout(check)}
             shippingFeeChanged={(fee) => handleShippingFeeChange(fee)}
+            discount={discount}
           />
         </Tab.Pane>
       )
@@ -359,6 +406,7 @@ const ProceedCheckout = (props) => {
           <PayPalCheckout userInfo={userInfor}
             cartBook={cartBook} isCheckout={(check) => handleCheckout(check)}
             shippingFeeChanged={(fee) => handleShippingFeeChange(fee)}
+            discount={discount}
           />
         </Tab.Pane>
       )
@@ -381,7 +429,14 @@ const ProceedCheckout = (props) => {
                 <div className="title-wrapper">
                   <h2 style={{
                     textAlign: "center"
-                  }}>{t('Your Order')}</h2>
+                  }}>{t('Coupon')}</h2>
+                  <input
+                    type="text"
+                    placeholder={t('Coupon')}
+                    id="name"
+                    defaultValue={coupon}
+                    onChange={handleCouponChange}
+                  />
                 </div>
                 <div className="title-wrapper">
                   <h2>{t('Shipping Fee')}</h2>
@@ -402,6 +457,31 @@ const ProceedCheckout = (props) => {
                     {
                       <NumberFormat
                         value={orderTotal}
+                        thousandSeparator={true}
+                        displayType={"text"}
+                        suffix=" VND"
+                      ></NumberFormat>
+                    }
+                  </div>
+                </div>
+                <div className="title-wrapper">
+                  <h2>{t('Discount')}</h2>
+                  <div className="product-price">
+                    {
+                      <NumberFormat
+                        value={discount * 100}
+                        displayType={"text"}
+                        suffix=" %"
+                      ></NumberFormat>
+                    }
+                  </div>
+                </div>
+                <div className="title-wrapper">
+                  <h2>{t('Final')}</h2>
+                  <div className="product-price">
+                    {
+                      <NumberFormat
+                        value={orderTotal - orderTotal * discount}
                         thousandSeparator={true}
                         displayType={"text"}
                         suffix=" VND"

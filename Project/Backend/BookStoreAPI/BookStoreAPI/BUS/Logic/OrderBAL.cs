@@ -80,7 +80,7 @@ namespace BookStoreAPI.BUS.Logic
                     UserId = userID,
                     ShippingFee = orderRequest.ShippingFee,
                     Type = orderRequest.Type,
-                    Total = orderDetailRequests.Sum(x => x.Quantity * x.CurrentPrice)
+                    Total = orderRequest.Total
                 };
 
                 var response = await CreateOrder(order);

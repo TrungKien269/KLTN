@@ -34,6 +34,8 @@ function CardCheckout(props) {
   const [orderTotal, setOrderTotal] = useState(0);
   const [shippingFee, setShippingFee] = useState(0);
 
+  const [discount, setDiscount] = useState(0);
+
   const [timeTyping, setTimeTyping] = useState(null);
 
   const loadStripe = () => {
@@ -72,6 +74,12 @@ function CardCheckout(props) {
     }
   }, [props.cartBook]);
 
+  useEffect(() => {
+    if(props.discount){
+      setDiscount(parseFloat(props.discount));
+    }
+  }, [props.discount])
+
   proceedOrder = useMemo(() => {
     if (cartBook) {
       let x = [];
@@ -105,7 +113,7 @@ function CardCheckout(props) {
 
   const SelectCity = (e) => {
     if (e.target.value) {
-      setCity(e.target.value)
+      setCity(cities[parseInt(e.target.value) - 1].name)
     }
   }
 
@@ -131,7 +139,6 @@ function CardCheckout(props) {
     if(city != "" && address != ""){
       var fullAddress = address + " " + city;
       CalculateDistance(fullAddress).then((res) => {
-        alert(GetShippingFee(res));
         setShippingFee(parseInt(GetShippingFee(res)));
         props.shippingFeeChanged(GetShippingFee(res));
       });
@@ -169,7 +176,6 @@ function CardCheckout(props) {
       }, (status, response) => {
 
         if (status === 200) {
-          console.log(response);
 
           Axios({
             headers: {
@@ -181,6 +187,7 @@ function CardCheckout(props) {
               stripeEmail: email,
               stripeToken: response.id,
               type: "Card",
+              total: parseInt(orderTotal) - parseInt(orderTotal) * discount,
               shippingFee: parseInt(shippingFee),
               fullName: fullName,
               phoneNumber: phonenumber,
@@ -197,7 +204,6 @@ function CardCheckout(props) {
                 icon: "success",
                 confirmButtonText: "Back to store",
               }).then(() => {
-                props.history.push("/collections/");
                 Axios({
                   headers: {
                     Authorization: "Bearer " + getToken(),

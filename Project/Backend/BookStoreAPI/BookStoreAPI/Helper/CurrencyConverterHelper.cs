@@ -21,8 +21,8 @@ namespace BookStoreAPI.Helper
                 };
                 var url = "https://transferwise.com/gb/currency-converter/vnd-to-usd-rate?amount=1";
                 HtmlDocument document = htmlWeb.Load(url, "GET");
-                var spanResult = document.DocumentNode.QuerySelector("div.input-group > input#cc-amount-to")
-                    .Attributes["value"].Value;
+                var spanResult = document.DocumentNode.QuerySelector("span.text-success")
+                    .InnerHtml;
                 return double.Parse(spanResult);
             }
             catch (Exception e)

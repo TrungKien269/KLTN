@@ -30,6 +30,8 @@ function PayPalCheckout(props) {
   const [shippingFee, setShippingFee] = useState(0);
   const [usdCurrency, setUSDCurrency] = useState(0.0);
 
+  const [discount, setDiscount] = useState(0);
+
   const [timeTyping, setTimeTyping] = useState(null);
 
   useEffect(() => {
@@ -59,6 +61,13 @@ function PayPalCheckout(props) {
       setCartBook(props.cartBook);
     }
   }, [props.cartBook]);
+
+  useEffect(() => {
+    if(props.discount){
+      setDiscount(parseFloat(props.discount));
+    }
+    console.log(props.discount)
+  }, [props.discount])
 
   proceedOrder = useMemo(() => {
     if (cartBook) {
@@ -119,7 +128,6 @@ function PayPalCheckout(props) {
     if(city != "" && address != ""){
       var fullAddress = address + " " + city;
       CalculateDistance(fullAddress).then((res) => {
-        alert(GetShippingFee(res));
         setShippingFee(parseInt(GetShippingFee(res)));
         props.shippingFeeChanged(GetShippingFee(res));
       });
@@ -134,7 +142,7 @@ function PayPalCheckout(props) {
     var itemArr = [];
     var cartBooks = cartBook.cartBook;
     var total = 0;
-    var shippingFeeInfo = parseInt((parseInt(shippingFee) * usdCurrency).toFixed(2));
+    var shippingFeeInfo = (parseInt(shippingFee) * usdCurrency).toFixed(2).toString();
     var shippingInfo = {
       method: "Shipping",
       address: {
@@ -165,9 +173,10 @@ function PayPalCheckout(props) {
         itemArr.push(item);
       }
     }
+    var discountInfo = (parseFloat(discount) * total).toFixed(2).toString();
     var amountInfo = {
       currency_code: "USD",
-      value: (total + shippingFeeInfo).toString(),
+      value: (parseFloat(total) + parseFloat(shippingFeeInfo) - discountInfo).toFixed(2).toString(),
       breakdown: {
         item_total: {
           currency_code: "USD",
@@ -176,6 +185,10 @@ function PayPalCheckout(props) {
         shipping: {
           currency_code: "USD",
           value: (parseInt(shippingFee) * usdCurrency).toFixed(2).toString()
+        },
+        discount: {
+          currency_code: "USD",
+          value: (parseFloat(discount) * total).toFixed(2).toString()
         }
       }
     }
@@ -260,6 +273,7 @@ function PayPalCheckout(props) {
                         email: email,
                         paypalOrderID: data.orderID,
                         type: "PayPal",
+                        total: parseInt(orderTotal) - parseInt(orderTotal) * discount,
                         shippingFee: parseInt(shippingFee),
                         fullName: fullName,
                         phoneNumber: phonenumber,
@@ -276,7 +290,6 @@ function PayPalCheckout(props) {
                           icon: "success",
                           confirmButtonText: "Back to store",
                         }).then(() => {
-                          props.history.push("/collections/");
                           Axios({
                             headers: {
                               Authorization: "Bearer " + getToken(),
