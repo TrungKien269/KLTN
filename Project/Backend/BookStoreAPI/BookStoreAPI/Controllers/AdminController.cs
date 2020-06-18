@@ -276,5 +276,12 @@ namespace BookStoreAPI.Controllers
         {
             return await PromotionEmailHelper.SendEmail(promotionID);
         }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPost("SendCouponEmail")]
+        public async Task<Response> SendCouponEmail(float value, int userID)
+        {
+            return await adminBal.SendCoupon(value, userID);
+        }
     }
 }

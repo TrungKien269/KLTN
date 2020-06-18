@@ -24,6 +24,7 @@ namespace BookStoreAPI.BUS.Control
         private PublisherBAL publisherBal;
         private PromotionBAL promotionBal;
         private CRUDPromotionBAL crudPromotionBal;
+        private CouponCodeBAL couponCodeBal;
 
         public AdminBAL()
         {
@@ -39,6 +40,7 @@ namespace BookStoreAPI.BUS.Control
             publisherBal = new PublisherBAL();
             promotionBal = new PromotionBAL();
             crudPromotionBal = new CRUDPromotionBAL();
+            couponCodeBal = new CouponCodeBAL();
         }
 
         public async Task<Response> GetListProcessing()
@@ -181,6 +183,16 @@ namespace BookStoreAPI.BUS.Control
         public async Task<Response> StatisticsNumberAccountWithYear()
         {
             return await accountBal.StatisticsNumberAccountWithYear();
+        }
+
+        public async Task<Response> GetListCouponCodeValue()
+        {
+            return await couponCodeBal.GetListCouponValue();
+        }
+
+        public async Task<Response> SendCoupon(float value, int userID)
+        {
+            return await couponCodeBal.TransactionSendCoupon(value, userID);
         }
     }
 }

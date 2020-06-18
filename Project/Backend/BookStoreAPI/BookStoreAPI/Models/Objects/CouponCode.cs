@@ -12,7 +12,8 @@ namespace BookStoreAPI.Models.Objects
         [Column("ID")]
         [MaxLength(20)]
         public string Id { get; set; }
-        public Single Value { get; set; }
+        public float Value { get; set; }
+        public int Sended { get; set; }
         public int State { get; set; }
     }
 }
