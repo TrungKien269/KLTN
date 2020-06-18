@@ -288,5 +288,33 @@ namespace BookStoreAPI.BUS.Logic
                 return Response.CatchError(e.Message);
             }
         }
+
+        public async Task<Response> CheckUserEBook(int userID)
+        {
+            try
+            {
+                var user = await context.UserEbook.Where(x => x.UserId.Equals(userID)).FirstOrDefaultAsync();
+                if (user is null)
+                {
+                    return new Response("You have to pay for reading ebook", false, 0, null);
+                }
+                else
+                {
+                    var compare = DateTime.Compare(user.ExpiredDate, DateTime.Now);
+                    if (compare > 0)
+                    {
+                        return new Response("Success", true, 1, user);
+                    }
+                    else
+                    {
+                        return new Response("Your reading time has been expired", false, 1, user);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
     }
 }

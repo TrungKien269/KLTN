@@ -2,6 +2,8 @@ import React, { useEffect, useState, useMemo, useRef } from "react";
 import { Link } from 'react-router-dom';
 import { withRouter, useParams } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { checkUserEBook } from '../../Utils/Commons';
 import Viewer, { SelectionMode, Worker, defaultLayout, RenderPage }
   from '@phuocng/react-pdf-viewer';
 import '@phuocng/react-pdf-viewer/cjs/react-pdf-viewer.css';
@@ -12,6 +14,17 @@ function ReadEBook(props) {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    checkUserEBook().then((res) => {
+      if(res.status === false){
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: res.message,
+        }).then(() => {
+          props.history.push("/rentebook/");
+        })
+      }
+    })
 
     axios({
       method: "get",
@@ -149,7 +162,6 @@ function ReadEBook(props) {
 
   const DisplayFile = useMemo(() => {
     if (link != null) {
-      console.log(link)
       return (
         <div
           style={{

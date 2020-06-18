@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { useTranslation } from "react-i18next";
@@ -44,7 +44,7 @@ function EBookDetailSection(props) {
                       </div>
                       <div className="row">
                         <div className="col-md-5">
-                          <Link to={`read/${data.id}`}
+                          <Link to={`/ebook/read/${data.id}`}
                             className="btn btn-fw btn--rounded btn--blue">
                             {t("Read")}
                           </Link>

@@ -64,11 +64,11 @@ const Routers = [
     exact: true,
     main: () => <EBookDetail />,
   },
-  {
-    path: "/ebook/read/:id",
-    exact: true,
-    main: () => <ReadEBook />,
-  },
+  // {
+  //   path: "/ebook/read/:id",
+  //   exact: true,
+  //   main: () => <ReadEBook />,
+  // },
 ];
 
 export default Routers;

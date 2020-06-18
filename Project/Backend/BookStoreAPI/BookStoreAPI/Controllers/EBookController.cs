@@ -44,7 +44,7 @@ namespace BookStoreAPI.Controllers
 
         [Authorize]
         [HttpPost("RentEBook")]
-        public async Task<Response> RentEBook(string stripeEmail, string stripeToken, int policyID, int userID)
+        public async Task<Response> RentEBook(string stripeEmail, string stripeToken, int policyID)
         {
             string accessToken = HttpContext.Request.Headers["Authorization"];
             var checkToken = JWTHelper.GetUserID(accessToken);
@@ -54,7 +54,25 @@ namespace BookStoreAPI.Controllers
             }
             else
             {
+				int userID = Int32.Parse(checkToken);
                 return await eBookBal.CreateTransactionRentEBook(stripeEmail, stripeToken, policyID, userID);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("CheckUserEBook")]
+        public async Task<Response> CheckUserEBook()
+        {
+            string accessToken = HttpContext.Request.Headers["Authorization"];
+            var checkToken = JWTHelper.GetUserID(accessToken);
+            if (checkToken is "Error")
+            {
+                return await Task.FromResult<Response>(new Response("Error", false, 0, null));
+            }
+            else
+            {
+                int userID = Int32.Parse(checkToken);
+                return await eBookBal.CheckUserEBook(userID);
             }
         }
     }
