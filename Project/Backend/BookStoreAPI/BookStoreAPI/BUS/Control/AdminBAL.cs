@@ -114,9 +114,9 @@ namespace BookStoreAPI.BUS.Control
             return await bookBal.StatisticsBookWithQuantityByMonth();
         }
 
-        public async Task<Response> StatisticsTop3Users()
+        public async Task<Response> StatisticsTop5Users()
         {
-            return await bookBal.StatisticsTop3Users();
+            return await bookBal.StatisticsTop5Users();
         }
 
         public async Task<Response> GetListPromotion()

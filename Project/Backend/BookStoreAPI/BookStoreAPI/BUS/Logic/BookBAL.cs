@@ -679,7 +679,7 @@ namespace BookStoreAPI.BUS.Logic
             }
         }
 
-        public async Task<Response> StatisticsTop3Users()
+        public async Task<Response> StatisticsTop5Users()
         {
             try
             {
@@ -689,7 +689,7 @@ namespace BookStoreAPI.BUS.Logic
                     {
                         user = x.Key,
                         numberOfBook = x.Sum(y => y.Quantity)
-                    }).OrderByDescending(x => x.numberOfBook).Take(3).ToListAsync();
+                    }).OrderByDescending(x => x.numberOfBook).Take(5).ToListAsync();
                 return new Response("Success", true, 1, users);
             }
             catch (Exception e)

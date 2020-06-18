@@ -246,10 +246,10 @@ namespace BookStoreAPI.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpGet("Top3Users")]
-        public async Task<Response> StatisticsTop3Users()
+        [HttpGet("Top5Users")]
+        public async Task<Response> StatisticsTop5Users()
         {
-            return await adminBal.StatisticsTop3Users();
+            return await adminBal.StatisticsTop5Users();
         }
 
         [Authorize(Roles = "Administrator")]

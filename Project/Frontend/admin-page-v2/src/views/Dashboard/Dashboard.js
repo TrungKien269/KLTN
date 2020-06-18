@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useMemo,
 } from "react";
-import { Bar, Line } from "react-chartjs-2";
+import { Bar, Line, Pie } from "react-chartjs-2";
 import axios from "axios";
 import {
   Badge,
@@ -44,6 +44,8 @@ const Dashboard = () => {
   const [data1, setData1] = useState();
   const [dataBookSold, setDataBookSold] = useState();
   const [totalOrder, setTotalOrder] = useState();
+  const [top3user, setTop3User] = useState();
+  const [numberAccountYear, setNumberAccountYear] = useState();
 
   useEffect(() => {
     axios({
@@ -58,28 +60,28 @@ const Dashboard = () => {
         return data.month === 1
           ? "Jan"
           : data.month === 2
-          ? "Feb"
-          : data.month === 3
-          ? "Mar"
-          : data.month === 4
-          ? "Apr"
-          : data.month === 5
-          ? "May"
-          : data.month === 6
-          ? "Jun"
-          : data.month === 7
-          ? "Jul"
-          : data.month === 8
-          ? "Aug"
-          : data.month === 9
-          ? "Sep"
-          : data.month === 10
-          ? "Oct"
-          : data.month === 11
-          ? "Nov"
-          : data.month === 12
-          ? "Dec"
-          : "";
+            ? "Feb"
+            : data.month === 3
+              ? "Mar"
+              : data.month === 4
+                ? "Apr"
+                : data.month === 5
+                  ? "May"
+                  : data.month === 6
+                    ? "Jun"
+                    : data.month === 7
+                      ? "Jul"
+                      : data.month === 8
+                        ? "Aug"
+                        : data.month === 9
+                          ? "Sep"
+                          : data.month === 10
+                            ? "Oct"
+                            : data.month === 11
+                              ? "Nov"
+                              : data.month === 12
+                                ? "Dec"
+                                : "";
       });
       var data = res.data.obj.map((data) => {
         sum = sum + data.numberOrder;
@@ -110,28 +112,28 @@ const Dashboard = () => {
         return data.month === 1
           ? "Jan"
           : data.month === 2
-          ? "Feb"
-          : data.month === 3
-          ? "Mar"
-          : data.month === 4
-          ? "Apr"
-          : data.month === 5
-          ? "May"
-          : data.month === 6
-          ? "Jun"
-          : data.month === 7
-          ? "Jul"
-          : data.month === 8
-          ? "Aug"
-          : data.month === 9
-          ? "Sep"
-          : data.month === 10
-          ? "Oct"
-          : data.month === 11
-          ? "Nov"
-          : data.month === 12
-          ? "Dec"
-          : "";
+            ? "Feb"
+            : data.month === 3
+              ? "Mar"
+              : data.month === 4
+                ? "Apr"
+                : data.month === 5
+                  ? "May"
+                  : data.month === 6
+                    ? "Jun"
+                    : data.month === 7
+                      ? "Jul"
+                      : data.month === 8
+                        ? "Aug"
+                        : data.month === 9
+                          ? "Sep"
+                          : data.month === 10
+                            ? "Oct"
+                            : data.month === 11
+                              ? "Nov"
+                              : data.month === 12
+                                ? "Dec"
+                                : "";
       });
       var data = res.data.obj.map((data) => {
         return data.numberBook;
@@ -148,6 +150,76 @@ const Dashboard = () => {
         ],
       });
     });
+  }, []);
+
+  useEffect(() => {
+    axios({
+      headers: {
+        Authorization: "Bearer " + getToken()
+      },
+      method: "get",
+      url: "http://localhost:5000/api/Admin/Top5Users",
+    }).then((res) => {
+      if (res.data.status) {
+        var labels = res.data.obj.map((data) => {
+          return data.user.fullName;
+        });
+        var data = res.data.obj.map((data) => {
+          return data.numberOfBook;
+        });
+        setTop3User({
+          labels: labels,
+          datasets: [
+            {
+              label: 'Top 5 Users',
+              backgroundColor: 'rgba(255,99,132,0.2)',
+              borderColor: 'rgba(255,99,132,1)',
+              borderWidth: 1,
+              hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+              hoverBorderColor: 'rgba(255,99,132,1)',
+              data: data,
+            },
+          ],
+        })
+      }
+    })
+  }, []);
+
+  useEffect(() => {
+    axios({
+      headers: {
+        Authorization: "Bearer " + getToken()
+      },
+      method: "get",
+      url: "http://localhost:5000/api/Admin/NumberAccountWithYear",
+    }).then((res) => {
+      if (res.data.status) {
+        console.log(res.data.obj)
+        var labels = res.data.obj.map((data) => {
+          return data.year;
+        });
+        var data = res.data.obj.map((data) => {
+          return data.numberAccount;
+        });
+        setNumberAccountYear({
+          labels: labels,
+          datasets: [
+            {
+              data: data,
+              backgroundColor: [
+                '#FF6384',
+                '#36A2EB',
+                '#FFCE56',
+              ],
+              hoverBackgroundColor: [
+                '#FF6384',
+                '#36A2EB',
+                '#FFCE56',
+              ],
+            }],
+        })
+      }
+    })
   }, []);
 
   const options = {
@@ -196,7 +268,6 @@ const Dashboard = () => {
   };
 
   const showChart1 = useMemo(() => {
-    console.log(data1);
     return <Line data={data1} options={options} />;
   }, [data1]);
   const showChart2 = useMemo(() => {
@@ -205,30 +276,61 @@ const Dashboard = () => {
   const showTotalOrder = useMemo(() => {
     return <div className="text-value">{totalOrder}</div>;
   }, [totalOrder]);
+  const showChart3 = useMemo(() => {
+    return (<Bar data={top3user} options={options} />)
+  }, [top3user])
+  const showChart4 = useMemo(() => {
+    return (<Pie data={numberAccountYear} />)
+  }, [numberAccountYear])
 
   return (
-    <Row>
-      <Col xs="12" md="6" lg="6">
-        <Card className="text-white bg-primary">
-          <CardBody className="pb-0">
-            <ButtonGroup className="float-right"></ButtonGroup>
-            {showTotalOrder}
-            <div>Order by months</div>
-          </CardBody>
-          <div className="chart-wrapper mx-3">{showChart1}</div>
-        </Card>
-      </Col>
-      <Col xs="12" md="6" lg="6">
-        <Card className="text-white bg-info">
-          <CardBody className="pb-0">
-            <ButtonGroup className="float-right"></ButtonGroup>
-            {showTotalOrder}
-            <div>Books Sold by months</div>
-          </CardBody>
-          <div className="chart-wrapper mx-3">{showChart2}</div>
-        </Card>
-      </Col>
-    </Row>
+    <React.Fragment>
+      <Row>
+        <Col xs="12" md="6" lg="6">
+          <Card className="text-white bg-primary">
+            <CardBody className="pb-0">
+              <ButtonGroup className="float-right"></ButtonGroup>
+              {showTotalOrder}
+              <div>Order by months</div>
+            </CardBody>
+            <div className="chart-wrapper mx-3">{showChart1}</div>
+          </Card>
+        </Col>
+        <Col xs="12" md="6" lg="6">
+          <Card className="text-white bg-info">
+            <CardBody className="pb-0">
+              <ButtonGroup className="float-right"></ButtonGroup>
+              {showTotalOrder}
+              <div>Books Sold by months</div>
+            </CardBody>
+            <div className="chart-wrapper mx-3">{showChart2}</div>
+          </Card>
+        </Col>
+      </Row>
+      <Row>
+        <Col xs="12" md="6" lg="6">
+          <Card>
+            <CardBody>
+              <div className="chart-wrapper">
+                {showChart3}
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col xs="12" md="6" lg="6">
+          <Card>
+            <CardBody>
+              <div className="chart-wrapper">
+                {showChart4}
+                <div style={{
+                  textAlign: "center"
+                }}>Number of account registerd every year</div>
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+    </React.Fragment>
   );
 };
 export default Dashboard;
