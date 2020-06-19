@@ -287,7 +287,7 @@ namespace BookStoreAPI.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpPost("ListReceipt")]
+        [HttpGet("ListReceipt")]
         public async Task<Response> GetListReceipt()
         {
             return await adminBal.GetListReceipt();

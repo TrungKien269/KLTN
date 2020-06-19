@@ -21,6 +21,7 @@
     "chart.js": "^2.9.3",
     "classnames": "^2.2.6",
     "core-js": "^3.6.5",
+    "d3": "^5.16.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "flag-icon-css": "^3.4.6",
@@ -31,6 +32,8 @@
     "react": "^16.13.1",
     "react-app-polyfill": "^1.0.6",
     "react-chartjs-2": "^2.9.0",
+    "react-csv-reader": "^3.0.6",
+    "react-csv-to-table": "0.0.4",
     "react-dom": "^16.13.1",
     "react-js-pagination": "^3.0.3",
     "react-number-format": "^4.4.1",
@@ -39,7 +42,8 @@
     "react-test-renderer": "^16.13.1",
     "reactstrap": "^8.4.1",
     "semantic-ui-react": "^0.88.2",
-    "simple-line-icons": "^2.4.1"
+    "simple-line-icons": "^2.4.1",
+    "sweetalert2": "^9.15.1"
   },
   "devDependencies": {
     "react-scripts": "^3.4.1"
