@@ -44,6 +44,7 @@ const Dashboard = () => {
   const [data1, setData1] = useState();
   const [dataBookSold, setDataBookSold] = useState();
   const [totalOrder, setTotalOrder] = useState();
+  const [totalBook, setTotalBook] = useState();
   const [top3user, setTop3User] = useState();
   const [numberAccountYear, setNumberAccountYear] = useState();
 
@@ -60,28 +61,28 @@ const Dashboard = () => {
         return data.month === 1
           ? "Jan"
           : data.month === 2
-            ? "Feb"
-            : data.month === 3
-              ? "Mar"
-              : data.month === 4
-                ? "Apr"
-                : data.month === 5
-                  ? "May"
-                  : data.month === 6
-                    ? "Jun"
-                    : data.month === 7
-                      ? "Jul"
-                      : data.month === 8
-                        ? "Aug"
-                        : data.month === 9
-                          ? "Sep"
-                          : data.month === 10
-                            ? "Oct"
-                            : data.month === 11
-                              ? "Nov"
-                              : data.month === 12
-                                ? "Dec"
-                                : "";
+          ? "Feb"
+          : data.month === 3
+          ? "Mar"
+          : data.month === 4
+          ? "Apr"
+          : data.month === 5
+          ? "May"
+          : data.month === 6
+          ? "Jun"
+          : data.month === 7
+          ? "Jul"
+          : data.month === 8
+          ? "Aug"
+          : data.month === 9
+          ? "Sep"
+          : data.month === 10
+          ? "Oct"
+          : data.month === 11
+          ? "Nov"
+          : data.month === 12
+          ? "Dec"
+          : "";
       });
       var data = res.data.obj.map((data) => {
         sum = sum + data.numberOrder;
@@ -108,36 +109,39 @@ const Dashboard = () => {
       method: "get",
       url: "http://localhost:5000/api/Admin/NumberBookSoldWithMonth",
     }).then((res) => {
+      var sum = 0;
       var months = res.data.obj.map((data) => {
         return data.month === 1
           ? "Jan"
           : data.month === 2
-            ? "Feb"
-            : data.month === 3
-              ? "Mar"
-              : data.month === 4
-                ? "Apr"
-                : data.month === 5
-                  ? "May"
-                  : data.month === 6
-                    ? "Jun"
-                    : data.month === 7
-                      ? "Jul"
-                      : data.month === 8
-                        ? "Aug"
-                        : data.month === 9
-                          ? "Sep"
-                          : data.month === 10
-                            ? "Oct"
-                            : data.month === 11
-                              ? "Nov"
-                              : data.month === 12
-                                ? "Dec"
-                                : "";
+          ? "Feb"
+          : data.month === 3
+          ? "Mar"
+          : data.month === 4
+          ? "Apr"
+          : data.month === 5
+          ? "May"
+          : data.month === 6
+          ? "Jun"
+          : data.month === 7
+          ? "Jul"
+          : data.month === 8
+          ? "Aug"
+          : data.month === 9
+          ? "Sep"
+          : data.month === 10
+          ? "Oct"
+          : data.month === 11
+          ? "Nov"
+          : data.month === 12
+          ? "Dec"
+          : "";
       });
       var data = res.data.obj.map((data) => {
+        sum = sum + data.numberBook;
         return data.numberBook;
       });
+      setTotalBook(sum);
       setDataBookSold({
         labels: months,
         datasets: [
@@ -155,7 +159,7 @@ const Dashboard = () => {
   useEffect(() => {
     axios({
       headers: {
-        Authorization: "Bearer " + getToken()
+        Authorization: "Bearer " + getToken(),
       },
       method: "get",
       url: "http://localhost:5000/api/Admin/Top5Users",
@@ -171,30 +175,30 @@ const Dashboard = () => {
           labels: labels,
           datasets: [
             {
-              label: 'Top 5 Users',
-              backgroundColor: 'rgba(255,99,132,0.2)',
-              borderColor: 'rgba(255,99,132,1)',
+              label: "Top 5 Users",
+              backgroundColor: "rgba(255,99,132,0.2)",
+              borderColor: "rgba(255,99,132,1)",
               borderWidth: 1,
-              hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-              hoverBorderColor: 'rgba(255,99,132,1)',
+              hoverBackgroundColor: "rgba(255,99,132,0.4)",
+              hoverBorderColor: "rgba(255,99,132,1)",
               data: data,
             },
           ],
-        })
+        });
       }
-    })
+    });
   }, []);
 
   useEffect(() => {
     axios({
       headers: {
-        Authorization: "Bearer " + getToken()
+        Authorization: "Bearer " + getToken(),
       },
       method: "get",
       url: "http://localhost:5000/api/Admin/NumberAccountWithYear",
     }).then((res) => {
       if (res.data.status) {
-        console.log(res.data.obj)
+        console.log(res.data.obj);
         var labels = res.data.obj.map((data) => {
           return data.year;
         });
@@ -206,20 +210,13 @@ const Dashboard = () => {
           datasets: [
             {
               data: data,
-              backgroundColor: [
-                '#FF6384',
-                '#36A2EB',
-                '#FFCE56',
-              ],
-              hoverBackgroundColor: [
-                '#FF6384',
-                '#36A2EB',
-                '#FFCE56',
-              ],
-            }],
-        })
+              backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+              hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+            },
+          ],
+        });
       }
-    })
+    });
   }, []);
 
   const options = {
@@ -276,12 +273,15 @@ const Dashboard = () => {
   const showTotalOrder = useMemo(() => {
     return <div className="text-value">{totalOrder}</div>;
   }, [totalOrder]);
+  const showTotalBook = useMemo(() => {
+    return <div className="text-value">{totalBook}</div>;
+  }, [totalBook]);
   const showChart3 = useMemo(() => {
-    return (<Bar data={top3user} options={options} />)
-  }, [top3user])
+    return <Bar data={top3user} options={options} />;
+  }, [top3user]);
   const showChart4 = useMemo(() => {
-    return (<Pie data={numberAccountYear} />)
-  }, [numberAccountYear])
+    return <Pie data={numberAccountYear} options={options} />;
+  }, [numberAccountYear]);
 
   return (
     <React.Fragment>
@@ -300,7 +300,7 @@ const Dashboard = () => {
           <Card className="text-white bg-info">
             <CardBody className="pb-0">
               <ButtonGroup className="float-right"></ButtonGroup>
-              {showTotalOrder}
+              {showTotalBook}
               <div>Books Sold by months</div>
             </CardBody>
             <div className="chart-wrapper mx-3">{showChart2}</div>
@@ -311,9 +311,7 @@ const Dashboard = () => {
         <Col xs="12" md="6" lg="6">
           <Card>
             <CardBody>
-              <div className="chart-wrapper">
-                {showChart3}
-              </div>
+              <div className="chart-wrapper">{showChart3}</div>
             </CardBody>
           </Card>
         </Col>
@@ -322,9 +320,13 @@ const Dashboard = () => {
             <CardBody>
               <div className="chart-wrapper">
                 {showChart4}
-                <div style={{
-                  textAlign: "center"
-                }}>Number of account registerd every year</div>
+                <div
+                  style={{
+                    textAlign: "center",
+                  }}
+                >
+                  Number of account registerd every year
+                </div>
               </div>
             </CardBody>
           </Card>
