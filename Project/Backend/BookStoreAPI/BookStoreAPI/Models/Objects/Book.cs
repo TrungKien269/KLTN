@@ -66,5 +66,7 @@ namespace BookStoreAPI.Models.Objects
         public virtual ICollection<WishList> WishList { get; set; }
         [InverseProperty("Book")]
         public ICollection<BookViewTracking> BookViewTracking { get; set; }
+        [InverseProperty("Book")]
+        public BookNumber BookNumber { get; set; }
     }
 }

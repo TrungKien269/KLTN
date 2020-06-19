@@ -13,11 +13,13 @@ namespace DemoCreateDataKLTN
         {
             try
             {
-                POrder pOrder = new POrder();
-                for (int i = 0; i < 5; i++)
-                {
-                    pOrder.Execute();
-                }
+                //POrder pOrder = new POrder();
+                //for (int i = 0; i < 5; i++)
+                //{
+                //    pOrder.Execute();
+                //}
+                PBookNumber pBookNumber = new PBookNumber();
+                pBookNumber.Execute();
             }
             catch (Exception e)
             {

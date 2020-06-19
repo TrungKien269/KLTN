@@ -25,6 +25,7 @@ namespace BookStoreAPI.BUS.Control
         private PromotionBAL promotionBal;
         private CRUDPromotionBAL crudPromotionBal;
         private CouponCodeBAL couponCodeBal;
+        private ImportReceiptBAL importReceiptBal;
 
         public AdminBAL()
         {
@@ -41,6 +42,7 @@ namespace BookStoreAPI.BUS.Control
             promotionBal = new PromotionBAL();
             crudPromotionBal = new CRUDPromotionBAL();
             couponCodeBal = new CouponCodeBAL();
+            importReceiptBal = new ImportReceiptBAL();
         }
 
         public async Task<Response> GetListProcessing()
@@ -193,6 +195,11 @@ namespace BookStoreAPI.BUS.Control
         public async Task<Response> SendCoupon(float value, int userID)
         {
             return await couponCodeBal.TransactionSendCoupon(value, userID);
+        }
+
+        public async Task<Response> GetListReceipt()
+        {
+            return await importReceiptBal.GetListReceipt();
         }
     }
 }

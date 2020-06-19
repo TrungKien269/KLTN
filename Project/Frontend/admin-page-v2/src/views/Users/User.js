@@ -3,9 +3,25 @@ import { Badge, Card, CardBody, CardHeader, Col, Row, Table } from "reactstrap";
 import { Button, Dropdown } from "semantic-ui-react";
 import Axios from "axios";
 import moment from "moment";
+import Swal from "sweetalert2";
 
 function User(props) {
   const [user, setUser] = useState(null);
+  const [coupon, setCoupon] = useState(null);
+
+  const couponOptions = [
+    { key: 5, value: 0.05, text: "5%" },
+    { key: 6, value: 0.06, text: "6%" },
+    { key: 7, value: 0.07, text: "7%" },
+    { key: 8, value: 0.08, text: "8%" },
+    { key: 9, value: 0.09, text: "9%" },
+    { key: 10, value: 0.1, text: "10%" },
+    { key: 11, value: 0.11, text: "11%" },
+    { key: 12, value: 0.12, text: "12%" },
+    { key: 13, value: 0.13, text: "13%" },
+    { key: 14, value: 0.14, text: "14%" },
+    { key: 15, value: 0.15, text: "15%" },
+  ];
 
   useEffect(() => {
     Axios({
@@ -26,8 +42,8 @@ function User(props) {
     return status === "Available"
       ? "success"
       : status === "Banned"
-      ? "danger"
-      : "primary";
+        ? "danger"
+        : "primary";
   };
 
   const showUserInfo = useMemo(() => {
@@ -84,10 +100,10 @@ function User(props) {
                 Ban user
               </Button>
             ) : (
-              <Button color="green" onClick={(id) => handleActivate(user.id)}>
-                Activate user
+                <Button color="green" onClick={(id) => handleActivate(user.id)}>
+                  Activate user
               </Button>
-            )}
+              )}
           </div>
         </tbody>
       );
@@ -142,6 +158,48 @@ function User(props) {
       });
   };
 
+  const handleSelectCoupon = (event, field) => {
+    let value = field.value;
+    setCoupon(value);
+  }
+
+  const SendCoupon = () => {
+    if (coupon) {
+      Axios({
+        headers: {
+          Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
+        },
+        method: "POST",
+        url: "http://localhost:5000/api/Admin/SendCouponEmail",
+        params: {
+          value: parseFloat(coupon),
+          userID: parseInt(props.match.params.id),
+        }
+      }).then((res) => {
+        if (res.data.status) {
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Coupon has been sent to this user"
+          });
+        }
+        else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: res.data.message,
+          });
+        }
+      }).catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: err,
+        });
+      })
+    }
+  }
+
   return (
     <div className="animated fadeIn">
       <Row>
@@ -159,10 +217,12 @@ function User(props) {
                 <Dropdown
                   className="m-1"
                   placeholder="State"
-                  search
+                  options={couponOptions}
                   selection
+                  value={coupon ? coupon : ""}
+                  onChange={(e, data) => handleSelectCoupon(e, data)}
                 />
-                <Button size="small" color="green">
+                <Button size="small" color="green"  onClick={SendCoupon}>
                   Send
                 </Button>
               </div>
