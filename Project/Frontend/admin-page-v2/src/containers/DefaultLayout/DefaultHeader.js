@@ -71,7 +71,7 @@ class DefaultHeader extends Component {
           </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
-          <NavItem className="d-md-down-none">
+          {/* <NavItem className="d-md-down-none">
             <NavLink to="#" className="nav-link">
               <i className="icon-bell"></i>
               <Badge pill color="danger">
@@ -88,7 +88,7 @@ class DefaultHeader extends Component {
             <NavLink to="#" className="nav-link">
               <i className="icon-location-pin"></i>
             </NavLink>
-          </NavItem>
+          </NavItem> */}
           <UncontrolledDropdown nav direction="down">
             <DropdownToggle nav>
               <img
