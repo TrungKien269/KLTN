@@ -193,6 +193,7 @@ const PromotionForm = (props) => {
           </Form>
         </CardBody>
       </Card>
+    
     );
   }, [bookOptions]);
 

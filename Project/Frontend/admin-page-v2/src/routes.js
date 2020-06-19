@@ -26,6 +26,7 @@ const Buttons = React.lazy(() => import("./views/Buttons/Buttons"));
 const Charts = React.lazy(() => import("./views/Charts"));
 const Dashboard = React.lazy(() => import("./views/Dashboard"));
 const BookManagement = React.lazy(() => import("./views/BookManagement"));
+const ImportCsv = React.lazy(() => import("./views/BookManagement/ImportCsv"));
 const OrderManagement = React.lazy(() =>
   import("./views/OrderManagement/OrderManagement")
 );
@@ -61,6 +62,11 @@ const routes = [
     path: "/bookmanagement",
     name: "Book Management",
     component: BookManagement,
+  },
+  {
+    path: "/import",
+    name: "Import Books",
+    component: ImportCsv,
   },
   {
     path: "/ordermanagement",
