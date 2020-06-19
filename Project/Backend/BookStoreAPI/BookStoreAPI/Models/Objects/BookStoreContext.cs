@@ -52,6 +52,8 @@ namespace BookStoreAPI.Models.Objects
         public virtual DbSet<EbookPayment> EbookPayment { get; set; }
         public virtual DbSet<EbookRentalPolicy> EbookRentalPolicy { get; set; }
         public virtual DbSet<UserEbook> UserEbook { get; set; }
+        public virtual DbSet<BookNumber> BookNumber { get; set; }
+        public virtual DbSet<ImportReceipt> ImportReceipt { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -445,6 +447,22 @@ namespace BookStoreAPI.Models.Objects
                     .HasForeignKey<UserEbook>(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserEBook_User");
+            });
+
+            modelBuilder.Entity<BookNumber>(entity =>
+            {
+                entity.Property(e => e.BookId).ValueGeneratedNever();
+
+                entity.HasOne(d => d.Book)
+                    .WithOne(p => p.BookNumber)
+                    .HasForeignKey<BookNumber>(d => d.BookId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookNumber_Book");
+            });
+
+            modelBuilder.Entity<ImportReceipt>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
             });
         }
     }

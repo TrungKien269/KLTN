@@ -285,5 +285,20 @@ namespace BookStoreAPI.Controllers
         {
             return await adminBal.SendCoupon(value, userID);
         }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPost("ListReceipt")]
+        public async Task<Response> GetListReceipt()
+        {
+            return await adminBal.GetListReceipt();
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPost("ImportReceipt")]
+        public async Task<Response> Import(ImportReceipt receipt, IFormFile file)
+        {
+            var filePath = await ImportReceiptHelper.UploadFile(receipt, file);
+            return await ImportReceiptHelper.InsertBookNumber(filePath, receipt);
+        }
     }
 }

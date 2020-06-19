@@ -26,7 +26,7 @@ namespace BookStoreAPI.BUS.Logic
             {
                 var list = await context.Book.Where(x =>
                         x.OriginalPrice > 50000 && x.OriginalPrice < 130000 && x.Status.Equals("Available"))
-                    .OrderBy(x => x.Id)
+                    .Include(x => x.BookNumber).OrderBy(x => x.Id)
                     .Take(30).Skip(10).ToListAsync();
                 return new Response("Success", true, 0, list);
             }
@@ -42,7 +42,7 @@ namespace BookStoreAPI.BUS.Logic
             {
                 var list = await context.Book.Where(x =>
                         x.OriginalPrice > 50000 && x.OriginalPrice < 130000 && x.Status.Equals("Available"))
-                    .OrderBy(x => x.Id)
+                    .Include(x => x.BookNumber).OrderBy(x => x.Id)
                     .Take(30).Skip(10).ToListAsync();
                 return new Response("Success", true, 0, list);
             }
@@ -57,7 +57,7 @@ namespace BookStoreAPI.BUS.Logic
             try
             {
                 var list = await context.Book.Include(x => x.AuthorBook).ThenInclude(x => x.Author)
-                    .Include(x => x.BookCategory).ThenInclude(x => x.Cate)                    
+                    .Include(x => x.BookCategory).ThenInclude(x => x.Cate).Include(x => x.BookNumber)
                     .Where(x => x.Status.Equals("Available"))
                     .OrderByDescending(x => x.CurrentPrice)
                     .Take(3).ToListAsync();
@@ -74,7 +74,7 @@ namespace BookStoreAPI.BUS.Logic
             try
             {
                 var list = await context.Book.Include(x => x.AuthorBook).ThenInclude(x => x.Author)
-                    .Include(x => x.BookCategory).ThenInclude(x => x.Cate)
+                    .Include(x => x.BookCategory).ThenInclude(x => x.Cate).Include(x => x.BookNumber)
                     .Where(x => x.Status.Equals("Available"))
                     .OrderBy(x => x.CurrentPrice)
                     .Take(6).ToListAsync();
@@ -432,6 +432,7 @@ namespace BookStoreAPI.BUS.Logic
                     .Include(x => x.FormBook).ThenInclude(x => x.Form)
                     .Include(x => x.SupplierBook).ThenInclude(x => x.Supplier)
                     .Include(x => x.BookCategory).ThenInclude(x => x.Cate)
+                    .Include(x => x.BookNumber)
                     .Where(x => x.Id.Equals(id) && x.Status.Equals("Available")).FirstOrDefaultAsync();
                 if (book is null)
                 {
@@ -499,7 +500,7 @@ namespace BookStoreAPI.BUS.Logic
             try
             {
                 var books = new List<Book>();
-                books = await context.Book.Include(x => x.PublisherBook).ThenInclude(x => x.Publisher)
+                books = await context.Book.Include(x => x.PublisherBook).ThenInclude(x => x.Publisher).Include(x => x.BookNumber)
                     .Where(x => x.BookCategory.All(y => y.Cate.Cate.Name.Equals(category)) &&
                                                  x.Status.Equals("Available"))
                     .OrderByDescending(x => x.CurrentPrice).ToListAsync();
@@ -516,7 +517,7 @@ namespace BookStoreAPI.BUS.Logic
             try
             {
                 var books = new List<Book>();
-                books = await context.Book.Include(x => x.PublisherBook).ThenInclude(x => x.Publisher)
+                books = await context.Book.Include(x => x.PublisherBook).ThenInclude(x => x.Publisher).Include(x => x.BookNumber)
                     .Where(x => x.BookCategory.All(y => y.Cate.Name.Equals(subcategory)) &&
                                                  x.Status.Equals("Available"))
                     .OrderByDescending(x => x.CurrentPrice).ToListAsync();
