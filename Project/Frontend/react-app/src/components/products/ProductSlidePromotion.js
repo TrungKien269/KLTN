@@ -5,22 +5,21 @@ import ProductCard from "./ProductCard";
 import NumberFormat from "react-number-format";
 import { Dimmer, Loader, Image, Segment } from "semantic-ui-react";
 import Axios from "axios";
-import moment from 'moment';
-import TimeCounting from "../utilities/TimeCounter"
+import moment from "moment";
+import TimeCounting from "../utilities/TimeCounter";
 
 function ProductSlidePromotion(props) {
-
   const [promotion, setPromotion] = useState();
 
   useEffect(() => {
     Axios({
       method: "get",
-      url: "http://localhost:5000/api/Main/ListCurrentPromotion"
+      url: "http://localhost:5000/api/Main/ListCurrentPromotion",
     }).then((res) => {
       if (res.data.status) {
         setPromotion(res.data.obj);
       }
-    })
+    });
   }, []);
 
   const ShowPromotionBooks = useMemo(() => {
@@ -51,10 +50,9 @@ function ProductSlidePromotion(props) {
             }
             sale={parseFloat(promo.discount) * 100}
           />
-        )
+        );
       });
-    }
-    else {
+    } else {
       return <Loader active inline="centered" size="huge" />;
     }
     return result;
@@ -62,11 +60,9 @@ function ProductSlidePromotion(props) {
 
   const ShowTimeCounting = useMemo(() => {
     if (promotion) {
-      return (
-        <TimeCounting endedDate={promotion[0].endedDate} />
-      )
+      return <TimeCounting endedDate={promotion[0].endedDate} />;
     }
-  }, [promotion])
+  }, [promotion]);
 
   const options = {
     nav: true,
@@ -103,7 +99,7 @@ function ProductSlidePromotion(props) {
       {ShowTimeCounting}
       <OwlCarousel options={options}>{ShowPromotionBooks}</OwlCarousel>
     </React.Fragment>
-  )
+  );
 }
 
-export default ProductSlidePromotion
+export default ProductSlidePromotion;

@@ -16,15 +16,15 @@ function SpecialItemSlide(props) {
         setData(res.data.obj);
       }
     });
-  }, [])
+  }, []);
 
-  const showFeatureBook = (data) => {
+  const showFeatureBook = useMemo(() => {
     let result = "";
-    let authors = "";
-    if (data && data.length > 0) {
+    if (data) {
       result = data.map((book) => {
         return (
           <SpecialItemCard
+            className="item"
             key={book.id}
             id={book.id}
             image={book.image}
@@ -43,7 +43,7 @@ function SpecialItemSlide(props) {
       });
     }
     return result;
-  };
+  }, [data]);
 
   const options = {
     nav: false,
@@ -51,15 +51,11 @@ function SpecialItemSlide(props) {
     center: true,
     margin: 0,
     loop: true,
-    autoWidth: false,
     dots: false,
+    autoWidth: false,
   };
 
-  return (
-    <OwlCarousel options={options}>
-      {showFeatureBook(data)}
-    </OwlCarousel>
-  );
+  return <OwlCarousel options={options}>{showFeatureBook}</OwlCarousel>;
 }
 
 export default SpecialItemSlide;

@@ -15,8 +15,8 @@ import OrderStatus from "./components/order/OrderStatus";
 import ProceedCheckout from "./components/order/ProceedCheckout";
 import "lightgallery.js/dist/css/lightgallery.css";
 import Chatbot from "./components/Chatbot";
-import EBookRented from './pages/index/EBookRented';
-import ReadEBook from './pages//index/ReadEBook';
+import EBookRented from "./pages/index/EBookRented";
+import ReadEBook from "./pages//index/ReadEBook";
 
 const showPage = (Routers) => {
   var result = null;
