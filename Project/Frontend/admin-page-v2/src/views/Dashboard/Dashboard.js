@@ -45,7 +45,7 @@ const Dashboard = () => {
   const [dataBookSold, setDataBookSold] = useState();
   const [totalOrder, setTotalOrder] = useState();
   const [totalBook, setTotalBook] = useState();
-  const [top5user, setTop5User] = useState();
+  const [top3user, setTop3User] = useState();
   const [numberAccountYear, setNumberAccountYear] = useState();
 
   useEffect(() => {
@@ -164,7 +164,6 @@ const Dashboard = () => {
       method: "get",
       url: "http://localhost:5000/api/Admin/Top5Users",
     }).then((res) => {
-      console.log(res.data.obj);
       if (res.data.status) {
         var labels = res.data.obj.map((data) => {
           return data.user.fullName;
@@ -172,8 +171,7 @@ const Dashboard = () => {
         var data = res.data.obj.map((data) => {
           return data.numberOfBook;
         });
-
-        setTop5User({
+        setTop3User({
           labels: labels,
           datasets: [
             {
@@ -279,8 +277,8 @@ const Dashboard = () => {
     return <div className="text-value">{totalBook}</div>;
   }, [totalBook]);
   const showChart3 = useMemo(() => {
-    return <Bar data={top5user} options={options} />;
-  }, [top5user]);
+    return <Bar data={top3user} options={options} />;
+  }, [top3user]);
   const showChart4 = useMemo(() => {
     return <Pie data={numberAccountYear} options={options} />;
   }, [numberAccountYear]);

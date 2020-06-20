@@ -4,8 +4,10 @@ import { Link, withRouter } from "react-router-dom";
 import axios from "axios";
 import { getToken } from "../../Utils/Commons";
 import Swal from "sweetalert2";
-import { Modal } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
+import { Button, Modal, Container } from "react-bootstrap";
+import NumberFormat from "react-number-format";
+import { useTranslation } from 'react-i18next';
+
 import ProductRatingCard from "./ProductRatingCard";
 
 const ProductCard = (props) => {
@@ -17,26 +19,27 @@ const ProductCard = (props) => {
 
   const ShowSaleOff = () => {
     if (props.sale) {
-      return <div class="badge badge__sale">{props.sale}%</div>;
+      return (
+        <div class="badge badge__sale">{props.sale}%</div>
+      )
     }
-  };
+  }
 
   const ShowPrice = () => {
     if (props.originalPrice) {
       return (
         <div>
-          <p className="card__book-price">
-            <del>
-              <small>{props.originalPrice}</small>
-            </del>
-          </p>
+          <p className="card__book-price"><del><small>{props.originalPrice}</small></del></p>
           <p className="card__book-price">{props.price}</p>
         </div>
-      );
-    } else {
-      return <p className="card__book-price">{props.price}</p>;
+      )
     }
-  };
+    else {
+      return (
+        <p className="card__book-price">{props.price}</p>
+      )
+    }
+  }
 
   const addToCart = (event) => {
     event.preventDefault();
@@ -122,10 +125,9 @@ const ProductCard = (props) => {
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
       </Modal>
-
       <Link to={`/book/${props.id}`} title={props.name}>
         <div className="card display-on-hover">
-          {ShowSaleOff}
+          {ShowSaleOff()}
           <img
             className="card-img-top img-contain img-contain-25"
             src={props.image}
@@ -134,20 +136,20 @@ const ProductCard = (props) => {
 
           <div className="card-body">
             <h5 className="card__book-title">{props.name}</h5>
+
             <ProductRatingCard id={props.id} />
-            {ShowPrice}
+
+            {ShowPrice()}
+
             <button
               className="btn btn--rounded btn-fw btn--blue item-display"
               onClick={addToCart}
             >
-              {t("Add to cart")}
+              {t('Add to cart')}
             </button>
           </div>
           <div className="badge badge__utilities item-display">
-            <span
-              className="badge__utilities-blue"
-              onClick={(e) => addToWishList(e)}
-            >
+            <span className="badge__utilities-blue" onClick={addToWishList}>
               <i className="fas fa-heart" />
             </span>
 

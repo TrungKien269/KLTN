@@ -1,162 +1,49 @@
 .App {
-    text-align: center;
+  text-align: center;
 }
 
 .App-logo {
-    height: 40vmin;
-    pointer-events: none;
+  height: 40vmin;
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
 }
 
 .App-header {
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
 
 .App-link {
-    color: #61dafb;
+  color: #61dafb;
 }
 
 @keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 body.light-mode {
-    background-color: #fff;
-    color: #333;
-    transition: background-color 0.3s ease;
+  background-color: #fff;
+  color: #333;
+  transition: background-color 0.3s ease;
 }
-
 body.dark-mode {
-    background-color: #1a1919;
-    color: #999;
-    transition: background-color 0.3s ease;
-}
-
-.select-package-form {
-    background-color: rgba(27, 139, 204, 0.1);
-    margin: 1.5rem;
-    padding: 1.2rem;
-    border-radius: 5px;
-    font-size: 1.4rem;
-}
-
-.select-package-form input[type="radio"] {
-    display: none;
-}
-
-.select-package-form label {
-    font-size: 1.5rem;
-    font-weight: 500;
-    position: relative;
-    margin: 0;
-    line-height: 20px;
-    padding: 2rem 0 2rem 0;
-    width: 100%;
-    border-radius: 5px;
-    text-align: center;
-    margin-bottom: 2rem;
-    transition: all 1s;
-}
-
-.select-package-form label:hover {
-    cursor: pointer;
-    background: linear-gradient(
-        36deg,
-        rgba(0, 212, 255, 0.5) 0%,
-        rgba(27, 139, 204, 0.5) 50%,
-        rgba(2, 0, 36, 0.5) 100%
-    );
-}
-
-.select-package-form input[type="radio"]:checked ~ label {
-    background: linear-gradient(
-        36deg,
-        rgba(0, 212, 255, 0.7) 0%,
-        rgba(27, 139, 204, 0.7) 50%,
-        rgba(2, 0, 36, 0.7) 100%
-    );
-}
-
-.payment-form {
-    background-color: rgba(27, 139, 204, 0.1);
-    margin: 1.5rem;
-    /* padding: 1.2rem; */
-    padding-bottom: 0;
-    border-radius: 5px;
-}
-
-.payment-form input {
-    font-size: 1.4rem;
-    border: none;
-    border-radius: 5px;
-}
-
-.payment-form select {
-    font-size: 1.4rem;
-    border: none;
-    border-radius: 5px;
-    height: 1 !important;
-}
-
-.payment-form label {
-    font-weight: 500;
-    font-size: 1rem;
-}
-
-.payment-form svg {
-    font-size: 2rem;
-}
-
-.btn-payment {
-    padding: 1rem 2.4rem;
-    color: #fbd46d;
-    font-weight: 600;
-    font-size: 1.4rem;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 5% 50%);
-    background-color: #1b8bcc;
-    box-shadow: none;
-}
-
-.btn-reset {
-    padding: 1rem 2.4rem;
-    color: #1b8bcc;
-    font-weight: 600;
-    font-size: 1.4rem;
-    clip-path: polygon(95% 0, 100% 50%, 95% 100%, 0 100%, 0 0);
-    background-color: #fbd46d;
-    box-shadow: none;
-}
-
-.w-10 {
-    width: 10%;
-}
-.coupon-code-input {
-    font-size: 1.4rem;
-    border: 0.5px solid #333;
-    border-radius: 3px;
-    padding: 0.8rem 0.5rem;
-}
-.ui.attached.tabular.menu {
-    font-size: 1.4rem;
-}
-.form-control {
-    height: 100% !important;
-    padding: 1.2rem 1rem !important;
+  background-color: #1a1919;
+  color: #999;
+  transition: background-color 0.3s ease;
 }

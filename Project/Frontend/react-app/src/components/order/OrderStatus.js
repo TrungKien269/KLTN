@@ -4,7 +4,7 @@ import { getToken } from "../../Utils/Commons";
 import NumberFormat from "react-number-format";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 const OrderStatus = () => {
   const [processingOrder, setProcessingOrder] = useState("");
@@ -217,7 +217,7 @@ const OrderStatus = () => {
               <table>
                 <thead>
                   <tr>
-                    <th className="item">{t("Book")}</th>
+                    <th className="item">{t('Book')}</th>
                     <th className="qty">Quantity</th>
                     <th className="price">Price</th>
                     <th className="total-price">Total</th>
@@ -236,115 +236,112 @@ const OrderStatus = () => {
     return orderBlock;
   }, [processingOrder]);
 
-  const listOrderDelivering = useMemo(
-    (tr) => {
-      let orderItem = [];
-      let orderBlock = [];
-      if (deliveringOrder && deliveringOrder.length > 0) {
-        orderBlock = deliveringOrder.map((order) => {
-          let x = order.orderDetail;
-          orderItem = x.map((item) => {
-            return (
-              <tr>
-                <td className="item-name">
-                  <div className="item-img">
-                    <Link to={`/book/${item.bookId}`} title={item.book.name}>
-                      <img
-                        src={item.book.image}
-                        className="img-contain img-cover-10"
-                        alt=""
-                      />
-                    </Link>
-                  </div>
-                  <div className="item-title">
-                    <Link to={`/book/${item.bookId}`}>{item.book.name}</Link>
-                  </div>
-                </td>
-                <td className="item-qty">
-                  <div className="quantity buttons_added d-flex justify-content-center">
-                    <input
-                      type="text"
-                      step={1}
-                      min={1}
-                      max
-                      name="quantity"
-                      defaultValue={item.quantity}
-                      title="Qty"
-                      className="input-text qty text h-100"
-                      size={4}
-                      pattern
-                      inputMode
-                      disabled
-                    />
-                  </div>
-                </td>
-                <td className="item-price">
-                  <p>
-                    {
-                      <NumberFormat
-                        displayType="text"
-                        value={item.book.originalPrice}
-                        thousandSeparator={true}
-                        suffix=" VND"
-                      ></NumberFormat>
-                    }
-                  </p>
-                </td>
-                <td className="item-total">
-                  <p>
-                    <NumberFormat
-                      displayType="text"
-                      value={item.book.originalPrice * item.quantity}
-                      thousandSeparator={true}
-                      suffix=" VND"
-                    ></NumberFormat>
-                  </p>
-                </td>
-                <td className="action"></td>
-              </tr>
-            );
-          });
+  const listOrderDelivering = useMemo((tr) => {
+    let orderItem = [];
+    let orderBlock = [];
+    if (deliveringOrder && deliveringOrder.length > 0) {
+      orderBlock = deliveringOrder.map((order) => {
+        let x = order.orderDetail;
+        orderItem = x.map((item) => {
           return (
-            <div className="order-block">
-              <div className="title-wrapper">
-                <h2>Date: {order.createdDate.slice(0, 10)}</h2>
-                <h2>
-                  Total:{" "}
+            <tr>
+              <td className="item-name">
+                <div className="item-img">
+                  <Link to={`/book/${item.bookId}`} title={item.book.name}>
+                    <img
+                      src={item.book.image}
+                      className="img-contain img-cover-10"
+                      alt=""
+                    />
+                  </Link>
+                </div>
+                <div className="item-title">
+                  <Link to={`/book/${item.bookId}`}>{item.book.name}</Link>
+                </div>
+              </td>
+              <td className="item-qty">
+                <div className="quantity buttons_added d-flex justify-content-center">
+                  <input
+                    type="text"
+                    step={1}
+                    min={1}
+                    max
+                    name="quantity"
+                    defaultValue={item.quantity}
+                    title="Qty"
+                    className="input-text qty text h-100"
+                    size={4}
+                    pattern
+                    inputMode
+                    disabled
+                  />
+                </div>
+              </td>
+              <td className="item-price">
+                <p>
                   {
                     <NumberFormat
                       displayType="text"
-                      value={order.total}
+                      value={item.book.originalPrice}
                       thousandSeparator={true}
                       suffix=" VND"
                     ></NumberFormat>
                   }
-                </h2>
-                <p>Amount: {order.orderDetail.length}</p>
-              </div>
-              <div className="cart-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th className="item">Book</th>
-                      <th className="qty">Quantity</th>
-                      <th className="price">Price</th>
-                      <th className="total-price">Total</th>
-                      <th className="remove">&nbsp;</th>
-                    </tr>
-                  </thead>
-                  <tbody>{orderItem}</tbody>
-                </table>
-              </div>
-            </div>
+                </p>
+              </td>
+              <td className="item-total">
+                <p>
+                  <NumberFormat
+                    displayType="text"
+                    value={item.book.originalPrice * item.quantity}
+                    thousandSeparator={true}
+                    suffix=" VND"
+                  ></NumberFormat>
+                </p>
+              </td>
+              <td className="action"></td>
+            </tr>
           );
         });
-      } else {
-        orderBlock.push(<h2>Nothing here</h2>);
-      }
-      return orderBlock;
-    },
-    [deliveringOrder]
-  );
+        return (
+          <div className="order-block">
+            <div className="title-wrapper">
+              <h2>Date: {order.createdDate.slice(0, 10)}</h2>
+              <h2>
+                Total:{" "}
+                {
+                  <NumberFormat
+                    displayType="text"
+                    value={order.total}
+                    thousandSeparator={true}
+                    suffix=" VND"
+                  ></NumberFormat>
+                }
+              </h2>
+              <p>Amount: {order.orderDetail.length}</p>
+            </div>
+            <div className="cart-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th className="item">Book</th>
+                    <th className="qty">Quantity</th>
+                    <th className="price">Price</th>
+                    <th className="total-price">Total</th>
+                    <th className="remove">&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>{orderItem}</tbody>
+              </table>
+            </div>
+          </div>
+        );
+      });
+    } else {
+      orderBlock.push(<h2>Nothing here</h2>);
+    }
+    return orderBlock;
+  }, [deliveringOrder]);
 
   const listOrderDelivered = useMemo(() => {
     let orderBlock = [];
@@ -563,28 +560,28 @@ const OrderStatus = () => {
   return (
     <section className="section__order-status">
       <div className="cart-title">
-        <h2>{t("Orders")}</h2>
+        <h2>{t('Orders')}</h2>
       </div>
       <div className="container">
         <ul className="nav nav-tabs nav-order" id="active-exp">
           <li className="">
             <a data-toggle="tab" href="#processing">
-              {t("Processing")}
+              {t('Processing')}
             </a>
           </li>
           <li>
             <a data-toggle="tab" href="#delivering">
-              {t("Delivering")}
+              {t('Delivering')}
             </a>
           </li>
           <li>
             <a data-toggle="tab" href="#delivered">
-              {t("Delivered")}
+              {t('Delivered')}
             </a>
           </li>
           <li>
             <a data-toggle="tab" href="#cancel">
-              {t("Cancelled")}
+              {t('Cancelled')}
             </a>
           </li>
         </ul>

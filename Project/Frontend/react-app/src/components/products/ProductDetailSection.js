@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import axios from "axios";
 import NumberFormat from "react-number-format";
 import Swal from "sweetalert2";
@@ -23,12 +23,13 @@ function ProductDetailSection(props) {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
     axios({
       method: "get",
       url: `http://localhost:5000/api/BookInfo/RelatedBook/${props.bookInfo}`,
     }).then((res) => {
       if (res.data.status) {
-        setSimilarityData((prev) => [...res.data.obj]);
+        setSimilarityData(prev => [...res.data.obj]);
       }
     });
 
@@ -44,27 +45,30 @@ function ProductDetailSection(props) {
       setAuthors(results);
     });
 
-    if (getToken()) {
+    if(getToken()){
       axios({
         headers: {
-          Authorization: "Bearer " + getToken(),
+          Authorization: "Bearer " + getToken()
         },
         method: "post",
         url: "http://localhost:5000/api/Main/SaveTracking",
         params: {
-          bookID: props.bookInfo,
-        },
-      }).then((res) => {});
+          bookID: props.bookInfo
+        }
+      }).then((res) => {
+      })
     }
+
   }, []);
 
   useEffect(() => {
+
     axios({
       method: "get",
       url: `http://localhost:5000/api/BookInfo/RelatedBook/${props.bookInfo}`,
     }).then((res) => {
       if (res.data.status) {
-        setSimilarityData((prev) => [...res.data.obj]);
+        setSimilarityData(prev => [...res.data.obj]);
       }
     });
 
@@ -80,18 +84,20 @@ function ProductDetailSection(props) {
       setAuthors(results);
     });
 
-    if (getToken()) {
+    if(getToken()){
       axios({
         headers: {
-          Authorization: "Bearer " + getToken(),
+          Authorization: "Bearer " + getToken()
         },
         method: "post",
         url: "http://localhost:5000/api/Main/SaveTracking",
         params: {
-          bookID: props.bookInfo,
-        },
-      }).then((res) => {});
+          bookID: props.bookInfo
+        }
+      }).then((res) => {
+      })
     }
+
   }, [props.bookInfo]);
 
   const ShowPriceBook = (originalPrice, currentPrice) => {
@@ -104,8 +110,8 @@ function ProductDetailSection(props) {
                 value={originalPrice}
                 displayType={"text"}
                 thousandSeparator={true}
-                suffix={" VND"}
-              ></NumberFormat>
+                suffix={" VND"}>
+              </NumberFormat>
             </del>
           </h4>
           <h2>
@@ -113,25 +119,26 @@ function ProductDetailSection(props) {
               value={currentPrice}
               displayType={"text"}
               thousandSeparator={true}
-              suffix={" VND"}
+              suffix={" VND"} 
               style={{
-                color: "red",
-              }}
-            ></NumberFormat>
+                color: "red"
+              }}>
+            </NumberFormat>
           </h2>
         </div>
-      );
-    } else {
+      )
+    }
+    else {
       return (
         <h2>
           <NumberFormat
             value={currentPrice}
             displayType={"text"}
             thousandSeparator={true}
-            suffix={" VND"}
-          ></NumberFormat>
+            suffix={" VND"}>
+          </NumberFormat>
         </h2>
-      );
+      )
     }
   };
 
@@ -165,7 +172,6 @@ function ProductDetailSection(props) {
     nav: true,
     rewind: true,
     autoplay: true,
-    dots: false,
     navText: [
       "<span aria-label='Previous'>‹</span>",
       "<span aria-label='Next'>›</span>",
@@ -190,9 +196,7 @@ function ProductDetailSection(props) {
                 </Link>
               </div>
               <div className="col-md">
-                <Link to={`/book/${book.id}`} title={book.name}>
-                  {book.name}
-                </Link>
+                <Link to={`/book/${book.id}`} title={book.name}>{book.name}</Link>
                 <p className="card__book-price">
                   <NumberFormat
                     value={book.currentPrice}
@@ -206,7 +210,7 @@ function ProductDetailSection(props) {
           </li>
         );
       });
-    }
+    };
     return results;
   }, [similarityRef.current]);
 
@@ -295,7 +299,7 @@ function ProductDetailSection(props) {
             <div className="row">
               <div className="col-md">
                 <div className="sidebar-block">
-                  <h2>{t("Related Books")}</h2>
+                  <h2>{t('Related Books')}</h2>
                   <ul className="list-unstyled sidebar-list">
                     {/* show related book */}
                     {showRelatedBooks}
@@ -312,11 +316,7 @@ function ProductDetailSection(props) {
                       <OwlCarousel options={options}>
                         <div style={{ display: "flex", alignItems: "center" }}>
                           {" "}
-                          <PhotoItem
-                            key={data.bookId}
-                            image={data.image}
-                            group="group1"
-                          />
+                          <PhotoItem key={data.bookId} image={data.image} group="group1" />
                         </div>
                         {showSlideBooks}
                       </OwlCarousel>
@@ -328,7 +328,8 @@ function ProductDetailSection(props) {
                     </div>
                     <ProductRating id={props.bookInfo} />
                     <div className="special-author text-dark">
-                      {t("Authors")}:{authors}
+                      {t('Authors')}:
+                      {authors}
                     </div>
                     {ShowPriceBook(data.originalPrice, data.currentPrice)}
                     <div

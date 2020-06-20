@@ -4,8 +4,8 @@ import { getToken } from "../../Utils/Commons";
 import NumberFormat from "react-number-format";
 import Swal from "sweetalert2";
 import { withRouter, Link } from "react-router-dom";
-import data from "../../data/local.json";
-import { useTranslation } from "react-i18next";
+import data from '../../data/local.json';
+import { useTranslation } from 'react-i18next';
 import { PayPalButton } from "react-paypal-button-v2";
 import { CalculateDistance } from "../../Utils/MapDistance";
 import { GetShippingFee } from "../../Utils/ShippingFee";
@@ -39,17 +39,17 @@ function PayPalCheckout(props) {
     setShippingFee(25000);
     Axios({
       method: "get",
-      url: "http://localhost:5000/api/ProceedOrder/USDCurrency",
+      url: "http://localhost:5000/api/ProceedOrder/USDCurrency"
     }).then((res) => {
       if (res.data.status) {
-        setUSDCurrency(parseFloat(res.data.obj));
+        setUSDCurrency(parseFloat(res.data.obj))
       }
-    });
+    })
   }, []);
 
   useEffect(() => {
     if (props.userInfo) {
-      setUserInfor(props.userInfo);
+      setUserInfor(props.userInfo)
       setFullName(props.userInfo.fullName);
       setPhoneNumber(props.userInfo.phoneNumber);
       setAddress(props.userInfo.address);
@@ -63,11 +63,11 @@ function PayPalCheckout(props) {
   }, [props.cartBook]);
 
   useEffect(() => {
-    if (props.discount) {
+    if(props.discount){
       setDiscount(parseFloat(props.discount));
     }
-    console.log(props.discount);
-  }, [props.discount]);
+    console.log(props.discount)
+  }, [props.discount])
 
   proceedOrder = useMemo(() => {
     if (cartBook) {
@@ -92,7 +92,9 @@ function PayPalCheckout(props) {
     let cityItems = [];
     if (cities && cities.length > 0) {
       cityItems = cities.map((city) => {
-        return <option value={city.id}>{city.name}</option>;
+        return (
+          <option value={city.id}>{city.name}</option>
+        )
       });
     }
     return cityItems;
@@ -100,9 +102,9 @@ function PayPalCheckout(props) {
 
   const SelectCity = (e) => {
     if (e.target.value) {
-      setCity(cities[parseInt(e.target.value) - 1].name);
+      setCity(cities[parseInt(e.target.value) - 1].name)
     }
-  };
+  }
 
   const handleNameChange = (event) => {
     setFullName(event.target.value);
@@ -115,17 +117,15 @@ function PayPalCheckout(props) {
   const handleAdressChange = (event) => {
     var value = event.target.value;
     if (timeTyping) {
-      clearTimeout(timeTyping);
+      clearTimeout(timeTyping)
     }
-    setTimeTyping(
-      setTimeout(() => {
-        setAddress(value);
-      }, 1500)
-    );
+    setTimeTyping(setTimeout(() => {
+      setAddress(value);
+    }, 1500));
   };
 
   useEffect(() => {
-    if (city != "" && address != "") {
+    if(city != "" && address != ""){
       var fullAddress = address + " " + city;
       CalculateDistance(fullAddress).then((res) => {
         setShippingFee(parseInt(GetShippingFee(res)));
@@ -135,241 +135,83 @@ function PayPalCheckout(props) {
   }, [address, city]);
 
   const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
+    setEmail(event.target.value)
+  }
 
   const SettingPayPal = () => {
     var itemArr = [];
     var cartBooks = cartBook.cartBook;
     var total = 0;
-    var shippingFeeInfo = (parseInt(shippingFee) * usdCurrency)
-      .toFixed(2)
-      .toString();
+    var shippingFeeInfo = (parseInt(shippingFee) * usdCurrency).toFixed(2).toString();
     var shippingInfo = {
       method: "Shipping",
       address: {
         name: {
-          full_name: fullName,
+          full_name: fullName
         },
         address_line_1: address,
         address_line_2: "/",
         admin_area_2: "/",
         admin_area_1: city,
-        country_code: "VN",
-      },
-    };
+        country_code: "VN"
+      }
+    }
     if (cartBook) {
       for (let i = 0; i < cartBooks.length; i++) {
-        total =
-          total +
-          parseFloat(
-            (parseInt(cartBooks[i].subTotal) * usdCurrency).toFixed(2)
-          );
+        total = total + parseFloat((parseInt(cartBooks[i].subTotal) * usdCurrency).toFixed(2));
         let item = {
           name: cartBooks[i].book.name,
           description: cartBooks[i].book.releaseYear,
           sku: cartBooks[i].bookId,
           unit_amount: {
             currency_code: "USD",
-            value: (parseInt(cartBooks[i].book.currentPrice) * usdCurrency)
-              .toFixed(2)
-              .toString(),
+            value: (parseInt(cartBooks[i].book.currentPrice) * usdCurrency).toFixed(2).toString()
           },
           quantity: cartBooks[i].quantity.toString(),
-          category: "PHYSICAL_GOODS",
-        };
+          category: "PHYSICAL_GOODS"
+        }
         itemArr.push(item);
       }
     }
     var discountInfo = (parseFloat(discount) * total).toFixed(2).toString();
     var amountInfo = {
       currency_code: "USD",
-      value: (parseFloat(total) + parseFloat(shippingFeeInfo) - discountInfo)
-        .toFixed(2)
-        .toString(),
+      value: (parseFloat(total) + parseFloat(shippingFeeInfo) - discountInfo).toFixed(2).toString(),
       breakdown: {
         item_total: {
           currency_code: "USD",
-          value: total,
+          value: total
         },
         shipping: {
           currency_code: "USD",
-          value: (parseInt(shippingFee) * usdCurrency).toFixed(2).toString(),
+          value: (parseInt(shippingFee) * usdCurrency).toFixed(2).toString()
         },
         discount: {
           currency_code: "USD",
-          value: (parseFloat(discount) * total).toFixed(2).toString(),
-        },
-      },
-    };
+          value: (parseFloat(discount) * total).toFixed(2).toString()
+        }
+      }
+    }
     var purchaseUnitsInfo = {
       amount: amountInfo,
       items: itemArr,
-      shipping: shippingInfo,
-    };
+      shipping: shippingInfo
+    }
     return purchaseUnitsInfo;
   };
 
   const buttonStyle = {
-    layout: "vertical",
-    color: "blue",
-    width: "50%",
-  };
+    layout: 'vertical',
+    color: 'blue',
+    width: '50%'
+  }
 
   return (
     <div>
       <div className="title-wrapper">
-        <h2>{t("Please provide complete information")}</h2>
+        <h2>{t('Please provide complete information')}</h2>
       </div>
-      <form className="payment-form">
-        <div className="panel-body mt-5 p-3">
-          <div className="row">
-            <div className="col-xs-12 col-md-12">
-              <div className="form-group">
-                <label>EMAIL</label>
-                <input
-                  type="email"
-                  name="email"
-                  className="form-control"
-                  placeholder="Your email"
-                  value={email !== "" ? email : ""}
-                  onChange={(e) => handleEmailChange(e)}
-                />
-              </div>
-              <div className="row">
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label>{t("NAME")}</label>
-                    <input
-                      type="text"
-                      placeholder={t("Your name")}
-                      id="name"
-                      className="form-control"
-                      defaultValue={userInfor && userInfor.fullName}
-                      onChange={(e) => handleNameChange(e)}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div class="form-group">
-                    <label>{t("PHONE NUMBER")}</label>
-                    <input
-                      type="number"
-                      placeholder={t("Phone number")}
-                      id="number"
-                      className="form-control"
-                      defaultValue={userInfor && userInfor.phoneNumber}
-                      onChange={(e) => handlePhoneChange(e)}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label>{t("CITY")}</label>
-                    <select
-                      name="city"
-                      id="cbCity"
-                      className="form-control"
-                      onChange={(e) => SelectCity(e)}
-                    >
-                      <option selected hidden>
-                        {t("Choose City")}
-                      </option>
-                      {showListCity}
-                    </select>
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label>{t("ADDRESS")}</label>
-                    <input
-                      className="form-control"
-                      placeholder={t("Your detail address")}
-                      defaultValue={userInfor && userInfor.address}
-                      onChange={(e) => handleAdressChange(e)}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="panel-footer p-0 mt-3">
-          <div className="d-flex flex-row">
-            <PayPalButton
-              createOrder={(data, actions) => {
-                return actions.order.create({
-                  intent: "CAPTURE",
-                  purchase_units: [SettingPayPal()],
-                });
-              }}
-              onApprove={(data, actions) => {
-                Axios({
-                  headers: {
-                    Authorization: "Bearer " + getToken(),
-                  },
-                  url: "http://localhost:5000/api/ProceedOrder/PayPalCheckout",
-                  method: "post",
-                  params: {
-                    email: email,
-                    paypalOrderID: data.orderID,
-                    type: "PayPal",
-                    total:
-                      parseInt(orderTotal) - parseInt(orderTotal) * discount,
-                    shippingFee: parseInt(shippingFee),
-                    fullName: fullName,
-                    phoneNumber: phonenumber,
-                    address: address + " " + city,
-                  },
-                  data: proceedOrder,
-                })
-                  .then((res) => {
-                    if (res.data.status) {
-                      setCartBook(null);
-                      props.isCheckout(true);
-                      Swal.fire({
-                        title: "Success",
-                        text: "Your order is on processing",
-                        icon: "success",
-                        confirmButtonText: "Back to store",
-                      }).then(() => {
-                        Axios({
-                          headers: {
-                            Authorization: "Bearer " + getToken(),
-                          },
-                          method: "delete",
-                          url: "http://localhost:5000/api/UserCart/ResetCart",
-                        });
-                      });
-                    } else {
-                      Swal.fire({
-                        title: "Error",
-                        text: res.data.message,
-                        icon: "error",
-                      });
-                    }
-                  })
-                  .catch((err) => {
-                    Swal.fire({
-                      title: "Error",
-                      text: err,
-                      icon: "error",
-                    });
-                  });
-              }}
-              style={buttonStyle}
-              options={{
-                clientId:
-                  "AS_iLHEtFU2km3bPNvkvleuO1PoozOEBIre-bHSyjnaCr44n9ZzSb9vIt2URySILtCLUCQbMFXU1LosN",
-                disableFunding: "card",
-              }}
-            />
-          </div>
-        </div>
-      </form>
-      {/* <form className="form-checkout">
+      <form className="form-checkout">
         <input
           type="email"
           placeholder={t('Email for receive notification')}
@@ -484,9 +326,9 @@ function PayPalCheckout(props) {
           </div>
         </div>
 
-      </form> */}
+      </form>
     </div>
-  );
+  )
 }
 
-export default PayPalCheckout;
+export default PayPalCheckout

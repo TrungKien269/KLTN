@@ -5,10 +5,14 @@ import ProductSlideBestSale from "../../components/products/ProductSlideBestSale
 import ProductSlideBestPrice from "../../components/products/ProductSlideBestPrice";
 import ProductSlidePromotion from "../../components/products/ProductSlidePromotion";
 import ProductSlideRecommend from "../../components/products/ProductSlideRecommend";
+import Header from "../../components/header/Header";
+import Footer from "../../components/Footer";
+import TimeCounting from "../../components/utilities/TimeCounter";
 import { getToken } from "../../Utils/Commons";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
-const Index = () => {
+function Index() {
+
   const { t, i18n } = useTranslation();
 
   const ShowListRecommendBook = () => {
@@ -17,7 +21,7 @@ const Index = () => {
         <div className="section__bestseller">
           <div className="container">
             <div className="title-wrapper">
-              <h3>{t("Recommend for you")}</h3>
+              <h3>{t('Recommend for you')}</h3>
             </div>
             <ProductSlideRecommend />
           </div>
@@ -32,7 +36,7 @@ const Index = () => {
       <div className="section__bestseller">
         <div className="container">
           <div className="title-wrapper">
-            <h3>{t("Best Price")}</h3>
+            <h3>{t('Best Price')}</h3>
           </div>
           <ProductSlideBestSale />
         </div>
@@ -40,7 +44,7 @@ const Index = () => {
       <div className="section__bestseller">
         <div className="container">
           <div className="title-wrapper">
-            <h3>{t("Best Sellers")}</h3>
+            <h3>{t('Best Sellers')}</h3>
           </div>
           <ProductSlideBestPrice />
         </div>
@@ -49,12 +53,12 @@ const Index = () => {
       <div className="section__feature">
         <SpecialItemSlide />
       </div>
-      {/* <div className="section__promo">
-        <h2>{t("Limited time offer for sales")}</h2>
+      <div className="section__promo">
+        <h2>{t('Limited time offer for sales')}</h2>
         <div className="container">{<ProductSlidePromotion />}</div>
-      </div> */}
+      </div>
     </React.Fragment>
   );
-};
+}
 
 export default Index;

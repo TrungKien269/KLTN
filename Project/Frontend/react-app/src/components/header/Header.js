@@ -5,8 +5,9 @@ import SearchBar from "../utilities/SearchBar";
 import { removeUserSession, getToken } from "../../Utils/Commons";
 import { UserContext } from "../../context/userContext";
 import Axios from "axios";
-import useDarkMode from "use-dark-mode";
-import { Trans, useTranslation } from "react-i18next";
+import useDarkMode from 'use-dark-mode';
+import { Trans, useTranslation } from 'react-i18next';
+import { I18nContext } from "../../context/I18nContext";
 
 const Header = (props) => {
   const { token, refreshToken } = useContext(UserContext);
@@ -40,7 +41,7 @@ const Header = (props) => {
         setUser(res.data.obj);
       });
     }
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     if (token) {
@@ -60,19 +61,20 @@ const Header = (props) => {
     if (token) {
       var i = 10;
       var int = setInterval(function () {
-        window.scrollTo({ top: i, left: 0, behavior: "smooth" });
+        window.scrollTo({ top: i, left: 0, behavior: 'smooth' });
         i += 10;
         if (i >= 1380) clearInterval(int);
       }, 5);
-    } else {
+    }
+    else {
       var i = 10;
       var int = setInterval(function () {
-        window.scrollTo({ top: i, left: 0, behavior: "smooth" });
+        window.scrollTo({ top: i, left: 0, behavior: 'smooth' });
         i += 10;
         if (i >= 1440) clearInterval(int);
       }, 5);
     }
-  };
+  }
 
   const loginNav = useMemo(() => {
     if (token) {
@@ -84,9 +86,9 @@ const Header = (props) => {
                 to="/wishlist"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                title={"Wish list"}
+                title={'Wish list'}
               >
-                <i className="fab fa-gratipay"></i>
+                <i class="fab fa-gratipay"></i>
               </Link>
             </div>
 
@@ -95,9 +97,8 @@ const Header = (props) => {
                 to="/cart"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                title={"Cart"}
-              >
-                <i class="fas fa-shopping-cart"></i>
+                title={'Cart'}>
+                <i class="fab fa-opencart"></i>
               </Link>
             </div>
 
@@ -112,11 +113,8 @@ const Header = (props) => {
                 <div className="user__ava-signin d-flex align-items-center">
                   {user && user.fullName}
                   <span className="header-avatar">
-                    <img
-                      className="img img-cover"
-                      src="../img/19-512.png"
-                      title={user && user.fullName}
-                    />
+                    <img className="img img-cover" src="../img/19-512.png"
+                      title={user && user.fullName} />
                   </span>
                 </div>
               </a>
@@ -127,13 +125,13 @@ const Header = (props) => {
                 <div className="row">
                   <ul className="list-unstyled">
                     <li>
-                      <Link to="/profile">{"Profile"}</Link>
+                      <Link to="/profile">{'Profile'}</Link>
                     </li>
                     <li>
-                      <Link to="/orderstatus">{"Your Orders"}</Link>
+                      <Link to="/orderstatus">{'Your Orders'}</Link>
                     </li>
                     <li>
-                      <a onClick={handleLogout}>{"Log out"}</a>
+                      <a onClick={handleLogout}>{'Log out'}</a>
                     </li>
                   </ul>
                 </div>
@@ -150,11 +148,11 @@ const Header = (props) => {
               to="/login"
               data-toggle="tooltip"
               data-placement="bottom"
-              title={"Log in"}
-            >
+              title={'Log in'}>
               <i className="fas fa-sign-in-alt"></i>
             </Link>
-            <div></div>
+            <div>
+            </div>
           </React.Fragment>
         </Trans>
       );
@@ -172,15 +170,13 @@ const Header = (props) => {
 
           <div className="hidden-md-elements nav__social-icon">
             <div className="dropdown ">
-              <a
-                className=""
+              <a className=""
                 id="navbarDropdownMenuLink2"
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
-                title={"Language"}
-              >
-                <i className="fa fa-language"></i>
+                title={'Language'}>
+                <i class="fa fa-language"></i>
               </a>
               <div
                 className="dropdown-menu mega-menu mega-menu-sm "
@@ -189,25 +185,23 @@ const Header = (props) => {
                 <div className="row">
                   <ul className="list-unstyled">
                     <li>
-                      <a onClick={() => handleClick("en")}>{t("English")}</a>
+                      <Link onClick={() => handleClick('en')}>{t('English')}</Link>
                     </li>
                     <li>
-                      <a onClick={() => handleClick("vn")}>{t("Vietnamese")}</a>
+                      <Link onClick={() => handleClick('vn')}>{t('Vietnamese')}</Link>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
             <div className="dropdown ">
-              <a
-                className=""
+              <a className=""
                 id="navbarDropdownMenuLink1"
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
-                title={"Theme"}
-              >
-                <i className="fa fa-palette"></i>
+                title={'Theme'}>
+                <i class="fa fa-palette"></i>
               </a>
               <div
                 className="dropdown-menu mega-menu mega-menu-sm "
@@ -216,10 +210,10 @@ const Header = (props) => {
                 <div className="row">
                   <ul className="list-unstyled">
                     <li>
-                      <a onClick={darkMode.disable}>{t("Light")}</a>
+                      <Link onClick={darkMode.disable}>{t("Light")}</Link>
                     </li>
                     <li>
-                      <a onClick={darkMode.enable}>{t("Dark")}</a>
+                      <Link onClick={darkMode.enable}>{t("Dark")}</Link>
                     </li>
                   </ul>
                 </div>
@@ -259,7 +253,7 @@ const Header = (props) => {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                {t("Categories")}
+                {t('Categories')}
                 <i className="fa fa-angle-down hidden-xs" />
               </Link>
               <div
@@ -273,23 +267,26 @@ const Header = (props) => {
             </li>
             {/* Audio book */}
             <li className="nav-item mega-dropdown">
-              <Link to="/ebooks/" className="nav-link dropdown-toggle">
-                {t("Ebooks")}
+              <Link
+                to="/ebooks/"
+                className="nav-link dropdown-toggle"
+              >
+                {t('Ebooks')}
               </Link>
             </li>
             {/* recommended */}
             <li className="nav-item mega-dropdown">
-              <a
+              <Link
                 className="nav-link dropdown-toggle"
                 onClick={ScrollToRecommendSection}
               >
-                {t("Recommend")}
-              </a>
+                {t('Recommend')}
+              </Link>
             </li>
             {/* Sale */}
             <li className="nav-item mega-dropdown">
               <Link to="#" className="nav-link dropdown-toggle">
-                {t("Sale")}
+                {t('Sale')}
               </Link>
             </li>
             {/*Pages*/}
