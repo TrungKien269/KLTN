@@ -34,12 +34,12 @@ export default {
       },
     },
     {
-      name: "Users",
+      name: "Users management",
       url: "/users",
       icon: "icon-user",
     },
     {
-      name: "Book management ",
+      name: "Books management ",
       url: "/bookmanagement",
       icon: "fa fa-book",
     },
@@ -49,12 +49,12 @@ export default {
       icon: "fa fa-shopping-bag",
     },
     {
-      name: "Order management",
+      name: "Orders management",
       url: "/ordermanagement",
       icon: "fa fa-shopping-cart",
     },
     {
-      name: "Import Books",
+      name: "Importing Management",
       url: "/import",
       icon: "fa fa-file-excel-o",
     },

@@ -17,6 +17,8 @@ import {
   Row,
   CardFooter,
 } from "reactstrap";
+import Swal from "sweetalert2";
+
 const PromotionDetailForm = (props) => {
   const [data, setData] = useState();
   const [bookID, setBookID] = useState("0");
@@ -57,13 +59,13 @@ const PromotionDetailForm = (props) => {
   }, [bookOptions]);
 
   const handleChange = (e, data) => {
-    if(data.value)
+    if (data.value)
       setBookID(data.value);
   };
 
   const handleDiscount = (e) => {
     var value = e.target.value;
-    if(value){
+    if (value) {
       setDiscount(parseFloat(value));
     }
   }
@@ -75,23 +77,51 @@ const PromotionDetailForm = (props) => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    Axios({
-      headers: {
-        Authorization: "Bearer " + getToken(),
-      },
-      url: "http://localhost:5000/api/Admin/CreatePromotionDetail",
-      method: "post",
-      params: {
-        promotionID: parseInt(props.id),
-        bookID: bookID,
-        discount: parseFloat(discount)
+    Swal.fire({
+      title: "Confirm",
+      text: "Do you want to create this promotion book?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, create!",
+    }).then((result) => {
+      if (result.value) {
+        Axios({
+          headers: {
+            Authorization: "Bearer " + getToken(),
+          },
+          url: "http://localhost:5000/api/Admin/CreatePromotionDetail",
+          method: "post",
+          params: {
+            promotionID: parseInt(props.id),
+            bookID: bookID,
+            discount: parseFloat(discount)
+          }
+        }).then((res) => {
+          if (res.data.status) {
+            Swal.fire({
+              title: "Done",
+              text: "Create this promotion book",
+              icon: "success",
+            });
+            handleReset();
+          }
+          else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: res.data.message,
+            });
+          }
+        }).catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: err,
+          });
+        })
       }
-    }).then((res) => {
-      if(res.data.status){
-        console.log(res.data)
-      }
-    }).catch((err) => {
-      console.log(err);
     })
   };
 
@@ -129,7 +159,7 @@ const PromotionDetailForm = (props) => {
               <i className="fa fa-dot-circle-o"></i> Add
             </Button>
             <Button type="reset" size="sm" color="danger"
-            onClick={handleReset}>
+              onClick={handleReset}>
               <i className="fa fa-ban"></i> Reset
             </Button>
           </div>

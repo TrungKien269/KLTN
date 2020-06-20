@@ -19,10 +19,9 @@ import {
   Label
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import PromotionForm from "./PromotionForm";
 import moment from 'moment';
 
-const PromotionLList = () => {
+const PromotionList = () => {
   const [listPromo, setListPromo] = useState([]);
 
   const [modal, setModal] = useState(false);
@@ -33,7 +32,6 @@ const PromotionLList = () => {
 
   const toggle = (data) => {
     setModal(!modal)
-    // console.log(moment(data.endedDate).format("YYYY-MM-DD hh:mm:ss"));
     if(modal == false){
       setPromotionID(parseInt(data.id));
       setEndedDate(moment(data.endedDate).format("YYYY-MM-DD"));
@@ -117,7 +115,6 @@ const PromotionLList = () => {
       }
     }).then(res => {
       if(res.data.status){
-        console.log(res.data);
         let promo = listPromo.find(x => x.id === data.id);
         promo.isExpired = 0;
 
@@ -138,10 +135,10 @@ const PromotionLList = () => {
     if (listPromo) {
       x = listPromo.map((data) => {
         var linktodetail = `/promotionmanagement/${data.id}`;
-        var d = data.promotionDetail;
-        results = d.map((da) => {
-          return <div key={da.book.id}>{da.book.name}</div>;
-        });
+        // var d = data.promotionDetail;
+        // results = d.map((da) => {
+        //   return <div key={da.book.id}>{da.book.name}</div>;
+        // });
 
         return (
           <tr key={data.id}>
@@ -248,26 +245,6 @@ const PromotionLList = () => {
               </thead>
               <tbody>{showListPromo}</tbody>
             </Table>
-            <Pagination>
-              <PaginationItem>
-                <PaginationLink previous tag="button"></PaginationLink>
-              </PaginationItem>
-              <PaginationItem active>
-                <PaginationLink tag="button">1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink tag="button">2</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink tag="button">3</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink tag="button">4</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink next tag="button"></PaginationLink>
-              </PaginationItem>
-            </Pagination>
           </CardBody>
         </Card>
       </div>
@@ -280,4 +257,4 @@ const PromotionLList = () => {
     );
   }
 };
-export default PromotionLList;
+export default PromotionList;

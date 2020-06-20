@@ -16,6 +16,8 @@ import {
   Label,
   Row,
 } from "reactstrap";
+import Swal from "sweetalert2";
+
 const PromotionForm = (props) => {
   const [data, setData] = useState();
   const [endedDate, setEndedDate] = useState("");
@@ -67,8 +69,6 @@ const PromotionForm = (props) => {
     setDiscount(parseFloat(e.target.value));
   };
 
-  // useEffect(() => console.log(detailReq), [detailReq]);
-
   useEffect(() => {
     if (book.length > 0) {
       var len = book.length;
@@ -86,26 +86,52 @@ const PromotionForm = (props) => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    Axios({
-      headers: {
-        Authorization: "Bearer " + getToken(),
-      },
-      method: "POST",
-      url: "http://localhost:5000/api/Admin/CreatePromotion",
-      params: {
-        endedDate: endedDateRef.current,
-        description: descriptionRef.current,
-      },
-      data: detailReqRef.current,
-    }).then((res) => {
-      if (res.status) {
-        console.log(res.data);
-        alert("success");
-        window.location.reload();
-      } else {
-        alert("failed");
+    Swal.fire({
+      title: "Confirm",
+      text: "Do you want to create this promotion?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, create!",
+    }).then((result) => {
+      if(result.value){
+        Axios({
+          headers: {
+            Authorization: "Bearer " + getToken(),
+          },
+          method: "POST",
+          url: "http://localhost:5000/api/Admin/CreatePromotion",
+          params: {
+            endedDate: endedDateRef.current,
+            description: descriptionRef.current,
+          },
+          data: detailReqRef.current,
+        }).then((res) => {
+          if (res.status) {
+            Swal.fire({
+              title: "Done",
+              text: "Create this promotion",
+              icon: "success",
+            }).then(() => {
+              window.location.reload();
+            })
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: res.data.message,
+            });
+          }
+        }).catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: err,
+          });
+        })
       }
-    });
+    })
   };
 
   const multiSelectBooks = useMemo(() => {
@@ -185,7 +211,7 @@ const PromotionForm = (props) => {
               </Col>
             </FormGroup>
             <Button className="mr-1" type="submit" size="sm" color="primary">
-              <i className="fa fa-dot-circle-o"></i> Submit
+              <i className="fa fa-dot-circle-o"></i> Create
             </Button>
             <Button type="reset" size="sm" color="danger">
               <i className="fa fa-ban"></i> Reset
@@ -193,7 +219,7 @@ const PromotionForm = (props) => {
           </Form>
         </CardBody>
       </Card>
-    
+
     );
   }, [bookOptions]);
 

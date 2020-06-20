@@ -1,7 +1,8 @@
 import React from "react";
 import PromotionForm from "./PromotionForm";
 import { Row, Col } from "reactstrap";
-import PromotionLList from "./PromotionList";
+import PromotionList from "./PromotionList";
+import PromotionPagination from './PromotionPagination';
 
 const PromotionManagement = () => {
   return (
@@ -11,7 +12,9 @@ const PromotionManagement = () => {
           <PromotionForm></PromotionForm>
         </Col>
         <Col md="12" xs="12">
-          <PromotionLList></PromotionLList>
+          <PromotionPagination
+            itemsCountPerPage={20}
+            pageRangeDisplayed={10} />
         </Col>
       </Row>
     </div>

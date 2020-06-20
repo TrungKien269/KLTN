@@ -117,45 +117,103 @@ function User(props) {
   }, [user]);
 
   const handleActivate = (id) => {
-    Axios({
-      headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
-      },
-      method: "put",
-      url: "http://localhost:5000/api/Admin/UpdateUserState/",
-      params: {
-        userID: parseInt(id),
-        state: "Available",
-      },
+    Swal.fire({
+      title: "Confirm",
+      text: "Do you want to activate this account?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, activate!",
+    }).then((result) => {
+      if (result.value) {
+        Axios({
+          headers: {
+            Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
+          },
+          method: "put",
+          url: "http://localhost:5000/api/Admin/UpdateUserState/",
+          params: {
+            userID: parseInt(id),
+            state: "Available",
+          },
+        })
+          .then((res) => {
+            if (res.data.status) {
+              Swal.fire({
+                title: "Done",
+                text: "Activate this account",
+                icon: "success",
+              });
+              setUser({ ...user, state: "Available" });
+            }
+            else {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: res.data.message,
+              });
+            }
+          })
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: err,
+            });
+          });
+      }
     })
-      .then((res) => {
-        console.log(res.data.obj);
-        setUser({ ...user, state: "Available" });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   const handleBan = (id) => {
-    Axios({
-      headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
-      },
-      method: "put",
-      url: "http://localhost:5000/api/Admin/UpdateUserState/",
-      params: {
-        userID: parseInt(id),
-        state: "Banned",
-      },
+    Swal.fire({
+      title: "Confirm",
+      text: "Do you want to ban this account?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, ban!",
+    }).then((result) => {
+      if (result.value) {
+        Axios({
+          headers: {
+            Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
+          },
+          method: "put",
+          url: "http://localhost:5000/api/Admin/UpdateUserState/",
+          params: {
+            userID: parseInt(id),
+            state: "Banned",
+          },
+        })
+          .then((res) => {
+            if (res.data.status) {
+              Swal.fire({
+                title: "Done",
+                text: "Ban this account",
+                icon: "success",
+              });
+              setUser({ ...user, state: "Banned" });
+            }
+            else {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: res.data.message,
+              });
+            }
+          })
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: err,
+            });
+          });
+      }
     })
-      .then((res) => {
-        console.log(res.data.obj);
-        setUser({ ...user, state: "Banned" });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   const handleSelectCoupon = (event, field) => {
@@ -165,38 +223,57 @@ function User(props) {
 
   const SendCoupon = () => {
     if (coupon) {
-      Axios({
-        headers: {
-          Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
-        },
-        method: "POST",
-        url: "http://localhost:5000/api/Admin/SendCouponEmail",
-        params: {
-          value: parseFloat(coupon),
-          userID: parseInt(props.match.params.id),
+      Swal.fire({
+        title: "Confirm",
+        text: "Do you want to send this coupon?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, send!",
+      }).then((result) => {
+        if (result.value) {
+          Axios({
+            headers: {
+              Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
+            },
+            method: "POST",
+            url: "http://localhost:5000/api/Admin/SendCouponEmail",
+            params: {
+              value: parseFloat(coupon),
+              userID: parseInt(props.match.params.id),
+            }
+          }).then((res) => {
+            if (res.data.status) {
+              Swal.fire({
+                icon: "success",
+                title: "Success",
+                text: "Coupon has been sent to this user"
+              });
+            }
+            else {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: res.data.message,
+              });
+            }
+          }).catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: err,
+            });
+          })
         }
-      }).then((res) => {
-        if (res.data.status) {
-          Swal.fire({
-            icon: "success",
-            title: "Success",
-            text: "Coupon has been sent to this user"
-          });
-        }
-        else {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: res.data.message,
-          });
-        }
-      }).catch((err) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: err,
-        });
       })
+    }
+    else{
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "You have to choose one type of coupon!",
+      });
     }
   }
 
@@ -222,7 +299,7 @@ function User(props) {
                   value={coupon ? coupon : ""}
                   onChange={(e, data) => handleSelectCoupon(e, data)}
                 />
-                <Button size="small" color="green"  onClick={SendCoupon}>
+                <Button size="small" color="green" onClick={SendCoupon}>
                   Send
                 </Button>
               </div>
