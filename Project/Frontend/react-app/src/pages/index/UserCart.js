@@ -4,10 +4,9 @@ import { Link, withRouter } from "react-router-dom";
 import Swal from "sweetalert2";
 import Header from "../../components/header/Header";
 import Footer from "../../components/Footer";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function UserCart() {
-
   const [data, setData] = useState([]);
 
   const { t, i18n } = useTranslation();
@@ -21,7 +20,7 @@ function UserCart() {
       url: "http://localhost:5000/api/UserCart/Cart",
     }).then((res) => {
       if (res.data.status) {
-        setData(res.data.obj.cartBook)
+        setData(res.data.obj.cartBook);
       }
     });
   }, []);
@@ -62,14 +61,16 @@ function UserCart() {
   };
 
   const handleQuantityChanged = (bookId, index) => {
-    let quantity = document.getElementsByClassName("input-text qty text h-100")[index].value;
+    let quantity = document.getElementsByClassName("input-text qty text h-100")[
+      index
+    ].value;
 
     let items = [...data];
     let item = items[index];
     item.quantity = parseInt(quantity);
     item.subTotal = parseInt(item.book.currentPrice) * parseInt(quantity);
     items[index] = item;
-    setData((prev) => [...items])
+    setData((prev) => [...items]);
 
     axios({
       headers: {
@@ -118,9 +119,7 @@ function UserCart() {
                   type="button"
                   value="-"
                   className="minus quantity__button"
-                  onClick={() =>
-                    handleQuantityChanged(item.bookId, index)
-                  }
+                  onClick={() => handleQuantityChanged(item.bookId, index)}
                 />
                 <input
                   type="text"
@@ -138,9 +137,7 @@ function UserCart() {
                   type="button"
                   value="+"
                   class="plus quantity__button"
-                  onClick={() =>
-                    handleQuantityChanged(item.bookId, index)
-                  }
+                  onClick={() => handleQuantityChanged(item.bookId, index)}
                 />
               </div>
             </td>
@@ -156,7 +153,7 @@ function UserCart() {
                 id="btnRemove"
                 onClick={() => handleRemoveClicked(item.bookId, index)}
               >
-                {t('Remove')}
+                {t("Remove")}
               </button>
             </td>
           </tr>
@@ -169,17 +166,17 @@ function UserCart() {
   return (
     <React.Fragment>
       <div className="cart-title">
-        <h2>{t('shopping cart')}</h2>
+        <h2>{t("shopping cart")}</h2>
       </div>
       <div className="container">
         <div className="cart-table">
           <table>
             <thead>
               <tr>
-                <th className="item">{t('Book')}</th>
-                <th className="qty">{t('Quantity')}</th>
-                <th className="price">{t('Price')}</th>
-                <th className="total-price">{t('Total')}</th>
+                <th className="item">{t("Book")}</th>
+                <th className="qty">{t("Quantity")}</th>
+                <th className="price">{t("Price")}</th>
+                <th className="total-price">{t("Total")}</th>
                 <th className="remove">&nbsp;</th>
               </tr>
               {showListBooks}
@@ -187,16 +184,15 @@ function UserCart() {
           </table>
         </div>
         <div className="row">
-          <div className="col-sm-6 col-xs-12 cart-left">
-            
-          </div>
+          <div className="col-sm-6 col-xs-12 cart-left"></div>
 
           <div className="col-sm-6 col-xs-12 cart-right">
             <div className="cart-right-table">
-              
               <div className="note-tax">
                 <span>
-                  {t('Shipping, taxes and discounts will be calculated at checkout')}
+                  {t(
+                    "Shipping, taxes and discounts will be calculated at checkout"
+                  )}
                 </span>
               </div>
             </div>
@@ -206,7 +202,7 @@ function UserCart() {
                 to="/collections/"
                 className="btn btn--rounded btn--blue btn-fit"
               >
-                {t('Continue Shopping')}
+                {t("Continue Shopping")}
               </Link>
               <Link
                 to={"/proceedcheckout"}
@@ -215,7 +211,7 @@ function UserCart() {
                 name="checkout"
                 id="btnOrder"
               >
-                {t('Proceed to Checkout')}
+                {t("Proceed to Checkout")}
               </Link>
             </div>
           </div>
@@ -223,7 +219,6 @@ function UserCart() {
       </div>
     </React.Fragment>
   );
-
 }
 
-export default withRouter(UserCart)
+export default withRouter(UserCart);

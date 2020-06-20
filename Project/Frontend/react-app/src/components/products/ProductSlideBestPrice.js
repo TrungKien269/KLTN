@@ -21,20 +21,21 @@ const ProductSlideBestPrice = () => {
     if (book) {
       result = book.map((book) => {
         return (
-          <ProductCard
-            key={book.id}
-            id={book.id}
-            name={book.name}
-            image={book.image}
-            price={
-              <NumberFormat
-                value={book.currentPrice}
-                displayType={"text"}
-                thousandSeparator={true}
-                suffix={" VND"}
-              />
-            }
-          />
+          <div className="item" key={book.id}>
+            <ProductCard
+              id={book.id}
+              name={book.name}
+              image={book.image}
+              price={
+                <NumberFormat
+                  value={book.currentPrice}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  suffix={" VND"}
+                />
+              }
+            />
+          </div>
         );
       });
     } else {
@@ -73,7 +74,11 @@ const ProductSlideBestPrice = () => {
     ],
   };
 
-  return <OwlCarousel options={options}>{showLowestPriceBook}</OwlCarousel>;
+  if (book) {
+    return <OwlCarousel options={options}>{showLowestPriceBook}</OwlCarousel>;
+  } else {
+    return <Loader active inline="centered" size="massive" />;
+  }
 };
 
 export default ProductSlideBestPrice;

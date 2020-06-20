@@ -1,57 +1,50 @@
-import React, { Component, Suspense } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import ProductCard from "./ProductCard";
 import Badge from "../utilities/Badge";
 import axios from "axios";
 import OwlCarousel from "react-owl-carousel2";
 import NumberFormat from "react-number-format";
-import { Dimmer, Loader, Image, Segment } from "semantic-ui-react";
+import { Loader } from "semantic-ui-react";
 
-class ProductSlideBestSale extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { data: [] };
-  }
+const ProductSlideBestSale = () => {
+  const [data, setData] = useState();
 
-  componentDidMount() {
-    const x = this;
+  useEffect(() => {
     axios({
       method: "get",
       url: "http://localhost:5000/api/Main/List6BestSaleBook",
-    }).then(function (response) {
-      x.setState({ data: response.data.obj });
+    }).then((res) => {
+      setData(res.data.obj);
     });
-  }
+  }, []);
 
-  ShowTop6 = (data) => {
-    let result = {};
-    if (Object.keys(data).length > 0) {
+  const ShowTop6 = useMemo(() => {
+    let result = "";
+    if (data) {
       result = data.map((book) => {
-        if (book.status) {
-          return (
-            <ProductCard
-              key={book.id}
-              id={book.id}
-              name={book.name}
-              image={book.image}
-              price={
-                <NumberFormat
-                  value={book.currentPrice}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  suffix={" VND"}
-                />
-              }
-            />
-          );
-        }
+        return (
+          <ProductCard
+            className="item"
+            key={book.id}
+            id={book.id}
+            name={book.name}
+            image={book.image}
+            price={
+              <NumberFormat
+                value={book.currentPrice}
+                displayType={"text"}
+                thousandSeparator={true}
+                suffix={" VND"}
+              />
+            }
+          />
+        );
       });
-    } else {
-      return <Loader active inline="centered" size="huge" />;
     }
     return result;
-  };
+  }, [data]);
 
-  options = {
+  const options = {
     nav: true,
     items: 5,
     margin: 30,
@@ -81,13 +74,11 @@ class ProductSlideBestSale extends Component {
     ],
   };
 
-  render() {
-    return (
-      <OwlCarousel options={this.options}>
-        {this.ShowTop6(this.state.data)}
-      </OwlCarousel>
-    );
+  if (data) {
+    return <OwlCarousel options={options}>{ShowTop6}</OwlCarousel>;
+  } else {
+    return <Loader active inline="centered" size="massive" />;
   }
-}
+};
 
 export default ProductSlideBestSale;
