@@ -414,8 +414,38 @@ namespace BookStoreAPI.BUS.Logic
                 findBook.Summary = obj.Summary;
 
                 context.Book.Update(findBook);
-                await context.SaveChangesAsync();
-                return new Response("Success", true, 1, findBook);
+                var check = await context.SaveChangesAsync();
+                if (check is 1)
+                {
+                    return new Response("Success", true, 1, findBook);
+                }
+                else
+                {
+                    return new Response("Update Fail!", false, 0, findBook);
+                }
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
+        public async Task<Response> DisableBook(string bookID)
+        {
+            try
+            {
+                var findBook = await context.Book.Where(x => x.Id.Equals(bookID)).FirstOrDefaultAsync();
+                findBook.Status = "Inavailable";
+                context.Book.Update(findBook);
+                var check = await context.SaveChangesAsync();
+                if (check is 1)
+                {
+                    return new Response("Success", true, 1, findBook);
+                }
+                else
+                {
+                    return new Response("Disable Fail!", false, 0, findBook);
+                }
             }
             catch (Exception e)
             {

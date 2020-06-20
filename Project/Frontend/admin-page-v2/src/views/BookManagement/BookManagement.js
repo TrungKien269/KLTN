@@ -21,6 +21,10 @@ const BookManagement = (props) => {
 
   const handleSelectBookID = (id) => {
     setBookID(id);
+    window.scrollTo({
+      top: 1380,
+      behavior: 'smooth',
+    })
   };
 
   const displayBookForm = useMemo(() => {

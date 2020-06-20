@@ -81,25 +81,24 @@ namespace BookStoreAPI.Helper
                           "<th><b>Book</b></th>" +
                           "<th><b>Price</b></th>" +
                           "<th><b>Quantity</b</th>" +
-                          "<th><b>Amount</b></th>" +
+                          "<th><b>SubTotal</b></th>" +
                           "</tr>");
                 for (int i = 0; i < orderDetailRequests.Count; i++)
                 {
                     sb.Append("<tr>" +
                               "<td style='text-align:center'>" + (i + 1) + "</td>" +
                               "<td>" + orderDetailRequests[i].BookName + "</td>" +
-                              "<td style='text-align:center'>" + Convert.ToDecimal(orderDetailRequests[i].CurrentPrice).ToString("#,##") + "</td>" +
+                              "<td style='text-align:center'>" + Convert.ToDecimal(orderDetailRequests[i].CurrentPrice).ToString("#,##") + " VND" + "</td>" +
                               "<td style='text-align:center'>" + orderDetailRequests[i].Quantity + "</td>" +
                               "<td style='text-align:center'>" +
-                              (orderDetailRequests[i].CurrentPrice * orderDetailRequests[i].Quantity) + "</td>" +
+                              Convert.ToDecimal(orderDetailRequests[i].CurrentPrice * orderDetailRequests[i].Quantity).ToString("#,##") + " VND" + "</td>" +
                               "</tr>");
                 }
                 sb.Append("</table>");
-                sb.Append("<p>Shipping Fee: &nbsp;" + orderRequest.ShippingFee + " &nbsp; VND</p>");
+                sb.Append("<p>Shipping Fee: &nbsp;" + Convert.ToDecimal(orderRequest.ShippingFee).ToString("#,##") + "&nbsp; VND</p>");
                 sb.Append("<p><b>Total:</b> &nbsp;" +
-                          Convert.ToDecimal(orderRequest.ShippingFee +
-                                            orderDetailRequests.Sum(x => x.Quantity * x.CurrentPrice)).ToString("#,##") +
-                          " &nbsp; VND</p>");
+                          Convert.ToDecimal(orderRequest.Total).ToString("#,##") +
+                          "&nbsp; VND</p>");
                 sb.Append("<p>You can visit this link to view your card charge: " +
                           "<a href='" + charge.ReceiptUrl + "'</a>" + charge.ReceiptUrl + "</p>");
                 sb.Append("<br/><br/><br/>");

@@ -161,41 +161,52 @@ const Main = () => {
 
     const bodyFormData = new FormData();
     bodyFormData.append('file', fileInfo);
-
-    Axios({
-      headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
-        "Content-Type": "multipart/form-data"
-      },
-      method: "post",
-      url: "http://localhost:5000/api/Admin/ImportReceipt",
-      params: {
-        id: receiptID,
-        importDate: importedDate,
-        total: parseInt(total)
-      },
-      data: bodyFormData,
-    }).then((res) => {
-      if (res.data.status) {
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: "Upload Receipt successfully"
-        });
+    Swal.fire({
+      title: "Confirm",
+      text: "Do you want to import this receipt?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, import!",
+    }).then((result) => {
+      if (result.value) {
+        Axios({
+          headers: {
+            Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
+            "Content-Type": "multipart/form-data"
+          },
+          method: "post",
+          url: "http://localhost:5000/api/Admin/ImportReceipt",
+          params: {
+            id: receiptID,
+            importDate: importedDate,
+            total: parseInt(total)
+          },
+          data: bodyFormData,
+        }).then((res) => {
+          if (res.data.status) {
+            Swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "Upload Receipt successfully"
+            });
+          }
+          else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: res.data.message,
+            });
+          }
+        }).catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: err,
+          });
+        })
       }
-      else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: res.data.message,
-        });
-      }
-    }).catch((err) => {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: err,
-      });
     })
   }
 
@@ -261,12 +272,12 @@ const Main = () => {
 
                 <Col md="9">
                   <Input type="file" multiple={false}
-                  accept={".csv"}
-                  onChange={LoadFileCSV} />
+                    accept={".csv"}
+                    onChange={LoadFileCSV} />
                 </Col>
               </FormGroup>
               <Button className="mr-1" type="submit" size="sm" color="primary">
-                <i className="fa fa-dot-circle-o"></i> Submit
+                <i className="fa fa-dot-circle-o"></i> Import
               </Button>
               <Button type="reset" size="sm" color="danger">
                 <i className="fa fa-ban"></i> Reset

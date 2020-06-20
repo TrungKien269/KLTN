@@ -125,10 +125,10 @@ namespace BookStoreAPI.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpPost("Remove")]
-        public async Task<Response> RemoveBook(string id)
+        [HttpPost("DisableBook")]
+        public async Task<Response> DisableBook(string id)
         {
-            return await adminBal.RemoveBook(id);
+            return await adminBal.DisableBook(id);
         }
 
         [Authorize(Roles = "Administrator")]

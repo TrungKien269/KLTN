@@ -142,5 +142,11 @@ namespace BookStoreAPI.Controllers
         {
             return await userOrderBal.DisableCoupon(code);
         }
+
+        [HttpPost("CheckBookOrder")]
+        public async Task<Response> CheckNumberBookOrder([FromBody] List<OrderDetailRequest> orderDetailRequests)
+        {
+            return await userOrderBal.CheckNumberBookOrder(orderDetailRequests);
+        }
     }
 }
