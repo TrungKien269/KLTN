@@ -95,7 +95,7 @@ function PromotionDetailPagination(props) {
           url: "http://localhost:5000/api/Admin/UpdatePromotionDetail",
           method: "put",
           params: {
-            promotionID: parseInt(props.match.params.id),
+            promotionID: parseInt(props.id),
             bookID: bookID,
             discount: parseFloat(discount)
           }
@@ -151,7 +151,7 @@ function PromotionDetailPagination(props) {
           url: "http://localhost:5000/api/Admin/DeletePromotionDetail",
           method: "delete",
           params: {
-            promotionID: parseInt(props.match.params.id),
+            promotionID: parseInt(props.id),
             bookID: bookId,
           }
         }).then((res) => {

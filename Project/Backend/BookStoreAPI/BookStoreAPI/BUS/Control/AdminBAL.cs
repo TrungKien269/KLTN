@@ -111,6 +111,11 @@ namespace BookStoreAPI.BUS.Control
             return await bookBal.Delete(id);
         }
 
+        public async Task<Response> DisableBook(string id)
+        {
+            return await bookBal.DisableBook(id);
+        }
+
         public async Task<Response> StatisticsBookWithQuantityByMonth()
         {
             return await bookBal.StatisticsBookWithQuantityByMonth();

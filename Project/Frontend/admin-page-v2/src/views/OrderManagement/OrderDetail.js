@@ -7,15 +7,16 @@ import {
   CardBody,
   CardHeader,
   Col,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
+  Button,
   Row,
   Table,
 } from "reactstrap";
 import NumberFormat from "react-number-format";
+import moment from "moment";
+import Swal from "sweetalert2";
+
 const OrderDetail = (props) => {
-  const [order, setOrder] = useState("");
+  const [order, setOrder] = useState(null);
 
   useEffect(() => {
     Axios({
@@ -28,7 +29,6 @@ const OrderDetail = (props) => {
         orderID: props.match.params.id,
       },
     }).then((res) => {
-      console.log(res.data.obj);
       setOrder(res.data.obj);
     });
   }, []);
@@ -42,104 +42,169 @@ const OrderDetail = (props) => {
           <tr key={orderD.book.id}>
             <td> {orderD.book.id}</td>
             <td>{orderD.book.name}</td>
-            <td>{orderD.book.currentPrice}</td>
+            <td>
+              <NumberFormat
+                value={orderD.book.currentPrice}
+                displayType={"text"}
+                thousandSeparator={true}
+                suffix={" VND"}
+              />
+            </td>
             <td>{orderD.quantity}</td>
-            <td>{orderD.quantity * orderD.book.currentPrice}</td>
+            <td>
+              <NumberFormat
+                value={orderD.quantity * orderD.book.currentPrice}
+                displayType={"text"}
+                thousandSeparator={true}
+                suffix={" VND"}
+              />
+            </td>
           </tr>
         );
       });
-    }
-    return (
-      <React.Fragment>
-        <Card>
-          <CardHeader className="position-relative">
-            <div className="d-flex justify-content-lg-between">
-              <div>
-                {" "}
-                <i className="fa fa-align-justify"></i>{" "}
-                <strong>Order ID: </strong>
-                {order.id} | <strong>Order Date:</strong> {order.createdDate}
-                {" | "}
-                <strong>Customer name: </strong> {order.fullName}
-                {" | "}
-                <strong>Address: </strong> {order.address}
-                {" | "} <strong>Phone number: </strong>
-                {order.phoneNumber}
-                {" | "} <strong>Payment type: </strong> {order.type}
+      return (
+        <React.Fragment>
+          <Card>
+            <CardHeader className="position-relative">
+              <div className="d-flex justify-content-lg-between">
+                <div>
+                  {" "}
+                  <i className="fa fa-align-justify"></i>
+                  <strong>Order ID:</strong> &nbsp;{order.id}
+                </div>
               </div>
-              <span>
-                {" "}
-                {order.status === "processing" ? (
-                  <Badge color="warning">proccessing</Badge>
-                ) : order.status === "Delivering" ? (
-                  <Badge color="success">Delivering</Badge>
-                ) : order.status === "Delivered" ? (
-                  <Badge color="success">Delivered</Badge>
-                ) : order.status === "Canceled" ? (
-                  <Badge color="danger">Canceled </Badge>
-                ) : (
-                  ""
-                )}
-              </span>
-            </div>
-          </CardHeader>
-          <CardBody>
-            <strong>
-              {" "}
-              Total:{" "}
-              <NumberFormat
-                value={order.total}
-                displayType={"text"}
-                thousandSeparator={true}
-                suffix={" VND"}
-              />
-              {" | "}
-              Shipping fee:{" "}
-              <NumberFormat
-                value={order.shippingFee}
-                displayType={"text"}
-                thousandSeparator={true}
-                suffix={" VND"}
-              />
-            </strong>
-
-            <Table responsive>
-              <thead>
-                <tr>
-                  <th>Book ID</th>
-                  <th>Book name</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>SubTotal</th>
-                </tr>
-              </thead>
-              <tbody>{results}</tbody>
-            </Table>
-            <Pagination>
-              <PaginationItem>
-                <PaginationLink previous tag="button"></PaginationLink>
-              </PaginationItem>
-              <PaginationItem active>
-                <PaginationLink tag="button">1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink tag="button">2</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink tag="button">3</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink tag="button">4</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink next tag="button"></PaginationLink>
-              </PaginationItem>
-            </Pagination>
-          </CardBody>
-        </Card>
-      </React.Fragment>
-    );
+            </CardHeader>
+            <CardBody>
+              <Table responsive>
+                <thead>
+                  <tr>
+                    <th>Book ID</th>
+                    <th>Book name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>SubTotal</th>
+                  </tr>
+                </thead>
+                <tbody>{results}</tbody>
+              </Table>
+              <Row>
+                <Col lg="6">
+                  <h5>Type: &nbsp;
+                  <strong>{order.type}</strong>
+                  </h5>
+                  <h5>Total: &nbsp;
+                  <strong>
+                      <NumberFormat
+                        value={order.total}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        suffix={" VND"}
+                      />
+                    </strong>
+                  </h5>
+                  <h5>Shipping fee: &nbsp;
+                    <strong>
+                      <NumberFormat
+                        value={order.shippingFee}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        suffix={" VND"}
+                      />
+                    </strong>
+                  </h5>
+                  <h5>Created Date: &nbsp;
+                    <strong>
+                      {moment(order.createdDate).format("DD-MM-YYYY hh:mm:ss")}
+                    </strong>
+                  </h5>
+                  {order.status === "Processing" ?
+                    (<Button color="success" size="lg"
+                      onClick={() => handleConfirm(order.id, "Delivering")}>
+                      Confirm Order</Button>) :
+                    order.status === "Delivering" ?
+                      (<Button color="success" size="lg"
+                        onClick={() => handleConfirm(order.id, "Delivered")}>
+                        Confirm Order</Button>) : ""}
+                </Col>
+                <Col lg="6">
+                  <h5>State: &nbsp;
+                  {order.status === "Processing" ? (
+                      <Badge color="warning">Processing</Badge>
+                    ) : order.status === "Delivering" ? (
+                      <Badge color="primary">Delivering</Badge>
+                    ) : order.status === "Delivered" ? (
+                      <Badge color="success">Delivered</Badge>
+                    ) : (
+                            <Badge color="danger">Canceled </Badge>
+                          )}
+                  </h5>
+                  <h5>Customer name: &nbsp;
+                      <strong>{order.fullName}</strong>
+                  </h5>
+                  <h5>Phone number: &nbsp;
+                      <strong>{order.phoneNumber}</strong>
+                  </h5>
+                  <h5>Address: &nbsp;
+                      <strong>{order.address}</strong>
+                  </h5>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+        </React.Fragment>
+      );
+    }
   }, [order]);
+
+  const handleConfirm = (orderID, state) => {
+    Swal.fire({
+      title: "Confirm",
+      text: "Do you want to confirm this order?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, confirm!",
+    }).then((result) => {
+      if (result.value) {
+        Axios({
+          headers: {
+            Authorization: "Bearer " + getToken(),
+          },
+          method: "post",
+          url: "http://localhost:5000/api/Admin/ConfirmOrder",
+          params: {
+            id: orderID,
+            status: state,
+          },
+        }).then((res) => {
+          if (res.data.status) {
+            Swal.fire({
+              title: "Done",
+              text: "Confirm this order",
+              icon: "success",
+            }).then(() => {
+              var newOrder = order;
+              setOrder({...order, newOrder});
+            })
+          }
+          else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: res.data.message,
+            });
+          }
+        }).catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: err,
+          });
+        })
+      }
+    })
+  }
 
   return <div>{showOrderDetail}</div>;
 };

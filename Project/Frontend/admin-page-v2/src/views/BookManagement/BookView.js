@@ -37,7 +37,7 @@ const BookView = (props) => {
           searchQuery={searchvalue}
           category={category}
           itemsCountPerPage={10}
-          pageRangeDisplayed={3}
+          pageRangeDisplayed={10}
           selectBookID={onSelectBook}
         ></BookPagination>
       </CardBody>

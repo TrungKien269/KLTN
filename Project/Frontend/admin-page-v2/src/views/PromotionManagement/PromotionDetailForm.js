@@ -104,8 +104,12 @@ const PromotionDetailForm = (props) => {
               title: "Done",
               text: "Create this promotion book",
               icon: "success",
+            }).then(() => {
+              handleReset();
+              setTimeout(() => {
+                window.location.reload();
+              }, 2000)
             });
-            handleReset();
           }
           else {
             Swal.fire({

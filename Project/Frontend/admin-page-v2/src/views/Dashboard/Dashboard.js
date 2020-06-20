@@ -198,7 +198,6 @@ const Dashboard = () => {
       url: "http://localhost:5000/api/Admin/NumberAccountWithYear",
     }).then((res) => {
       if (res.data.status) {
-        console.log(res.data.obj);
         var labels = res.data.obj.map((data) => {
           return data.year;
         });

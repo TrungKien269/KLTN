@@ -29,6 +29,7 @@ import {
   Row,
 } from "reactstrap";
 import Axios from "axios";
+import Swal from "sweetalert2";
 
 const BookForm = (props) => {
   const { selectedID } = props;
@@ -60,7 +61,7 @@ const BookForm = (props) => {
         method: "get",
         url: `http://localhost:5000/api/BookInfo/Book/${selectedID}`,
       }).then((res) => {
-        console.log(res.data.obj);
+        // console.log(res.data.obj);
         document.getElementById("product-id").value = res.data.obj.id;
         document.getElementById("book-name").value = res.data.obj.name;
         document.getElementById("orprice-input").value =
@@ -373,42 +374,86 @@ const BookForm = (props) => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-
-    Axios({
-      headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
-      },
-      url: "http://localhost:5000/api/Admin/InsertUpdateBook",
-      method: "post",
-      params: {
-        id: id,
-        name: bookname,
-        originalPrice: parseInt(orPrice),
-        currentPrice: parseInt(curPrice),
-        releaseYear: parseInt(pubYear),
-        weight: parseFloat(weight),
-        numOfPage: parseInt(numPage),
-        image: thumbnail,
-        summary: summary,
-        status: "Available",
-        cateID: parseInt(category),
-        formID: parseInt(form),
-        supplierID: parseInt(supplier),
-        publisherID: parseInt(publisher),
-        images: imageList,
-      },
-      data: authorList,
-      paramsSerializer: (params) => {
-        return qs.stringify(params);
-      },
+    Swal.fire({
+      title: "Confirm",
+      text: "Do you want to modify this book?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, sure!",
+    }).then((result) => {
+      if (result.value) {
+        Axios({
+          headers: {
+            Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
+          },
+          url: "http://localhost:5000/api/Admin/InsertUpdateBook",
+          method: "post",
+          params: {
+            id: id,
+            name: bookname,
+            originalPrice: parseInt(orPrice),
+            currentPrice: parseInt(curPrice),
+            releaseYear: parseInt(pubYear),
+            weight: parseFloat(weight),
+            numOfPage: parseInt(numPage),
+            image: thumbnail,
+            summary: summary,
+            status: "Available",
+            cateID: parseInt(category),
+            formID: parseInt(form),
+            supplierID: parseInt(supplier),
+            publisherID: parseInt(publisher),
+            images: imageList,
+          },
+          data: authorList,
+          paramsSerializer: (params) => {
+            return qs.stringify(params);
+          },
+        }).then((res) => {
+          if (res.data.status) {
+            Swal.fire({
+              title: "Done",
+              text: "Modify Book",
+              icon: "success",
+            })
+          }
+          else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: res.data.message,
+            });
+          }
+        })
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: err,
+            });
+          });
+      }
     })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
+
+  const ShowButton = useMemo(() => {
+    if (selectedID != null) {
+      return (
+        <Button type="submit" size="sm" color="primary">
+          <i className="fa fa-dot-circle-o"></i> Update
+      </Button>
+      )
+    }
+    else {
+      return (
+        <Button type="submit" size="sm" color="primary">
+          <i className="fa fa-dot-circle-o"></i> Create
+          </Button>
+      )
+    }
+  }, [selectedID])
 
   return (
     <Card>
@@ -693,9 +738,7 @@ const BookForm = (props) => {
               </Label>
             </Col>
           </FormGroup>
-          <Button type="submit" size="sm" color="primary">
-            <i className="fa fa-dot-circle-o"></i> Add/Update
-          </Button>
+          {ShowButton}
           <Button
             type="reset"
             size="sm"

@@ -56,13 +56,13 @@ const Login = (props) => {
     <div className="app flex-row align-items-center">
       <Container>
         <Row className="justify-content-center">
-          <Col md="8">
+          <Col md="5">
             <CardGroup>
               <Card className="p-4">
                 <CardBody>
                   <Form onSubmit={(e) => handleFormSubmit(e)}>
                     <h1>Login</h1>
-                    <p className="text-muted">Sign In to your account</p>
+                    <p className="text-muted">Login to admin system</p>
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
@@ -74,6 +74,7 @@ const Login = (props) => {
                         type="text"
                         placeholder="Username"
                         autoComplete="username"
+                        autoFocus={true}
                       />
                     </InputGroup>
                     <InputGroup className="mb-4">
@@ -95,16 +96,11 @@ const Login = (props) => {
                           Login
                         </Button>
                       </Col>
-                      <Col xs="6" className="text-right">
-                        <Button color="link" className="px-0">
-                          Forgot password?
-                        </Button>
-                      </Col>
                     </Row>
                   </Form>
                 </CardBody>
               </Card>
-              <Card
+              {/*<Card
                 className="text-white bg-primary py-5 d-md-down-none"
                 style={{ width: "44%" }}
               >
@@ -128,7 +124,7 @@ const Login = (props) => {
                     </Link>
                   </div>
                 </CardBody>
-              </Card>
+              </Card> */}
             </CardGroup>
           </Col>
         </Row>
