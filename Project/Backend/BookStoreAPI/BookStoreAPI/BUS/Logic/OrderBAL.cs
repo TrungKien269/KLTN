@@ -69,6 +69,7 @@ namespace BookStoreAPI.BUS.Logic
         {
             try
             {
+                var bookNumberBal = new BookNumberBAL();
                 var order = new Order
                 {
                     Id = "Order" + (((await CountOrder()).Obj as int?).Value + 1),
@@ -98,6 +99,10 @@ namespace BookStoreAPI.BUS.Logic
                     };
                     order.OrderDetail.Add(orderDetail);
                     response = await CreateOrderDetail(orderDetail);
+                    if (response.Status is false)
+                        throw new Exception(response.Message);
+                    response = await bookNumberBal.UpdateNumberForBook(orderDetailRequest.BookID,
+                        orderDetailRequest.Quantity);
                     if (response.Status is false)
                         throw new Exception(response.Message);
                 }
@@ -337,6 +342,39 @@ namespace BookStoreAPI.BUS.Logic
                         NumberOrder = x.Count()
                     }).OrderBy(x => x.Month).ToListAsync();
                 return new Response("Success", true, orders.Count, orders);
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
+        public async Task<Response> CheckNumberBookOrder(List<OrderDetailRequest> orderDetailRequests)
+        {
+            try
+            {
+                var flag = 1;
+                var count = 0;
+                for (int i = 0; i < orderDetailRequests.Count; i++)
+                {
+                    var bookNumber = await context.BookNumber.Where(x => x.BookId.Equals(orderDetailRequests[i].BookID))
+                        .FirstOrDefaultAsync();
+                    if (orderDetailRequests[i].Quantity > bookNumber.Amount)
+                    {
+                        flag = 0;
+                        count++;
+                        orderDetailRequests[i].Quantity = bookNumber.Amount;
+                    }
+                }
+
+                if (flag is 1)
+                {
+                    return new Response("Success", true, count, orderDetailRequests);
+                }
+                else
+                {
+                    return new Response("Fail", false, count, orderDetailRequests);
+                }
             }
             catch (Exception e)
             {

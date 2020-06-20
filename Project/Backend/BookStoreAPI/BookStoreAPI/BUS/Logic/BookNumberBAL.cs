@@ -61,5 +61,32 @@ namespace BookStoreAPI.BUS.Logic
                 return Response.CatchError(e.Message);
             }
         }
+
+        public async Task<Response> UpdateNumberForBook(string bookID, int amount)
+        {
+            try
+            {
+                var book = await context.BookNumber.Where(x => x.BookId.Equals(bookID)).FirstOrDefaultAsync();
+                book.Amount = book.Amount - amount;
+                if (book.Amount <= 0)
+                {
+                    book.Amount = 0;
+                }
+                context.BookNumber.Update(book);
+                var check = await context.SaveChangesAsync();
+                if (check is 1)
+                {
+                    return new Response("Success", true, 1, book);
+                }
+                else
+                {
+                    return new Response("Update fail!", false, 0, book);
+                }
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
     }
 }

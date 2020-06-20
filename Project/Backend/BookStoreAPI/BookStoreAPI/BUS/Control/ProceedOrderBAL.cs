@@ -87,5 +87,10 @@ namespace BookStoreAPI.BUS.Control
         {
             return await couponCodeBal.DisableCoupon(code);
         }
+
+        public async Task<Response> CheckNumberBookOrder(List<OrderDetailRequest> orderDetailRequests)
+        {
+            return await orderBal.CheckNumberBookOrder(orderDetailRequests);
+        }
     }
 }
