@@ -122,7 +122,6 @@ const ProductCard = (props) => {
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
       </Modal>
-
       <Link to={`/book/${props.id}`} title={props.name}>
         <div className="card display-on-hover">
           {ShowSaleOff}
@@ -131,7 +130,6 @@ const ProductCard = (props) => {
             src={props.image}
             alt="Card image cap"
           />
-
           <div className="card-body">
             <h5 className="card__book-title">{props.name}</h5>
             <ProductRatingCard id={props.id} />

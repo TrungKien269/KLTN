@@ -149,7 +149,7 @@ const Signup = (props) => {
                   value="Male"
                   onClick={(e) => handleGenderChanged(e)}
                 />
-                <label for="male">Male</label>
+                <label htmlFor="male">Male</label>
                 <div class="check"></div>
               </li>
               <li>
@@ -160,7 +160,7 @@ const Signup = (props) => {
                   value="Female"
                   onClick={(e) => handleGenderChanged(e)}
                 />
-                <label for="female">Female</label>
+                <label htmlFor="female">Female</label>
                 <div class="check">
                   <div class="inside"></div>
                 </div>

@@ -680,8 +680,7 @@ body::-webkit-scrollbar-thumb {
   text-transform: uppercase;
   font-size: 3rem;
   font-weight: 200;
-  color: #fff;
-  margin-bottom: 3rem;
+  color: #03a9f4;
 }
 .navbar-toggler p {
   font-size: 1.2rem;
@@ -695,15 +694,7 @@ body::-webkit-scrollbar-thumb {
   color: #1ebf90;
 }
 .navbar-toggler:hover p {
-  color: #1ebf90;
-}
-.navbar-toggler:hover span,
-.navbar-toggler:hover span::before,
-.navbar-toggler:hover span::after {
-  background-color: #1ebf90;
-}
-.navbar-toggler i {
-  margin-right: 1.5rem;
+  color: #3c413f;
 }
 
 .nav-item {
@@ -1093,7 +1084,7 @@ body::-webkit-scrollbar-thumb {
   align-items: center;
   position: absolute;
   transform: translate(0, -50%);
-  top: 30%;
+  top: 50%;
   box-shadow: 0 0.4rem 0.4rem rgba(0, 0, 0, 0.4);
   height: 5.3rem;
   width: 5.3rem;
@@ -1301,12 +1292,6 @@ body::-webkit-scrollbar-thumb {
   line-height: 30px;
 }
 
-.mega-menu {
-  width: 80%;
-  padding: 3rem 3rem;
-  left: 50%;
-  transform: translate(-50%, 0);
-}
 .mega-menu-sm {
   width: 20rem;
   padding: 1rem 2rem;
