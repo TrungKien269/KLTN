@@ -9,6 +9,7 @@ import ProductRatingVote from "./ProductRatingVote";
 import { useTranslation } from "react-i18next";
 import OwlCarousel from "react-owl-carousel2";
 import { LightgalleryProvider, LightgalleryItem } from "react-lightgallery";
+import ProductCard from "./ProductCard";
 
 function ProductDetailSection(props) {
   const [data, setData] = useState(null);
@@ -163,6 +164,7 @@ function ProductDetailSection(props) {
   const options = {
     items: 1,
     nav: true,
+    center: true,
     rewind: true,
     autoplay: true,
     dots: false,
@@ -171,39 +173,56 @@ function ProductDetailSection(props) {
       "<span aria-label='Next'>›</span>",
     ],
   };
-
+  const optionRelatedBook = {
+    nav: true,
+    items: 4,
+    margin: 20,
+    loop: false,
+    autoWidth: false,
+    dots: false,
+    responsive: {
+      0: {
+        items: 1,
+      },
+      320: {
+        items: 2,
+      },
+      768: {
+        items: 3,
+      },
+      992: {
+        items: 4,
+      },
+      1200: {
+        items: 5,
+      },
+    },
+    navText: [
+      "<span aria-label='Previous'>‹</span>",
+      "<span aria-label='Next'>›</span>",
+    ],
+  };
   //show related book
   const showRelatedBooks = useMemo(() => {
     var results = "";
     if (similarityRef.current && similarityRef.current.length > 0) {
       results = similarityRef.current.slice(0, 5).map((book) => {
         return (
-          <li>
-            <div className="row">
-              <div className="col-md-6">
-                <Link to={`/book/${book.id}`} title={book.name}>
-                  <img
-                    src={book.image}
-                    className="img-cover shadow-lg"
-                    alt=""
-                  />
-                </Link>
-              </div>
-              <div className="col-md">
-                <Link to={`/book/${book.id}`} title={book.name}>
-                  {book.name}
-                </Link>
-                <p className="card__book-price">
-                  <NumberFormat
-                    value={book.currentPrice}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    suffix={" VND"}
-                  ></NumberFormat>
-                </p>
-              </div>
-            </div>
-          </li>
+          <div className="item" key={book.id}>
+            <ProductCard
+              id={book.id}
+              name={book.name}
+              image={book.image}
+              price={
+                <NumberFormat
+                  value={book.currentPrice}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  suffix={" VND"}
+                />
+              }
+            />
+          </div>
         );
       });
     }
@@ -293,18 +312,9 @@ function ProductDetailSection(props) {
         <section className="section__detail">
           <div className="container">
             <div className="row">
-              <div className="col-md">
-                <div className="sidebar-block">
-                  <h2>{t("Related Books")}</h2>
-                  <ul className="list-unstyled sidebar-list">
-                    {/* show related book */}
-                    {showRelatedBooks}
-                  </ul>
-                </div>
-              </div>
-              <div className="col-md-9">
+              <div className="col-md-12">
                 <div className="row">
-                  <div className="col-md-5 mar-right-sm d-flex align-items-center">
+                  <div className="col-md-6 col-lg-5 mar-right-sm d-flex align-items-center">
                     {/*Carousel-slide*/}
                     {/* <div className="container-fluid">{showSlideBooks}</div> */}
                     {/*/Carousel-slide*/}
@@ -322,7 +332,7 @@ function ProductDetailSection(props) {
                       </OwlCarousel>
                     </LightgalleryProvider>
                   </div>
-                  <div className="col-md">
+                  <div className="col-md-6 col-lg-7">
                     <div className="title-wrapper">
                       <h3>{data.name}</h3>
                     </div>
@@ -336,8 +346,8 @@ function ProductDetailSection(props) {
                       dangerouslySetInnerHTML={{ __html: data.summary }}
                     ></div>
                     <div className="row">
-                      <div className="col-md-6">
-                        <div className="quantity buttons_added d-flex flex-row mar-top-2">
+                      <div className="col-lg-6">
+                        <div className="quantity buttons_added d-flex flex-row mar-top-2 justify-content-md-center">
                           <input
                             type="button"
                             defaultValue="-"
@@ -365,7 +375,7 @@ function ProductDetailSection(props) {
                           />
                         </div>
                       </div>
-                      <div className="col-md-5">
+                      <div className="col-lg-6">
                         <a
                           href="#"
                           className="btn btn-fw btn--rounded btn--blue"
@@ -443,6 +453,14 @@ function ProductDetailSection(props) {
                       </tbody>
                     </table>
                   </div>
+                </div>
+              </div>
+              <div className="col-md-12">
+                <div className="sidebar-block">
+                  <h2>{t("Related Books")}</h2>
+                  <OwlCarousel options={optionRelatedBook}>
+                    {showRelatedBooks}
+                  </OwlCarousel>
                 </div>
               </div>
             </div>

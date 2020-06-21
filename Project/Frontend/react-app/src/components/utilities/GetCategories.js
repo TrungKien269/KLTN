@@ -35,3 +35,5 @@ const GetCategories = () => {
 };
 
 export default withRouter(GetCategories);
+
+

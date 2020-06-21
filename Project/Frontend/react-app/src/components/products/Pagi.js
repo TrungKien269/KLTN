@@ -136,15 +136,16 @@ const Index = (props) => {
       }
     } else {
       result.push(
-        <React.Fragment>
-          <div className="d-flex flex-column justify-content-center align-items-center w-100">
-            <h2>NOT FOUND</h2>
-            <img
-              className="img-contain img-cover-50"
-              src="/img/empty_state.png"
-            />
-          </div>
-        </React.Fragment>
+        <div
+          className="d-flex flex-column justify-content-center align-items-center w-100"
+          key="not-found"
+        >
+          <h2>NOT FOUND</h2>
+          <img
+            className="img-contain img-cover-50"
+            src="/img/empty_state.png"
+          />
+        </div>
       );
     }
     return result;

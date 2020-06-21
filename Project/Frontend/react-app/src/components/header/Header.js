@@ -78,7 +78,7 @@ const Header = (props) => {
     if (token) {
       return (
         <Trans i18nKey="user">
-          <React.Fragment>
+          <div className="d-flex flex-row align-items-center">
             <div>
               <Link
                 to="/wishlist"
@@ -97,7 +97,7 @@ const Header = (props) => {
                 data-placement="bottom"
                 title={"Cart"}
               >
-                <i class="fas fa-shopping-cart"></i>
+                <i className="fas fa-shopping-cart"></i>
               </Link>
             </div>
 
@@ -110,7 +110,9 @@ const Header = (props) => {
                 aria-expanded="false"
               >
                 <div className="user__ava-signin d-flex align-items-center">
-                  {user && user.fullName}
+                  <div className="d-flex flex-nowrap">
+                    {user && user.fullName}
+                  </div>
                   <span className="header-avatar">
                     <img
                       className="img img-cover"
@@ -139,7 +141,7 @@ const Header = (props) => {
                 </div>
               </div>
             </div>
-          </React.Fragment>
+          </div>
         </Trans>
       );
     } else {
@@ -164,12 +166,11 @@ const Header = (props) => {
   return (
     <React.Fragment>
       <nav className="navbar navbar-shadow">
-        <div className="container justify-content-between">
+        <div className="container-fluid d-flex flex-row justify-content-around flex-md-nowrap">
           <Link to="/" className="navbar-sm-brand">
             <img src={process.env.PUBLIC_URL + "/img/logo.png"} alt="" />
           </Link>
           <SearchBar />
-
           <div className="hidden-md-elements nav__social-icon">
             <div className="dropdown ">
               <a
@@ -229,7 +230,7 @@ const Header = (props) => {
           </div>
         </div>
       </nav>
-      <nav className="navbar navbar-pad-sm navbar-expand-lg bg-light hidden-lg-elements">
+      <nav className="navbar navbar-expand-lg navbar-pad-sm bg-light">
         {/* Collapse button */}
         <button
           className="navbar-toggler"
@@ -240,31 +241,32 @@ const Header = (props) => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon" />
+          <span className="navbar-toggler-icon d-flex align-items-center">
+            <i className="fas fa-bars"></i>
+          </span>
         </button>
         {/* Collapsible content */}
         <div
-          className="collapse navbar-collapse d-flex justify-content-center"
+          className="collapse navbar-collapse d-lg-flex justify-content-md-center"
           id="navbarSupportedContent2"
         >
           {/* Links */}
           <ul className="navbar-nav">
             {/* Textbooks */}
-            <li className="nav-item dropdown mega-dropdown">
-              <Link
-                to="/"
+            <li className="nav-item dropdown mega-dropdown active">
+              <a
                 className="nav-link dropdown-toggle"
-                id="navbarDropdownMenuLink3"
+                id="navbarDropdownMenuLink2"
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                {t("Categories")}
-                <i className="fa fa-angle-down hidden-xs" />
-              </Link>
+                Categories
+                <span className="sr-only">(current)</span>
+              </a>
               <div
-                className="dropdown-menu mega-menu"
-                aria-labelledby="navbarDropdownMenuLink3"
+                className="dropdown-menu mega-menu v-2 z-depth-1  py-5 px-3 text-center"
+                aria-labelledby="navbarDropdownMenuLink2"
               >
                 <div className="row">
                   <GetCategories />
