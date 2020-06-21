@@ -768,9 +768,9 @@ body::-webkit-scrollbar-thumb {
   text-decoration: none;
 }
 .nav__social-icon svg {
-  margin-right: 1rem;
+  margin-right: 2rem;
   color: #03a9f4;
-  font-size: 3rem;
+  font-size: 2.4rem;
 }
 
 .nav-item:not(:last-child) {
@@ -968,7 +968,7 @@ body::-webkit-scrollbar-thumb {
   font-size: 1.8rem;
   font-weight: 200;
   color: #bbb;
-  width: 50%;
+  width: 30%;
 }
 @media (max-width: 47em) {
   .input__search-bar {

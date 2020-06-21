@@ -78,7 +78,7 @@ const Header = (props) => {
     if (token) {
       return (
         <Trans i18nKey="user">
-          <React.Fragment>
+          <div className="d-flex flex-row align-items-center">
             <div>
               <Link
                 to="/wishlist"
@@ -110,7 +110,9 @@ const Header = (props) => {
                 aria-expanded="false"
               >
                 <div className="user__ava-signin d-flex align-items-center">
-                  {user && user.fullName}
+                  <div className="d-flex flex-nowrap">
+                    {user && user.fullName}
+                  </div>
                   <span className="header-avatar">
                     <img
                       className="img img-cover"
@@ -139,7 +141,7 @@ const Header = (props) => {
                 </div>
               </div>
             </div>
-          </React.Fragment>
+          </div>
         </Trans>
       );
     } else {
@@ -164,7 +166,7 @@ const Header = (props) => {
   return (
     <React.Fragment>
       <nav className="navbar navbar-shadow">
-        <div className="container justify-content-between">
+        <div className="container-fluid d-flex flex-row justify-content-around flex-md-nowrap">
           <Link to="/" className="navbar-sm-brand">
             <img src={process.env.PUBLIC_URL + "/img/logo.png"} alt="" />
           </Link>
@@ -228,111 +230,6 @@ const Header = (props) => {
             <>{loginNav}</>
           </div>
         </div>
-      </nav>
-      <nav className="navbar navbar-pad-sm navbar-expand-lg bg-light hidden-lg-elements">
-        {/* Collapse button */}
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent2"
-          aria-controls="navbarSupportedContent2"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon" />
-        </button>
-        {/* Collapsible content */}
-        <div
-          className="collapse navbar-collapse d-flex justify-content-center"
-          id="navbarSupportedContent2"
-        >
-          {/* Links */}
-          <ul className="navbar-nav">
-            {/* Textbooks */}
-            <li className="nav-item dropdown mega-dropdown">
-              <Link
-                to="/"
-                className="nav-link dropdown-toggle"
-                id="navbarDropdownMenuLink3"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                {t("Categories")}
-                <i className="fa fa-angle-down hidden-xs" />
-              </Link>
-              <div
-                className="dropdown-menu mega-menu"
-                aria-labelledby="navbarDropdownMenuLink3"
-              >
-                <div className="row">
-                  <GetCategories />
-                </div>
-              </div>
-            </li>
-            {/* Audio book */}
-            <li className="nav-item mega-dropdown">
-              <Link to="/ebooks/" className="nav-link dropdown-toggle">
-                {t("Ebooks")}
-              </Link>
-            </li>
-            {/* recommended */}
-            <li className="nav-item mega-dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                onClick={ScrollToRecommendSection}
-              >
-                {t("Recommend")}
-              </a>
-            </li>
-            {/* Sale */}
-            <li className="nav-item mega-dropdown">
-              <Link to="#" className="nav-link dropdown-toggle">
-                {t("Sale")}
-              </Link>
-            </li>
-            {/*Pages*/}
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                id="navbarDropdownMenuLink4"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Pages
-                <i className="fa fa-angle-down hidden-xs" />
-              </a>
-              <div
-                className="dropdown-menu mega-menu mega-menu-sm "
-                aria-labelledby="navbarDropdownMenuLink4"
-              >
-                <div className="row">
-                  <ul className="list-unstyled">
-                    <li>
-                      <Link to="/contact.html">Contact us</Link>
-                    </li>
-                    <li>
-                      <Link to="/about.html">About</Link>
-                    </li>
-                    <li>
-                      <Link to="/authors.html">Author</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Limited Offer Time</Link>
-                    </li>
-                    <li>
-                      <Link to="#">FAQs</Link>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </li>
-          </ul>
-          {/* Links */}
-        </div>
-        {/* Collapsible content */}
       </nav>
     </React.Fragment>
   );

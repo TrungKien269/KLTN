@@ -163,6 +163,7 @@ function ProductDetailSection(props) {
   const options = {
     items: 1,
     nav: true,
+    center: true,
     rewind: true,
     autoplay: true,
     dots: false,
@@ -336,8 +337,8 @@ function ProductDetailSection(props) {
                       dangerouslySetInnerHTML={{ __html: data.summary }}
                     ></div>
                     <div className="row">
-                      <div className="col-md-6">
-                        <div className="quantity buttons_added d-flex flex-row mar-top-2">
+                      <div className="col-lg-6">
+                        <div className="quantity buttons_added d-flex flex-row mar-top-2 justify-content-md-center">
                           <input
                             type="button"
                             defaultValue="-"
@@ -365,7 +366,7 @@ function ProductDetailSection(props) {
                           />
                         </div>
                       </div>
-                      <div className="col-md-5">
+                      <div className="col-lg-6">
                         <a
                           href="#"
                           className="btn btn-fw btn--rounded btn--blue"
