@@ -33,6 +33,7 @@ function CardCheckout(props) {
 
   const [orderTotal, setOrderTotal] = useState(0);
   const [shippingFee, setShippingFee] = useState(0);
+  const [bookTotal, setBookTotal] = useState(0);
 
   const [discount, setDiscount] = useState(0);
 
@@ -65,6 +66,7 @@ function CardCheckout(props) {
       setFullName(props.userInfo.fullName);
       setPhoneNumber(props.userInfo.phoneNumber);
       setAddress(props.userInfo.address);
+      setEmail(props.userInfo.account.email)
     }
   }, [props.userInfo]);
 
@@ -94,10 +96,11 @@ function CardCheckout(props) {
           quantity: x[i].quantity,
         });
       }
+      setBookTotal(parseInt(total));
       setOrderTotal(parseInt(total) + shippingFee);
     }
     return order;
-  }, [cartBook, orderTotal]);
+  }, [cartBook, orderTotal, shippingFee]);
 
   const showListCity = useMemo(() => {
     let cityItems = [];
@@ -165,75 +168,158 @@ function CardCheckout(props) {
     setCVC(evt.target.value);
   };
 
+  const handleReset = () => {
+    Swal.fire({
+      title: "Confirm",
+      text: "Do you want to reset all information?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, reset!",
+    }).then((result) => {
+      if (result.value) {
+        setUserInfor(null);
+        setFullName(null);
+        setPhoneNumber(null);
+        setAddress(null);
+        setEmail(null)
+        setCVC(null);
+        setCardNumber(null);
+        setExpMonth(null);
+        setExpYear(null);
+      }
+    })
+  }
+
   const Pay = (e) => {
     e.preventDefault();
-    window.Stripe.card.createToken(
-      {
-        number: cardNumber,
-        exp_month: expMonth,
-        exp_year: expYear,
-        cvc: cvc,
-      },
-      (status, response) => {
-        if (status === 200) {
-          Axios({
-            headers: {
-              Authorization: "Bearer " + getToken(),
-            },
-            method: "post",
-            url: "http://localhost:5000/api/ProceedOrder/CardCheckout",
-            params: {
-              stripeEmail: email,
-              stripeToken: response.id,
-              type: "Card",
-              total: parseInt(orderTotal) - parseInt(orderTotal) * discount,
-              shippingFee: parseInt(shippingFee),
-              fullName: fullName,
-              phoneNumber: phonenumber,
-              address: address + " " + city,
-            },
-            data: proceedOrder,
-          })
-            .then((res) => {
-              if (res.data.status) {
-                setCartBook(null);
-                props.isCheckout(true);
-                Swal.fire({
-                  title: "Success",
-                  text: "Your order is on processing",
-                  icon: "success",
-                  confirmButtonText: "Back to store",
-                }).then(() => {
-                  Axios({
-                    headers: {
-                      Authorization: "Bearer " + getToken(),
-                    },
-                    method: "delete",
-                    url: "http://localhost:5000/api/UserCart/ResetCart",
-                  });
-                });
-              } else {
-                Swal.fire({
-                  title: "Error",
-                  text: res.data.message,
-                  icon: "error",
-                });
-              }
+    if (proceedOrder.length > 0) {
+      Axios({
+        method: "post",
+        url: "http://localhost:5000/api/ProceedOrder/CheckBookOrder",
+        data: proceedOrder
+      }).then((res) => {
+        if (res.data.status === false) {
+          var currentCartBook = cartBook;
+          var bookInfo = "";
+          for (var i = 0; i < currentCartBook.cartBook.length; i++) {
+            if (currentCartBook.cartBook[i].quantity > res.data.obj[i].quantity) {
+              currentCartBook.cartBook[i].quantity = res.data.obj[i].quantity;
+              currentCartBook.cartBook[i].subTotal = currentCartBook.cartBook[i].book.currentPrice * res.data.obj[i].quantity;
+              bookInfo += "<p>" + currentCartBook.cartBook[i].book.name + ": &nbsp;" +
+                res.data.obj[i].quantity + "\n</p>";
+            }
+          }
+          currentCartBook.cartBook = currentCartBook.cartBook.filter(x => x.quantity !== 0);
+          Swal.fire({
+            titleText: "Your order contains some books which are not enough amount",
+            icon: "info",
+            html: "<div>" + bookInfo + "</div>"
+          }).then(() => {
+            Swal.fire({
+              titleText: "Refresh your order products",
+              icon: "info",
+              html: "You can review all available product before checking out"
             })
-            .catch((err) => {
-              Swal.fire({
-                title: "Error",
-                text: err,
-                icon: "error",
-              });
-            });
-        } else {
-          console.log(status);
-          console.log(response);
-          alert("Error");
+          })
+          setCartBook((prev) => {
+            return { ...prev, ...currentCartBook };
+          });
+          props.updateCartBook(currentCartBook);
         }
-      }
-    );
+        else {
+          Swal.fire({
+            title: "Confirm",
+            text: "Do you want to check out?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, check out!",
+          }).then((result) => {
+            if (result.value) {
+              window.Stripe.card.createToken(
+                {
+                  number: cardNumber,
+                  exp_month: expMonth,
+                  exp_year: expYear,
+                  cvc: cvc,
+                },
+                (status, response) => {
+                  if (status === 200) {
+                    Axios({
+                      headers: {
+                        Authorization: "Bearer " + getToken(),
+                      },
+                      method: "post",
+                      url: "http://localhost:5000/api/ProceedOrder/CardCheckout",
+                      params: {
+                        stripeEmail: email,
+                        stripeToken: response.id,
+                        type: "Card",
+                        total: parseInt(orderTotal) - parseInt(orderTotal) * discount,
+                        shippingFee: parseInt(shippingFee),
+                        fullName: fullName,
+                        phoneNumber: phonenumber,
+                        address: address + " " + city,
+                      },
+                      data: proceedOrder,
+                    })
+                      .then((res) => {
+                        if (res.data.status) {
+                          setCartBook(null);
+                          props.isCheckout(true);
+                          Swal.fire({
+                            title: "Success",
+                            text: "Your order is on processing",
+                            icon: "success",
+                            confirmButtonText: "Back to store",
+                          }).then(() => {
+                            Axios({
+                              headers: {
+                                Authorization: "Bearer " + getToken(),
+                              },
+                              method: "delete",
+                              url: "http://localhost:5000/api/UserCart/ResetCart",
+                            });
+                          });
+                        } else {
+                          Swal.fire({
+                            title: "Error",
+                            text: res.data.message,
+                            icon: "error",
+                          });
+                        }
+                      })
+                      .catch((err) => {
+                        Swal.fire({
+                          title: "Error",
+                          text: err,
+                          icon: "error",
+                        });
+                      });
+                  } else {
+                    Swal.fire({
+                      title: "Error",
+                      text: response,
+                      icon: "error",
+                    });
+                  }
+                }
+              );
+            }
+          })
+        }
+      })
+    }
+    else {
+      Swal.fire({
+        title: "Error",
+        text: "You must select one or more books before checking out!",
+        icon: "error",
+      });
+    }
   };
 
   return (
@@ -260,7 +346,7 @@ function CardCheckout(props) {
                   name="email"
                   className="form-control"
                   placeholder="Your email"
-                  value={email !== "" ? email : ""}
+                  defaultValue={userInfor && userInfor.account.email}
                   onChange={(e) => handleEmailChange(e)}
                 />
               </div>
@@ -332,6 +418,7 @@ function CardCheckout(props) {
                         maxLength="20"
                         placeholder="Enter your credit card number"
                         options={{ creditCard: true }}
+                        value={cardNumber ? cardNumber : ""}
                         onChange={(e) => handleCardNumberChange(e)}
                       />
                     </div>
@@ -346,6 +433,7 @@ function CardCheckout(props) {
                       className="form-control"
                       placeholder="CVC"
                       maxLength="4"
+                      value={cvc ? cvc : ""}
                       onChange={(e) => handleCVCChange(e)}
                     />
                   </div>
@@ -365,6 +453,7 @@ function CardCheckout(props) {
                       <select
                         name="expMonth"
                         className="form-control"
+                        value={expMonth ? expMonth : "Select Month"}
                         onChange={(e) => handleExpMonthChange(e)}
                       >
                         <option value="">Select Month</option>
@@ -388,6 +477,7 @@ function CardCheckout(props) {
                       <select
                         name="expYear"
                         className="form-control"
+                        value={expYear ? expYear : "Select Year"}
                         onChange={(e) => handleExpYearChange(e)}
                       >
                         <option value="">Select Year</option>
@@ -412,7 +502,8 @@ function CardCheckout(props) {
         </div>
         <div className="panel-footer p-0 mt-3">
           <div className="d-flex flex-row">
-            <button className="btn btn-reset btn-block h-100 m-0 w-50 text-left">
+            <button className="btn btn-reset btn-block h-100 m-0 w-50 text-left"
+              type="button" onClick={handleReset}>
               <i class="fas fa-chevron-left mr-2"></i>
               Reset
             </button>

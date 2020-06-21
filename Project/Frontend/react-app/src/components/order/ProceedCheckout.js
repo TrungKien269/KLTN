@@ -32,6 +32,7 @@ const ProceedCheckout = (props) => {
 
   const [orderTotal, setOrderTotal] = useState(0);
   const [shippingFee, setShippingFee] = useState(0);
+  const [bookTotal, setBookTotal] = useState(0);
 
   const [coupon, setCoupon] = useState(null);
   const [discount, setDiscount] = useState(0);
@@ -155,6 +156,7 @@ const ProceedCheckout = (props) => {
       setFullName(res.data.obj.fullName);
       setPhoneNumber(res.data.obj.phoneNumber);
       setAddress(res.data.obj.address);
+      setEmail(res.data.obj.account.email)
     });
   }, []);
 
@@ -177,75 +179,113 @@ const ProceedCheckout = (props) => {
           quantity: x[i].quantity,
         });
       }
+      setBookTotal(parseInt(total));
       setOrderTotal(parseInt(total) + shippingFee);
     }
     return order;
   }, [cartBook, orderTotal, shippingFee]);
 
+
+
   const handleSubmit = () => {
     if (proceedOrder.length > 0) {
-      Swal.fire({
-        title: "Confirm",
-        text: "Do you want to check out?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, check out!",
-      }).then((result) => {
-        if (result.value) {
-          Axios({
-            headers: {
-              Authorization: "Bearer " + getToken(),
-            },
-            method: "post",
-            url: "http://localhost:5000/api/ProceedOrder/CODCheckout",
-            params: {
-              email: email,
-              type: "COD",
-              total: parseInt(orderTotal) - parseInt(orderTotal) * discount,
-              shippingFee: shippingFee,
-              fullName: fullName,
-              phoneNumber: phonenumber,
-              address: address + " " + city,
-            },
-            data: proceedOrder,
+      Axios({
+        method: "post",
+        url: "http://localhost:5000/api/ProceedOrder/CheckBookOrder",
+        data: proceedOrder
+      }).then((res) => {
+        if (res.data.status === false) {
+          var currentCartBook = cartBook;
+          var bookInfo = "";
+          for (var i = 0; i < currentCartBook.cartBook.length; i++) {
+            if (currentCartBook.cartBook[i].quantity > res.data.obj[i].quantity) {
+              currentCartBook.cartBook[i].quantity = res.data.obj[i].quantity;
+              currentCartBook.cartBook[i].subTotal = currentCartBook.cartBook[i].book.currentPrice * res.data.obj[i].quantity;
+              bookInfo += "<p>" + currentCartBook.cartBook[i].book.name + ": &nbsp;" +
+                res.data.obj[i].quantity + "\n</p>";
+            }
+          }
+          currentCartBook.cartBook = currentCartBook.cartBook.filter(x => x.quantity !== 0);
+          Swal.fire({
+            titleText: "Your order contains some books which are not enough amount",
+            icon: "info",
+            html: "<div>" + bookInfo + "</div>"
+          }).then(() => {
+            Swal.fire({
+              titleText: "Refresh your order products",
+              icon: "info",
+              html: "You can review all available product before checking out"
+            })
           })
-            .then((res) => {
-              if (res.data.status) {
-                setCartBook(null);
-                Swal.fire({
-                  title: "Success",
-                  text: "Your order is on processing",
-                  icon: "success",
-                  confirmButtonText: "Back to store",
-                }).then(() => {
-                  props.history.push("/collections/");
-                  Axios({
-                    headers: {
-                      Authorization: "Bearer " + getToken(),
-                    },
-                    method: "delete",
-                    url: "http://localhost:5000/api/UserCart/ResetCart",
+          setCartBook((prev) => {
+            return { ...prev, ...currentCartBook };
+          });
+        }
+        else {
+          Swal.fire({
+            title: "Confirm",
+            text: "Do you want to check out?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, check out!",
+          }).then((result) => {
+            if (result.value) {
+              Axios({
+                headers: {
+                  Authorization: "Bearer " + getToken(),
+                },
+                method: "post",
+                url: "http://localhost:5000/api/ProceedOrder/CODCheckout",
+                params: {
+                  email: email,
+                  type: "COD",
+                  total: parseInt(orderTotal) - parseInt(orderTotal) * discount,
+                  shippingFee: shippingFee,
+                  fullName: fullName,
+                  phoneNumber: phonenumber,
+                  address: address + " " + city,
+                },
+                data: proceedOrder,
+              })
+                .then((res) => {
+                  if (res.data.status) {
+                    setCartBook(null);
+                    Swal.fire({
+                      title: "Success",
+                      text: "Your order is on processing",
+                      icon: "success",
+                      confirmButtonText: "Back to store",
+                    }).then(() => {
+                      props.history.push("/collections/");
+                      Axios({
+                        headers: {
+                          Authorization: "Bearer " + getToken(),
+                        },
+                        method: "delete",
+                        url: "http://localhost:5000/api/UserCart/ResetCart",
+                      });
+                    });
+                  } else {
+                    Swal.fire({
+                      title: "Error",
+                      text: res.data.message,
+                      icon: "error",
+                    });
+                  }
+                })
+                .catch((err) => {
+                  Swal.fire({
+                    title: "Error",
+                    text: err,
+                    icon: "error",
                   });
                 });
-              } else {
-                Swal.fire({
-                  title: "Error",
-                  text: res.data.message,
-                  icon: "error",
-                });
-              }
-            })
-            .catch((err) => {
-              Swal.fire({
-                title: "Error",
-                text: err,
-                icon: "error",
-              });
-            });
+            }
+          });
         }
-      });
+      })
     } else {
       Swal.fire({
         title: "Error",
@@ -254,6 +294,32 @@ const ProceedCheckout = (props) => {
       });
     }
   };
+
+  const handleReset = () => {
+    Swal.fire({
+      title: "Confirm",
+      text: "Do you want to reset all information?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, reset!",
+    }).then((result) => {
+      if (result.value) {
+        setUserInfor(null);
+        setFullName(null);
+        setPhoneNumber(null);
+        setAddress(null);
+        setEmail(null);
+      }
+    })
+  }
+
+  const handleUpdateCartBook = (newCartBook) => {
+    setCartBook((prev) => {
+      return { ...prev, ...newCartBook };
+    });
+  }
 
   const SelectCity = (e) => {
     if (e.target.value) {
@@ -323,7 +389,6 @@ const ProceedCheckout = (props) => {
     if (cities && cities.length > 0) {
       cityItems = cities.map((city) => {
         return (
-          // <option value={city.ID}>{city.Title}</option>
           <option value={city.id}> {city.name} </option>
         );
       });
@@ -350,7 +415,6 @@ const ProceedCheckout = (props) => {
                       name="email"
                       className="form-control"
                       placeholder="Your email"
-                      value={email !== "" ? email : ""}
                       defaultValue={userInfor && userInfor.account.email}
                       ref={emailRef}
                       onChange={(e) => handleEmailChange(e)}
@@ -421,7 +485,8 @@ const ProceedCheckout = (props) => {
             </div>
             <div className="panel-footer p-0 mt-3">
               <div className="d-flex flex-row">
-                <button className="btn btn-reset btn-block h-100 m-0 w-50 text-left">
+                <button className="btn btn-reset btn-block h-100 m-0 w-50 text-left"
+                  type="button" onClick={handleReset}>
                   <i class="fas fa-chevron-left mr-2"></i>
                   Reset
                 </button>
@@ -502,6 +567,7 @@ const ProceedCheckout = (props) => {
             isCheckout={(check) => handleCheckout(check)}
             shippingFeeChanged={(fee) => handleShippingFeeChange(fee)}
             discount={discount}
+            updateCartBook={(newCartBook) => handleUpdateCartBook(newCartBook)}
           />
         </Tab.Pane>
       ),
@@ -516,6 +582,7 @@ const ProceedCheckout = (props) => {
             isCheckout={(check) => handleCheckout(check)}
             shippingFeeChanged={(fee) => handleShippingFeeChange(fee)}
             discount={discount}
+            updateCartBook={(newCartBook) => handleUpdateCartBook(newCartBook)}
           />
         </Tab.Pane>
       ),
@@ -570,7 +637,7 @@ const ProceedCheckout = (props) => {
                   <div className="product-price">
                     {
                       <NumberFormat
-                        value={orderTotal}
+                        value={bookTotal}
                         thousandSeparator={true}
                         displayType={"text"}
                         suffix=" VND"

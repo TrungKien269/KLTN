@@ -21,6 +21,7 @@ function SpecialItemSlide(props) {
   const showFeatureBook = useMemo(() => {
     let result = "";
     if (data) {
+      console.log(data)
       result = data.map((book) => {
         return (
           <SpecialItemCard

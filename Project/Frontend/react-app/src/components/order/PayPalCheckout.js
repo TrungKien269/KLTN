@@ -53,6 +53,7 @@ function PayPalCheckout(props) {
       setFullName(props.userInfo.fullName);
       setPhoneNumber(props.userInfo.phoneNumber);
       setAddress(props.userInfo.address);
+      setEmail(props.userInfo.account.email)
     }
   }, [props.userInfo]);
 
@@ -66,7 +67,6 @@ function PayPalCheckout(props) {
     if (props.discount) {
       setDiscount(parseFloat(props.discount));
     }
-    console.log(props.discount);
   }, [props.discount]);
 
   proceedOrder = useMemo(() => {
@@ -86,7 +86,7 @@ function PayPalCheckout(props) {
       setOrderTotal(parseInt(total) + shippingFee);
     }
     return order;
-  }, [cartBook, orderTotal]);
+  }, [cartBook, orderTotal, shippingFee]);
 
   const showListCity = useMemo(() => {
     let cityItems = [];
@@ -216,6 +216,21 @@ function PayPalCheckout(props) {
     width: "50%",
   };
 
+  const CheckBookNumber = async () => {
+    await Axios({
+      method: "post",
+      url: "http://localhost:5000/api/ProceedOrder/CheckBookOrder",
+      data: proceedOrder
+    }).then((res) => {
+      if (res.data.status) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    });
+  }
+
   return (
     <div>
       <div className="title-wrapper">
@@ -300,70 +315,122 @@ function PayPalCheckout(props) {
           <div className="d-flex flex-row">
             <PayPalButton
               createOrder={(data, actions) => {
-                return actions.order.create({
-                  intent: "CAPTURE",
-                  purchase_units: [SettingPayPal()],
-                });
+                if (proceedOrder.length > 0) {
+                  return actions.order.create({
+                    intent: "CAPTURE",
+                    purchase_units: [SettingPayPal()],
+                  });
+                }
+                else {
+                  Swal.fire({
+                    title: "Error",
+                    text: "You must select one or more books before checking out!",
+                    icon: "error",
+                  });
+                }
               }}
               onApprove={(data, actions) => {
                 Axios({
-                  headers: {
-                    Authorization: "Bearer " + getToken(),
-                  },
-                  url: "http://localhost:5000/api/ProceedOrder/PayPalCheckout",
                   method: "post",
-                  params: {
-                    email: email,
-                    paypalOrderID: data.orderID,
-                    type: "PayPal",
-                    total:
-                      parseInt(orderTotal) - parseInt(orderTotal) * discount,
-                    shippingFee: parseInt(shippingFee),
-                    fullName: fullName,
-                    phoneNumber: phonenumber,
-                    address: address + " " + city,
-                  },
-                  data: proceedOrder,
-                })
-                  .then((res) => {
-                    if (res.data.status) {
-                      setCartBook(null);
-                      props.isCheckout(true);
+                  url: "http://localhost:5000/api/ProceedOrder/CheckBookOrder",
+                  data: proceedOrder
+                }).then((res) => {
+                  if (res.data.status === false) {
+                    var currentCartBook = cartBook;
+                    var bookInfo = "";
+                    for (var i = 0; i < currentCartBook.cartBook.length; i++) {
+                      if (currentCartBook.cartBook[i].quantity > res.data.obj[i].quantity) {
+                        currentCartBook.cartBook[i].quantity = res.data.obj[i].quantity;
+                        currentCartBook.cartBook[i].subTotal = currentCartBook.cartBook[i].book.currentPrice * res.data.obj[i].quantity;
+                        bookInfo += "<p>" + currentCartBook.cartBook[i].book.name + ": &nbsp;" +
+                          res.data.obj[i].quantity + "\n</p>";
+                      }
+                    }
+                    currentCartBook.cartBook = currentCartBook.cartBook.filter(x => x.quantity !== 0);
+                    Swal.fire({
+                      titleText: "Your order contains some books which are not enough amount",
+                      icon: "info",
+                      html: "<div>" + bookInfo + "</div>"
+                    }).then(() => {
                       Swal.fire({
-                        title: "Success",
-                        text: "Your order is on processing",
-                        icon: "success",
-                        confirmButtonText: "Back to store",
-                      }).then(() => {
-                        Axios({
-                          headers: {
-                            Authorization: "Bearer " + getToken(),
-                          },
-                          method: "delete",
-                          url: "http://localhost:5000/api/UserCart/ResetCart",
+                        titleText: "Refresh your order products",
+                        icon: "info",
+                        html: "You can review all available product before checking out"
+                      })
+                    })
+                    setCartBook((prev) => {
+                      return { ...prev, ...currentCartBook };
+                    });
+                    props.updateCartBook(currentCartBook);
+                  }
+                  else {
+                    Axios({
+                      headers: {
+                        Authorization: "Bearer " + getToken(),
+                      },
+                      url: "http://localhost:5000/api/ProceedOrder/PayPalCheckout",
+                      method: "post",
+                      params: {
+                        email: email,
+                        paypalOrderID: data.orderID,
+                        type: "PayPal",
+                        total:
+                          parseInt(orderTotal) - parseInt(orderTotal) * discount,
+                        shippingFee: parseInt(shippingFee),
+                        fullName: fullName,
+                        phoneNumber: phonenumber,
+                        address: address + " " + city,
+                      },
+                      data: proceedOrder,
+                    })
+                      .then((res) => {
+                        if (res.data.status) {
+                          setCartBook(null);
+                          props.isCheckout(true);
+                          Swal.fire({
+                            title: "Success",
+                            text: "Your order is on processing",
+                            icon: "success",
+                            confirmButtonText: "Back to store",
+                          }).then(() => {
+                            Axios({
+                              headers: {
+                                Authorization: "Bearer " + getToken(),
+                              },
+                              method: "delete",
+                              url: "http://localhost:5000/api/UserCart/ResetCart",
+                            });
+                          });
+                        } else {
+                          Swal.fire({
+                            title: "Error",
+                            text: res.data.message,
+                            icon: "error",
+                          });
+                        }
+                      })
+                      .catch((err) => {
+                        Swal.fire({
+                          title: "Error",
+                          text: err,
+                          icon: "error",
                         });
                       });
-                    } else {
-                      Swal.fire({
-                        title: "Error",
-                        text: res.data.message,
-                        icon: "error",
-                      });
-                    }
-                  })
-                  .catch((err) => {
-                    Swal.fire({
-                      title: "Error",
-                      text: err,
-                      icon: "error",
-                    });
-                  });
+                  }
+                })
               }}
               style={buttonStyle}
               options={{
                 clientId:
                   "AS_iLHEtFU2km3bPNvkvleuO1PoozOEBIre-bHSyjnaCr44n9ZzSb9vIt2URySILtCLUCQbMFXU1LosN",
                 disableFunding: "card",
+              }}
+              onError={(err) => {
+                Swal.fire({
+                  title: "Error",
+                  text: err,
+                  icon: "error",
+                });
               }}
             />
           </div>
