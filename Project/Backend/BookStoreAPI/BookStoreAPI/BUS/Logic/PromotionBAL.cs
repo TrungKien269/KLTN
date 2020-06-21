@@ -36,7 +36,8 @@ namespace BookStoreAPI.BUS.Logic
             try
             {
                 var list = await context.Promotion.Include(x => x.PromotionDetail).ThenInclude(x => x.Book)
-                    .Where(x => x.IsExpired.Equals(1)).OrderBy(x => x.EndedDate).ToListAsync();
+                    .ThenInclude(x => x.BookNumber)
+					.Where(x => x.IsExpired.Equals(1)).OrderBy(x => x.EndedDate).ToListAsync();
                 return new Response("Success", true, list.Count, list);
             }
             catch (Exception e)

@@ -21,7 +21,7 @@ const ProductCard = (props) => {
     }
   };
 
-  const ShowPrice = () => {
+  const ShowPrice = (props) => {
     if (props.originalPrice) {
       return (
         <div>
@@ -37,6 +37,21 @@ const ProductCard = (props) => {
       return <p className="card__book-price">{props.price}</p>;
     }
   };
+
+  const ShowBookAmount = (props) => {
+    if (props.amount) {
+      return (
+        <p className="card__book-price"><small>{t('Amount')}: {props.amount}</small></p>
+      )
+    }
+    else {
+      return (
+        <p className="card__book-price" style={{ color: "red" }}>
+          <small>{t('Sold out')}</small>
+        </p>
+      )
+    }
+  }
 
   const addToCart = (event) => {
     event.preventDefault();
@@ -133,7 +148,8 @@ const ProductCard = (props) => {
           <div className="card-body">
             <h5 className="card__book-title">{props.name}</h5>
             <ProductRatingCard id={props.id} />
-            {ShowPrice}
+            {ShowPrice(props)}
+            {ShowBookAmount(props)}
             <button
               className="btn btn--rounded btn-fw btn--blue item-display"
               onClick={addToCart}

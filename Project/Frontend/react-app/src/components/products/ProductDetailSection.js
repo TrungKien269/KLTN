@@ -55,7 +55,7 @@ function ProductDetailSection(props) {
         params: {
           bookID: props.bookInfo,
         },
-      }).then((res) => {});
+      }).then((res) => { });
     }
   }, []);
 
@@ -91,7 +91,7 @@ function ProductDetailSection(props) {
         params: {
           bookID: props.bookInfo,
         },
-      }).then((res) => {});
+      }).then((res) => { });
     }
   }, [props.bookInfo]);
 
@@ -206,7 +206,7 @@ function ProductDetailSection(props) {
   const showRelatedBooks = useMemo(() => {
     var results = "";
     if (similarityRef.current && similarityRef.current.length > 0) {
-      results = similarityRef.current.slice(0, 5).map((book) => {
+      results = similarityRef.current.slice(1, 6).map((book) => {
         return (
           <div className="item" key={book.id}>
             <ProductCard
@@ -455,12 +455,14 @@ function ProductDetailSection(props) {
                   </div>
                 </div>
               </div>
-              <div className="col-md-12">
-                <div className="sidebar-block">
-                  <h2>{t("Related Books")}</h2>
-                  <OwlCarousel options={optionRelatedBook}>
-                    {showRelatedBooks}
-                  </OwlCarousel>
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="sidebar-block">
+                    <h2>{t("Related Books")}</h2>
+                    <OwlCarousel options={optionRelatedBook}>
+                      {showRelatedBooks}
+                    </OwlCarousel>
+                  </div>
                 </div>
               </div>
             </div>

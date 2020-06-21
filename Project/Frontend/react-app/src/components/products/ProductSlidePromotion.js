@@ -49,6 +49,7 @@ function ProductSlidePromotion(props) {
               />
             }
             sale={parseFloat(promo.discount) * 100}
+            amount={parseInt(promo.book.bookNumber.amount)}
           />
         );
       });

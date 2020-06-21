@@ -34,6 +34,7 @@ const ProductSlideBestPrice = () => {
                   suffix={" VND"}
                 />
               }
+              amount={book.bookNumber.amount}
             />
           </div>
         );

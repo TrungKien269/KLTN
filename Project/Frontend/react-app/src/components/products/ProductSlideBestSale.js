@@ -37,6 +37,7 @@ const ProductSlideBestSale = () => {
                 suffix={" VND"}
               />
             }
+            amount={book.bookNumber.amount}
           />
         );
       });
