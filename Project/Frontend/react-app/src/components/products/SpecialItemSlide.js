@@ -4,14 +4,14 @@ import axios from "axios";
 import OwlCarousel from "react-owl-carousel2";
 import NumberFormat from "react-number-format";
 
-function SpecialItemSlide(props) {
+const SpecialItemSlide = (props) => {
   const [data, setData] = useState();
 
   useEffect(() => {
     axios({
       method: "GET",
       url: "http://localhost:5000/api/Main/List3FeaturedBook",
-    }).then(function (res) {
+    }).then((res) => {
       setData(res.data.obj);
     });
   }, []);
@@ -21,22 +21,22 @@ function SpecialItemSlide(props) {
     if (data) {
       result = data.map((book) => {
         return (
-          <div className="item" key={book.id}>
-            <SpecialItemCard
-              id={book.id}
-              image={book.image}
-              name={book.name}
-              price={
-                <NumberFormat
-                  value={book.currentPrice}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={"VND "}
-                />
-              }
-              author={book.authorBook[0].author.name}
-            />
-          </div>
+          <SpecialItemCard
+            className="item"
+            key={book.id}
+            id={book.id}
+            image={book.image}
+            name={book.name}
+            price={
+              <NumberFormat
+                value={book.currentPrice}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"VND "}
+              />
+            }
+            author={book.authorBook[0].author.name}
+          />
         );
       });
     }
@@ -50,10 +50,11 @@ function SpecialItemSlide(props) {
     margin: 0,
     loop: true,
     dots: false,
+    autoplay: true,
     autoWidth: false,
   };
 
   return <OwlCarousel options={options}>{showFeatureBook}</OwlCarousel>;
-}
+};
 
 export default SpecialItemSlide;

@@ -75,9 +75,8 @@ const Signup = (props) => {
             setUserSession(res.data.token);
             refreshToken();
             props.history.push("/");
-          })
-        } 
-        else {
+          });
+        } else {
           Swal.fire({
             title: "Error",
             text: res.data.message,
@@ -85,7 +84,7 @@ const Signup = (props) => {
           });
         }
       })
-      .catch((err) =>{
+      .catch((err) => {
         Swal.fire({
           title: "Error",
           text: err,
@@ -102,7 +101,7 @@ const Signup = (props) => {
           <label>Username</label>
           <input
             type="text"
-            class="col-md-8"
+            class="col-md-12 col-lg-8"
             onChange={(e) => handleUserNameChanged(e)}
           />
         </div>
@@ -110,9 +109,9 @@ const Signup = (props) => {
         <div class="field-control">
           <label>Password</label>
           <input
-            type="password" 
+            type="password"
             required
-            class="col-md-8"
+            class="col-md-12 col-lg-8"
             onChange={(e) => handlePasswordChanged(e)}
           />
         </div>
@@ -120,9 +119,9 @@ const Signup = (props) => {
         <div class="field-control">
           <label>Email</label>
           <input
-            type="email" 
+            type="email"
             required
-            class="col-md-8"
+            class="col-md-12 col-lg-8"
             onChange={(e) => handleEmailChanged(e)}
           />
         </div>
@@ -130,9 +129,9 @@ const Signup = (props) => {
         <div class="field-control">
           <label>Full Name</label>
           <input
-            type="text" 
+            type="text"
             required
-            class="col-md-8"
+            class="col-xs-12 col-lg-8"
             onChange={(e) => handleFullNameChanged(e)}
           />
         </div>
@@ -142,7 +141,7 @@ const Signup = (props) => {
             <ul>
               <li>
                 <input
-                  type="radio" 
+                  type="radio"
                   checked
                   id="male"
                   name="gender"
@@ -154,7 +153,7 @@ const Signup = (props) => {
               </li>
               <li>
                 <input
-                  type="radio" 
+                  type="radio"
                   id="female"
                   name="gender"
                   value="Female"
@@ -171,33 +170,37 @@ const Signup = (props) => {
         <div class="field-control">
           <label>Birthday</label>
           <input
-            type="date" 
+            type="date"
             required
-            class="col-md-8"
+            class="col-md-12 col-lg-8"
             onChange={(e) => handleBirthdayChanged(e)}
           />
         </div>
         <div class="field-control">
           <label>Phone Number</label>
           <input
-            type="number" 
+            type="number"
             required
-            class="col-md-8"
+            class="col-md-12 col-lg-8"
             onChange={(e) => handlePhoneNumberChanged(e)}
           />
         </div>
         <div class="field-control">
           <label>Address</label>
           <input
-            type="text" 
+            type="text"
             required
-            class="col-md-8"
+            class="col-md-12 col-lg-8"
             onChange={(e) => handleAddressChanged(e)}
           />
         </div>
 
-        <div class="col-md-8 pad-0-0 mar-top-md">
-          <input type="submit" value="Sign up" class="btn btn-fit btn--blue login-btn" />
+        <div class="col-md-12 col-lg-8 pad-0-0 mar-top-md">
+          <input
+            type="submit"
+            value="Sign up"
+            class="btn btn-fit btn--blue login-btn"
+          />
         </div>
       </form>
     </div>

@@ -1,9 +1,9 @@
-import React, { useMemo, useContext, useEffect, useState } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { getToken } from "../../Utils/Commons";
 import axios from "axios";
-import moment from "moment";
-import { Search, Grid, Header, Segment } from "semantic-ui-react";
+
+import { Search } from "semantic-ui-react";
 
 const SearchBar = (props) => {
   const [search, setSearch] = useState("");
@@ -26,17 +26,13 @@ const SearchBar = (props) => {
   }, []);
 
   const sHistory = useMemo(() => {
-    let results = [];
     let dataSearch = [];
     if (searchHistory && searchHistory.length > 0) {
       dataSearch = searchHistory.map((sh) => {
-        results.push({
-          title: sh.words,
-          key: sh.id,
-        });
+        return { title: sh.words, key: sh.id };
       });
     }
-    return results;
+    return dataSearch;
   }, [searchHistory]);
 
   const handleSearch = (event) => {
@@ -55,7 +51,6 @@ const SearchBar = (props) => {
     }
     if (event.key === "Enter") {
       let value = event.target.value;
-
       setSearch(value);
       if (value != "") {
         let routeString = `?search=${value}`;
@@ -85,7 +80,7 @@ const SearchBar = (props) => {
         {/* <input type="text" placeholder="Search" onKeyPress={(e) => Search(e)} />
         <i className="fas fa-search" /> */}
         <Search
-          // results={sHistory}
+          results={sHistory}
           // noResultsMessage="history is empty"
           onKeyDown={(e) => handleSearch(e)}
           className=""

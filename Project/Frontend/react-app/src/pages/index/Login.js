@@ -8,8 +8,8 @@ class Login extends Component {
   render() {
     return (
       <React.Fragment>
-        <section className="section__login">
-          <div className="containter-fluid">
+        <section className="container">
+          <div className="section__login">
             <div className="row">
               <LoginForm />
               <SignupForm />

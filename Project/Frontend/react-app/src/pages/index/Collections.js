@@ -5,10 +5,9 @@ import ListProducts from "../../components/products/ListProducts";
 import { withRouter } from "react-router-dom";
 import SideBarPriceRange from "../../components/utilities/SideBarPriceRange";
 import SideBarPriceSort from "../../components/utilities/SideBarPriceSort";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function Collections(props) {
-  
   const { category = "" } = props.match.params;
 
   const { t, i18n } = useTranslation();
@@ -25,7 +24,7 @@ function Collections(props) {
             </div>
             <div className="col-md">
               <div className="title-wrapper">
-                <h1>{category !== "" ? t(category) : t('All Products')}</h1>
+                <h1>{category !== "" ? t(category) : t("All Products")}</h1>
               </div>
               <div className="col-xd-6">
                 <SideBarPriceSort />

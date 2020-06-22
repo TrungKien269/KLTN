@@ -1,9 +1,8 @@
-import React, {  } from "react";
+import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
-function SpecialItemCard (props) {
-
+const SpecialItemCard = (props) => {
   const { t, i18n } = useTranslation();
 
   return (
@@ -12,7 +11,7 @@ function SpecialItemCard (props) {
         className="special-wrapper"
         style={{
           background:
-            "linear-gradient(90deg, rgba(0,0,0,0.6113795860140931) 46%, rgba(0,0,0,0.05675773727459732) 100%),url(" +
+            "linear-gradient(90deg, rgba(0,0,0,0.8) 46%, rgba(0,0,0,0.6) 100%),url(" +
             props.image +
             ")",
         }}
@@ -25,26 +24,30 @@ function SpecialItemCard (props) {
               alt=""
             />
           </div>
-          <div className="col">
+          <div className="col-md">
             <div className="special-text">
               <div className="special-title cut-text cut-text-1-line">
                 {props.name}
               </div>
               <div className="special-price">{props.price}</div>
               <div className="special-author">
-                {t('Authors')}: {props.author}
+                {t("Authors")}: {props.author}
               </div>
               {/* <a href="#" className="btn btn--rounded btn-fit btn--white">
                 view detail
               </a> */}
-              <Link to={`/book/${props.id}`} className="btn btn--rounded btn-fit btn--white">
-              {t('View Detail')}</Link>
+              <Link
+                to={`/book/${props.id}`}
+                className="btn btn--rounded btn-fit btn--white"
+              >
+                {t("View Detail")}
+              </Link>
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default SpecialItemCard;

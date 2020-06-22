@@ -2,15 +2,15 @@ import numpy as np
 import pandas as pd
 import pyodbc
 
-conn = pyodbc.connect("Driver=SQL Server;"
-                      "Server=DESKTOP-4UG8V66;"
+# conn = pyodbc.connect("Driver=SQL Server;"
+                      # "Server=DESKTOP-4UG8V66;"
+                      # "Database=BookStore;"
+                      # "Trusted_Connection=yes;")
+                      
+conn = pyodbc.connect("Driver=SQL Express;"
+                      "Server=desktop-tk99ngi;"
                       "Database=BookStore;"
                       "Trusted_Connection=yes;")
-                      
-# conn = pyodbc.connect("Driver=SQL Express;"
-#                       "Server=desktop-tk99ngi;"
-#                       "Database=BookStore;"
-#                       "Trusted_Connection=yes;")
 
 books = pd.read_sql_query('Select Book.Id, Book.Name, SubCategory.Name as Category, '
                           'RawBook.Author, RawBook.Supplier, RawBook.Publisher '

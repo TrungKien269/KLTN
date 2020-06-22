@@ -17,6 +17,7 @@ function ProductSlidePromotion(props) {
       url: "http://localhost:5000/api/Main/ListCurrentPromotion",
     }).then((res) => {
       if (res.data.status) {
+        console.log(res.data.obj);
         setPromotion(res.data.obj);
       }
     });

@@ -10,6 +10,7 @@ import ProductRatingCard from "./ProductRatingCard";
 
 const ProductCard = (props) => {
   const [show, setShow] = useState(false);
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -41,17 +42,20 @@ const ProductCard = (props) => {
   const ShowBookAmount = (props) => {
     if (props.amount) {
       return (
-        <p className="card__book-price"><small>{t('Amount')}: {props.amount}</small></p>
-      )
-    }
-    else {
+        <p className="card__book-price">
+          <small>
+            {t("Amount")}: {props.amount}
+          </small>
+        </p>
+      );
+    } else {
       return (
         <p className="card__book-price" style={{ color: "red" }}>
-          <small>{t('Sold out')}</small>
+          <small>{t("Sold out")}</small>
         </p>
-      )
+      );
     }
-  }
+  };
 
   const addToCart = (event) => {
     event.preventDefault();
@@ -141,7 +145,7 @@ const ProductCard = (props) => {
         <div className="card display-on-hover">
           {ShowSaleOff}
           <img
-            className="card-img-top img-contain img-contain-25"
+            className="card-img-top img-cover img-cover-30"
             src={props.image}
             alt="Card image cap"
           />
@@ -165,7 +169,10 @@ const ProductCard = (props) => {
               <i className="fas fa-heart" />
             </span>
 
-            <span className="badge__utilities-blue" onClick={handleShow}>
+            <span
+              className="badge__utilities-blue"
+              onClick={(e) => handleShow(e)}
+            >
               <i className="fas fa-search" />
             </span>
           </div>

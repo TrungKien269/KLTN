@@ -21,22 +21,22 @@ const ProductSlideBestPrice = () => {
     if (book) {
       result = book.map((book) => {
         return (
-          <div className="item" key={book.id}>
-            <ProductCard
-              id={book.id}
-              name={book.name}
-              image={book.image}
-              price={
-                <NumberFormat
-                  value={book.currentPrice}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  suffix={" VND"}
-                />
-              }
-              amount={book.bookNumber.amount}
-            />
-          </div>
+          <ProductCard
+            className="item"
+            key={book.id}
+            id={book.id}
+            name={book.name}
+            image={book.image}
+            price={
+              <NumberFormat
+                value={book.currentPrice}
+                displayType={"text"}
+                thousandSeparator={true}
+                suffix={" VND"}
+              />
+            }
+            amount={book.bookNumber.amount}
+          />
         );
       });
     } else {
@@ -47,7 +47,7 @@ const ProductSlideBestPrice = () => {
 
   const options = {
     nav: true,
-    items: 4,
+    items: 3,
     margin: 20,
     loop: false,
     autoWidth: false,

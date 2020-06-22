@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { Link, withRouter } from "react-router-dom";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function SideBarCategories() {
-
   const [categories, setCategories] = useState([]);
 
   const { t, i18n } = useTranslation();
@@ -24,7 +23,7 @@ function SideBarCategories() {
       result = cates.map((category) => {
         return (
           <li key={category.id}>
-            <Link to={category.name} className="pad-0-0">
+            <Link to={"/collections/" + category.name} className="pad-0-0">
               {t(category.name)}
             </Link>
           </li>
@@ -37,11 +36,11 @@ function SideBarCategories() {
   return (
     <React.Fragment>
       <div className="sidebar-block">
-        <h2>{t('Categories')}</h2>
+        <h2>{t("Categories")}</h2>
         <ul className="list-unstyled sidebar-list sidebar-category">
           {showListCategories(categories)}
           <li>
-            <Link to={"/collections/"}>{t('All Products')}</Link>
+            <Link to={"/collections/"}>{t("All Products")}</Link>
           </li>
         </ul>
       </div>

@@ -168,7 +168,7 @@ const Login = (props) => {
           <input
             type="text"
             required
-            className="col-md-8"
+            className="col-md-12 col-lg-8"
             onChange={(e) => handleUserNameChange(e)}
           />
         </div>
@@ -177,11 +177,11 @@ const Login = (props) => {
           <input
             type="password"
             required
-            className="col-md-8"
+            className="col-md-12 col-lg-8"
             onChange={(e) => handlePasswordChange(e)}
           />
         </div>
-        <div className="col-md-8 pad-0-0 mar-top-md">
+        <div className="col-md-12 col-lg-8 pad-0-0 mar-top-md">
           <input
             type="submit"
             className="btn btn-fit btn--blue login-btn"
@@ -189,13 +189,13 @@ const Login = (props) => {
           />
         </div>
       </form>
-      <div className="col-md-8">
+      <div className="col-md-12 col-lg-8">
         <div className="or">OR</div>
       </div>
 
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-8 pad-0-0">
+          <div className="col-md-12 col-lg-8 pad-0-0">
             <FacebookLogin
               appId="465730364148971"
               autoLoad={false}
@@ -212,7 +212,7 @@ const Login = (props) => {
               callback={(e) => responseFacebook(e)}
             />
           </div>
-          <div className="col-md-8 pad-0-0">
+          <div className="col-md-12 col-lg-8 pad-0-0">
             <GoogleLogin
               clientId="595791710812-b26iddsr8lsqntdqrs6cpmpllq65obfd.apps.googleusercontent.com"
               buttonText="Login with google"

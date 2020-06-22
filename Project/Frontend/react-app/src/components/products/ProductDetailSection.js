@@ -55,7 +55,7 @@ function ProductDetailSection(props) {
         params: {
           bookID: props.bookInfo,
         },
-      }).then((res) => { });
+      }).then((res) => {});
     }
   }, []);
 
@@ -91,7 +91,7 @@ function ProductDetailSection(props) {
         params: {
           bookID: props.bookInfo,
         },
-      }).then((res) => { });
+      }).then((res) => {});
     }
   }, [props.bookInfo]);
 
@@ -137,27 +137,20 @@ function ProductDetailSection(props) {
   };
 
   const PhotoItem = ({ image, group }) => (
-    <div>
-      <LightgalleryItem group={group} src={image}>
-        <img src={image} style={{ width: "100%" }} />
-      </LightgalleryItem>
-    </div>
+    <LightgalleryItem group={group} src={image}>
+      <img src={image} style={{ width: "100%" }} />
+    </LightgalleryItem>
   );
 
   const showSlideBooks = useMemo(() => {
     var results = [];
-
     if (data) {
       results = data.imageBook.map((image) => {
         return (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            {" "}
-            <PhotoItem key={image.bookId} image={image.path} group="group1" />
-          </div>
+          <PhotoItem key={image.bookId} image={image.path} group="group1" />
         );
       });
     }
-
     return results;
   }, [data]);
 
@@ -166,7 +159,7 @@ function ProductDetailSection(props) {
     nav: true,
     center: true,
     rewind: true,
-    autoplay: true,
+    autoplay: false,
     dots: false,
     navText: [
       "<span aria-label='Previous'>‹</span>",
@@ -347,7 +340,7 @@ function ProductDetailSection(props) {
                     ></div>
                     <div className="row">
                       <div className="col-lg-6">
-                        <div className="quantity buttons_added d-flex flex-row mar-top-2 justify-content-md-center">
+                        <div className="quantity buttons_added d-flex flex-row mar-top-2 justify-content-center justify-content-lg-center mb-md-2">
                           <input
                             type="button"
                             defaultValue="-"
@@ -455,14 +448,12 @@ function ProductDetailSection(props) {
                   </div>
                 </div>
               </div>
-              <div className="row">
+              <div className="row mt-5">
                 <div className="col-md-12">
-                  <div className="sidebar-block">
-                    <h2>{t("Related Books")}</h2>
-                    <OwlCarousel options={optionRelatedBook}>
-                      {showRelatedBooks}
-                    </OwlCarousel>
-                  </div>
+                  <h2>{t("Related Books")}</h2>
+                  <OwlCarousel options={optionRelatedBook}>
+                    {showRelatedBooks}
+                  </OwlCarousel>
                 </div>
               </div>
             </div>

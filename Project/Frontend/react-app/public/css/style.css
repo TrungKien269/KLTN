@@ -2063,7 +2063,7 @@ h1 {
   position: relative;
   background-size: cover !important;
   background-position: center;
-  padding: 7rem 7rem;
+  padding: 10rem 7rem;
 }
 @media (max-width: 47em) {
   .section__feature .special-wrapper {
@@ -2150,9 +2150,6 @@ h1 {
   color: #1b8bcc;
 }
 
-.section__login {
-  padding: 5rem 15rem;
-}
 .section__login ul {
   padding: 0 0;
 }

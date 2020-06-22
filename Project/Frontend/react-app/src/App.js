@@ -52,7 +52,7 @@ function App() {
           <PrivateRoute path="/rentebook" component={EBookRented} />
           <PrivateRoute path="/ebook/read/:id" component={ReadEBook} />
         </Switch>
-        <Chatbot />
+        {/* <Chatbot /> */}
         <Footer />
       </React.Fragment>
     </Router>

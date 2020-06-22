@@ -114,9 +114,6 @@ const CommentExampleComment = (props) => {
       <Header as="h3" dividing>
         {t("Comments")}
       </Header>
-
-      {listComment}
-
       <Form onSubmit={(e) => handleSubmit(e)}>
         <Form.TextArea
           id="txtComment"
@@ -130,6 +127,7 @@ const CommentExampleComment = (props) => {
           primary
         />
       </Form>
+      {listComment}
     </Comment.Group>
   );
 };
