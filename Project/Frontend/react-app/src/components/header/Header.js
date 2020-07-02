@@ -261,7 +261,7 @@ const Header = (props) => {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-              {t('Categories')}
+                {t("Categories")}
                 <span className="sr-only">(current)</span>
               </a>
               <div

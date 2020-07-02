@@ -8,7 +8,7 @@ import Axios from "axios";
 import moment from "moment";
 import TimeCounting from "../utilities/TimeCounter";
 
-function ProductSlidePromotion(props) {
+const ProductSlidePromotion = (props) => {
   const [promotion, setPromotion] = useState();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ function ProductSlidePromotion(props) {
   const ShowPromotionBooks = useMemo(() => {
     let result = {};
     if (promotion) {
-      result = promotion[0].promotionDetail.map((promo) => {
+      result = promotion[1].promotionDetail.map((promo) => {
         return (
           <ProductCard
             key={promo.book.id}
@@ -102,6 +102,6 @@ function ProductSlidePromotion(props) {
       <OwlCarousel options={options}>{ShowPromotionBooks}</OwlCarousel>
     </React.Fragment>
   );
-}
+};
 
 export default ProductSlidePromotion;

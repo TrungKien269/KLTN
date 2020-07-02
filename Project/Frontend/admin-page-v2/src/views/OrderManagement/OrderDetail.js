@@ -29,6 +29,7 @@ const OrderDetail = (props) => {
         orderID: props.match.params.id,
       },
     }).then((res) => {
+      console.log(res.data.obj);
       setOrder(res.data.obj);
     });
   }, []);
@@ -89,11 +90,13 @@ const OrderDetail = (props) => {
               </Table>
               <Row>
                 <Col lg="6">
-                  <h5>Type: &nbsp;
-                  <strong>{order.type}</strong>
+                  <h5>
+                    Type: &nbsp;
+                    <strong>{order.type}</strong>
                   </h5>
-                  <h5>Total: &nbsp;
-                  <strong>
+                  <h5>
+                    Total: &nbsp;
+                    <strong>
                       <NumberFormat
                         value={order.total}
                         displayType={"text"}
@@ -102,7 +105,8 @@ const OrderDetail = (props) => {
                       />
                     </strong>
                   </h5>
-                  <h5>Shipping fee: &nbsp;
+                  <h5>
+                    Shipping fee: &nbsp;
                     <strong>
                       <NumberFormat
                         value={order.shippingFee}
@@ -112,40 +116,56 @@ const OrderDetail = (props) => {
                       />
                     </strong>
                   </h5>
-                  <h5>Created Date: &nbsp;
+                  <h5>
+                    Created Date: &nbsp;
                     <strong>
                       {moment(order.createdDate).format("DD-MM-YYYY hh:mm:ss")}
                     </strong>
                   </h5>
-                  {order.status === "Processing" ?
-                    (<Button color="success" size="lg"
-                      onClick={() => handleConfirm(order.id, "Delivering")}>
-                      Confirm Order</Button>) :
-                    order.status === "Delivering" ?
-                      (<Button color="success" size="lg"
-                        onClick={() => handleConfirm(order.id, "Delivered")}>
-                        Confirm Order</Button>) : ""}
+                  {order.status === "Processing" ? (
+                    <Button
+                      color="success"
+                      size="lg"
+                      onClick={() => handleConfirm(order.id, "Delivering")}
+                    >
+                      Confirm Order
+                    </Button>
+                  ) : order.status === "Delivering" ? (
+                    <Button
+                      color="success"
+                      size="lg"
+                      onClick={() => handleConfirm(order.id, "Delivered")}
+                    >
+                      Confirm Order
+                    </Button>
+                  ) : (
+                    ""
+                  )}
                 </Col>
                 <Col lg="6">
-                  <h5>State: &nbsp;
-                  {order.status === "Processing" ? (
+                  <h5>
+                    State: &nbsp;
+                    {order.status === "Processing" ? (
                       <Badge color="warning">Processing</Badge>
                     ) : order.status === "Delivering" ? (
                       <Badge color="primary">Delivering</Badge>
                     ) : order.status === "Delivered" ? (
                       <Badge color="success">Delivered</Badge>
                     ) : (
-                            <Badge color="danger">Canceled </Badge>
-                          )}
+                      <Badge color="danger">Canceled </Badge>
+                    )}
                   </h5>
-                  <h5>Customer name: &nbsp;
-                      <strong>{order.fullName}</strong>
+                  <h5>
+                    Customer name: &nbsp;
+                    <strong>{order.fullName}</strong>
                   </h5>
-                  <h5>Phone number: &nbsp;
-                      <strong>{order.phoneNumber}</strong>
+                  <h5>
+                    Phone number: &nbsp;
+                    <strong>{order.phoneNumber}</strong>
                   </h5>
-                  <h5>Address: &nbsp;
-                      <strong>{order.address}</strong>
+                  <h5>
+                    Address: &nbsp;
+                    <strong>{order.address}</strong>
                   </h5>
                 </Col>
               </Row>
@@ -177,34 +197,35 @@ const OrderDetail = (props) => {
             id: orderID,
             status: state,
           },
-        }).then((res) => {
-          if (res.data.status) {
-            Swal.fire({
-              title: "Done",
-              text: "Confirm this order",
-              icon: "success",
-            }).then(() => {
-              var newOrder = order;
-              setOrder({...order, newOrder});
-            })
-          }
-          else {
+        })
+          .then((res) => {
+            if (res.data.status) {
+              Swal.fire({
+                title: "Done",
+                text: "Confirm this order",
+                icon: "success",
+              }).then(() => {
+                var newOrder = order;
+                setOrder({ ...order, newOrder });
+              });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: res.data.message,
+              });
+            }
+          })
+          .catch((err) => {
             Swal.fire({
               icon: "error",
-              title: "Oops...",
-              text: res.data.message,
+              title: "Error",
+              text: err,
             });
-          }
-        }).catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: err,
           });
-        })
       }
-    })
-  }
+    });
+  };
 
   return <div>{showOrderDetail}</div>;
 };

@@ -153,16 +153,6 @@ const Index = (props) => {
 
   return (
     <>
-      <div className="d-flex justify-content-center w-100">
-        <Pagination
-          hideDisabled={true}
-          activePage={activePage}
-          itemsCountPerPage={itemsCountPerPage}
-          totalItemsCount={flexData ? flexData.length : data ? data.length : 0}
-          pageRangeDisplayed={pageRangeDisplayed}
-          onChange={handlePageChange}
-        />
-      </div>
       <div className="row w-100">{showListData}</div>
       <div className="d-flex justify-content-center w-100">
         <Pagination

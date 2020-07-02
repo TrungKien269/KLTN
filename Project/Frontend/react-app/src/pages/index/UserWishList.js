@@ -4,7 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 import Swal from "sweetalert2";
 import Header from "../../components/header/Header";
 import Footer from "../../components/Footer";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function UserWishList(props) {
   const [data, setData] = useState([]);
@@ -37,7 +37,7 @@ function UserWishList(props) {
           icon: "error",
         });
       });
-  }, [])
+  }, []);
 
   const handleAddClicked = (bookID) => {
     axios({
@@ -87,7 +87,7 @@ function UserWishList(props) {
     }).then((result) => {
       if (result.value) {
         var newData = data.filter((item) => item.bookId != bookId);
-        setData(prev => [...newData]);
+        setData((prev) => [...newData]);
         axios({
           headers: {
             Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
@@ -129,7 +129,7 @@ function UserWishList(props) {
     if (data && data.length > 0) {
       bookArr = data.map((item, index) => {
         return (
-          <tr>
+          <tr className="">
             <td className="item-name">
               <div className="item-img">
                 <Link to={`/book/${item.bookId}`}>
@@ -150,13 +150,13 @@ function UserWishList(props) {
             <td className="item-price">
               <p>{new Date(item.dateTime).toLocaleDateString()}</p>
             </td>
-            <td className="item-img">
+            <td className="action w-25 text-center">
               <button
                 className="btn btn--blue btn--rounded btn-fit"
                 id="btnAddToCart"
                 onClick={() => handleAddClicked(item.bookId)}
               >
-                {t('Add to cart')}
+                <p className="d-flex flex-nowrap">{t("Add to cart")}</p>
               </button>
             </td>
             <td className="action">
@@ -165,7 +165,7 @@ function UserWishList(props) {
                 id="btnRemove"
                 onClick={() => handleRemoveClicked(item.bookId)}
               >
-                {t('Remove')}
+                {t("Remove")}
               </button>
             </td>
           </tr>
@@ -178,16 +178,16 @@ function UserWishList(props) {
   return (
     <React.Fragment>
       <div className="cart-title">
-        <h2>{t('Wish List')}</h2>
+        <h2>{t("Wish List")}</h2>
       </div>
       <div className="container">
         <div className="cart-table">
           <table>
             <thead>
               <tr>
-                <th className="item">{t('Book')}</th>
-                <th className="qty">{t('Price')}</th>
-                <th className="price">{t('Added Date')}</th>
+                <th className="item">{t("Book")}</th>
+                <th className="qty">{t("Price")}</th>
+                <th className="price">{t("Added Date")}</th>
                 <th className="cart">&nbsp;</th>
                 <th className="remove">&nbsp;</th>
               </tr>
@@ -200,4 +200,4 @@ function UserWishList(props) {
   );
 }
 
-export default withRouter(UserWishList)
+export default withRouter(UserWishList);

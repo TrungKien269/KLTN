@@ -24,6 +24,7 @@ const Index = (props) => {
 
   return (
     <React.Fragment>
+      
       <Pagi
         query={{ from, to }}
         sortQuery={{ sortfield, sorttype }}

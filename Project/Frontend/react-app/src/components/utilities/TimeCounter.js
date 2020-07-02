@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 function TimeCounting(props) {
   const [countDownDate, setCountDownDate] = useState(
-    new Date(props.endedDate).getTime()
+    new Date("2020-7-1").getTime()
   );
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
@@ -28,7 +28,7 @@ function TimeCounting(props) {
     setSeconds(Math.floor((distance % (1000 * 60)) / 1000));
 
     // If the count down is over, write some text
-    if (distance < 0) {
+    if (distance <= 0) {
       clearInterval(x);
       setDays("EXPIRED");
       setHours("EXPIRED");
@@ -42,27 +42,19 @@ function TimeCounting(props) {
       <div className="container">
         <div className="row d-flex justify-content-center">
           <div className="counting-box">
-            <div className="counting__number" id="count-days">
-              {days}
-            </div>
+            <div className="counting__number">{days}</div>
             <div className="counting__text">{t("days")}</div>
           </div>
           <div className="counting-box">
-            <div className="counting__number" id="count-hours">
-              {hours}
-            </div>
+            <div className="counting__number">{hours}</div>
             <div className="counting__text">{t("hours")}</div>
           </div>
           <div className="counting-box">
-            <div className="counting__number" id="count-minutes">
-              {minutes}
-            </div>
+            <div className="counting__number">{minutes}</div>
             <div className="counting__text">{t("minutes")}</div>
           </div>
           <div className="counting-box">
-            <div className="counting__number" id="count-seconds">
-              {seconds}
-            </div>
+            <div className="counting__number">{seconds}</div>
             <div className="counting__text">{t("seconds")}</div>
           </div>
         </div>

@@ -64,13 +64,14 @@ const CommentExampleComment = (props) => {
               "MM-DD-YYYY, hh:mm:ss"
             ),
             user: {
-              name: "You",
+              fullName: "You",
             },
           };
           setData((prev) => [newComment, ...data]);
         }
       });
     }
+    document.getElementById("txtComment").value = "";
   };
 
   const listComment = useMemo(() => {
@@ -80,6 +81,7 @@ const CommentExampleComment = (props) => {
       commentArr = data.sort((a, b) => {
         return new Date(b.dateTime) - new Date(a.dateTime);
       });
+      console.log(data);
       comments = commentArr.map((cmt) => {
         return (
           <Comment>
@@ -98,9 +100,6 @@ const CommentExampleComment = (props) => {
               <Comment.Text>
                 <p>{Object.keys(cmt).length > 0 ? cmt.text : ""}</p>
               </Comment.Text>
-              {/* <Comment.Actions>
-                <Comment.Action>Reply</Comment.Action>
-              </Comment.Actions> */}
             </Comment.Content>
           </Comment>
         );
@@ -111,13 +110,15 @@ const CommentExampleComment = (props) => {
 
   return (
     <Comment.Group>
-      <Header as="h3" dividing>
+      <Header as="h1" dividing>
         {t("Comments")}
       </Header>
-      <Form onSubmit={(e) => handleSubmit(e)}>
+      <Header as="h3">{t("Write your comment")}</Header>
+      <Form onSubmit={(e) => handleSubmit(e)} className="text-right">
         <Form.TextArea
           id="txtComment"
           required
+          rows="7"
           onChange={(e) => handleInputChange(e)}
         />
         <Button

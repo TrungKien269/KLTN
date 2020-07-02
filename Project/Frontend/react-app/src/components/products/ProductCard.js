@@ -153,7 +153,7 @@ const ProductCard = (props) => {
             <h5 className="card__book-title">{props.name}</h5>
             <ProductRatingCard id={props.id} />
             {ShowPrice(props)}
-            {ShowBookAmount(props)}
+            {/* {ShowBookAmount(props)} */}
             <button
               className="btn btn--rounded btn-fw btn--blue item-display"
               onClick={addToCart}

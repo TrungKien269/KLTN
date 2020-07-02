@@ -16,20 +16,17 @@ function SideBarPriceSort(props) {
   };
 
   return (
-    <div>
-      <React.Fragment>
-        <div className="sidebar-block">
-          <select onChange={Sort} className="price-range" defaultValue="">
-            <option value="" disabled hidden>
-              {t("Sort")}
-            </option>
-            <option value={"Price ASC"}>{t("Price Ascending")}</option>
-            <option value={"Price DESC"}>{t("Price Descending")}</option>
-            <option value={"Name ASC"}>{"A -> Z"}</option>
-            <option value={"Name DESC"}>{"Z -> A"}</option>
-          </select>
-        </div>
-      </React.Fragment>
+    <div className="sidebar-block">
+      <h2>{t("Sort options")}</h2>
+      <select onChange={Sort} className="price-range" defaultValue="">
+        <option value="" disabled hidden>
+          {t("Sort")}
+        </option>
+        <option value={"Price ASC"}>{t("Price Ascending")}</option>
+        <option value={"Price DESC"}>{t("Price Descending")}</option>
+        <option value={"Name ASC"}>{"A -> Z"}</option>
+        <option value={"Name DESC"}>{"Z -> A"}</option>
+      </select>
     </div>
   );
 }

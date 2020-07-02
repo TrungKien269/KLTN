@@ -10,12 +10,23 @@ import { useTranslation } from "react-i18next";
 import OwlCarousel from "react-owl-carousel2";
 import { LightgalleryProvider, LightgalleryItem } from "react-lightgallery";
 import ProductCard from "./ProductCard";
-
+import { Breadcrumb } from "semantic-ui-react";
 function ProductDetailSection(props) {
   const [data, setData] = useState(null);
   const [authors, setAuthors] = useState("");
   const [similarityData, setSimilarityData] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [bookName, setBookName] = useState("");
+  const sections = [
+    { key: "Home", content: "Home", href: "/" },
+    { key: "Store", content: "Collections", href: "/collections" },
+    { key: "Shirt", content: bookName, active: true },
+  ];
+  useEffect(() => {
+    if (data) {
+      setBookName(data.name);
+    }
+  }, [data]);
 
   const similarityRef = useRef(null);
   similarityRef.current = similarityData;
@@ -306,6 +317,11 @@ function ProductDetailSection(props) {
           <div className="container">
             <div className="row">
               <div className="col-md-12">
+                <Breadcrumb
+                  className="breadcrumb-section"
+                  icon="right angle"
+                  sections={sections}
+                />
                 <div className="row">
                   <div className="col-md-6 col-lg-5 mar-right-sm d-flex align-items-center">
                     {/*Carousel-slide*/}
@@ -340,7 +356,7 @@ function ProductDetailSection(props) {
                     ></div>
                     <div className="row">
                       <div className="col-lg-6">
-                        <div className="quantity buttons_added d-flex flex-row mar-top-2 justify-content-center justify-content-lg-center mb-md-2">
+                        <div className="quantity buttons_added d-flex flex-row mar-top-2 justify-content-center justify-content-lg-start mb-md-2">
                           <input
                             type="button"
                             defaultValue="-"

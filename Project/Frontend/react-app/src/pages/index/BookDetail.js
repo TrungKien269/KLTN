@@ -9,7 +9,7 @@ function BookDetail(props) {
   return (
     <React.Fragment>
       <ProductDetailSection bookInfo={id} />
-      <div className="container">
+      <div className="container mt-5 pad-0-0">
         <CommentSection id={id} />
       </div>
     </React.Fragment>

@@ -597,9 +597,9 @@ body::-webkit-scrollbar-thumb {
   margin: 2rem 0;
 }
 .cart-table table td {
-  position: relative;
-  padding: 15px 20px;
-  /* border-bottom: 1px solid #b8b8b8; */
+  /* position: relative; */
+  /* padding: 15px 20px; */
+  margin-bottom: 2rem;
 }
 .cart-table table td.item-name {
   text-align: left;
@@ -643,7 +643,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .navbar {
-  padding: 3rem 0;
+  padding: 1.5rem 0;
   box-shadow: none;
 }
 .navbar-expand-lg {
@@ -670,7 +670,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .navbar-pad-sm {
-  padding: 1rem 5rem;
+  padding: 1rem 3rem;
   z-index: 10;
 }
 .navbar-shadow {
@@ -2250,7 +2250,7 @@ h1 {
 }
 
 .section__product-list {
-  margin: 5rem 1rem;
+  margin: 2rem 1rem;
 }
 .section__product-list h4 {
   color: #5e5e5e;
@@ -2288,7 +2288,7 @@ h1 {
 }
 
 .sidebar-block:not(:first-child) {
-  margin-top: 6rem;
+  margin-top: 3rem;
 }
 
 .sidebar-block [type="checkbox"] {
@@ -3290,4 +3290,32 @@ h1 {
   border-radius: 30px;
   border: 1px solid #bbbbbb;
   padding: 0.5rem 0.5rem;
+}
+
+.breadcrumb-section {
+  font-size: 1.6rem !important;
+  font-weight: 400 !important;
+  margin: 2rem 0 !important;
+  margin-bottom: 2.5rem !important;
+  padding: 0.5rem 0rem !important;
+}
+.breadcrumb-section a {
+  transition: 0.2s;
+}
+.breadcrumb-section a:hover {
+  color: #03a9f4 !important;
+}
+.breadcrumb-section .active.section {
+  font-weight: 300 !important;
+}
+.ui.comments .comment {
+  font-size: 1.4rem;
+}
+.ui.comments {
+  max-width: none !important;
+  margin: 0 0;
+}
+h1.ui.header {
+  font-size: 2rem !important;
+  font-weight: 300 !important;
 }
