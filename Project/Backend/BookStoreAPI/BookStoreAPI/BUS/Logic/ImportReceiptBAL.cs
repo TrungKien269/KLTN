@@ -32,6 +32,26 @@ namespace BookStoreAPI.BUS.Logic
             }
         }
 
+        public async Task<Response> GetReceipt(string currentID)
+        {
+            try
+            {
+                var receipt = await context.ImportReceipt.Where(x => x.Id.Equals(currentID)).FirstOrDefaultAsync();
+                if (receipt is null)
+                {
+                    return new Response("Not found", false, 0, null);
+                }
+                else
+                {
+                    return new Response("Success", true, 1, receipt);
+                }
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
         public async Task<Response> InsertReceipt(ImportReceipt receipt)
         {
             try
@@ -81,6 +101,27 @@ namespace BookStoreAPI.BUS.Logic
             catch (Exception e)
             {
                 transaction.Rollback();
+                return Response.CatchError(e.Message);
+            }
+        }
+
+        public async Task<Response> UpdateReceipt(ImportReceipt receipt)
+        {
+            try
+            {
+                context.ImportReceipt.Update(receipt);
+                var check = await context.SaveChangesAsync();
+                if (check is 1)
+                {
+                    return new Response("Success", true, 1, receipt);
+                }
+                else
+                {
+                    return new Response("Update fail!", false, 0, receipt);
+                }
+            }
+            catch (Exception e)
+            {
                 return Response.CatchError(e.Message);
             }
         }

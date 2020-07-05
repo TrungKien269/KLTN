@@ -295,10 +295,26 @@ namespace BookStoreAPI.Controllers
 
         [Authorize(Roles = "Administrator")]
         [HttpPost("ImportReceipt")]
-        public async Task<Response> Import(ImportReceipt receipt, IFormFile file)
+        public async Task<Response> ImportReceipt(ImportReceipt receipt, IFormFile file)
         {
             var filePath = await ImportReceiptHelper.UploadFile(receipt, file);
             return await ImportReceiptHelper.InsertBookNumber(filePath, receipt);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPut("UpdateReceipt")]
+        public async Task<Response> UpdateImportReceipt(ImportReceipt receipt, IFormFile file)
+        {
+            if (file is null)
+            {
+                await ImportReceiptHelper.UpdateFile(receipt);
+                return await adminBal.UpdateReceipt(receipt);
+            }
+            else
+            {
+                await ImportReceiptHelper.UploadFile(receipt, file);
+                return await adminBal.UpdateReceipt(receipt);
+            }
         }
     }
 }

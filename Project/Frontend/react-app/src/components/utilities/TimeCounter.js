@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 function TimeCounting(props) {
   const [countDownDate, setCountDownDate] = useState(
-    new Date("2020-7-1").getTime()
+    new Date(props.endedDate).getTime()
   );
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);

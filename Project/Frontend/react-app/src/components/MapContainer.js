@@ -7,7 +7,7 @@ function MapContainer(props) {
   const [lat, setLat] = useState(10.851769);
   const [lng, setLng] = useState(106.772179);
 
-  Geocode.setApiKey("AIzaSyA6yguXT9Axmq4YONkT7flSBv9kqKEv3wY");
+  Geocode.setApiKey("AIzaSyChZPizXo_3sk70Cm4yveOd0YfQtuxc7As");
   Geocode.setLanguage("vn");
   Geocode.setRegion("vn");
 
@@ -43,5 +43,5 @@ function MapContainer(props) {
 }
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyA6yguXT9Axmq4YONkT7flSBv9kqKEv3wY"
+  apiKey: "AIzaSyChZPizXo_3sk70Cm4yveOd0YfQtuxc7As"
 })(MapContainer);

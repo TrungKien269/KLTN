@@ -72,7 +72,7 @@ function Footer() {
         </div>
       </div>
       <div className="container mar-top-lg">
-        {/* <div className="row"
+        <div className="row"
           style={{
             width: `50%`,
             height: `300px`,
@@ -81,8 +81,9 @@ function Footer() {
             marginBottom: `2%`,
             marginLeft: `50%`,
             transform: `translateX(-50%)`
-          }}> {  <MapContainer></MapContainer>  }
-        </div> */}
+          }}> 
+          {/*<MapContainer></MapContainer>*/}
+        </div> 
         <div className="row">
           <div className="col-md-3">
             <img src="img/footer_logo.webp" alt="" />

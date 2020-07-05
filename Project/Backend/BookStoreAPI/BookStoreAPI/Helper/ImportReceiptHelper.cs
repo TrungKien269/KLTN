@@ -25,6 +25,34 @@ namespace BookStoreAPI.Helper
             return filePath;
         }
 
+        public static async Task<string> UpdateFile(ImportReceipt receipt)
+        {
+            var receiptBal = new ImportReceiptBAL();
+            var currentReceiptResponse = await receiptBal.GetReceipt(receipt.Id);
+            if (currentReceiptResponse.Status)
+            {
+                var currentReceipt = currentReceiptResponse.Obj as ImportReceipt;
+                var fileName = currentReceipt.ImportDate.ToString("yyyyMMdd") + "_" + currentReceipt.Id + ".csv";
+                var filePath = Path.Combine("Files/ImportFile", fileName);
+                FileInfo file = new FileInfo(filePath);
+                if (file.Exists)
+                {
+                    var newFileName = receipt.ImportDate.ToString("yyyyMMdd") + "_" + receipt.Id + ".csv";
+                    var newFilePath = Path.Combine("Files/ImportFile", newFileName);
+                    file.MoveTo(newFilePath);
+                    return filePath;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public static async Task<Response> InsertBookNumber(string filePath, ImportReceipt receipt)
         {
             ImportReceiptBAL importReceiptBal = new ImportReceiptBAL();

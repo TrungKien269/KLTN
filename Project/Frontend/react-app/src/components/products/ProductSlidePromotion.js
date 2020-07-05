@@ -17,7 +17,7 @@ const ProductSlidePromotion = (props) => {
       url: "http://localhost:5000/api/Main/ListCurrentPromotion",
     }).then((res) => {
       if (res.data.status) {
-        console.log(res.data.obj);
+        // console.log(res.data.obj);
         setPromotion(res.data.obj);
       }
     });
@@ -26,7 +26,7 @@ const ProductSlidePromotion = (props) => {
   const ShowPromotionBooks = useMemo(() => {
     let result = {};
     if (promotion) {
-      result = promotion[1].promotionDetail.map((promo) => {
+      result = promotion[0].promotionDetail.map((promo) => {
         return (
           <ProductCard
             key={promo.book.id}

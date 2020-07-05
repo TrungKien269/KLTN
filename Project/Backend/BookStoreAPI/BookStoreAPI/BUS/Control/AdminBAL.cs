@@ -206,5 +206,10 @@ namespace BookStoreAPI.BUS.Control
         {
             return await importReceiptBal.GetListReceipt();
         }
+
+        public async Task<Response> UpdateReceipt(ImportReceipt receipt)
+        {
+            return await importReceiptBal.UpdateReceipt(receipt);
+        }
     }
 }
