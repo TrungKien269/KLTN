@@ -439,21 +439,21 @@ const BookForm = (props) => {
   };
 
   const ShowButton = useMemo(() => {
-    if (selectedID != null) {
+    if (id != "") {
       return (
-        <Button type="submit" size="sm" color="primary">
+        <Button type="submit" size="md" color="primary">
           <i className="fa fa-dot-circle-o"></i> Update
       </Button>
       )
     }
     else {
       return (
-        <Button type="submit" size="sm" color="primary">
+        <Button type="submit" size="md" color="primary">
           <i className="fa fa-dot-circle-o"></i> Create
           </Button>
       )
     }
-  }, [selectedID])
+  }, [id])
 
   return (
     <Card>
@@ -741,7 +741,7 @@ const BookForm = (props) => {
           {ShowButton}
           <Button
             type="reset"
-            size="sm"
+            size="md"
             color="danger"
             onClick={(e) => ResetAll(e)}
           >

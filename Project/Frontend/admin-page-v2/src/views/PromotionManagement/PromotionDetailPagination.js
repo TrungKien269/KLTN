@@ -310,7 +310,7 @@ function PromotionDetailPagination(props) {
             <i className="fa fa-align-justify"></i> Promotion id : {props.id}
           </span>
 
-          <Button.Group size="mini">
+          <Button.Group size="md">
             <Button positive onClick={toggleAdd}>
               Add
             </Button>

@@ -210,10 +210,10 @@ const PromotionForm = (props) => {
                 />
               </Col>
             </FormGroup>
-            <Button className="mr-1" type="submit" size="sm" color="primary">
+            <Button className="mr-1" type="submit" size="md" color="primary">
               <i className="fa fa-dot-circle-o"></i> Create
             </Button>
-            <Button type="reset" size="sm" color="danger">
+            <Button type="reset" size="md" color="danger">
               <i className="fa fa-ban"></i> Reset
             </Button>
           </Form>

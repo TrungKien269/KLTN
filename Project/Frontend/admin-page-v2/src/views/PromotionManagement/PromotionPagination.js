@@ -360,7 +360,7 @@ function PromotionPagination(props) {
                     />
                   </Col>
                 </FormGroup>
-                <Button className="mr-1" type="submit" size="sm" color="primary">
+                <Button className="mr-1" type="submit" size="md" color="primary">
                   <i className="fa fa-dot-circle-o"></i> Update
             </Button>
               </Form>

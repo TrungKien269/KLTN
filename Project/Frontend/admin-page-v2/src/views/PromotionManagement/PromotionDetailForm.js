@@ -21,7 +21,7 @@ import Swal from "sweetalert2";
 
 const PromotionDetailForm = (props) => {
   const [data, setData] = useState();
-  const [bookID, setBookID] = useState("0");
+  const [bookID, setBookID] = useState();
   const [discount, setDiscount] = useState(0);
 
   useEffect(() => {
@@ -53,10 +53,11 @@ const PromotionDetailForm = (props) => {
         selection
         options={bookOptions}
         placeholder="Select Books"
+        value={bookID ? bookID : null}
         onChange={(e, data) => handleChange(e, data)}
       />
     );
-  }, [bookOptions]);
+  }, [bookOptions, bookID]);
 
   const handleChange = (e, data) => {
     if (data.value)
@@ -77,56 +78,65 @@ const PromotionDetailForm = (props) => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    Swal.fire({
-      title: "Confirm",
-      text: "Do you want to create this promotion book?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, create!",
-    }).then((result) => {
-      if (result.value) {
-        Axios({
-          headers: {
-            Authorization: "Bearer " + getToken(),
-          },
-          url: "http://localhost:5000/api/Admin/CreatePromotionDetail",
-          method: "post",
-          params: {
-            promotionID: parseInt(props.id),
-            bookID: bookID,
-            discount: parseFloat(discount)
-          }
-        }).then((res) => {
-          if (res.data.status) {
-            Swal.fire({
-              title: "Done",
-              text: "Create this promotion book",
-              icon: "success",
-            }).then(() => {
-              handleReset();
-              setTimeout(() => {
-                window.location.reload();
-              }, 2000)
-            });
-          }
-          else {
+    if(bookID && discount != 0){
+      Swal.fire({
+        title: "Confirm",
+        text: "Do you want to add this book to this promotion?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, create!",
+      }).then((result) => {
+        if (result.value) {
+          Axios({
+            headers: {
+              Authorization: "Bearer " + getToken(),
+            },
+            url: "http://localhost:5000/api/Admin/CreatePromotionDetail",
+            method: "post",
+            params: {
+              promotionID: parseInt(props.id),
+              bookID: bookID,
+              discount: parseFloat(discount)
+            }
+          }).then((res) => {
+            if (res.data.status) {
+              Swal.fire({
+                title: "Done",
+                text: "Create this promotion book",
+                icon: "success",
+              }).then(() => {
+                handleReset();
+                setTimeout(() => {
+                  window.location.reload();
+                }, 2000)
+              });
+            }
+            else {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: res.data.message,
+              });
+            }
+          }).catch((err) => {
             Swal.fire({
               icon: "error",
-              title: "Oops...",
-              text: res.data.message,
+              title: "Error",
+              text: err,
             });
-          }
-        }).catch((err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: err,
-          });
-        })
-      }
-    })
+          })
+        }
+      });
+    }
+    else{
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "You have to choose all of fields for this action!",
+      });
+    }
   };
 
   return (
@@ -159,10 +169,10 @@ const PromotionDetailForm = (props) => {
           </FormGroup>
           <div className="text-right">
             {" "}
-            <Button className="mr-1" type="submit" size="sm" color="primary">
+            <Button className="mr-1" type="submit" size="md" color="primary">
               <i className="fa fa-dot-circle-o"></i> Add
             </Button>
-            <Button type="reset" size="sm" color="danger"
+            <Button type="reset" size="md" color="danger"
               onClick={handleReset}>
               <i className="fa fa-ban"></i> Reset
             </Button>
