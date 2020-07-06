@@ -3,74 +3,83 @@ import axios from "axios";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-
+import { Breadcrumb } from "semantic-ui-react";
 const ResetPassword = (props) => {
+  const [password, setPassword] = useState("");
+  const search = window.location.search;
+  const params = new URLSearchParams(search);
+  const sections = [
+    { key: "Home", content: "Home", href: "/" },
+    { key: "ConfirmEmail", content: "Confirm you email", active: true },
+  ];
+  const handlePasswordChanged = (event) => {
+    setPassword(event.target.value);
+  };
 
-    const [password, setPassword] = useState("");
-    const search = window.location.search;
-    const params = new URLSearchParams(search);
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    const token = params.get("token");
+    axios({
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+      method: "post",
+      url: "http://localhost:5000/api/ForgotPassword/ResetPassword",
+      params: {
+        newPassword: password,
+      },
+    })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.status) {
+          Swal.fire({
+            title: "Completely",
+            text: "Password has been changed successfully",
+            icon: "success",
+          });
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          if (err.response.status === 401) {
+            Swal.fire({
+              title: "Error",
+              text: "This session has expired!",
+              icon: "error",
+            });
+          }
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: err,
+            icon: "error",
+          });
+        }
+      });
+  };
 
-    const handlePasswordChanged = (event) => {
-        setPassword(event.target.value);
-    };
-
-    const handleFormSubmit = (event) => {
-        event.preventDefault();
-        const token = params.get('token');
-        axios({
-            headers: {
-                "Authorization": "Bearer " + token
-            },
-            method: "post", 
-            url: "http://localhost:5000/api/ForgotPassword/ResetPassword", 
-            params: {
-                newPassword: password
-            }
-        }).then((res) => {
-            console.log(res.data);
-            if(res.data.status){
-              Swal.fire({
-                title: "Completely",
-                text: "Password has been changed successfully",
-                icon: "success",
-              });
-            }
-        }).catch((err) => {
-            if (err.response) {
-                if(err.response.status === 401){
-                  Swal.fire({
-                    title: "Error",
-                    text: "This session has expired!",
-                    icon: "error",
-                  });
-                }
-            }
-            else{
-              Swal.fire({
-                title: "Error",
-                text: err,
-                icon: "error",
-              });
-            }
-        });
-    }
-
-    return (
+  return (
     <section className="section__login">
-      <div className="containter-fluid">
+      <div className="container">
+        <Breadcrumb
+          icon="right angle"
+          sections={sections}
+          className="breadcrumb-section"
+        />
         <div className="row">
           <div className="col-md-6">
             <h1>Create new password</h1>
             <form
-              method="post" id="resetForm"
+              method="post"
+              id="resetForm"
               onSubmit={(e) => handleFormSubmit(e)}
             >
               <div className="field-control">
                 <label>New Password</label>
                 <input
-                  type="password" 
+                  type="password"
                   required
-                  className="col-md-8" 
+                  className="col-md-8"
                   autofocus="true"
                   onChange={(e) => handlePasswordChanged(e)}
                 />
@@ -87,7 +96,7 @@ const ResetPassword = (props) => {
         </div>
       </div>
     </section>
-    )
-}
+  );
+};
 
-export default withRouter(ResetPassword)
+export default withRouter(ResetPassword);

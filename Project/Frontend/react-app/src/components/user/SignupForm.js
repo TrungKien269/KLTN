@@ -137,7 +137,7 @@ const Signup = (props) => {
         </div>
         <div class="field-control">
           <label>Gender</label>
-          <div>
+          <div className="col-lg-8">
             <ul>
               <li>
                 <input

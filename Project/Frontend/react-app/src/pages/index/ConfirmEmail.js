@@ -3,10 +3,13 @@ import axios from "axios";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-
+import { Breadcrumb } from "semantic-ui-react";
 const ConfirmEmail = (props) => {
   const [email, setEmail] = useState("");
-
+  const sections = [
+    { key: "Home", content: "Home", href: "/" },
+    { key: "ConfirmEmail", content: "Confirm you email", active: true },
+  ];
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -47,7 +50,12 @@ const ConfirmEmail = (props) => {
   return (
     <React.Fragment>
       <section className="section__login">
-        <div className="containter-fluid">
+        <div className="container">
+          <Breadcrumb
+            icon="right angle"
+            sections={sections}
+            className="breadcrumb-section"
+          />
           <div className="row">
             <div className="col-md-6">
               <h1>Confirm via Email</h1>

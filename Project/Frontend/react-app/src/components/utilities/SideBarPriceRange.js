@@ -1,10 +1,9 @@
-import React, { } from "react";
+import React from "react";
 import NumberFormat from "react-number-format";
 import { withRouter } from "react-router-dom";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function SideBarPriceRange(props) {
-
   const { t, i18n } = useTranslation();
 
   const PriceChange = (event) => {
@@ -17,9 +16,9 @@ function SideBarPriceRange(props) {
   return (
     <React.Fragment>
       <div className="sidebar-block">
-        <h2>{t('Price range')}</h2>
+        <h2>{t("Price range")}</h2>
         <select onChange={PriceChange} className="price-range">
-          <option value={"-1 -1"}>{t('All')}</option>
+          <option value={"-1 -1"}>{t("All")}</option>
           <option value={"0 100000"}>0 - 100.000</option>
           <option value={"100000 500000"}>100.000 - 500.000</option>
           <option value={"500000 1000000"}>500.000 - 1.000.000</option>
