@@ -3033,6 +3033,11 @@ h1 {
   padding: 0 1rem;
   z-index: 10;
 }
+@media (max-width: 768px) {
+  .price-range {
+    width: 100%;
+  }
+}
 
 .price-range:focus {
   outline: none;
