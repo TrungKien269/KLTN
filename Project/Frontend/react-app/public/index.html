@@ -85,6 +85,12 @@
           $(".collapse").collapse("hide");
         }
       });
+
+      $(document).keydown(function (e) {
+        if (e.key === "Enter") {
+          $(".collapse").collapse("hide");
+        }
+      });
     </script>
   </body>
 </html>
