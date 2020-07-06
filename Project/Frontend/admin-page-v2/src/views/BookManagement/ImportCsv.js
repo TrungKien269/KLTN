@@ -12,6 +12,10 @@ import {
   Label,
   Row,
   Table,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
 } from "reactstrap";
 import NumberFormat from "react-number-format";
 import { CsvToHtmlTable } from 'react-csv-to-table';
@@ -33,6 +37,24 @@ const Main = () => {
   const [receiptID, setReceiptID] = useState();
   const [total, setTotal] = useState(0);
   const [fileInfo, setFileInfo] = useState();
+
+  const [modal, setModal] = useState(false);
+  const toggle = () => {
+    if(selectedReceiptID != null) {
+      setModal(!modal)
+    }
+    else{
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "You have to choose one receipt to update!",
+      });
+    }
+  };
+  const [UpdateImportedDate, setUpdateImportedDate] = useState();
+  const [UpdateReceiptID, setUpdateReceiptID] = useState();
+  const [UpdateTotal, setUpdateTotal] = useState(0);
+  const [UpdateFileInfo, setUpdateFileInfo] = useState();
 
   useEffect(() => {
     Axios({
@@ -64,6 +86,10 @@ const Main = () => {
     setSelectedReceiptID(value);
     setSelectedReceipt(listReceipt.find(x => x.id === value));
 
+    setUpdateImportedDate(listReceipt.find(x => x.id === value).importDate.slice(0, 10));
+    setUpdateTotal(listReceipt.find(x => x.id === value).total);
+    setUpdateReceiptID(listReceipt.find(x => x.id === value).id);
+
     var fileName = listReceipt.find(x => x.id === value).importDate
       .slice(0, 10).split('-').join('') + '_' + value + ".csv";
 
@@ -80,7 +106,11 @@ const Main = () => {
       }
       setReceiptData(receiptDataObjs);
     }).catch(function (err) {
-      console.log(err);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: err,
+      });
     })
   }
 
@@ -210,6 +240,85 @@ const Main = () => {
     })
   }
 
+  const handleUpdateIDChange = (event) => {
+    var value = event.target.value;
+    if (value) {
+      setUpdateReceiptID(value);
+    }
+  }
+
+  const handleUpdateDateChange = (event) => {
+    var value = event.target.value;
+    if (value) {
+      setUpdateImportedDate(value);
+    }
+  }
+
+  const handleUpdateTotalChange = (event) => {
+    var value = event.target.value;
+    if (value) {
+      setUpdateTotal(parseInt(value));
+    }
+  }
+
+  const LoadUpdateFileCSV = (e) => {
+    setUpdateFileInfo(e.target.files[0])
+  }
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+
+    const bodyFormData = new FormData();
+    bodyFormData.append('file', UpdateFileInfo);
+    Swal.fire({
+      title: "Confirm",
+      text: "Do you want to update this receipt?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, update!",
+    }).then((result) => {
+      if (result.value) {
+        Axios({
+          headers: {
+            Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
+            "Content-Type": "multipart/form-data"
+          },
+          method: "put",
+          url: "http://localhost:5000/api/Admin/UpdateReceipt",
+          params: {
+            id: UpdateReceiptID,
+            importDate: UpdateImportedDate,
+            total: parseInt(UpdateTotal)
+          },
+          data: bodyFormData,
+        }).then((res) => {
+          if (res.data.status) {
+            Swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "Update Receipt successfully"
+            });
+          }
+          else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: res.data.message,
+            });
+          }
+        }).catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: err,
+          });
+        })
+      }
+    });
+  }
+
   return (
     <Row>
       <Col lg="6">
@@ -273,13 +382,14 @@ const Main = () => {
                 <Col md="9">
                   <Input type="file" multiple={false}
                     accept={".csv"}
-                    onChange={LoadFileCSV} />
+                    onChange={LoadFileCSV}
+                    required/>
                 </Col>
               </FormGroup>
-              <Button className="mr-1" type="submit" size="sm" color="primary">
+              <Button className="mr-1" type="submit" size="md" color="primary">
                 <i className="fa fa-dot-circle-o"></i> Import
               </Button>
-              <Button type="reset" size="sm" color="danger">
+              <Button type="reset" size="md" color="danger">
                 <i className="fa fa-ban"></i> Reset
               </Button>
             </Form>
@@ -297,11 +407,18 @@ const Main = () => {
               <Dropdown
                 selection
                 className="ml-1"
-                placeholder="Select state"
+                placeholder="Select receipt"
                 options={receiptOptions}
                 onChange={handleSelectReceipt}
                 value={selectedReceiptID ? selectedReceiptID : null}
               />
+              <Button
+                color="primary"
+                className="btn ml-1"
+                onClick={toggle}
+              >
+                <i className="fa fa-close"></i> Update
+              </Button>
               <Button
                 color="danger"
                 className="btn ml-1"
@@ -347,6 +464,85 @@ const Main = () => {
           </CardBody>
         </Card>
       </Col>
+
+      <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Update Receipt</ModalHeader>
+        <ModalBody>
+          <Card>
+            <CardHeader>
+              <strong>Update Receipt</strong>
+            </CardHeader>
+            <CardBody>
+              <Form className="form-horizontal" encType="multipart/form-data"
+                onSubmit={handleUpdate}>
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="date-input">Import Day</Label>
+                  </Col>
+                  <Col xs="12" md="9">
+                    <Input
+                      required
+                      type="date"
+                      id="date-input"
+                      name="date-input"
+                      placeholder="date"
+                      onChange={handleUpdateDateChange}
+                      defaultValue={selectedReceipt ? selectedReceipt.importDate.slice(0, 10) : ""}
+                    />
+                  </Col>
+                </FormGroup>
+
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="text-input">Import Bill ID</Label>
+                  </Col>
+                  <Col xs="12" md="9">
+                    <Input
+                      required
+                      id="text-input"
+                      name="text-input"
+                      placeholder="ID"
+                      onChange={handleUpdateIDChange}
+                      defaultValue={selectedReceipt ? selectedReceipt.id : ""}
+                      disabled={true}
+                    />
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="text-input">Total</Label>
+                  </Col>
+                  <Col xs="12" md="9">
+                    <Input
+                      required
+                      type="number"
+                      id="text-input"
+                      name="text-input"
+                      placeholder="Total"
+                      onChange={handleUpdateTotalChange}
+                      defaultValue={selectedReceipt ? selectedReceipt.total : "0"}
+                    />
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="book-select">Select file to import</Label>
+                  </Col>
+
+                  <Col md="9">
+                    <Input type="file" multiple={false}
+                      accept={".csv"}
+                      onChange={LoadUpdateFileCSV} />
+                  </Col>
+                </FormGroup>
+                <Button className="mr-1" type="submit" size="md" color="primary">
+                  <i className="fa fa-dot-circle-o"></i> Update
+                </Button>
+              </Form>
+            </CardBody>
+          </Card>
+        </ModalBody>
+      </Modal>
     </Row>
   );
 };
