@@ -388,7 +388,7 @@ body::-webkit-scrollbar-thumb {
   transition: 0.3s;
 }
 
-@media (max-width: 47em) {
+@media (max-width: 768px) {
   .hidden-md-elements {
     display: none !important;
   }
@@ -644,9 +644,9 @@ body::-webkit-scrollbar-thumb {
 
 .navbar {
   padding: 1.5rem 0;
-  box-shadow: none;
+  /* box-shadow: none; */
 }
-.navbar-expand-lg {
+.navbar-expand-md {
   position: sticky;
   top: 0;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
@@ -662,12 +662,12 @@ body::-webkit-scrollbar-thumb {
   text-decoration: none;
   color: #1ebf90;
 }
-@media (max-width: 47em) {
+/* @media (max-width: 47em) {
   .navbar-sm-brand {
     width: 100%;
     text-align: center;
   }
-}
+} */
 
 .navbar-pad-sm {
   padding: 1rem 3rem;
@@ -691,7 +691,7 @@ body::-webkit-scrollbar-thumb {
   outline: none;
 }
 .navbar-toggler:hover {
-  color: #1ebf90;
+  color: #1b8bcc;
 }
 .navbar-toggler:hover p {
   color: #3c413f;
@@ -749,7 +749,6 @@ body::-webkit-scrollbar-thumb {
   font-weight: 400;
   font-size: 2.5rem;
   display: flex;
-  justify-content: center;
   align-items: center;
 }
 .nav__social-icon a {
@@ -3034,6 +3033,11 @@ h1 {
   padding: 0 1rem;
   z-index: 10;
 }
+@media (max-width: 768px) {
+  .price-range {
+    width: 100%;
+  }
+}
 
 .price-range:focus {
   outline: none;
@@ -3300,6 +3304,7 @@ h1 {
   padding: 0.5rem 0rem !important;
 }
 .breadcrumb-section a {
+  font-size: 1.6rem !important;
   transition: 0.2s;
 }
 .breadcrumb-section a:hover {

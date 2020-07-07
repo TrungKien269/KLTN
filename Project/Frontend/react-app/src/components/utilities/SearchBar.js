@@ -71,6 +71,7 @@ const SearchBar = (props) => {
           }
         });
       }
+      
     }
   };
 
@@ -86,6 +87,7 @@ const SearchBar = (props) => {
           className=""
         />
       </div>
+      
     </React.Fragment>
   );
 };

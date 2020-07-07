@@ -19,7 +19,7 @@ const Index = () => {
             <div className="title-wrapper">
               <h3>{t("Recommend for you")}</h3>
             </div>
-            <ProductSlideBestPrice />
+            <ProductSlideRecommend />
           </div>
         </div>
       );
@@ -52,7 +52,7 @@ const Index = () => {
       <div className="section__promo">
         <h2>{t("Limited time offer for sales")}</h2>
         <div className="container">
-          {/* <ProductSlidePromotion /> */}
+          <ProductSlidePromotion />
         </div>
       </div>
     </React.Fragment>

@@ -7,6 +7,7 @@ import { UserContext } from "../../context/userContext";
 import Axios from "axios";
 import useDarkMode from "use-dark-mode";
 import { Trans, useTranslation } from "react-i18next";
+import { Divider } from "semantic-ui-react";
 
 const Header = (props) => {
   const { token, refreshToken } = useContext(UserContext);
@@ -72,6 +73,15 @@ const Header = (props) => {
         if (i >= 1440) clearInterval(int);
       }, 5);
     }
+  };
+
+  const ScrollToFooterSection = () => {
+    var i = 10;
+      var int = setInterval(function () {
+        window.scrollTo({ top: i, left: 0, behavior: "smooth" });
+        i += 15;
+        if (i >= 3000) clearInterval(int);
+      }, 5);
   };
 
   const loginNav = useMemo(() => {
@@ -156,7 +166,6 @@ const Header = (props) => {
             >
               <i className="fas fa-sign-in-alt"></i>
             </Link>
-            <div></div>
           </React.Fragment>
         </Trans>
       );
@@ -165,13 +174,13 @@ const Header = (props) => {
 
   return (
     <React.Fragment>
-      <nav className="navbar navbar-shadow">
+      <nav className="navbar navbar-shadow hidden-md-elements">
         <div className="container-fluid d-flex flex-row justify-content-around flex-md-nowrap">
           <Link to="/" className="navbar-sm-brand">
             <img src={process.env.PUBLIC_URL + "/img/logo.png"} alt="" />
           </Link>
           <SearchBar />
-          <div className="hidden-md-elements nav__social-icon">
+          <div className="nav__social-icon">
             <div className="dropdown ">
               <a
                 className=""
@@ -230,7 +239,7 @@ const Header = (props) => {
           </div>
         </div>
       </nav>
-      <nav className="navbar navbar-expand-lg navbar-pad-sm bg-light">
+      <nav className="navbar navbar-expand-md navbar-pad-sm bg-light">
         {/* Collapse button */}
         <button
           className="navbar-toggler"
@@ -245,6 +254,14 @@ const Header = (props) => {
             <i className="fas fa-bars"></i>
           </span>
         </button>
+        <Link
+          to="/"
+          className="navbar-toggler navbar-sm-brand"
+          aria-expanded="false"
+        >
+          <img src={process.env.PUBLIC_URL + "/img/logo.png"} alt="" />
+        </Link>
+
         {/* Collapsible content */}
         <div
           className="collapse navbar-collapse d-lg-flex justify-content-md-center"
@@ -263,6 +280,7 @@ const Header = (props) => {
               >
                 {t("Categories")}
                 <span className="sr-only">(current)</span>
+                <i className="fa fa-angle-down hidden-xs" />
               </a>
               <div
                 className="dropdown-menu mega-menu v-2 z-depth-1  py-5 px-3 text-center"
@@ -298,13 +316,14 @@ const Header = (props) => {
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
-                id="navbarDropdownMenuLink4"
+                /*id="navbarDropdownMenuLink4"
                 data-toggle="dropdown"
                 aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Pages
-                <i className="fa fa-angle-down hidden-xs" />
+                aria-expanded="false" */
+              onClick={ScrollToFooterSection}>
+                About us
+                {/*Pages*/}
+                {/*<i className="fa fa-angle-down hidden-xs" />*/}
               </a>
               <div
                 className="dropdown-menu mega-menu mega-menu-sm "
@@ -313,19 +332,19 @@ const Header = (props) => {
                 <div className="row">
                   <ul className="list-unstyled">
                     <li>
-                      <Link to="/contact.html">Contact us</Link>
+                      {/*<Link to="/contact.html">Contact us</Link>*/}
                     </li>
                     <li>
-                      <Link to="/about.html">About</Link>
+                      {/*<Link to="/about.html">About</Link>*/}
                     </li>
                     <li>
-                      <Link to="/authors.html">Author</Link>
+                      {/*<Link to="/authors.html">Author</Link>*/}
                     </li>
                     <li>
-                      <Link to="#">Limited Offer Time</Link>
+                      {/*<Link to="#">Limited Offer Time</Link>*/}
                     </li>
                     <li>
-                      <Link to="#">FAQs</Link>
+                      {/*<Link to="#">FAQs</Link>*/}
                     </li>
                   </ul>
                 </div>
@@ -333,6 +352,74 @@ const Header = (props) => {
             </li>
           </ul>
           {/* Links */}
+          <div className="navbar-toggler">
+            <Divider horizontal>Options</Divider>
+          </div>
+
+          <div
+            className="navbar-toggler nav__social-icon justify-content-between"
+            aria-expanded="false"
+          >
+            <div className="dropdown ">
+              <a
+                className=""
+                id="navbarDropdownMenuLink2"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                title={"Language"}
+              >
+                <i className="fa fa-language"></i>
+              </a>
+              <div
+                className="dropdown-menu mega-menu mega-menu-sm "
+                aria-labelledby="navbarDropdownMenuLink2"
+              >
+                <div className="row">
+                  <ul className="list-unstyled">
+                    <li>
+                      <a onClick={() => handleClick("en")}>{t("English")}</a>
+                    </li>
+                    <li>
+                      <a onClick={() => handleClick("vn")}>{t("Vietnamese")}</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="dropdown ">
+              <a
+                className=""
+                id="navbarDropdownMenuLink1"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                title={"Theme"}
+              >
+                <i className="fa fa-palette"></i>
+              </a>
+              <div
+                className="dropdown-menu mega-menu mega-menu-sm "
+                aria-labelledby="navbarDropdownMenuLink1"
+              >
+                <div className="row">
+                  <ul className="list-unstyled">
+                    <li>
+                      <a onClick={darkMode.disable}>{t("Light")}</a>
+                    </li>
+                    <li>
+                      <a onClick={darkMode.enable}>{t("Dark")}</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <>{loginNav}</>
+          </div>
+          <div className="navbar-toggler">
+            <Divider horizontal>Search</Divider>
+            <SearchBar />
+          </div>
         </div>
         {/* Collapsible content */}
       </nav>

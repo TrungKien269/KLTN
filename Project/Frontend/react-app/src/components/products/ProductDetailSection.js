@@ -23,6 +23,7 @@ function ProductDetailSection(props) {
     { key: "Shirt", content: bookName, active: true },
   ];
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (data) {
       setBookName(data.name);
     }

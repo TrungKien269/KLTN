@@ -3,22 +3,30 @@ import LoginForm from "../../components/user/LoginForm";
 import SignupForm from "../../components/user/SignupForm";
 import Header from "../../components/header/Header";
 import Footer from "../../components/Footer";
+import { Breadcrumb } from "semantic-ui-react";
+const Login = () => {
+  const sections = [
+    { key: "Home", content: "Home", href: "/" },
+    { key: "Login", content: "Login or Register", active: true },
+  ];
 
-class Login extends Component {
-  render() {
-    return (
-      <React.Fragment>
-        <section className="container">
-          <div className="section__login">
-            <div className="row">
-              <LoginForm />
-              <SignupForm />
-            </div>
+  return (
+    <React.Fragment>
+      <section className="container">
+        <div className="section__login">
+          <Breadcrumb
+            icon="right angle"
+            sections={sections}
+            className="breadcrumb-section"
+          />
+          <div className="row">
+            <LoginForm />
+            <SignupForm />
           </div>
-        </section>
-      </React.Fragment>
-    );
-  }
-}
+        </div>
+      </section>
+    </React.Fragment>
+  );
+};
 
 export default Login;

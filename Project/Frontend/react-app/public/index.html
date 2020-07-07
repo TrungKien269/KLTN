@@ -79,5 +79,18 @@
     <script src="%PUBLIC_URL%/js/bootstrap.min.js"></script>
     <!-- <script src="%PUBLIC_URL%/js/owl.carousel.min.js"></script>     -->
     <script src="%PUBLIC_URL%/js/main.js"></script>
+    <script>
+      $(document).click(function (e) {
+        if (!$(e.target).is(".prompt")) {
+          $(".collapse").collapse("hide");
+        }
+      });
+
+      $(document).keydown(function (e) {
+        if (e.key === "Enter") {
+          $(".collapse").collapse("hide");
+        }
+      });
+    </script>
   </body>
 </html>
