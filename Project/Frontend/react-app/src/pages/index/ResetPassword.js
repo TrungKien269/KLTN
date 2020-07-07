@@ -4,21 +4,43 @@ import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Breadcrumb } from "semantic-ui-react";
+
 const ResetPassword = (props) => {
   const [password, setPassword] = useState("");
+  const [cfpassword, setCFPassword] = useState("");
   const search = window.location.search;
   const params = new URLSearchParams(search);
   const sections = [
     { key: "Home", content: "Home", href: "/" },
-    { key: "ConfirmEmail", content: "Confirm you email", active: true },
+    { key: "Login", content: "Login", href: "/login" },
+    { key: "ConfirmEmail", content: "Confirm your email", href: "/confirmemail" },
+    { key: "ResetPassword", content: "Create new password", active: true },
   ];
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handlePasswordChanged = (event) => {
     setPassword(event.target.value);
   };
 
+  const handleConfirmPasswordChanged = (event) => {
+    setCFPassword(event.target.value);
+  };
+
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    const token = params.get("token");
+    
+    if(password != cfpassword){
+      Swal.fire({
+        title: "Error",
+        text: "Your confirm password and new password are not same!",
+        icon: "error",
+      });
+    }
+    else{
+      const token = params.get("token");
     axios({
       headers: {
         Authorization: "Bearer " + token,
@@ -30,13 +52,14 @@ const ResetPassword = (props) => {
       },
     })
       .then((res) => {
-        console.log(res.data);
         if (res.data.status) {
           Swal.fire({
-            title: "Completely",
-            text: "Password has been changed successfully",
             icon: "success",
+            title: "Password change successfully",
+            text: "Your password has been changed",
+            confirmButtonText: "Back to the login page",
           });
+          props.history.push("/login");
         }
       })
       .catch((err) => {
@@ -56,6 +79,7 @@ const ResetPassword = (props) => {
           });
         }
       });
+    }
   };
 
   return (
@@ -75,7 +99,7 @@ const ResetPassword = (props) => {
               onSubmit={(e) => handleFormSubmit(e)}
             >
               <div className="field-control">
-                <label>New Password</label>
+                <label>New password</label>
                 <input
                   type="password"
                   required
@@ -84,11 +108,21 @@ const ResetPassword = (props) => {
                   onChange={(e) => handlePasswordChanged(e)}
                 />
               </div>
+              <div className="field-control">
+                <label>Confirm new password</label>
+                <input
+                  type="password"
+                  required
+                  className="col-md-8"
+                  autofocus="true"
+                  onChange={(e) => handleConfirmPasswordChanged(e)}
+                />
+              </div>
               <div className="col-md-8 pad-0-0 mar-top-md">
                 <input
                   type="submit"
                   className="btn btn-fit btn--blue"
-                  value="Send"
+                  value="Change"
                 />
               </div>
             </form>

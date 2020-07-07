@@ -133,25 +133,24 @@ function UserProfile(props) {
               Swal.fire({
                 icon: "success",
                 title: "Password change successfully",
-                text: "Your password is changed",
-                confirmButtonText: "Back to the login page",
+                text: "Your password has been changed"
               });
-              removeUserSession();
-              props.history.push("/login");
+              // removeUserSession();
+              // props.history.push("/login");
             }
           });
         } else {
           Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: "Your confirm Password is wrong",
+            text: "Your confirm password and new password are not same!",
           });
         }
       } else {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: "Your Password is wrong",
+          text: "Your current password is wrong!",
         });
       }
     });

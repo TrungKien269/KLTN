@@ -4,12 +4,19 @@ import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Breadcrumb } from "semantic-ui-react";
+
 const ConfirmEmail = (props) => {
   const [email, setEmail] = useState("");
   const sections = [
     { key: "Home", content: "Home", href: "/" },
-    { key: "ConfirmEmail", content: "Confirm you email", active: true },
+    { key: "Login", content: "Login", href: "/login" },
+    { key: "ConfirmEmail", content: "Confirm your email", active: true },
   ];
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
