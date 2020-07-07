@@ -16,20 +16,12 @@ const ResetPassword = (props) => {
     setPassword(event.target.value);
   };
 
-  const [password, setPassword] = useState("");
-  const search = window.location.search;
-  const params = new URLSearchParams(search);
-
-  const handlePasswordChanged = (event) => {
-    setPassword(event.target.value);
-  };
-
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    const token = params.get('token');
+    const token = params.get("token");
     axios({
       headers: {
-        "Authorization": "Bearer " + token
+        Authorization: "Bearer " + token,
       },
       method: "post",
       url: "http://localhost:5000/api/ForgotPassword/ResetPassword",
