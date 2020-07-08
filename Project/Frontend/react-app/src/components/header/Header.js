@@ -75,12 +75,31 @@ const Header = (props) => {
     }
   };
 
+  const ScrollToPromotionSection = () => {
+    if(token){
+      var i = 10;
+      var int = setInterval(function () {
+        window.scrollTo({ top: i, left: 0, behavior: "smooth" });
+        i += 15;
+        if (i >= 3000) clearInterval(int);
+      }, 5);
+    }
+    else{
+      var i = 10;
+      var int = setInterval(function () {
+        window.scrollTo({ top: i, left: 0, behavior: "smooth" });
+        i += 15;
+        if (i >= 2350) clearInterval(int);
+      }, 5);
+    }
+  };
+
   const ScrollToFooterSection = () => {
     var i = 10;
       var int = setInterval(function () {
         window.scrollTo({ top: i, left: 0, behavior: "smooth" });
         i += 15;
-        if (i >= 3000) clearInterval(int);
+        if (i >= 5000) clearInterval(int);
       }, 5);
   };
 
@@ -308,7 +327,8 @@ const Header = (props) => {
             </li>
             {/* Sale */}
             <li className="nav-item mega-dropdown">
-              <Link to="#" className="nav-link dropdown-toggle">
+              <Link to="#" className="nav-link dropdown-toggle" 
+              onClick={ScrollToPromotionSection}>
                 {t("Sale")}
               </Link>
             </li>

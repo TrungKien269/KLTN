@@ -201,6 +201,17 @@ const OrderStatus = () => {
             <div className="title-wrapper">
               <h2>Date: {order.createdDate.slice(0, 10)}</h2>
               <h2>
+                Shipping Fee: {" "}
+                {
+                  <NumberFormat
+                    displayType="text"
+                    value={order.shippingFee}
+                    thousandSeparator={true}
+                    suffix=" VND"
+                  ></NumberFormat>
+                }
+              </h2>
+              <h2>
                 Total:{" "}
                 {
                   <NumberFormat
@@ -236,115 +247,123 @@ const OrderStatus = () => {
     return orderBlock;
   }, [processingOrder]);
 
-  const listOrderDelivering = useMemo(
-    (tr) => {
-      let orderItem = [];
-      let orderBlock = [];
-      if (deliveringOrder && deliveringOrder.length > 0) {
-        orderBlock = deliveringOrder.map((order) => {
-          let x = order.orderDetail;
-          orderItem = x.map((item) => {
-            return (
-              <tr>
-                <td className="item-name">
-                  <div className="item-img">
-                    <Link to={`/book/${item.bookId}`} title={item.book.name}>
-                      <img
-                        src={item.book.image}
-                        className="img-contain img-cover-10"
-                        alt=""
-                      />
-                    </Link>
-                  </div>
-                  <div className="item-title">
-                    <Link to={`/book/${item.bookId}`}>{item.book.name}</Link>
-                  </div>
-                </td>
-                <td className="item-qty">
-                  <div className="quantity buttons_added d-flex justify-content-center">
-                    <input
-                      type="text"
-                      step={1}
-                      min={1}
-                      max
-                      name="quantity"
-                      defaultValue={item.quantity}
-                      title="Qty"
-                      className="input-text qty text h-100"
-                      size={4}
-                      pattern
-                      inputMode
-                      disabled
-                    />
-                  </div>
-                </td>
-                <td className="item-price">
-                  <p>
-                    {
-                      <NumberFormat
-                        displayType="text"
-                        value={item.book.originalPrice}
-                        thousandSeparator={true}
-                        suffix=" VND"
-                      ></NumberFormat>
-                    }
-                  </p>
-                </td>
-                <td className="item-total">
-                  <p>
-                    <NumberFormat
-                      displayType="text"
-                      value={item.book.originalPrice * item.quantity}
-                      thousandSeparator={true}
-                      suffix=" VND"
-                    ></NumberFormat>
-                  </p>
-                </td>
-                <td className="action"></td>
-              </tr>
-            );
-          });
+  const listOrderDelivering = useMemo((tr) => {
+    let orderItem = [];
+    let orderBlock = [];
+    if (deliveringOrder && deliveringOrder.length > 0) {
+      orderBlock = deliveringOrder.map((order) => {
+        let x = order.orderDetail;
+        orderItem = x.map((item) => {
           return (
-            <div className="order-block">
-              <div className="title-wrapper">
-                <h2>Date: {order.createdDate.slice(0, 10)}</h2>
-                <h2>
-                  Total:{" "}
+            <tr>
+              <td className="item-name">
+                <div className="item-img">
+                  <Link to={`/book/${item.bookId}`} title={item.book.name}>
+                    <img
+                      src={item.book.image}
+                      className="img-contain img-cover-10"
+                      alt=""
+                    />
+                  </Link>
+                </div>
+                <div className="item-title">
+                  <Link to={`/book/${item.bookId}`}>{item.book.name}</Link>
+                </div>
+              </td>
+              <td className="item-qty">
+                <div className="quantity buttons_added d-flex justify-content-center">
+                  <input
+                    type="text"
+                    step={1}
+                    min={1}
+                    max
+                    name="quantity"
+                    defaultValue={item.quantity}
+                    title="Qty"
+                    className="input-text qty text h-100"
+                    size={4}
+                    pattern
+                    inputMode
+                    disabled
+                  />
+                </div>
+              </td>
+              <td className="item-price">
+                <p>
                   {
                     <NumberFormat
                       displayType="text"
-                      value={order.total}
+                      value={item.book.originalPrice}
                       thousandSeparator={true}
                       suffix=" VND"
                     ></NumberFormat>
                   }
-                </h2>
-                <p>Amount: {order.orderDetail.length}</p>
-              </div>
-              <div className="cart-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th className="item">Book</th>
-                      <th className="qty">Quantity</th>
-                      <th className="price">Price</th>
-                      <th className="total-price">Total</th>
-                      <th className="remove">&nbsp;</th>
-                    </tr>
-                  </thead>
-                  <tbody>{orderItem}</tbody>
-                </table>
-              </div>
-            </div>
+                </p>
+              </td>
+              <td className="item-total">
+                <p>
+                  <NumberFormat
+                    displayType="text"
+                    value={item.book.originalPrice * item.quantity}
+                    thousandSeparator={true}
+                    suffix=" VND"
+                  ></NumberFormat>
+                </p>
+              </td>
+              <td className="action"></td>
+            </tr>
           );
         });
-      } else {
-        orderBlock.push(<h2>Nothing here</h2>);
-      }
-      return orderBlock;
-    },
-    [deliveringOrder]
-  );
+        return (
+          <div className="order-block">
+            <div className="title-wrapper">
+              <h2>Date: {order.createdDate.slice(0, 10)}</h2>
+              <h2>
+                Shipping Fee: {" "}
+                {
+                  <NumberFormat
+                    displayType="text"
+                    value={order.shippingFee}
+                    thousandSeparator={true}
+                    suffix=" VND"
+                  ></NumberFormat>
+                }
+              </h2>
+              <h2>
+                Total:{" "}
+                {
+                  <NumberFormat
+                    displayType="text"
+                    value={order.total}
+                    thousandSeparator={true}
+                    suffix=" VND"
+                  ></NumberFormat>
+                }
+              </h2>
+              <p>Amount: {order.orderDetail.length}</p>
+            </div>
+            <div className="cart-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th className="item">Book</th>
+                    <th className="qty">Quantity</th>
+                    <th className="price">Price</th>
+                    <th className="total-price">Total</th>
+                    <th className="remove">&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>{orderItem}</tbody>
+              </table>
+            </div>
+          </div>
+        );
+      });
+    } else {
+      orderBlock.push(<h2>Nothing here</h2>);
+    }
+    return orderBlock;
+  }, [deliveringOrder]);
 
   const listOrderDelivered = useMemo(() => {
     let orderBlock = [];
@@ -417,6 +436,17 @@ const OrderStatus = () => {
           <div className="order-block">
             <div className="title-wrapper">
               <h2>Date: {order.createdDate.slice(0, 10)}</h2>
+              <h2>
+                Shipping Fee: {" "}
+                {
+                  <NumberFormat
+                    displayType="text"
+                    value={order.shippingFee}
+                    thousandSeparator={true}
+                    suffix=" VND"
+                  ></NumberFormat>
+                }
+              </h2>
               <h2>
                 Total:{" "}
                 {
@@ -524,6 +554,17 @@ const OrderStatus = () => {
           <div className="order-block">
             <div className="title-wrapper">
               <h2>Date: {order.createdDate.slice(0, 10)}</h2>
+              <h2>
+                Shipping Fee: {" "}
+                {
+                  <NumberFormat
+                    displayType="text"
+                    value={order.shippingFee}
+                    thousandSeparator={true}
+                    suffix=" VND"
+                  ></NumberFormat>
+                }
+              </h2>
               <h2>
                 Total:{" "}
                 {
