@@ -24,10 +24,8 @@ namespace BookStoreAPI.BUS.Logic
         {
             try
             {
-                var list = await context.Book.Where(x =>
-                        x.OriginalPrice > 50000 && x.OriginalPrice < 130000 && x.Status.Equals("Available"))
-                    .Include(x => x.BookNumber).OrderBy(x => x.Id)
-                    .Take(30).Skip(10).ToListAsync();
+                var list = await context.Book.Where(x => x.Status.Equals("Available"))
+                    .Include(x => x.BookNumber).Take(1000).ToListAsync();
                 return new Response("Success", true, 0, list);
             }
             catch (Exception e)

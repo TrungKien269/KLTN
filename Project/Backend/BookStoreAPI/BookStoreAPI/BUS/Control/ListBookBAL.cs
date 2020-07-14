@@ -30,10 +30,10 @@ namespace BookStoreAPI.BUS.Control
             return await publisherBal.GetFamousList();
         }
 
-        //public async Task<Response> GetListBookByCategory(string category, int skipNumber, int indexPriceFilter)
-        //{
-        //    return await bookBal.GetBookByCategory(category, skipNumber, indexPriceFilter);
-        //}
+        public async Task<Response> GetListBook()
+        {
+            return await bookBal.GetList();
+        }
 
         public async Task<Response> GetListBookByCategory(string category)
         {

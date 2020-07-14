@@ -82,7 +82,7 @@ function Footer() {
             marginLeft: `50%`,
             transform: `translateX(-50%)`
           }}> 
-          {/*<MapContainer></MapContainer>*/}
+          {/*<MapContainer></MapContainer> */}
         </div> 
         <div className="row">
           <div className="col-md-3">

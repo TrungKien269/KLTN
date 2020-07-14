@@ -84,7 +84,7 @@ const Index = (props) => {
       method: "get",
       url: `http://localhost:5000/api/ListBook/${
         category.length > 0 ? `Category/${category}` : "GetAll"
-      }`,
+        }`,
     }).then(function (res) {
       setData(res.data.obj);
     });
@@ -116,23 +116,25 @@ const Index = (props) => {
           : loadingRange[1];
       for (let i = start; i <= end; i++) {
         const book = listData[i];
-        result.push(
-          <div className="col-lg-3 col-md-4 col-6" key={book.id}>
-            <ProductCard
-              id={book.id}
-              name={book.name}
-              image={book.image}
-              price={
-                <NumberFormat
-                  value={book.currentPrice}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={"VND "}
-                />
-              }
-            />
-          </div>
-        );
+        if (book != null) {
+          result.push(
+            <div className="col-lg-3 col-md-4 col-6" key={book.id}>
+              <ProductCard
+                id={book.id}
+                name={book.name}
+                image={book.image}
+                price={
+                  <NumberFormat
+                    value={book.currentPrice}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"VND "}
+                  />
+                }
+              />
+            </div>
+          );
+        }
       }
     } else {
       result.push(
