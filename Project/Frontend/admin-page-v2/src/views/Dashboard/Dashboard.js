@@ -30,6 +30,7 @@ import {
 } from "reactstrap";
 import { CustomTooltips } from "@coreui/coreui-plugin-chartjs-custom-tooltips";
 import { getStyle, hexToRgba } from "@coreui/coreui/dist/js/coreui-utilities";
+import NumberFormat from "react-number-format";
 import { getToken } from "../../Utils/Commons";
 
 const Widget03 = lazy(() => import("../../views/Widgets/Widget03"));
@@ -47,6 +48,63 @@ const Dashboard = () => {
   const [totalBook, setTotalBook] = useState();
   const [top5user, setTop5User] = useState();
   const [numberAccountYear, setNumberAccountYear] = useState();
+  const [revenuesData, setRevenuesData] = useState();
+  const [totalRevenue, setTotalRevenue] = useState();
+
+  useEffect(() => {
+    axios({
+      headers: {
+        Authorization: "Bearer " + getToken(),
+      },
+      method: "get",
+      url: "http://localhost:5000/api/Admin/RevenueWithMonth",
+    }).then((res) => {
+      var sum = 0;
+      var months = res.data.obj.map((data) => {
+        return data.month === 1
+          ? "Jan"
+          : data.month === 2
+            ? "Feb"
+            : data.month === 3
+              ? "Mar"
+              : data.month === 4
+                ? "Apr"
+                : data.month === 5
+                  ? "May"
+                  : data.month === 6
+                    ? "Jun"
+                    : data.month === 7
+                      ? "Jul"
+                      : data.month === 8
+                        ? "Aug"
+                        : data.month === 9
+                          ? "Sep"
+                          : data.month === 10
+                            ? "Oct"
+                            : data.month === 11
+                              ? "Nov"
+                              : data.month === 12
+                                ? "Dec"
+                                : "";
+      });
+      var data = res.data.obj.map((data) => {
+        sum = sum + data.revenue;
+        return data.revenue;
+      });
+      setTotalRevenue(sum);
+      setRevenuesData({
+        labels: months,
+        datasets: [
+          {
+            label: "Revenue by month",
+            backgroundColor: "transparent",
+            borderColor: "rgba(255,255,255,.55)",
+            data: data,
+          },
+        ],
+      })
+    })
+  }, []);
 
   useEffect(() => {
     axios({
@@ -61,28 +119,28 @@ const Dashboard = () => {
         return data.month === 1
           ? "Jan"
           : data.month === 2
-          ? "Feb"
-          : data.month === 3
-          ? "Mar"
-          : data.month === 4
-          ? "Apr"
-          : data.month === 5
-          ? "May"
-          : data.month === 6
-          ? "Jun"
-          : data.month === 7
-          ? "Jul"
-          : data.month === 8
-          ? "Aug"
-          : data.month === 9
-          ? "Sep"
-          : data.month === 10
-          ? "Oct"
-          : data.month === 11
-          ? "Nov"
-          : data.month === 12
-          ? "Dec"
-          : "";
+            ? "Feb"
+            : data.month === 3
+              ? "Mar"
+              : data.month === 4
+                ? "Apr"
+                : data.month === 5
+                  ? "May"
+                  : data.month === 6
+                    ? "Jun"
+                    : data.month === 7
+                      ? "Jul"
+                      : data.month === 8
+                        ? "Aug"
+                        : data.month === 9
+                          ? "Sep"
+                          : data.month === 10
+                            ? "Oct"
+                            : data.month === 11
+                              ? "Nov"
+                              : data.month === 12
+                                ? "Dec"
+                                : "";
       });
       var data = res.data.obj.map((data) => {
         sum = sum + data.numberOrder;
@@ -114,28 +172,28 @@ const Dashboard = () => {
         return data.month === 1
           ? "Jan"
           : data.month === 2
-          ? "Feb"
-          : data.month === 3
-          ? "Mar"
-          : data.month === 4
-          ? "Apr"
-          : data.month === 5
-          ? "May"
-          : data.month === 6
-          ? "Jun"
-          : data.month === 7
-          ? "Jul"
-          : data.month === 8
-          ? "Aug"
-          : data.month === 9
-          ? "Sep"
-          : data.month === 10
-          ? "Oct"
-          : data.month === 11
-          ? "Nov"
-          : data.month === 12
-          ? "Dec"
-          : "";
+            ? "Feb"
+            : data.month === 3
+              ? "Mar"
+              : data.month === 4
+                ? "Apr"
+                : data.month === 5
+                  ? "May"
+                  : data.month === 6
+                    ? "Jun"
+                    : data.month === 7
+                      ? "Jul"
+                      : data.month === 8
+                        ? "Aug"
+                        : data.month === 9
+                          ? "Sep"
+                          : data.month === 10
+                            ? "Oct"
+                            : data.month === 11
+                              ? "Nov"
+                              : data.month === 12
+                                ? "Dec"
+                                : "";
       });
       var data = res.data.obj.map((data) => {
         sum = sum + data.numberBook;
@@ -164,7 +222,6 @@ const Dashboard = () => {
       method: "get",
       url: "http://localhost:5000/api/Admin/Top5Users",
     }).then((res) => {
-      console.log(res.data.obj);
       if (res.data.status) {
         var labels = res.data.obj.map((data) => {
           return data.user.fullName;
@@ -263,6 +320,7 @@ const Dashboard = () => {
         hoverRadius: 4,
       },
     },
+
   };
 
   const showChart1 = useMemo(() => {
@@ -272,10 +330,22 @@ const Dashboard = () => {
     return <Line data={dataBookSold} options={options} />;
   });
   const showTotalOrder = useMemo(() => {
-    return <div className="text-value">{totalOrder}</div>;
+    return <div className="text-value">
+      <NumberFormat
+        displayType="text"
+        value={totalOrder}
+        thousandSeparator={true}
+      ></NumberFormat>
+    </div>;
   }, [totalOrder]);
   const showTotalBook = useMemo(() => {
-    return <div className="text-value">{totalBook}</div>;
+    return <div className="text-value">
+      <NumberFormat
+        displayType="text"
+        value={totalBook}
+        thousandSeparator={true}
+      ></NumberFormat>
+    </div>;
   }, [totalBook]);
   const showChart3 = useMemo(() => {
     return <Bar data={top5user} options={options} />;
@@ -283,9 +353,36 @@ const Dashboard = () => {
   const showChart4 = useMemo(() => {
     return <Pie data={numberAccountYear} options={options} />;
   }, [numberAccountYear]);
+  const showChart5 = useMemo(() => {
+    return <Line data={revenuesData} options={options} />;
+  });
+  const showTotalRevenue = useMemo(() => {
+    return <div className="text-value">
+      <NumberFormat
+        displayType="text"
+        value={totalRevenue}
+        thousandSeparator={true}
+        suffix=" VND"
+      ></NumberFormat>
+    </div>;
+  }, [totalRevenue])
 
   return (
     <React.Fragment>
+      <Row>
+        <Col xs="12" md="12" lg="12">
+          <Card className="text-white" style={{
+            backgroundColor: "#66CC99"
+          }}>
+            <CardBody className="pb-0">
+              <ButtonGroup className="float-right"></ButtonGroup>
+              {showTotalRevenue}
+              <div>Revenue by months</div>
+            </CardBody>
+            <div className="chart-wrapper mx-3">{showChart5}</div>
+          </Card>
+        </Col>
+      </Row>
       <Row>
         <Col xs="12" md="6" lg="6">
           <Card className="text-white bg-primary">

@@ -273,6 +273,13 @@ namespace BookStoreAPI.Controllers
             return await adminBal.StatisticsNumberAccountWithYear();
         }
 
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("RevenueWithMonth")]
+        public async Task<Response> StatisticsRevenueWithMonth()
+        {
+            return await adminBal.StatisticsRevenueWithMonth();
+        }
+
         [HttpPost("SendPromotionEmail")]
         public async Task<Response> SendPromotionEmail(int promotionID)
         {

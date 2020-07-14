@@ -41,20 +41,12 @@
   - utter_goodbye
   
 ## ask for functionality
-* greet
-  - utter_greet
 * ask_func_list
   - utter_ask_func_list
-* goodbye
-  - utter_goodbye
 
 ## ask for name
-* greet
-  - utter_greet
 * ask_name
   - utter_ask_name
-* goodbye
-  - utter_goodbye
 
 ## ask name
 * ask_name

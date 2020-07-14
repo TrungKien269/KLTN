@@ -17,6 +17,33 @@ namespace BookStoreAPI.BUS.Logic
             this.context = new BookStoreContext();
         }
 
+        public async Task<Response> CreateBookNumber(string bookID)
+        {
+            try
+            {
+                var bookNumber = new BookNumber()
+                {
+                    BookId = bookID,
+                    Amount = 0
+                };
+
+                await context.BookNumber.AddAsync(bookNumber);
+                var check = await context.SaveChangesAsync();
+                if (check is 1)
+                {
+                    return new Response("Success", true, 1, bookNumber);
+                }
+                else
+                {
+                    return new Response("Create fail!", false, 0, bookNumber);
+                }
+            }
+            catch (Exception e)
+            {
+                return Response.CatchError(e.Message);
+            }
+        }
+
         public async Task<Response> InsertNumberForBook(string bookID, int amount)
         {
             try
@@ -38,7 +65,7 @@ namespace BookStoreAPI.BUS.Logic
                     }
                     else
                     {
-                        return new Response("Create fail!", false, 0, bookNumber);
+                        return new Response("Insert fail!", false, 0, bookNumber);
                     }
                 }
                 else

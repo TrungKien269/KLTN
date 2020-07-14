@@ -16,6 +16,7 @@ namespace BookStoreAPI.BUS.Logic
         private SupplierBAL supplierBal;
         private PublisherBAL publisherBal;
         private RawBookBAL rawBookBal;
+        private BookNumberBAL bookNumberBal;
 
         public CRUDBookBAL()
         {
@@ -25,6 +26,7 @@ namespace BookStoreAPI.BUS.Logic
             supplierBal = new SupplierBAL();
             publisherBal = new PublisherBAL();
             rawBookBal = new RawBookBAL();
+            bookNumberBal = new BookNumberBAL();
         }
 
         public async Task<Response> CreateBookProcess(Book book, List<Author> authors, List<string> images, int cateID,
@@ -53,6 +55,7 @@ namespace BookStoreAPI.BUS.Logic
                         await bookBal.InsertFormBook(book.Id, formID);
                         await bookBal.InsertSupplierrBook(book.Id, supplierID);
                         await bookBal.InsertPublisherBook(book.Id, publisherID);
+                        await bookNumberBal.CreateBookNumber(book.Id);
 
                         await CreateRawBookProcess(book, authors, cateID, formID, supplierID, publisherID);
 

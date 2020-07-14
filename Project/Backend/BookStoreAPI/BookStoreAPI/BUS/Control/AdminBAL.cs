@@ -192,6 +192,11 @@ namespace BookStoreAPI.BUS.Control
             return await accountBal.StatisticsNumberAccountWithYear();
         }
 
+        public async Task<Response> StatisticsRevenueWithMonth()
+        {
+            return await orderBal.StatisticsRevenueWithMonth();
+        }
+
         public async Task<Response> GetListCouponCodeValue()
         {
             return await couponCodeBal.GetListCouponValue();

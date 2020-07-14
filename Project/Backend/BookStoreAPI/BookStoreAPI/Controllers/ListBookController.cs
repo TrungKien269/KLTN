@@ -27,7 +27,8 @@ namespace BookStoreAPI.Controllers
         [HttpGet("GetAll")]
         public async Task<Response> Index()
         {
-            return await listBookBal.GetListBookByCategory("Fiction");
+            //return await listBookBal.GetListBookByCategory("Fiction");
+            return await listBookBal.GetListBook();
         }
 
         [HttpGet("Category/{category}")]
