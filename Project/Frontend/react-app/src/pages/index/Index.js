@@ -49,12 +49,12 @@ const Index = () => {
       <div className="section__feature">
         <SpecialItemSlide />
       </div>
-      <div className="section__promo">
+      {/* <div className="section__promo">
         <h2>{t("Limited time offer for sales")}</h2>
         <div className="container">
           <ProductSlidePromotion />
         </div>
-      </div>
+      </div> */}
     </React.Fragment>
   );
 };
